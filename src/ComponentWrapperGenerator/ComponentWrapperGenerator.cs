@@ -33,12 +33,13 @@ namespace ComponentWrapperGenerator
             typeToGenerate = typeToGenerate ?? throw new ArgumentNullException(nameof(typeToGenerate));
 
             var propertiesToGenerate = GetPropertiesToGenerate(typeToGenerate);
+            var eventsToGenerate = GetEventsToGenerate(typeToGenerate);
 
-            GenerateComponentFile(typeToGenerate, propertiesToGenerate, outputFolder);
-            GenerateHandlerFile(typeToGenerate, propertiesToGenerate, outputFolder);
+            GenerateComponentFile(typeToGenerate, propertiesToGenerate, eventsToGenerate, outputFolder);
+            GenerateHandlerFile(typeToGenerate, propertiesToGenerate, eventsToGenerate, outputFolder);
         }
 
-        private void GenerateComponentFile(Type typeToGenerate, IEnumerable<PropertyInfo> propertiesToGenerate, string outputFolder)
+        private void GenerateComponentFile(Type typeToGenerate, IEnumerable<PropertyInfo> propertiesToGenerate, IEnumerable<EventInfo> eventsToGenerate, string outputFolder)
         {
             var fileName = Path.Combine(outputFolder, $"{typeToGenerate.Name}.generated.cs");
             var directoryName = Path.GetDirectoryName(fileName);
@@ -87,7 +88,25 @@ namespace ComponentWrapperGenerator
                 propertyAttributeBuilder.Append(GetPropertyRenderAttribute(prop));
             }
             var propertyAttributes = propertyAttributeBuilder.ToString();
-            var eventHandlerAttributes = "";
+
+            // events
+            var eventDeclarationBuidler = new StringBuilder();
+            if (eventsToGenerate.Any())
+            {
+                eventDeclarationBuidler.AppendLine();
+            }
+            foreach (var e in eventsToGenerate)
+            {
+                eventDeclarationBuidler.Append(GetEventDeclaration(e, usings));
+            }
+            var eventDeclarations = eventDeclarationBuidler.ToString();
+
+            var eventAttributeBuilder = new StringBuilder();
+            foreach (var e in eventsToGenerate)
+            {
+                eventAttributeBuilder.Append(GetEventHandlerRenderAttribute(e));
+            }
+            var eventHandlerAttributes = eventAttributeBuilder.ToString();
 
             var usingsText = string.Join(
                 Environment.NewLine,
@@ -128,7 +147,7 @@ namespace {Settings.RootNamespace}
 {{
     public {classModifiers}partial class {componentName} : {componentBaseName}
     {{
-{staticConstructor}{propertyDeclarations}
+{staticConstructor}{propertyDeclarations}{eventDeclarations}
         public new {componentNamespacePrefix}{componentName} NativeControl => (({componentHandlerName})ElementHandler).{componentName}Control;
 
         protected override void RenderAttributes(AttributesBuilder builder)
@@ -221,10 +240,31 @@ namespace {Settings.RootNamespace}
 ";
         }
 
+        private string GetEventDeclaration(EventInfo e, IList<UsingStatement> usings)
+        {
+            // e.g. delegate void PropertyChangingEventHandler(object sender, PropertyChangingEventArgs e)
+            // Need to get second parameter type from handler delegate.
+            var eventArgsType = e.EventHandlerType
+                ?.GetMethod("Invoke")
+                ?.GetParameters().ElementAtOrDefault(1)
+                ?.ParameterType;
+
+            string eventCallbackType = eventArgsType is null || eventArgsType == typeof(EventArgs)
+                ? "EventCallback"
+                : $"EventCallback<{GetTypeNameAndAddNamespace(eventArgsType, usings)}>";
+
+            const string indent = "        ";
+
+            var xmlDocContents = GetXmlDocContents(e, indent);
+
+            return $@"{xmlDocContents}{indent}[Parameter] public {eventCallbackType} On{GetEventName(e)} {{ get; set; }}
+";
+        }
+
         private static string GetXmlDocText(XmlElement xmlDocElement)
         {
             var allText = xmlDocElement?.InnerXml;
-            allText = allText.Replace("To be added.", string.Empty, StringComparison.Ordinal);
+            allText = allText?.Replace("To be added.", string.Empty, StringComparison.Ordinal);
             if (string.IsNullOrWhiteSpace(allText))
             {
                 return null;
@@ -232,19 +272,26 @@ namespace {Settings.RootNamespace}
             return allText;
         }
 
-        private string GetXmlDocContents(PropertyInfo prop, string indent)
+        private string GetXmlDocContents(MemberInfo member, string indent)
         {
             foreach (var xmlDoc in XmlDocs)
             {
 
                 var xmlDocContents = string.Empty;
+                var xmlDocPrefix = member.MemberType switch
+                {
+                    MemberTypes.Property => "P",
+                    MemberTypes.Event => "E",
+                    _ => ""
+                };
+
                 // Format of XML docs we're looking for in a given property:
                 // <member name="P:Xamarin.Forms.ActivityIndicator.Color">
                 //     <summary>Gets or sets the <see cref="T:Xamarin.Forms.Color" /> of the ActivityIndicator. This is a bindable property.</summary>
                 //     <value>A <see cref="T:Xamarin.Forms.Color" /> used to display the ActivityIndicator. Default is <see cref="P:Xamarin.Forms.Color.Default" />.</value>
                 //     <remarks />
                 // </member>
-                var xmlDocNodeName = $"P:{prop.DeclaringType.Namespace}.{prop.DeclaringType.Name}.{prop.Name}";
+                var xmlDocNodeName = $"{xmlDocPrefix}:{member.DeclaringType.Namespace}.{member.DeclaringType.Name}.{member.Name}";
                 var xmlDocNode = xmlDoc.SelectSingleNode($"//member[@name='{xmlDocNodeName}']");
                 if (xmlDocNode != null)
                 {
@@ -370,6 +417,16 @@ namespace {Settings.RootNamespace}
 ";
         }
 
+        private static string GetEventHandlerRenderAttribute(EventInfo e)
+        {
+            var eventPropName = "On" + GetEventName(e);
+
+#pragma warning disable CA1308 // Normalize strings to uppercase
+            return $@"            builder.AddAttribute(""{eventPropName.ToLowerInvariant()}"", {eventPropName});
+";
+#pragma warning restore CA1308 // Normalize strings to uppercase
+        }
+
         private static readonly Dictionary<Type, string> TypeToCSharpName = new Dictionary<Type, string>
         {
             { typeof(bool), "bool" },
@@ -416,7 +473,7 @@ namespace {Settings.RootNamespace}
             return null;
         }
 
-        private void GenerateHandlerFile(Type typeToGenerate, IEnumerable<PropertyInfo> propertiesToGenerate, string outputFolder)
+        private void GenerateHandlerFile(Type typeToGenerate, IEnumerable<PropertyInfo> propertiesToGenerate, IEnumerable<EventInfo> eventsToGenerate, string outputFolder)
         {
             var fileName = Path.Combine(outputFolder, "Handlers", $"{typeToGenerate.Name}Handler.generated.cs");
             var directoryName = Path.GetDirectoryName(fileName);
@@ -439,7 +496,6 @@ namespace {Settings.RootNamespace}
             // usings
             var usings = new List<UsingStatement>
             {
-                //new UsingStatement { Namespace = "Microsoft.AspNetCore.Components", IsUsed = true, }, // Typically needed only when there are event handlers for the EventArgs types
                 new UsingStatement { Namespace = "Microsoft.MobileBlazorBindings.Core", IsUsed = true, },
                 new UsingStatement { Namespace = "System", IsUsed = true, },
                 new UsingStatement { Namespace = "Xamarin.Forms", Alias = "XF" },
@@ -490,8 +546,49 @@ namespace {Settings.RootNamespace}
 ";
             }
 
-            var outputBuilder = new StringBuilder();
-            outputBuilder.Append($@"{headerText}
+            // events
+
+#pragma warning disable CA1308 // Normalize strings to uppercase
+            var eventConfigurerers = string.Join(Environment.NewLine + Environment.NewLine, eventsToGenerate.Select(e =>
+            {
+                var handlerIdName = $"{GetEventName(e)}EventHandlerId";
+
+                return $@"            ConfigureEvent(
+                eventName: ""on{GetEventName(e).ToLowerInvariant()}"",
+                setId: id => {handlerIdName} = id,
+                clearId: id => {{ if ({handlerIdName} == id) {{ {handlerIdName} = 0; }} }});
+            {componentName}Control.{e.Name} += (s, e) =>
+            {{
+                if ({handlerIdName} != default)
+                {{
+                    renderer.Dispatcher.InvokeAsync(() => renderer.DispatchEventAsync({handlerIdName}, null, e));
+                }}
+            }};";
+            }));
+#pragma warning restore CA1308 // Normalize strings to uppercase
+
+            string initializeEventHandlersMethod = string.Empty;
+            if (!string.IsNullOrWhiteSpace(eventConfigurerers))
+            {
+                initializeEventHandlersMethod = $@"
+        private void InitializeEventHandlers(NativeComponentRenderer renderer)
+        {{
+{eventConfigurerers}
+        }}
+
+";
+            }
+
+            var initializeEventHandlersMethodCall = string.IsNullOrEmpty(initializeEventHandlersMethod)
+                ? ""
+                : @"
+            InitializeEventHandlers(renderer);";
+
+            string eventHandlerIdsValues = string.Concat(eventsToGenerate.Select(e =>
+                $@"        public ulong {GetEventName(e)}EventHandlerId {{ get; set; }}
+"));
+
+            var output = $@"{headerText}
 {usingsText}
 
 namespace {Settings.RootNamespace}.Handlers
@@ -503,17 +600,17 @@ namespace {Settings.RootNamespace}.Handlers
         {{
             {componentName}Control = {componentVarName}Control ?? throw new ArgumentNullException(nameof({componentVarName}Control));
 
-            Initialize(renderer);
+            Initialize(renderer);{initializeEventHandlersMethodCall}
         }}
 
         partial void Initialize(NativeComponentRenderer renderer);
 
         public {componentNamespacePrefix}{componentName} {componentName}Control {{ get; }}
-{applyAttributesMethod}    }}
+{applyAttributesMethod}{initializeEventHandlersMethod}{eventHandlerIdsValues}    }}
 }}
-");
+";
 
-            File.WriteAllText(fileName, outputBuilder.ToString());
+            File.WriteAllText(fileName, output);
         }
 
         private static string GetPropertySetAttribute(PropertyInfo prop, List<UsingStatement> usings)
@@ -619,9 +716,33 @@ namespace {Settings.RootNamespace}.Handlers
                     .Where(HasPublicGetAndSet)
                     .Where(prop => prop.DeclaringType == componentType)
                     .Where(prop => !DisallowedComponentPropertyTypes.Contains(prop.PropertyType))
-                    .Where(IsPropertyBrowsable)
+                    .Where(IsMemberBrowsable)
                     .OrderBy(prop => prop.Name, StringComparer.OrdinalIgnoreCase)
                     .ToList();
+        }
+
+        private static IEnumerable<EventInfo> GetEventsToGenerate(Type componentType)
+        {
+            var allPublicEvents = componentType.GetEvents();
+
+            return
+                allPublicEvents
+                    .Where(e => e.GetAddMethod() != null)
+                    .Where(prop => prop.DeclaringType == componentType)
+                    .Where(IsMemberBrowsable)
+                    .OrderBy(prop => prop.Name, StringComparer.OrdinalIgnoreCase)
+                    .ToList();
+        }
+
+        private static string GetEventName(EventInfo eventInfo)
+        {
+            return eventInfo.Name switch
+            {
+                "Clicked" => "Click",
+                "Pressed" => "Press",
+                "Released" => "Release",
+                _ => eventInfo.Name
+            };
         }
 
         private static bool HasPublicGetAndSet(PropertyInfo propInfo)
@@ -629,10 +750,10 @@ namespace {Settings.RootNamespace}.Handlers
             return propInfo.GetGetMethod() != null && propInfo.GetSetMethod() != null;
         }
 
-        private static bool IsPropertyBrowsable(PropertyInfo propInfo)
+        private static bool IsMemberBrowsable(MemberInfo memberInfo)
         {
             // [EditorBrowsable(EditorBrowsableState.Never)]
-            var attr = (EditorBrowsableAttribute)Attribute.GetCustomAttribute(propInfo, typeof(EditorBrowsableAttribute));
+            var attr = (EditorBrowsableAttribute)Attribute.GetCustomAttribute(memberInfo, typeof(EditorBrowsableAttribute));
             return (attr == null) || (attr.State != EditorBrowsableState.Never);
         }
 
