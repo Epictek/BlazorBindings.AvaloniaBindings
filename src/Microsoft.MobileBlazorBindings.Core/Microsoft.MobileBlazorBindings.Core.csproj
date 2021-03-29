@@ -7,6 +7,8 @@
     <PackageTags>blazor;mobileblazorbindings</PackageTags>
 
     <SignAssembly>true</SignAssembly>
+
+    <Version>0.6.69-preview-collectionview</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

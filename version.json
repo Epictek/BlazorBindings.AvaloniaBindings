@@ -1,8 +1,9 @@
 {
   "$schema": "https://raw.githubusercontent.com/AArnott/Nerdbank.GitVersioning/master/src/NerdBank.GitVersioning/version.schema.json",
-  "version": "0.6-preview",
+  "version": "0.6-preview-collectionview",
   "publicReleaseRefSpec": [
     "^refs/heads/master$",
+    "^refs/heads/collection_view$",
     "^refs/heads/v\\d+(?:\\.\\d+)?$"
   ]
 }

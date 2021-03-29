@@ -5,6 +5,7 @@
     <Title>Experimental Forms binding for Blazor</Title>
     <Description>Experimental Mobile Blazor Bindings enables using Blazor syntax in .razor files to build native apps for iOS and Android.</Description>
     <PackageTags>blazor;mobileblazorbindings</PackageTags>
+    <Version>0.6.69-preview-collectionview</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,11 +14,12 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Xamarin.Forms" Version="5.0.0.1874" />
+
+    <PackageReference Include="Microsoft.MobileBlazorBindings.WebView" Version="0.6.67-preview" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Microsoft.MobileBlazorBindings.Core\Microsoft.MobileBlazorBindings.Core.csproj" />
-    <ProjectReference Include="..\Microsoft.MobileBlazorBindings.WebView\Microsoft.MobileBlazorBindings.WebView.csproj" />
   </ItemGroup>
 
   <ItemGroup>

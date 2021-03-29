@@ -70,7 +70,12 @@ namespace Microsoft.MobileBlazorBindings
 
         protected override void RemoveChildElement(IXamarinFormsElementHandler parentHandler, IXamarinFormsElementHandler childHandler)
         {
-            if (parentHandler is IXamarinFormsContainerElementHandler parent)
+            if (childHandler is INonPhysicalChild)
+            {
+                // If the child is a non-child container then we shouldn't try to remove it from a parent.
+                return;
+            }
+            else if (parentHandler is IXamarinFormsContainerElementHandler parent)
             {
                 parent.RemoveChild(childHandler.ElementControl);
             }
