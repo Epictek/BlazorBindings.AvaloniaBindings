@@ -8,7 +8,7 @@
 
     <SignAssembly>true</SignAssembly>
 
-    <Version>0.6.69-preview-collectionview</Version>
+    <Version>0.6.70-preview-collectionview</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
