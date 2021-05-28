@@ -59,5 +59,10 @@ namespace Microsoft.MobileBlazorBindings.Elements.Handlers
             // in this class should get called.
             throw new NotSupportedException();
         }
+
+        public void Remove()
+        {
+            // Because this handler is not backed by real component, this method is no-op.
+        }
     }
 }
