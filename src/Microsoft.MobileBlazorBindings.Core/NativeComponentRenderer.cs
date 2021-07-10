@@ -204,6 +204,8 @@ namespace Microsoft.MobileBlazorBindings.Core
         {
             bool success;
 
+            type = Nullable.GetUnderlyingType(type) ?? type;
+
             if (type == typeof(string))
             {
                 result = s;
