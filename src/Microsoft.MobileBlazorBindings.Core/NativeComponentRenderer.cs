@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Components.RenderTree;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
@@ -87,15 +88,19 @@ namespace Microsoft.MobileBlazorBindings.Core
 
         protected override Task UpdateDisplayAsync(in RenderBatch renderBatch)
         {
-            var numUpdatedComponents = renderBatch.UpdatedComponents.Count;
-            for(var i = 0; i < numUpdatedComponents; i++)
-            {
-                var updatedComponent = renderBatch.UpdatedComponents.Array[i];
+            var pendingComponentUpdates = renderBatch.UpdatedComponents.Array
+                .Take(renderBatch.UpdatedComponents.Count)
+                .ToDictionary(c => c.ComponentId, c => c.Edits);
 
-                if (updatedComponent.Edits.Count > 0)
+            var numUpdatedComponents = renderBatch.UpdatedComponents.Count;
+            for (var componentIndex = 0; componentIndex < numUpdatedComponents; componentIndex++)
+            {
+                var updatedComponent = renderBatch.UpdatedComponents.Array[componentIndex];
+
+                if (pendingComponentUpdates.Remove(updatedComponent.ComponentId) && updatedComponent.Edits.Count > 0)
                 {
                     var adapter = _componentIdToAdapter[updatedComponent.ComponentId];
-                    adapter.ApplyEdits(updatedComponent.ComponentId, updatedComponent.Edits, renderBatch.ReferenceFrames, renderBatch);
+                    adapter.ApplyEdits(updatedComponent.ComponentId, updatedComponent.Edits, renderBatch.ReferenceFrames, renderBatch, pendingComponentUpdates);
                 }
             }
 
