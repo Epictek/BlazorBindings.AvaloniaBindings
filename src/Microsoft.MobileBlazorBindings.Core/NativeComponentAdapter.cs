@@ -51,7 +51,7 @@ namespace Microsoft.MobileBlazorBindings.Core
             return $"{nameof(NativeComponentAdapter)}: Name={Name ?? "<?>"}, Target={_targetElement?.GetType().Name ?? "<None>"}, #Children={Children.Count}";
         }
 
-        internal void ApplyEdits(int componentId, ArrayBuilderSegment<RenderTreeEdit> edits, ArrayRange<RenderTreeFrame> referenceFrames, RenderBatch batch, Dictionary<int, ArrayBuilderSegment<RenderTreeEdit>> pendingComponentsUpdates)
+        internal void ApplyEdits(int componentId, ArrayBuilderSegment<RenderTreeEdit> edits, ArrayRange<RenderTreeFrame> referenceFrames, RenderBatch batch, HashSet<int> processedComponentIds)
         {
             Renderer.Dispatcher.AssertAccess();
 
@@ -60,7 +60,7 @@ namespace Microsoft.MobileBlazorBindings.Core
                 switch (edit.Type)
                 {
                     case RenderTreeEditType.PrependFrame:
-                        ApplyPrependFrame(batch, componentId, edit.SiblingIndex, referenceFrames.Array, edit.ReferenceFrameIndex, pendingComponentsUpdates);
+                        ApplyPrependFrame(batch, componentId, edit.SiblingIndex, referenceFrames.Array, edit.ReferenceFrameIndex, processedComponentIds);
                         break;
                     case RenderTreeEditType.RemoveFrame:
                         ApplyRemoveFrame(edit.SiblingIndex);
@@ -171,14 +171,14 @@ namespace Microsoft.MobileBlazorBindings.Core
                 attributeEventUpdatesAttributeName: null);
         }
 
-        private int ApplyPrependFrame(RenderBatch batch, int componentId, int siblingIndex, RenderTreeFrame[] frames, int frameIndex, Dictionary<int, ArrayBuilderSegment<RenderTreeEdit>> pendingComponentUpdates)
+        private int ApplyPrependFrame(RenderBatch batch, int componentId, int siblingIndex, RenderTreeFrame[] frames, int frameIndex, HashSet<int> processedComponentIds)
         {
             ref var frame = ref frames[frameIndex];
             switch (frame.FrameType)
             {
                 case RenderTreeFrameType.Element:
                     {
-                        InsertElement(siblingIndex, frames, frameIndex, componentId, batch, pendingComponentUpdates);
+                        InsertElement(siblingIndex, frames, frameIndex, componentId, batch, processedComponentIds);
                         return 1;
                     }
                 case RenderTreeFrameType.Component:
@@ -190,15 +190,16 @@ namespace Microsoft.MobileBlazorBindings.Core
 
                         AddChildAdapter(siblingIndex, childAdapter);
 
-                        // If pending edits contain child component - apply edits for this component recursively.
+                        // Apply edits for child component recursively.
                         // That is done to fully initialize elements before adding to the UI tree.
-                        if (pendingComponentUpdates.TryGetValue(frame.ComponentId, out var componentEdits))
-                        {
-                            pendingComponentUpdates.Remove(frame.ComponentId);
+                        processedComponentIds.Add(frame.ComponentId);
 
-                            if (componentEdits.Count > 0)
+                        for (var i = 0; i < batch.UpdatedComponents.Count; i++)
+                        {
+                            var componentEdits = batch.UpdatedComponents.Array[i];
+                            if (componentEdits.ComponentId == frame.ComponentId && componentEdits.Edits.Count > 0)
                             {
-                                childAdapter.ApplyEdits(frame.ComponentId, componentEdits, batch.ReferenceFrames, batch, pendingComponentUpdates);
+                                childAdapter.ApplyEdits(frame.ComponentId, componentEdits.Edits, batch.ReferenceFrames, batch, processedComponentIds);
                             }
                         }
 
@@ -206,7 +207,7 @@ namespace Microsoft.MobileBlazorBindings.Core
                     }
                 case RenderTreeFrameType.Region:
                     {
-                        return InsertFrameRange(batch, componentId, siblingIndex, frames, frameIndex + 1, frameIndex + frame.RegionSubtreeLength, pendingComponentUpdates);
+                        return InsertFrameRange(batch, componentId, siblingIndex, frames, frameIndex + 1, frameIndex + frame.RegionSubtreeLength, processedComponentIds);
                     }
                 case RenderTreeFrameType.Markup:
                     {
@@ -252,7 +253,7 @@ namespace Microsoft.MobileBlazorBindings.Core
             return new NativeComponentAdapter(Renderer, physicalParent);
         }
 
-        private void InsertElement(int siblingIndex, RenderTreeFrame[] frames, int frameIndex, int componentId, RenderBatch batch, Dictionary<int, ArrayBuilderSegment<RenderTreeEdit>> pendingComponentsUpdates)
+        private void InsertElement(int siblingIndex, RenderTreeFrame[] frames, int frameIndex, int componentId, RenderBatch batch, HashSet<int> processedComponentIds)
         {
             // Elements represent native elements
             ref var frame = ref frames[frameIndex];
@@ -293,7 +294,7 @@ namespace Microsoft.MobileBlazorBindings.Core
                 {
                     // As soon as we see a non-attribute child, all the subsequent child frames are
                     // not attributes, so bail out and insert the remnants recursively
-                    InsertFrameRange(batch, componentId, childIndex: 0, frames, descendantIndex, endIndexExcl, pendingComponentsUpdates);
+                    InsertFrameRange(batch, componentId, childIndex: 0, frames, descendantIndex, endIndexExcl, processedComponentIds);
                     break;
                 }
             }
@@ -434,13 +435,13 @@ namespace Microsoft.MobileBlazorBindings.Core
             return null;
         }
 
-        private int InsertFrameRange(RenderBatch batch, int componentId, int childIndex, RenderTreeFrame[] frames, int startIndex, int endIndexExcl, Dictionary<int, ArrayBuilderSegment<RenderTreeEdit>> pendingComponentsUpdates)
+        private int InsertFrameRange(RenderBatch batch, int componentId, int childIndex, RenderTreeFrame[] frames, int startIndex, int endIndexExcl, HashSet<int> processedComponentIds)
         {
             var origChildIndex = childIndex;
             for (var frameIndex = startIndex; frameIndex < endIndexExcl; frameIndex++)
             {
                 ref var frame = ref batch.ReferenceFrames.Array[frameIndex];
-                var numChildrenInserted = ApplyPrependFrame(batch, componentId, childIndex, frames, frameIndex, pendingComponentsUpdates);
+                var numChildrenInserted = ApplyPrependFrame(batch, componentId, childIndex, frames, frameIndex, processedComponentIds);
                 childIndex += numChildrenInserted;
 
                 // Skip over any descendants, since they are already dealt with recursively
