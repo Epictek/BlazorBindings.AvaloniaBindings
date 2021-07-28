@@ -9,14 +9,14 @@ using XF = Xamarin.Forms;
 
 namespace Microsoft.MobileBlazorBindings.Elements
 {
-    public abstract partial class BaseMenuItem : Element
+    public abstract partial class Brush : Element
     {
-        static BaseMenuItem()
+        static Brush()
         {
             RegisterAdditionalHandlers();
         }
 
-        public new XF.BaseMenuItem NativeControl => ((BaseMenuItemHandler)ElementHandler).BaseMenuItemControl;
+        public new XF.Brush NativeControl => ((BrushHandler)ElementHandler).BrushControl;
 
         protected override void RenderAttributes(AttributesBuilder builder)
         {

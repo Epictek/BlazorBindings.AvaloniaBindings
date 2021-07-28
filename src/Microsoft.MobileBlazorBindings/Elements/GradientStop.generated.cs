@@ -9,29 +9,32 @@ using XF = Xamarin.Forms;
 
 namespace Microsoft.MobileBlazorBindings.Elements
 {
-    public partial class NavigableElement : Element
+    public partial class GradientStop : Element
     {
-        static NavigableElement()
+        static GradientStop()
         {
+            ElementHandlerRegistry.RegisterElementHandler<GradientStop>(
+                renderer => new GradientStopHandler(renderer, new XF.GradientStop()));
+
             RegisterAdditionalHandlers();
         }
 
-        [Parameter] public string @class { get; set; }
-        [Parameter] public string StyleClass { get; set; }
+        [Parameter] public XF.Color? Color { get; set; }
+        [Parameter] public float? Offset { get; set; }
 
-        public new XF.NavigableElement NativeControl => ((NavigableElementHandler)ElementHandler).NavigableElementControl;
+        public new XF.GradientStop NativeControl => ((GradientStopHandler)ElementHandler).GradientStopControl;
 
         protected override void RenderAttributes(AttributesBuilder builder)
         {
             base.RenderAttributes(builder);
 
-            if (@class != null)
+            if (Color != null)
             {
-                builder.AddAttribute(nameof(@class), @class);
+                builder.AddAttribute(nameof(Color), AttributeHelper.ColorToString(Color.Value));
             }
-            if (StyleClass != null)
+            if (Offset != null)
             {
-                builder.AddAttribute(nameof(StyleClass), StyleClass);
+                builder.AddAttribute(nameof(Offset), AttributeHelper.SingleToString(Offset.Value));
             }
 
             RenderAdditionalAttributes(builder);

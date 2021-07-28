@@ -9,19 +9,28 @@ using XF = Xamarin.Forms;
 
 namespace Microsoft.MobileBlazorBindings.Elements
 {
-    public abstract partial class BaseMenuItem : Element
+    public partial class SolidColorBrush : Brush
     {
-        static BaseMenuItem()
+        static SolidColorBrush()
         {
+            ElementHandlerRegistry.RegisterElementHandler<SolidColorBrush>(
+                renderer => new SolidColorBrushHandler(renderer, new XF.SolidColorBrush()));
+
             RegisterAdditionalHandlers();
         }
 
-        public new XF.BaseMenuItem NativeControl => ((BaseMenuItemHandler)ElementHandler).BaseMenuItemControl;
+        [Parameter] public XF.Color? Color { get; set; }
+
+        public new XF.SolidColorBrush NativeControl => ((SolidColorBrushHandler)ElementHandler).SolidColorBrushControl;
 
         protected override void RenderAttributes(AttributesBuilder builder)
         {
             base.RenderAttributes(builder);
 
+            if (Color != null)
+            {
+                builder.AddAttribute(nameof(Color), AttributeHelper.ColorToString(Color.Value));
+            }
 
             RenderAdditionalAttributes(builder);
         }

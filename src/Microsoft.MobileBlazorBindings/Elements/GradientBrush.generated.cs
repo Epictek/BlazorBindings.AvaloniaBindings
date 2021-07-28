@@ -9,14 +9,14 @@ using XF = Xamarin.Forms;
 
 namespace Microsoft.MobileBlazorBindings.Elements
 {
-    public abstract partial class BaseMenuItem : Element
+    public abstract partial class GradientBrush : Brush
     {
-        static BaseMenuItem()
+        static GradientBrush()
         {
             RegisterAdditionalHandlers();
         }
 
-        public new XF.BaseMenuItem NativeControl => ((BaseMenuItemHandler)ElementHandler).BaseMenuItemControl;
+        public new XF.GradientBrush NativeControl => ((GradientBrushHandler)ElementHandler).GradientBrushControl;
 
         protected override void RenderAttributes(AttributesBuilder builder)
         {
