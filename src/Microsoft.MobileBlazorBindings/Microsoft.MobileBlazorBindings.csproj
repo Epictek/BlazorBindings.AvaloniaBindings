@@ -5,7 +5,7 @@
     <Title>Experimental Forms binding for Blazor</Title>
     <Description>Experimental Mobile Blazor Bindings enables using Blazor syntax in .razor files to build native apps for iOS and Android.</Description>
     <PackageTags>blazor;mobileblazorbindings</PackageTags>
-    <Version>0.6.74-preview-fork</Version>
+    <Version>0.6.75-preview-fork</Version>
   </PropertyGroup>
 
   <ItemGroup>
