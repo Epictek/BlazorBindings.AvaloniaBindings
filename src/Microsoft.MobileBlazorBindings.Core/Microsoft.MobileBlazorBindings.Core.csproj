@@ -8,7 +8,7 @@
 
     <SignAssembly>true</SignAssembly>
 
-    <Version>0.6.76-preview-fork</Version>
+    <Version>0.6.77-preview-fork</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
