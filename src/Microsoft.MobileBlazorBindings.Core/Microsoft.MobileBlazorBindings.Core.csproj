@@ -7,6 +7,8 @@
 		<PackageTags>blazor;mobileblazorbindings</PackageTags>
 
 		<SignAssembly>true</SignAssembly>
+
+		<Version>0.7.01-preview-maui</Version>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

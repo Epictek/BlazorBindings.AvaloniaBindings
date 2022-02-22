@@ -6,6 +6,7 @@
     <Title>Experimental Forms binding for Blazor</Title>
     <Description>Experimental Mobile Blazor Bindings enables using Blazor syntax in .razor files to build native apps for iOS and Android.</Description>
     <PackageTags>blazor;mobileblazorbindings</PackageTags>
+	<Version>0.7.01-preview-maui</Version>
   </PropertyGroup>
 
 	<PropertyGroup Condition="$(TargetFramework.Contains('-ios')) or $(TargetFramework.Contains('-maccatalyst'))">
