@@ -10,7 +10,4 @@
     <PackageProjectUrl>https://aka.ms/mobileblazorbindings</PackageProjectUrl>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Nerdbank.GitVersioning" Version="3.3.37" PrivateAssets="all" />
-  </ItemGroup>
 </Project>
