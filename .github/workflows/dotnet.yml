@@ -15,10 +15,12 @@ jobs:
     - uses: actions/checkout@v3
       with:
         fetch-depth: 0
+        
     - name: Install .NET 6.0.300-preview.22204.3
-      run: |
-          curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --version 6.0.300-preview.22204.3 --quality preview
-          dotnet --version
+    - uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: '6.0.300-preview.22204.3'
+        include-prerelease: true
     - name: Install MAUI
       run: |
         dotnet workload install maui
