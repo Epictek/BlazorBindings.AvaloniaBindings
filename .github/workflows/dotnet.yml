@@ -23,9 +23,7 @@ jobs:
     - name: Install MAUI
       run: |
         dotnet workload install maui
-    - name: Restore dependencies
-      run: dotnet restore MobileBlazorBindings.sln
+    - name: Add msbuild to PATH
+      uses: microsoft/setup-msbuild@v1.1
     - name: Build
-      run: dotnet build --no-restore MobileBlazorBindings.sln
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: msbuild MobileBlazorBindings.sln /property:Configuration=Release
