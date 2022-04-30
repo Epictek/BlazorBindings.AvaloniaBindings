@@ -15,14 +15,13 @@ jobs:
     - uses: actions/checkout@v3
       with:
         fetch-depth: 0
+    - name: Install .NET 6.0.300-preview.22204.3
+      run: |
+          curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --version 6.0.300-preview.22204.3 --quality preview
+          dotnet --version
     - name: Install MAUI
       run: |
-        dotnet workload install maui `
-        --from-rollback-file https://aka.ms/dotnet/maui/6.0.300/rc.2.json `
-        --source https://pkgs.dev.azure.com/dnceng/public/_packaging/darc-pub-dotnet-runtime-323bf2dd/nuget/v3/index.json `
-        --source https://pkgs.dev.azure.com/dnceng/public/_packaging/darc-pub-dotnet-emsdk-572aeedc/nuget/v3/index.json `
-        --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json `
-        --source https://api.nuget.org/v3/index.json
+        dotnet workload install maui
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
