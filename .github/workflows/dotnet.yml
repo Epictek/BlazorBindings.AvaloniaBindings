@@ -13,6 +13,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    - name: Install MAUI
+      run: dotnet workload install maui
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
