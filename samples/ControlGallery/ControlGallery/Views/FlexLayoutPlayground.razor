@@ -1,0 +1,20 @@
+﻿@page "/flexlayoutplayground"
+
+<ContentPage>
+    <StackLayout>
+        <Label Text="Simple FlexLayout" />
+
+        <FlexLayout Wrap="FlexWrap.Wrap" Direction="FlexDirection.Row">
+            @foreach (var word in _words)
+            {
+                <Frame BackgroundColor="Color.LightBlue" CornerRadius="10" Padding="10" \>
+                    <Label Text="@word" />
+                </Frame>
+            }
+        </FlexLayout>
+    </StackLayout>
+</ContentPage>
+
+@code {
+    string[] _words = new[] { "Lorem", "ipsum", "dolor", "sit", "amet", "consectetur", "adipiscing", "elit", "sed", "do" };
+}
