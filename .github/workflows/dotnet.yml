@@ -29,8 +29,8 @@ jobs:
         --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json `
         --source https://api.nuget.org/v3/index.json
     - name: Restore dependencies
-      run: dotnet restore MobileBlazorBindings.sln
+      run: dotnet restore BlazorBindings.Maui.sln
     - name: Build
-      run: dotnet build --no-restore MobileBlazorBindings.sln
+      run: dotnet build --no-restore BlazorBindings.Maui.sln
     - name: Test
       run: dotnet test --no-build --verbosity normal
