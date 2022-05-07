@@ -7,7 +7,6 @@
 		<Title>Maui binding for Blazor</Title>
 		<Description>Experimental Maui Blazor Bindings enables using Blazor syntax in .razor files to build native apps for iOS and Android.</Description>
 		<PackageTags>blazor;blazorbindings</PackageTags>
-		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	</PropertyGroup>
 
 	<ItemGroup>

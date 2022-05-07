@@ -7,7 +7,6 @@
 		<Title>Experimental binding of Skia Sharp in Maui Blazor Bindings</Title>
 		<Description>Support for Skia Sharp for Maui Blazor Bindings.</Description>
 		<PackageTags>blazor;blazorbindings;SkiaSharp;</PackageTags>
-		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>	
 	</PropertyGroup>
 
 	<ItemGroup>
