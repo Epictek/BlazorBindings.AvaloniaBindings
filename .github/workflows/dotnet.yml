@@ -36,3 +36,18 @@ jobs:
       uses: actions/upload-artifact@v3.0.0
       with:
         path: packages
+
+  publish-to-myget:  
+
+    runs-on: windows-2022
+    
+    needs: [build]
+    
+    steps:
+    - uses: actions/download-artifact@v3.0.0
+    
+    - name: Display structure of downloaded files
+      run: ls -R
+     
+    - name: Publish to Myget
+      run: dotnet nuget push *.nupkg -k ${{ secrets.MYGET_TOKEN }} -s https://www.myget.org/F/blazorbindings/api/v2/package
