@@ -31,7 +31,7 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore BlazorBindings.Maui.sln
     - name: Build
-      run: dotnet pack -o ./packages --no-restore src/BlazorBindings.Maui -c Release
+      run: dotnet pack -o ./packages -c Release
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3.0.0
       with:
