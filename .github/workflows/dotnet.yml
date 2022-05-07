@@ -30,13 +30,11 @@ jobs:
         --source https://api.nuget.org/v3/index.json
     - name: Restore dependencies
       run: dotnet restore BlazorBindings.Maui.sln
-    - name: Test
-      run: dotnet test --no-restore --verbosity normal
     - name: Build
-      run: dotnet build --no-restore BlazorBindings.Maui.sln
+      run: dotnet build --no-restore BlazorBindings.Maui.sln -c Release
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3.0.0
       with:
         path: |
-          /**/.nupkg
-          /**/.snupkg
+          /**/*.nupkg
+          /**/*.snupkg
