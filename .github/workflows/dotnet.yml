@@ -31,10 +31,10 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore BlazorBindings.Maui.sln
     - name: Build
-      run: dotnet build --no-restore BlazorBindings.Maui.sln -c Release
+      run: dotnet build --no-restore src/BlazorBindings.Maui -c Release
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3.0.0
       with:
         path: |
-          /**/*.nupkg
-          /**/*.snupkg
+          /src/BlazorBindings.Maui/bin/Release/*.nupkg
+          /src/BlazorBindings.Maui/bin/Release/*.snupkg
