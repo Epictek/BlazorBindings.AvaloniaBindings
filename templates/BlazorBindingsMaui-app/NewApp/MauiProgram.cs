@@ -1,4 +1,4 @@
-﻿using Microsoft.MobileBlazorBindings;
+﻿using BlazorBindings.Maui;
 
 namespace NewApp;
 
