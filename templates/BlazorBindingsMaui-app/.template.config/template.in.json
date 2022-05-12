@@ -5,7 +5,7 @@
     "Blazor",
     "MAUI"
   ],
-  "name": "Experimental Mobile Blazor Bindings App",
+  "name": "MAUI Blazor Bindings App",
   "description": "A multiproject template for using Blazor to build native cross-platform applications.",
   "groupIdentity": "BlazorBindings.Maui.App",
   "identity": "BlazorBindings.Maui.App.CSharp",
