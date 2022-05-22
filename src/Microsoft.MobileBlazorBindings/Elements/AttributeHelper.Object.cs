@@ -22,13 +22,14 @@ namespace Microsoft.MobileBlazorBindings.Elements
                 float f => SingleToString(f),
                 uint ui => UInt32ToString(ui),
                 Color color => ColorToString(color),
+                Rectangle rect => RectToString(rect),
                 CornerRadius cornerRadius => CornerRadiusToString(cornerRadius),
                 DateTime dateTime => DateTimeToString(dateTime),
                 GridLength gridLength => GridLengthToString(gridLength),
                 LayoutOptions layoutOptions => LayoutOptionsToString(layoutOptions),
                 Thickness thickness => ThicknessToString(thickness),
                 TimeSpan timeSpan => TimeSpanToString(timeSpan),
-
+                Enum => (int)(object)value,
                 _ => ObjectToDelegate(value)
             };
         }
