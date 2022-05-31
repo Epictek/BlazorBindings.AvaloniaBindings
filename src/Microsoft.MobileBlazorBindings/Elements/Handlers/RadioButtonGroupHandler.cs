@@ -36,9 +36,18 @@ namespace Microsoft.MobileBlazorBindings.Elements.Handlers
                 clearId: id => { if (_selectedValueChangedEventId == id) { _selectedValueChangedEventId = 0; } });
         }
 
-        public override void SetParent(XF.Element parent)
+        public override void AddChild(XF.Element child, int physicalSiblingIndex)
         {
-            base.SetParent(parent);
+            base.AddChild(child, physicalSiblingIndex);
+
+            if (child is XF.RadioButton radioButton)
+            {
+                var selectedValue = XF.RadioButtonGroup.GetSelectedValue(StackLayoutControl);
+                if (Equals(radioButton.Value, selectedValue))
+                {
+                    radioButton.IsChecked = true;
+                }
+            }
         }
 
         public override void ApplyAttribute(ulong attributeEventHandlerId, string attributeName, object attributeValue, string attributeEventUpdatesAttributeName)
