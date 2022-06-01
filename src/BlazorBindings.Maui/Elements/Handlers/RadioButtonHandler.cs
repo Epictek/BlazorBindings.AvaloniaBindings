@@ -9,7 +9,7 @@ namespace BlazorBindings.Maui.Elements.Handlers
         {
             switch (attributeName)
             {
-                case nameof(RadioButton.Title):
+                case nameof(RadioButton.Text):
                     RadioButtonControl.Content = (string)attributeValue;
                     return true;
 

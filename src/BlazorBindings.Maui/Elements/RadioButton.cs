@@ -8,14 +8,14 @@ namespace BlazorBindings.Maui.Elements
 {
     public partial class RadioButton : TemplatedView
     {
-        [Parameter] public string Title { get; set; }
+        [Parameter] public string Text { get; set; }
         [Parameter] public object Value { get; set; }
 
         partial void RenderAdditionalAttributes(AttributesBuilder builder)
         {
-            if (Title != null || Value != null)
+            if (Text != null || Value != null)
             {
-                builder.AddAttribute(nameof(Title), Title ?? Value.ToString());
+                builder.AddAttribute(nameof(Text), Text ?? Value.ToString());
             }
             if (Value != null)
             {

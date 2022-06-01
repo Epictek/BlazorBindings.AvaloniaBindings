@@ -14,9 +14,9 @@
             <Label Text=@($"RadioButtons with pre-selected enum value and titles. Selected value: {selectedEnumValue}") />
 
             <RadioButtonGroup @bind-SelectedValue="selectedEnumValue">
-                <RadioButton Value="ValueEnum.A" Title="First (A)" />
-                <RadioButton Value="ValueEnum.B" Title="Second (B)" />
-                <RadioButton Value="ValueEnum.C" Title="Third (C)" />
+                <RadioButton Value="ValueEnum.A" Text="First (A)" />
+                <RadioButton Value="ValueEnum.B" Text="Second (B)" />
+                <RadioButton Value="ValueEnum.C" Text="Third (C)" />
             </RadioButtonGroup>
 
             <Button Text="Change selection" OnClick="ChangeSelection" />
