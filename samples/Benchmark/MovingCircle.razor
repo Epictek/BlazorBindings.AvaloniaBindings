@@ -1,0 +1,14 @@
+﻿@using Microsoft.Maui.Layouts
+
+<BoxView CornerRadius="Radius"
+         Color="Color"
+         AbsoluteLayout.LayoutBounds=@(new Rect(X, Y, Radius, Radius))
+         AbsoluteLayout.LayoutFlags="@AbsoluteLayoutFlags.PositionProportional" />
+
+
+@code {
+    [Parameter] public Color Color { get; set; }
+    [Parameter] public double Radius { get; set; }
+    [Parameter] public double X { get; set; }
+    [Parameter] public double Y { get; set; }
+}

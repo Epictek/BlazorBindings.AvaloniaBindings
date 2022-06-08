@@ -1,0 +1,46 @@
+﻿@using System.Diagnostics
+<ContentPage>
+    <AbsoluteLayout>
+        <MovingCircle Radius="15" Color="Colors.AliceBlue" X="_x % 1" Y="(-Math.Cos(_x * 10) + 1) / 2" />
+        <MovingCircle Radius="20" Color="Colors.AntiqueWhite" X="2*_x % 1" Y="(-Math.Cos(_x * 15) + 1) / 3" />
+        <MovingCircle Radius="25" Color="Colors.Aqua" X="3*_x % 1" Y="(-Math.Cos(_x * 20) + 1) / 4" />
+        <MovingCircle Radius="30" Color="Colors.Azure" X="4*_x % 1" Y="(-Math.Cos(_x * 25) + 1) / 5" />
+        <MovingCircle Radius="40" Color="Colors.Beige" X="5*_x % 1" Y="(-Math.Cos(_x * 30) + 1) / 6" />
+        <MovingCircle Radius="45" Color="Colors.Fuchsia" X="6*_x % 1" Y="(-Math.Cos(_x * 35) + 1) / 2" />
+        <MovingCircle Radius="50" Color="Colors.Green" X="7*_x % 1" Y="(-Math.Cos(_x * 40) + 1) / 2" />
+        <MovingCircle Radius="53" Color="Colors.Yellow" X="8*_x % 1" Y="(-Math.Cos(_x * 45) + 1) / 2" />
+        <MovingCircle Radius="57" Color="Colors.DarkSalmon" X="9*_x % 1" Y="(-Math.Cos(_x * 50) + 1) / 2" />
+        <MovingCircle Radius="60" Color="Colors.Magenta" X="10*_x % 1" Y="(-Math.Cos(_x * 55) + 1) / 2" />
+
+        <Label Text=@($"FPS: {_fps}") TextColor="Colors.Red" />
+    </AbsoluteLayout>
+</ContentPage>
+
+@code {
+    double _x;
+    double _speed = 0.1;
+    List<double> _frameTimes = new();
+    double _fps = 0;
+    Stopwatch _stopWatch = new();
+    TimeSpan _waitTime = TimeSpan.FromMilliseconds(0.1);
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        _x += (_stopWatch.Elapsed.TotalSeconds * _speed) % 1;
+
+        if (_frameTimes.Count > 50)
+        {
+            _fps = 1 / _frameTimes.Average();
+            _frameTimes.Clear();
+        }
+
+        _frameTimes.Add(_stopWatch.Elapsed.TotalSeconds);
+        _stopWatch.Restart();
+
+        _ = InvokeAsync(async () =>
+        {
+            await Task.Delay(_waitTime);
+            StateHasChanged();
+        });
+    }
+}
