@@ -1,0 +1,18 @@
+﻿<FlyoutPage>
+    <Flyout>
+        <FlyoutMenuPage ItemSelected="PageSelected" />
+    </Flyout>
+
+    <Detail>
+        @_pageFragment
+    </Detail>
+</FlyoutPage>
+
+@code {
+    RenderFragment _pageFragment = @<ContactsPage />;
+
+    void PageSelected(RenderFragment pageFragment)
+    {
+        _pageFragment = pageFragment;
+    }
+}
