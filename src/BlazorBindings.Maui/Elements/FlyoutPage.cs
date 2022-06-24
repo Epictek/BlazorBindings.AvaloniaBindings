@@ -1,32 +1,39 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
+using BlazorBindings.Core;
+using BlazorBindings.Maui.Elements.Handlers;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
+using MC = Microsoft.Maui.Controls;
 
 namespace BlazorBindings.Maui.Elements
 {
     public partial class FlyoutPage : Page
     {
-        [Parameter] public string FlyoutTitle { get; set; }
-
         [Parameter] public RenderFragment Flyout { get; set; }
         [Parameter] public RenderFragment Detail { get; set; }
 
-        protected override RenderFragment GetChildContent() => RenderChildContent;
-
-        private void RenderChildContent(RenderTreeBuilder builder)
+        protected override void RenderAdditionalElementContent(RenderTreeBuilder builder, ref int sequence)
         {
-            builder.OpenComponent<FlyoutFlyoutPage>(0);
-            builder.AddAttribute(0, nameof(FlyoutFlyoutPage.ChildContent), Flyout);
-            // TODO: This feels a bit hacky. This is really a property of the child control, but here we are defining
-            // it on the container control and applying it to the child. What about other such properties?
-            builder.AddAttribute(1, "Title", FlyoutTitle);
-            builder.CloseComponent();
+            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(FlyoutPage), nameof(Flyout), Flyout);
+            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(FlyoutPage), nameof(Detail), Detail);
+        }
 
-            builder.OpenComponent<FlyoutDetailPage>(1);
-            builder.AddAttribute(0, nameof(FlyoutDetailPage.ChildContent), Detail);
-            builder.CloseComponent();
+        static partial void RegisterAdditionalHandlers()
+        {
+            ElementHandlerRegistry.RegisterPropertyContentHandler<FlyoutPage>(nameof(Flyout),
+                _ => new ContentPropertyHandler<MC.FlyoutPage>((page, value) => page.Flyout = (MC.Page)value));
+
+            ElementHandlerRegistry.RegisterPropertyContentHandler<FlyoutPage>(nameof(Detail),
+                _ => new ContentPropertyHandler<MC.FlyoutPage>((page, value) =>
+                {
+                    if (value is not MC.NavigationPage navigationPage)
+                    {
+                        navigationPage = new MC.NavigationPage((MC.Page)value);
+                    }
+                    page.Detail = navigationPage;
+                }));
         }
     }
 }
