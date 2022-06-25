@@ -28,6 +28,10 @@ namespace BlazorBindings.Maui.Elements
             ElementHandlerRegistry.RegisterPropertyContentHandler<FlyoutPage>(nameof(Detail),
                 _ => new ContentPropertyHandler<MC.FlyoutPage>((page, value) =>
                 {
+                    // We cannot set Detail to null. An actual page will probably be set on next invocation anyway.
+                    if (value == null)
+                        return;
+
                     if (value is not MC.NavigationPage navigationPage)
                     {
                         navigationPage = new MC.NavigationPage((MC.Page)value);
