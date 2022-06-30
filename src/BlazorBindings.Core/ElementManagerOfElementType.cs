@@ -13,16 +13,17 @@ namespace BlazorBindings.Core
     {
         private static TElementType ConvertToType(IElementHandler elementHandler, string parameterName)
         {
-            if (!(elementHandler is TElementType))
+            return elementHandler switch
             {
-                throw new ArgumentException($"Expected parameter value of type '{elementHandler.GetType().FullName}' to be convertible to type '{typeof(TElementType).FullName}'.", parameterName);
-            }
-            return (TElementType)elementHandler;
+                TElementType elementType => elementType,
+                null => default,
+                _ => throw new ArgumentException($"Expected parameter value of type '{elementHandler.GetType().FullName}' to be convertible to type '{typeof(TElementType).FullName}'.", parameterName)
+            };
         }
 
-        public sealed override void AddChildElement(IElementHandler parentHandler, IElementHandler childHandler, int physicalSiblingIndex)
+        public sealed override void SetChildElement(IElementHandler parentHandler, IElementHandler previousChildHandler, IElementHandler newChildHandler, int physicalSiblingIndex)
         {
-            AddChildElement(ConvertToType(parentHandler, nameof(parentHandler)), ConvertToType(childHandler, nameof(childHandler)), physicalSiblingIndex);
+            SetChildElement(ConvertToType(parentHandler, nameof(parentHandler)), ConvertToType(previousChildHandler, nameof(previousChildHandler)), ConvertToType(newChildHandler, nameof(newChildHandler)), physicalSiblingIndex);
         }
 
         public sealed override int GetChildElementIndex(IElementHandler parentHandler, IElementHandler childHandler)
@@ -40,15 +41,9 @@ namespace BlazorBindings.Core
             return IsParentOfChild(ConvertToType(parentHandler, nameof(parentHandler)), ConvertToType(childHandler, nameof(childHandler)));
         }
 
-        public sealed override void RemoveChildElement(IElementHandler parentHandler, IElementHandler childHandler)
-        {
-            RemoveChildElement(ConvertToType(parentHandler, nameof(parentHandler)), ConvertToType(childHandler, nameof(childHandler)));
-        }
-
-        protected abstract void AddChildElement(TElementType parentHandler, TElementType childHandler, int physicalSiblingIndex);
+        protected abstract void SetChildElement(TElementType parentHandler, TElementType previousChildHandler, TElementType newChildHandler, int physicalSiblingIndex);
         protected abstract int GetChildElementIndex(TElementType parentHandler, TElementType childHandler);
         protected abstract bool IsParented(TElementType handler);
         protected abstract bool IsParentOfChild(TElementType parentHandler, TElementType childHandler);
-        protected abstract void RemoveChildElement(TElementType parentHandler, TElementType childHandler);
     }
 }

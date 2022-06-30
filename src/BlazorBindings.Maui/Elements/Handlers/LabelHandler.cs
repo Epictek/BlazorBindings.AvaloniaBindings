@@ -3,7 +3,6 @@
 
 using BlazorBindings.Core;
 using System;
-using System.Diagnostics;
 using MC = Microsoft.Maui.Controls;
 
 namespace BlazorBindings.Maui.Elements.Handlers
@@ -12,20 +11,10 @@ namespace BlazorBindings.Maui.Elements.Handlers
     {
         private readonly TextSpanContainer _textSpanContainer = new();
 
-        public virtual void AddChild(MC.Element child, int physicalSiblingIndex)
+        public void SetChild(MC.Element previousChild, MC.Element newChild, int physicalSiblingIndex)
         {
-            var childAsSpan = child as MC.Span;
-
             var formattedString = GetFormattedString();
-            if (physicalSiblingIndex <= formattedString.Spans.Count)
-            {
-                formattedString.Spans.Insert(physicalSiblingIndex, childAsSpan);
-            }
-            else
-            {
-                Debug.WriteLine($"WARNING: {nameof(AddChild)} called with {nameof(physicalSiblingIndex)}={physicalSiblingIndex}, but Label.FormattedText.Spans.Count={LabelControl.FormattedText.Spans.Count}");
-                formattedString.Spans.Add(childAsSpan);
-            }
+            ContainerHelper.SetChild(formattedString.Spans, previousChild, newChild, physicalSiblingIndex);
         }
 
         public int GetChildIndex(MC.Element child)
@@ -41,14 +30,6 @@ namespace BlazorBindings.Maui.Elements.Handlers
                 MC.FormattedString formattedString when LabelControl.FormattedText == formattedString => 0,
                 _ => -1
             };
-        }
-
-        public virtual void RemoveChild(MC.Element child)
-        {
-            var childAsSpan = child as MC.Span;
-
-            var formattedString = GetFormattedString();
-            formattedString.Spans.Remove(childAsSpan);
         }
 
         public void HandleText(int index, string text)

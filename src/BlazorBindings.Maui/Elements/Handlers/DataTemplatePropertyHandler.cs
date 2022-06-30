@@ -1,10 +1,10 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-using Microsoft.AspNetCore.Components;
-using Microsoft.Maui.Controls;
 using BlazorBindings.Core;
 using BlazorBindings.Maui.Elements.DataTemplates;
+using Microsoft.AspNetCore.Components;
+using Microsoft.Maui.Controls;
 using System;
 using MC = Microsoft.Maui.Controls;
 
@@ -36,9 +36,7 @@ namespace BlazorBindings.Maui.Elements.Handlers
         // Because this is a 'fake' element, all matters related to physical trees
         // should be no-ops.
 
-        void IMauiContainerElementHandler.AddChild(MC.Element child, int physicalSiblingIndex) { }
-
-        void IMauiContainerElementHandler.RemoveChild(MC.Element child) { }
+        void IMauiContainerElementHandler.SetChild(MC.Element previousChild, MC.Element newChild, int physicalSiblingIndex) { }
 
         int IMauiContainerElementHandler.GetChildIndex(MC.Element child) => -1;
 

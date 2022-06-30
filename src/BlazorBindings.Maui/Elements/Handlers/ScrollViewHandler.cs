@@ -8,18 +8,10 @@ namespace BlazorBindings.Maui.Elements.Handlers
 {
     public partial class ScrollViewHandler : IMauiContainerElementHandler
     {
-        public void AddChild(MC.Element child, int physicalSiblingIndex)
+        public void SetChild(MC.Element previousChild, MC.Element newChild, int physicalSiblingIndex)
         {
-            var childAsView = child as MC.View;
+            var childAsView = newChild as MC.View;
             ScrollViewControl.Content = childAsView;
-        }
-
-        public void RemoveChild(MC.Element child)
-        {
-            if (ScrollViewControl.Content == child)
-            {
-                ScrollViewControl.Content = null;
-            }
         }
 
         public int GetChildIndex(MC.Element child)

@@ -37,16 +37,14 @@ namespace BlazorBindings.Maui.Elements.Handlers
 
         private event Action<MC.Element> ChildAdded;
 
-        void IMauiContainerElementHandler.AddChild(MC.Element child, int physicalSiblingIndex)
+        void IMauiContainerElementHandler.SetChild(MC.Element previousChild, MC.Element newChild, int physicalSiblingIndex)
         {
-            var index = Math.Min(physicalSiblingIndex, Elements.Count);
-            Elements.Insert(index, child);
-            ChildAdded?.Invoke(child);
-        }
+            ContainerHelper.SetChild(Elements, previousChild, newChild, physicalSiblingIndex);
 
-        void IMauiContainerElementHandler.RemoveChild(MC.Element child)
-        {
-            Elements.Remove(child);
+            if (newChild != null)
+            {
+                ChildAdded?.Invoke(newChild);
+            }
         }
 
         int IMauiContainerElementHandler.GetChildIndex(MC.Element child)

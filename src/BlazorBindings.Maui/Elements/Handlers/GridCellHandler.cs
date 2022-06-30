@@ -54,31 +54,18 @@ namespace BlazorBindings.Maui.Elements.Handlers
             }
         }
 
-        public void AddChild(MC.Element child, int physicalSiblingIndex)
+        public void SetChild(MC.Element previousChild, MC.Element newChild, int physicalSiblingIndex)
         {
-            if (!(child is MC.View childView))
+            if (newChild is MC.View childView)
             {
-                throw new ArgumentException($"Expected parent to be of type {typeof(MC.View).FullName} but it is of type {child?.GetType().FullName}.", nameof(child));
+                MC.Grid.SetColumn(childView, Column);
+                MC.Grid.SetColumnSpan(childView, ColumnSpan);
+                MC.Grid.SetRow(childView, Row);
+                MC.Grid.SetRowSpan(childView, RowSpan);
             }
 
-            MC.Grid.SetColumn(childView, Column);
-            MC.Grid.SetColumnSpan(childView, ColumnSpan);
-            MC.Grid.SetRow(childView, Row);
-            MC.Grid.SetRowSpan(childView, RowSpan);
-
-            _children.Add(childView);
-            _parentGrid.Children.Add(childView);
-        }
-
-        public void RemoveChild(MC.Element child)
-        {
-            if (!(child is MC.View childView))
-            {
-                throw new ArgumentException($"Expected parent to be of type {typeof(MC.View).FullName} but it is of type {child?.GetType().FullName}.", nameof(child));
-            }
-
-            _children.Remove(childView);
-            _parentGrid.Children.Remove(childView);
+            ContainerHelper.SetChild(_parentGrid.Children, previousChild, newChild, physicalSiblingIndex);
+            ContainerHelper.SetChild(_children, previousChild, newChild, physicalSiblingIndex);
         }
 
         public int GetChildIndex(MC.Element child)

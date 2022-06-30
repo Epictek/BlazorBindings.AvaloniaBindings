@@ -8,18 +8,10 @@ namespace BlazorBindings.Maui.Elements.Handlers
 {
     public partial class ShellContentHandler : BaseShellItemHandler, IMauiContainerElementHandler
     {
-        public virtual void AddChild(MC.Element child, int physicalSiblingIndex)
+        public virtual void SetChild(MC.Element previousChild, MC.Element newChild, int physicalSiblingIndex)
         {
-            var childAsTemplatedPage = child as MC.TemplatedPage;
+            var childAsTemplatedPage = newChild as MC.TemplatedPage;
             ShellContentControl.Content = childAsTemplatedPage;
-        }
-
-        public virtual void RemoveChild(MC.Element child)
-        {
-            if (ShellContentControl.Content == child)
-            {
-                ShellContentControl.Content = null;
-            }
         }
 
         public int GetChildIndex(MC.Element child)

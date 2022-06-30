@@ -33,15 +33,9 @@ namespace BlazorBindings.Maui.Elements.Handlers
             }
         }
 
-        public void AddChild(MC.Element child, int physicalSiblingIndex)
+        public void SetChild(MC.Element previousChild, MC.Element newChild, int physicalSiblingIndex)
         {
-            _parentChildManager.SetChild(child);
-        }
-
-        public void RemoveChild(MC.Element child)
-        {
-            // TODO: This could probably be implemented at some point, but it isn't needed right now
-            throw new NotImplementedException();
+            _parentChildManager.SetChild(newChild);
         }
 
         public int GetChildIndex(MC.Element child)

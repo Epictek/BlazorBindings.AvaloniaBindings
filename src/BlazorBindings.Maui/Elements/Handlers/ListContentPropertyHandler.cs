@@ -28,24 +28,14 @@ namespace BlazorBindings.Maui.Elements.Handlers
             // Because this Handler is used internally only, this method is no-op.
         }
 
-        void IMauiContainerElementHandler.AddChild(MC.Element child, int physicalSiblingIndex)
+        void IMauiContainerElementHandler.SetChild(MC.Element previousChild, MC.Element newChild, int physicalSiblingIndex)
         {
-            if (!(child is TItemType typedChild))
-            {
-                throw new NotSupportedException($"Cannot add item of type {child?.GetType().Name} to a {typeof(TItemType)} collection.");
-            }
-
-            _propertyItems.Insert(physicalSiblingIndex, typedChild);
+            ContainerHelper.SetChild(_propertyItems, previousChild, newChild, physicalSiblingIndex);
         }
 
         int IMauiContainerElementHandler.GetChildIndex(MC.Element child)
         {
             return _propertyItems.IndexOf(child as TItemType);
-        }
-
-        void IMauiContainerElementHandler.RemoveChild(MC.Element child)
-        {
-            _propertyItems.Remove(child as TItemType);
         }
 
         // Because this is a 'fake' element, all matters related to physical trees

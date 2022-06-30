@@ -122,23 +122,23 @@ namespace BlazorBindings.Core
         {
             var childToRemove = Children[siblingIndex];
             Children.RemoveAt(siblingIndex);
-            childToRemove.RemoveSelfAndDescendants();
+            childToRemove.RemoveSelfAndDescendants(siblingIndex);
         }
 
-        private void RemoveSelfAndDescendants()
+        private void RemoveSelfAndDescendants(int siblingIndex)
         {
             if (_targetElement != null)
             {
                 // This adapter represents a physical element, so by removing it, we implicitly
                 // remove all descendants.
-                Renderer.ElementManager.RemoveChildElement(_closestPhysicalParent, _targetElement);
+                Renderer.ElementManager.SetChildElement(_closestPhysicalParent, _targetElement, null, siblingIndex);
             }
             else
             {
                 // This adapter is just a container for other adapters
                 foreach (var child in Children)
                 {
-                    child.RemoveSelfAndDescendants();
+                    child.RemoveSelfAndDescendants(siblingIndex);
                 }
             }
         }
@@ -321,7 +321,7 @@ namespace BlazorBindings.Core
             if (!Renderer.ElementManager.IsParented(_targetElement))
             {
                 var elementIndex = GetIndexForElement();
-                Renderer.ElementManager.AddChildElement(_closestPhysicalParent, _targetElement, elementIndex);
+                Renderer.ElementManager.SetChildElement(_closestPhysicalParent, null, _targetElement, elementIndex);
             }
         }
 

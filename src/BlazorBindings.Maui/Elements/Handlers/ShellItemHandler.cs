@@ -2,7 +2,6 @@
 // Licensed under the MIT license.
 
 using System;
-using System.Diagnostics;
 using System.Linq;
 using MC = Microsoft.Maui.Controls;
 
@@ -10,43 +9,20 @@ namespace BlazorBindings.Maui.Elements.Handlers
 {
     public partial class ShellItemHandler : ShellGroupItemHandler, IMauiContainerElementHandler
     {
-        public virtual void AddChild(MC.Element child, int physicalSiblingIndex)
+        public void SetChild(MC.Element previousChild, MC.Element newChild, int physicalSiblingIndex)
         {
-            if (child is null)
-            {
-                throw new ArgumentNullException(nameof(child));
-            }
-
-            MC.ShellSection sectionToAdd = child switch
+            MC.ShellSection sectionToAdd = newChild switch
             {
                 MC.TemplatedPage childAsTemplatedPage => childAsTemplatedPage,  // Implicit conversion
                 MC.ShellContent childAsShellContent => childAsShellContent,  // Implicit conversion
                 MC.ShellSection childAsShellSection => childAsShellSection,
-                _ => throw new NotSupportedException($"Handler of type '{GetType().FullName}' representing element type '{TargetElement?.GetType().FullName ?? "<null>"}' doesn't support adding a child (child type is '{child.GetType().FullName}').")
+                null => null,
+                _ => throw new NotSupportedException($"Handler of type '{GetType().FullName}' representing element type '{TargetElement?.GetType().FullName ?? "<null>"}' doesn't support adding a child (child type is '{newChild.GetType().FullName}').")
             };
 
-            if (ShellItemControl.Items.Count >= physicalSiblingIndex)
-            {
-                ShellItemControl.Items.Insert(physicalSiblingIndex, sectionToAdd);
-            }
-            else
-            {
-                Debug.WriteLine($"WARNING: {nameof(AddChild)} called with {nameof(physicalSiblingIndex)}={physicalSiblingIndex}, but ShellItemControl.Items.Count={ShellItemControl.Items.Count}");
-                ShellItemControl.Items.Add(sectionToAdd);
-            }
-        }
+            MC.ShellSection sectionToRemove = GetSectionForElement(previousChild);
 
-        public virtual void RemoveChild(MC.Element child)
-        {
-            if (child is null)
-            {
-                throw new ArgumentNullException(nameof(child));
-            }
-
-            var sectionToRemove = GetSectionForElement(child)
-                ?? throw new NotSupportedException($"Handler of type '{GetType().FullName}' representing element type '{TargetElement?.GetType().FullName ?? "<null>"}' doesn't support removing a child (child type is '{child.GetType().FullName}').");
-
-            ShellItemControl.Items.Remove(sectionToRemove);
+            ContainerHelper.SetChild(ShellItemControl.Items, sectionToRemove, sectionToAdd, physicalSiblingIndex);
         }
 
         public override void SetParent(MC.Element parent)

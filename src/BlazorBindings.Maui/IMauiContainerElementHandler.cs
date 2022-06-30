@@ -7,8 +7,7 @@ namespace BlazorBindings.Maui
 {
     public interface IMauiContainerElementHandler : IMauiElementHandler
     {
-        void AddChild(MC.Element child, int physicalSiblingIndex);
-        void RemoveChild(MC.Element child);
+        void SetChild(MC.Element previousChild, MC.Element newChild, int physicalSiblingIndex);
         int GetChildIndex(MC.Element child);
     }
 }
