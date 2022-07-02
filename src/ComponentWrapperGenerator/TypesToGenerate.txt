@@ -5,6 +5,7 @@ BaseShellItem
 BoxView
 Brush
 Button
+#CarouselView // Manually written to use custom logic for generics and binding
 CheckBox
 #CollectionView // Manually written to use custom logic for generics and binding
 ContentPage
