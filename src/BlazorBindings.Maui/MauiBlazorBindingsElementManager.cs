@@ -85,10 +85,5 @@ namespace BlazorBindings.Maui
                     $"(child type is '{childHandler.ElementControl?.GetType().FullName}').");
             }
         }
-
-        protected override bool IsParentOfChild(IMauiElementHandler parentHandler, IMauiElementHandler childHandler)
-        {
-            return childHandler.IsParentedTo(parentHandler.ElementControl);
-        }
     }
 }

@@ -259,7 +259,7 @@ namespace BlazorBindings.Core
             ref var frame = ref frames[frameIndex];
             var elementName = frame.ElementName;
             var elementHandlerFactory = ElementHandlerRegistry.ElementHandlers[elementName];
-            var elementHandler = elementHandlerFactory.CreateElementHandler(new ElementHandlerFactoryContext(Renderer, _closestPhysicalParent, _targetComponent));
+            var elementHandler = elementHandlerFactory(Renderer, _closestPhysicalParent, _targetComponent);
 
             if (_targetComponent is NativeControlComponentBase componentInstance)
             {
@@ -357,11 +357,6 @@ namespace BlazorBindings.Core
                 var matchedEarlierSibling = GetEarlierSiblingMatch(parentAdapter, childAdapter);
                 if (matchedEarlierSibling != null)
                 {
-                    if (!Renderer.ElementManager.IsParentOfChild(_closestPhysicalParent, matchedEarlierSibling._targetElement))
-                    {
-                        //Debug.Fail($"Expected that the item found ({matchedEarlierSibling.DebugName}) with target element ({matchedEarlierSibling._targetElement.GetType().FullName}) should necessarily be an immediate child of the closest native parent ({_closestPhysicalParent.GetType().FullName}), but it wasn't...");
-                    }
-
                     // If a native element was found somewhere within this sibling, the index for the new element
                     // will be 1 greater than its native index.
                     return Renderer.ElementManager.GetChildElementIndex(_closestPhysicalParent, matchedEarlierSibling._targetElement) + 1;

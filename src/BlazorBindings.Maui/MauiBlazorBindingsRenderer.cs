@@ -19,7 +19,7 @@ namespace BlazorBindings.Maui
         {
         }
 
-        public override Dispatcher Dispatcher { get; } = new XamarinDeviceDispatcher();
+        public override Dispatcher Dispatcher { get; } = new MauiDeviceDispatcher();
 
         public Task<TComponent> AddComponent<TComponent>(MC.Element parent, Dictionary<string, object> parameters = null) where TComponent : IComponent
         {

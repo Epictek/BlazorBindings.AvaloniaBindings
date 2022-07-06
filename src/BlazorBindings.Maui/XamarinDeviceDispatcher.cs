@@ -11,7 +11,7 @@ namespace BlazorBindings.Maui
     /// <summary>
     /// Custom dispatcher for MAUI apps to ensure all UI work is done on the UI (main) thread.
     /// </summary>
-    internal class XamarinDeviceDispatcher : Microsoft.AspNetCore.Components.Dispatcher
+    internal class MauiDeviceDispatcher : Microsoft.AspNetCore.Components.Dispatcher
     {
         private static IDispatcher Dispatcher => Application.Current.Dispatcher;
 

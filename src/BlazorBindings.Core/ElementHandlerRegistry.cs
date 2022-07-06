@@ -9,39 +9,38 @@ namespace BlazorBindings.Core
 {
     public static class ElementHandlerRegistry
     {
-        internal static Dictionary<string, ElementHandlerFactory> ElementHandlers { get; }
-            = new Dictionary<string, ElementHandlerFactory>();
+        internal static Dictionary<string, ElementHandlerFactory> ElementHandlers { get; } = new();
 
         public static void RegisterElementHandler<TComponent>(
             Func<NativeComponentRenderer, IElementHandler, TComponent, IElementHandler> factory) where TComponent : NativeControlComponentBase
         {
-            ElementHandlers.Add(typeof(TComponent).FullName, new ElementHandlerFactory((renderer, parent, component) => factory(renderer, parent, (TComponent)component)));
+            ElementHandlers.Add(typeof(TComponent).FullName, (renderer, parent, component) => factory(renderer, parent, (TComponent)component));
         }
 
         public static void RegisterElementHandler<TComponent>(
             Func<NativeComponentRenderer, IElementHandler, IElementHandler> factory) where TComponent : NativeControlComponentBase
         {
-            ElementHandlers.Add(typeof(TComponent).FullName, new ElementHandlerFactory((renderer, parent, _) => factory(renderer, parent)));
+            ElementHandlers.Add(typeof(TComponent).FullName, (renderer, parent, _) => factory(renderer, parent));
         }
 
         public static void RegisterElementHandler<TComponent>(
             Func<NativeComponentRenderer, IElementHandler> factory) where TComponent : NativeControlComponentBase
         {
-            ElementHandlers.Add(typeof(TComponent).FullName, new ElementHandlerFactory((renderer, _, __) => factory(renderer)));
+            ElementHandlers.Add(typeof(TComponent).FullName, (renderer, _, __) => factory(renderer));
         }
 
         public static void RegisterPropertyContentHandler<TComponent>(string propertyName,
             Func<NativeComponentRenderer, IElementHandler> factory) where TComponent : NativeControlComponentBase
         {
             var key = $"p-{typeof(TComponent).FullName}.{propertyName}";
-            ElementHandlers.Add(key, new ElementHandlerFactory((renderer, _, __) => factory(renderer)));
+            ElementHandlers.Add(key, (renderer, _, __) => factory(renderer));
         }
 
         public static void RegisterPropertyContentHandler<TComponent>(string propertyName,
             Func<NativeComponentRenderer, IElementHandler, IComponent, IElementHandler> factory) where TComponent : NativeControlComponentBase
         {
             var key = $"p-{typeof(TComponent).FullName}.{propertyName}";
-            ElementHandlers.Add(key, new ElementHandlerFactory((renderer, parent, component) => factory(renderer, parent, component)));
+            ElementHandlers.Add(key, (renderer, parent, component) => factory(renderer, parent, component));
         }
 
         public static void RegisterElementHandler<TComponent, TControlHandler>() where TComponent : NativeControlComponentBase where TControlHandler : class, IElementHandler, new()
