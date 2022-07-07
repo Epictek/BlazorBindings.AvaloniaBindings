@@ -43,6 +43,7 @@ Page
 ProgressBar
 RadialGradientBrush 
 RadioButton
+RefreshView
 ScrollView
 #SelectableItemsView // Manually written to use custom logic for generics and binding
 Shell
