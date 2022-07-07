@@ -3,7 +3,7 @@
 <ContentPage Title="RadioButtons">
     <RefreshView @bind-IsRefreshing="_isRefreshing" OnRefreshing="Refresh">
         <ScrollView>
-            <VerticalStackLayout HorizontalOptions="LayoutOptions.Fill">
+            <VerticalStackLayout>
                 <Label>Last refresh time: @_refreshTime</Label>
                 <Label>Page was refreshed @_refreshCount times.</Label>
                 <Button OnClick="TriggerRefresh" Text="Trigger refresh" />
