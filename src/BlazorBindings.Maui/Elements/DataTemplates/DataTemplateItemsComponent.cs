@@ -41,10 +41,11 @@ namespace BlazorBindings.Maui.Elements.DataTemplates
 
         private readonly List<MC.VerticalStackLayout> _itemRoots = new();
 
-        public void Add(MC.VerticalStackLayout templateRoot)
+        public MC.View AddTemplateRoot()
         {
+            var templateRoot = new MC.VerticalStackLayout();
             _itemRoots.Add(templateRoot);
-            StateHasChanged();
+            return templateRoot;
         }
     }
 }
