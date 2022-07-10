@@ -1,0 +1,16 @@
+﻿<ContentPage Title="Checkboxes">
+    <VerticalStackLayout Margin="20">
+
+        <HorizontalStackLayout>
+            <CheckBox @bind-IsChecked="_isChecked" />
+            <Label>Checkbox Title</Label>
+        </HorizontalStackLayout>
+
+        <Label>Checkbox is @(_isChecked ? "checked" : "unchecked")!</Label>
+    </VerticalStackLayout>
+</ContentPage>
+
+@code
+{
+    private bool _isChecked;
+}

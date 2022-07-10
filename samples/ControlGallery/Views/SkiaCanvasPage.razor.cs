@@ -4,11 +4,10 @@
 using BlazorBindings.Maui.SkiaSharp;
 using SkiaSharp;
 using SkiaSharp.Views.Maui;
-using System;
 
 namespace ControlGallery.Views
 {
-    public partial class SkiaCanvasDemo
+    public partial class SkiaCanvasPage
     {
         public SKCanvasView CanvasView { get; set; }
         public SKCanvasView CanvasView2 { get; set; }

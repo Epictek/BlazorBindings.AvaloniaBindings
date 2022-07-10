@@ -1,0 +1,31 @@
+﻿@page "/edit-text/editor"
+
+@{
+    RenderFragment Separator = @<BoxView Color="Colors.LightGray" HeightRequest="1" />;
+}
+
+<ContentPage Title="Entry">
+    <StackLayout Margin="20">
+        <Entry @bind-Text="_text" OnCompleted="OnCompleted" />
+        <Label Text=@($"Edits count: {_editsNumber}. Text entered: {_text}") />
+
+        @Separator
+
+        <Label>Email entry: @_email</Label>
+        <Entry @bind-Text="_email" Keyboard="Keyboard.Email" />
+        
+        @Separator
+
+
+
+    </StackLayout>
+</ContentPage>
+
+@code
+{
+    string _text;
+    string _email;
+    int _editsNumber;
+
+    void OnCompleted() => _editsNumber++;
+}

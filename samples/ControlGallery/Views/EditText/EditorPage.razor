@@ -1,6 +1,6 @@
-﻿@page "/editorplayground"
+﻿@page "/edit-text/editors"
 
-<ContentPage>
+<ContentPage Title="Editor">
     <StackLayout Margin="20">
         <Editor @bind-Text="_text" OnCompleted="OnCompleted" AutoSize="EditorAutoSizeOption.TextChanges" />
         <Label Text=@($"Edits count: {_editsNumber}. Text entered: {_text}")/>

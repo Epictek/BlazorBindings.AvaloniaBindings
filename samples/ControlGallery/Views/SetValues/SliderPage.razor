@@ -1,0 +1,11 @@
+﻿<ContentPage Title="Sliders">
+    <VerticalStackLayout Margin="20">
+        <Slider Minimum="0" Maximum="20" @bind-Value="_sliderValue" />
+        <Label>Slider is @_sliderValue</Label>
+    </VerticalStackLayout>
+</ContentPage>
+
+@code
+{
+    private double _sliderValue;
+}
