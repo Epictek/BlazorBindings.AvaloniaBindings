@@ -76,6 +76,7 @@ namespace ComponentWrapperGenerator
                 new UsingStatement { Namespace = "System.Threading.Tasks", IsUsed = true, },
                 new UsingStatement { Namespace = "Microsoft.Maui.Controls", Alias = "MC" },
                 new UsingStatement { Namespace = "Microsoft.Maui.Controls.Compatibility", Alias = "MCC" },
+                new UsingStatement { Namespace = "Microsoft.Maui.Controls.Shapes", Alias = "MCS" },
                 //new UsingStatement { Namespace = "Xamarin.Forms.DualScreen", Alias = "XFD" },
             };
 
@@ -149,7 +150,7 @@ namespace {componentNamespace}
         {{
             {staticConstructorBody.Trim()}
         }}
-{ propertyDeclarations}
+{propertyDeclarations}
         public new {componentNamespacePrefix}{componentName} NativeControl => (ElementHandler as {componentHandlerName})?.{componentName}Control;
 
         protected override void RenderAttributes(AttributesBuilder builder)
@@ -200,6 +201,8 @@ namespace {componentNamespace}
             typeof(Brush),
             typeof(Button.ButtonContentLayout), // TODO: This is temporary; should be possible to add support later
             typeof(ColumnDefinitionCollection),
+            typeof(PointCollection),
+            typeof(DoubleCollection),
             typeof(ControlTemplate),
             typeof(DataTemplate),
             typeof(Element),
@@ -478,6 +481,7 @@ namespace {componentNamespace}
                 new UsingStatement { Namespace = "System", IsUsed = true, },
                 new UsingStatement { Namespace = "Microsoft.Maui.Controls", Alias = "MC" },
                 new UsingStatement { Namespace = "Microsoft.Maui.Controls.Compatibility", Alias = "MCC" },
+                new UsingStatement { Namespace = "Microsoft.Maui.Controls.Shapes", Alias = "MCS" },
                 //new UsingStatement { Namespace = "Xamarin.Forms.DualScreen", Alias = "MD" },
             };
 

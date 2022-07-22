@@ -41,7 +41,7 @@ NavigableElement
 Page
 #Picker // Manually written to use custom logic for generics and binding
 ProgressBar
-RadialGradientBrush 
+RadialGradientBrush
 RadioButton
 RefreshView
 ScrollView
@@ -71,6 +71,14 @@ ToolbarItem
 VerticalStackLayout
 View
 VisualElement
+
+# Microsoft.Maui.Controls.Shapes components
+Shapes.Ellipse
+Shapes.Line
+Shapes.Polygon
+Shapes.Polyline
+Shapes.Rectangle
+Shapes.Shape
 
 # Microsoft.Maui.Controls.Compatibility components
 Compatibility.Layout
