@@ -20,24 +20,41 @@ namespace BlazorBindings.Maui.Elements
                 _ => new ContentPropertyHandler<MC.StructuredItemsView>((itemsView, valueElement) => itemsView.Footer = valueElement));
         }
 
-        [Parameter] public MC.ItemSizingStrategy? ItemSizingStrategy { get; set; }
+        [Parameter] public MC.ItemSizingStrategy ItemSizingStrategy { get; set; }
         [Parameter] public MC.IItemsLayout ItemsLayout { get; set; }
         [Parameter] public RenderFragment Header { get; set; }
         [Parameter] public RenderFragment Footer { get; set; }
 
-        public new MC.StructuredItemsView NativeControl => (ElementHandler as StructuredItemsViewHandler)?.StructuredItemsViewControl;
+        public new MC.StructuredItemsView NativeControl => (MC.StructuredItemsView)((Element)this).NativeControl;
 
-        protected override void RenderAttributes(AttributesBuilder builder)
+        protected override void HandleParameter(string name, object value)
         {
-            base.RenderAttributes(builder);
+            switch (name)
+            {
+                case nameof(ItemSizingStrategy):
+                    if (!ItemSizingStrategy.Equals(value))
+                    {
+                        ItemSizingStrategy = (MC.ItemSizingStrategy)value;
+                        NativeControl.ItemSizingStrategy = ItemSizingStrategy;
+                    }
+                    break;
+                case nameof(ItemsLayout):
+                    if (!Equals(ItemsLayout, value))
+                    {
+                        ItemsLayout = (MC.IItemsLayout)value;
+                        NativeControl.ItemsLayout = ItemsLayout;
+                    }
+                    break;
+                case nameof(Header):
+                    Header = (RenderFragment)value;
+                    break;
+                case nameof(Footer):
+                    Footer = (RenderFragment)value;
+                    break;
 
-            if (ItemSizingStrategy != null)
-            {
-                builder.AddAttribute(nameof(ItemSizingStrategy), (int)ItemSizingStrategy.Value);
-            }
-            if (ItemsLayout != null)
-            {
-                builder.AddAttribute(nameof(ItemsLayout), AttributeHelper.ObjectToDelegate(ItemsLayout));
+                default:
+                    base.HandleParameter(name, value);
+                    break;
             }
         }
 

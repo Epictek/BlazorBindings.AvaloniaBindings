@@ -29,6 +29,11 @@ namespace BlazorBindings.Maui.Elements
             return base.SetParametersAsync(ParameterView.Empty);
         }
 
+        protected sealed override void RenderAttributes(AttributesBuilder builder)
+        {
+            // Since we set attributes directly in SetParametersAsync, this method is empty and sealed.
+        }
+
         protected virtual void HandleParameter(string name, object value)
         {
             switch (name)

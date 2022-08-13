@@ -117,11 +117,12 @@ namespace ComponentWrapperGenerator
                 classModifiers += "abstract ";
             }
 
-            var staticConstructorBody = "RegisterAdditionalHandlers();\r\n";
+            var staticConstructorBody = "";
             foreach (var prop in contentProperties)
             {
                 staticConstructorBody += prop.GetContentHandlerRegistration();
             }
+            staticConstructorBody += "\r\n            RegisterAdditionalHandlers();";
 
             var createNativeElement = isComponentAbstract ? "" : $@"
         protected override MC.Element CreateNativeElement() => new {componentNamespacePrefix}{componentName}();";

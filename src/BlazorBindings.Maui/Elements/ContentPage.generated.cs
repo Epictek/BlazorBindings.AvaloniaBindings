@@ -14,10 +14,9 @@ namespace BlazorBindings.Maui.Elements
     {
         static ContentPage()
         {
-            RegisterAdditionalHandlers();
-
             ElementHandlerRegistry.RegisterPropertyContentHandler<ContentPage>(nameof(ChildContent),
                 _ => new ContentPropertyHandler<MC.ContentPage>((x, value) => x.Content = (MC.View)value));
+            RegisterAdditionalHandlers();
         }
 
         [Parameter] public RenderFragment ChildContent { get; set; }

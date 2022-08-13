@@ -71,6 +71,7 @@ ToolbarItem
 VerticalStackLayout
 View
 VisualElement
+WebView
 
 # Microsoft.Maui.Controls.Shapes components
 Shapes.Ellipse

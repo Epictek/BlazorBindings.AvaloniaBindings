@@ -16,12 +16,11 @@ namespace BlazorBindings.Maui.Elements
     {
         static Page()
         {
-            RegisterAdditionalHandlers();
-
             ElementHandlerRegistry.RegisterPropertyContentHandler<Page>(nameof(MenuBarItems),
                 _ => new ListContentPropertyHandler<MC.Page, MC.MenuBarItem>(x => x.MenuBarItems));
             ElementHandlerRegistry.RegisterPropertyContentHandler<Page>(nameof(ToolbarItems),
                 _ => new ListContentPropertyHandler<MC.Page, MC.ToolbarItem>(x => x.ToolbarItems));
+            RegisterAdditionalHandlers();
         }
 
         [Parameter] public MC.ImageSource BackgroundImageSource { get; set; }

@@ -15,10 +15,9 @@ namespace BlazorBindings.Maui.Elements
     {
         static Layout()
         {
-            RegisterAdditionalHandlers();
-
             ElementHandlerRegistry.RegisterPropertyContentHandler<Layout>(nameof(ChildContent),
                 _ => new ListContentPropertyHandler<MC.Layout, IView>(x => x.Children));
+            RegisterAdditionalHandlers();
         }
 
         [Parameter] public bool CascadeInputTransparent { get; set; }
