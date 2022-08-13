@@ -19,7 +19,7 @@ namespace BlazorBindings.Maui.Elements
 
         [Parameter] public Color Color { get; set; }
         [Parameter] public bool IsChecked { get; set; }
-        [Parameter] public EventCallback<double> IsCheckedChanged { get; set; }
+        [Parameter] public EventCallback<bool> IsCheckedChanged { get; set; }
 
         public new MC.CheckBox NativeControl => (MC.CheckBox)((Element)this).NativeControl;
 
@@ -48,7 +48,7 @@ namespace BlazorBindings.Maui.Elements
                     {
                         void NativeControlCheckedChanged(object sender, MC.CheckedChangedEventArgs e) => IsCheckedChanged.InvokeAsync(NativeControl.IsChecked);
 
-                        IsCheckedChanged = (EventCallback<double>)value;
+                        IsCheckedChanged = (EventCallback<bool>)value;
                         NativeControl.CheckedChanged -= NativeControlCheckedChanged;
                         NativeControl.CheckedChanged += NativeControlCheckedChanged;
                     }

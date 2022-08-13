@@ -6,6 +6,7 @@ using BlazorBindings.Maui.Elements.Handlers;
 using MC = Microsoft.Maui.Controls;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Maui;
+using System;
 using System.Threading.Tasks;
 
 namespace BlazorBindings.Maui.Elements
@@ -126,7 +127,7 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(OnCompleted):
                     if (!Equals(OnCompleted, value))
                     {
-                        void NativeControlCompleted(object sender, System.EventArgs e) => OnCompleted.InvokeAsync();
+                        void NativeControlCompleted(object sender, EventArgs e) => OnCompleted.InvokeAsync();
 
                         OnCompleted = (EventCallback)value;
                         NativeControl.Completed -= NativeControlCompleted;

@@ -6,6 +6,7 @@ using BlazorBindings.Maui.Elements.Handlers;
 using MC = Microsoft.Maui.Controls;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Maui.Graphics;
+using System;
 using System.Threading.Tasks;
 
 namespace BlazorBindings.Maui.Elements
@@ -24,6 +25,9 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public Color ThumbColor { get; set; }
         [Parameter] public MC.ImageSource ThumbImageSource { get; set; }
         [Parameter] public double Value { get; set; }
+        [Parameter] public EventCallback OnDragCompleted { get; set; }
+        [Parameter] public EventCallback OnDragStarted { get; set; }
+        [Parameter] public EventCallback<bool> ValueChanged { get; set; }
 
         public new MC.Slider NativeControl => (MC.Slider)((Element)this).NativeControl;
 
@@ -80,6 +84,36 @@ namespace BlazorBindings.Maui.Elements
                     {
                         Value = (double)value;
                         NativeControl.Value = Value;
+                    }
+                    break;
+                case nameof(OnDragCompleted):
+                    if (!Equals(OnDragCompleted, value))
+                    {
+                        void NativeControlDragCompleted(object sender, EventArgs e) => OnDragCompleted.InvokeAsync();
+
+                        OnDragCompleted = (EventCallback)value;
+                        NativeControl.DragCompleted -= NativeControlDragCompleted;
+                        NativeControl.DragCompleted += NativeControlDragCompleted;
+                    }
+                    break;
+                case nameof(OnDragStarted):
+                    if (!Equals(OnDragStarted, value))
+                    {
+                        void NativeControlDragStarted(object sender, EventArgs e) => OnDragStarted.InvokeAsync();
+
+                        OnDragStarted = (EventCallback)value;
+                        NativeControl.DragStarted -= NativeControlDragStarted;
+                        NativeControl.DragStarted += NativeControlDragStarted;
+                    }
+                    break;
+                case nameof(ValueChanged):
+                    if (!Equals(ValueChanged, value))
+                    {
+                        void NativeControlValueChanged(object sender, MC.ValueChangedEventArgs e) => ValueChanged.InvokeAsync(NativeControl.Value);
+
+                        ValueChanged = (EventCallback<bool>)value;
+                        NativeControl.ValueChanged -= NativeControlValueChanged;
+                        NativeControl.ValueChanged += NativeControlValueChanged;
                     }
                     break;
 

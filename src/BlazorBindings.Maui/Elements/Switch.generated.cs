@@ -6,6 +6,7 @@ using BlazorBindings.Maui.Elements.Handlers;
 using MC = Microsoft.Maui.Controls;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Maui.Graphics;
+using System.ComponentModel;
 using System.Threading.Tasks;
 
 namespace BlazorBindings.Maui.Elements
@@ -20,6 +21,7 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public bool IsToggled { get; set; }
         [Parameter] public Color OnColor { get; set; }
         [Parameter] public Color ThumbColor { get; set; }
+        [Parameter] public EventCallback<bool> IsToggledChanged { get; set; }
 
         public new MC.Switch NativeControl => (MC.Switch)((Element)this).NativeControl;
 
@@ -48,6 +50,22 @@ namespace BlazorBindings.Maui.Elements
                     {
                         ThumbColor = (Color)value;
                         NativeControl.ThumbColor = ThumbColor;
+                    }
+                    break;
+                case nameof(IsToggledChanged):
+                    if (!Equals(IsToggledChanged, value))
+                    {
+                        void NativeControlPropertyChanged(object sender, PropertyChangedEventArgs e)
+                        {
+                            if (e.PropertyName == nameof(NativeControl.IsToggled))
+                            {
+                                IsToggledChanged.InvokeAsync(NativeControl.IsToggled);
+                            }
+                        }
+
+                        IsToggledChanged = (EventCallback<bool>)value;
+                        NativeControl.PropertyChanged -= NativeControlPropertyChanged;
+                        NativeControl.PropertyChanged += NativeControlPropertyChanged;
                     }
                     break;
 

@@ -7,6 +7,7 @@ using MC = Microsoft.Maui.Controls;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.Maui;
+using System;
 using System.Threading.Tasks;
 
 namespace BlazorBindings.Maui.Elements
@@ -85,7 +86,7 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(OnAppearing):
                     if (!Equals(OnAppearing, value))
                     {
-                        void NativeControlAppearing(object sender, System.EventArgs e) => OnAppearing.InvokeAsync();
+                        void NativeControlAppearing(object sender, EventArgs e) => OnAppearing.InvokeAsync();
 
                         OnAppearing = (EventCallback)value;
                         NativeControl.Appearing -= NativeControlAppearing;
@@ -95,7 +96,7 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(OnDisappearing):
                     if (!Equals(OnDisappearing, value))
                     {
-                        void NativeControlDisappearing(object sender, System.EventArgs e) => OnDisappearing.InvokeAsync();
+                        void NativeControlDisappearing(object sender, EventArgs e) => OnDisappearing.InvokeAsync();
 
                         OnDisappearing = (EventCallback)value;
                         NativeControl.Disappearing -= NativeControlDisappearing;

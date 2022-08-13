@@ -7,6 +7,7 @@ using MC = Microsoft.Maui.Controls;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Maui.Graphics;
 using System;
+using System.ComponentModel;
 using System.Threading.Tasks;
 
 namespace BlazorBindings.Maui.Elements
@@ -26,6 +27,7 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public string Format { get; set; }
         [Parameter] public Color TextColor { get; set; }
         [Parameter] public TimeSpan Time { get; set; }
+        [Parameter] public EventCallback<TimeSpan> TimeChanged { get; set; }
 
         public new MC.TimePicker NativeControl => (MC.TimePicker)((Element)this).NativeControl;
 
@@ -89,6 +91,22 @@ namespace BlazorBindings.Maui.Elements
                     {
                         Time = (TimeSpan)value;
                         NativeControl.Time = Time;
+                    }
+                    break;
+                case nameof(TimeChanged):
+                    if (!Equals(TimeChanged, value))
+                    {
+                        void NativeControlPropertyChanged(object sender, PropertyChangedEventArgs e)
+                        {
+                            if (e.PropertyName == nameof(NativeControl.Time))
+                            {
+                                TimeChanged.InvokeAsync(NativeControl.Time);
+                            }
+                        }
+
+                        TimeChanged = (EventCallback<TimeSpan>)value;
+                        NativeControl.PropertyChanged -= NativeControlPropertyChanged;
+                        NativeControl.PropertyChanged += NativeControlPropertyChanged;
                     }
                     break;
 

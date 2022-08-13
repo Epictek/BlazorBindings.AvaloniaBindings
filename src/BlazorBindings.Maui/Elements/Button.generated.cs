@@ -7,6 +7,7 @@ using MC = Microsoft.Maui.Controls;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Maui;
 using Microsoft.Maui.Graphics;
+using System;
 using System.Threading.Tasks;
 
 namespace BlazorBindings.Maui.Elements
@@ -145,7 +146,7 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(OnClick):
                     if (!Equals(OnClick, value))
                     {
-                        void NativeControlClicked(object sender, System.EventArgs e) => OnClick.InvokeAsync();
+                        void NativeControlClicked(object sender, EventArgs e) => OnClick.InvokeAsync();
 
                         OnClick = (EventCallback)value;
                         NativeControl.Clicked -= NativeControlClicked;
@@ -155,7 +156,7 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(OnPress):
                     if (!Equals(OnPress, value))
                     {
-                        void NativeControlPressed(object sender, System.EventArgs e) => OnPress.InvokeAsync();
+                        void NativeControlPressed(object sender, EventArgs e) => OnPress.InvokeAsync();
 
                         OnPress = (EventCallback)value;
                         NativeControl.Pressed -= NativeControlPressed;
@@ -165,7 +166,7 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(OnRelease):
                     if (!Equals(OnRelease, value))
                     {
-                        void NativeControlReleased(object sender, System.EventArgs e) => OnRelease.InvokeAsync();
+                        void NativeControlReleased(object sender, EventArgs e) => OnRelease.InvokeAsync();
 
                         OnRelease = (EventCallback)value;
                         NativeControl.Released -= NativeControlReleased;

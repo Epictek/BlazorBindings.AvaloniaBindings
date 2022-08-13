@@ -28,6 +28,7 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public string Text { get; set; }
         [Parameter] public Color TextColor { get; set; }
         [Parameter] public TextTransform TextTransform { get; set; }
+        [Parameter] public EventCallback<string> TextChanged { get; set; }
 
         public new MC.InputView NativeControl => (MC.InputView)((Element)this).NativeControl;
 
@@ -104,6 +105,16 @@ namespace BlazorBindings.Maui.Elements
                     {
                         TextTransform = (TextTransform)value;
                         NativeControl.TextTransform = TextTransform;
+                    }
+                    break;
+                case nameof(TextChanged):
+                    if (!Equals(TextChanged, value))
+                    {
+                        void NativeControlTextChanged(object sender, MC.TextChangedEventArgs e) => TextChanged.InvokeAsync(NativeControl.Text);
+
+                        TextChanged = (EventCallback<string>)value;
+                        NativeControl.TextChanged -= NativeControlTextChanged;
+                        NativeControl.TextChanged += NativeControlTextChanged;
                     }
                     break;
 

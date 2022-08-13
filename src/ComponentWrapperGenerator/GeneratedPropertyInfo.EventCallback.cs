@@ -11,13 +11,14 @@ namespace ComponentWrapperGenerator
         {
             new ("BaseShellItem","Appearing","OnAppearing"),
             new ("BaseShellItem","Disappearing","OnDisappearing"),
-            new ("CheckBox","CheckedChanged","IsCheckedChanged", typeArgument:"double"),
+            new ("CheckBox","CheckedChanged","IsCheckedChanged", typeArgument:"bool"),
             new ("DatePicker","DateSelected","DateChanged", typeArgument:"DateTime"),
             new ("Editor", "Completed", "OnCompleted"),
             new ("Entry", "Completed", "OnCompleted"),
             new ("ImageButton", "Clicked", "OnClick"),
             new ("ImageButton", "Pressed", "OnPress"),
             new ("ImageButton", "Released", "OnRelease"),
+            new ("InputView", "TextChanged", "TextChanged", typeArgument: "string"),
             new ("MenuItem", "Clicked", "OnClick"),
             new ("Page","Appearing","OnAppearing"),
             new ("Page","Disappearing","OnDisappearing"),
@@ -28,15 +29,21 @@ namespace ComponentWrapperGenerator
             new ("Button", "Released", "OnRelease"),
             new ("ScrollView", "Scrolled", "OnScrolled"),
             new ("Stepper", "ValueChanged", "ValueChanged", typeArgument: "double"),
+            new ("TimePicker", "PropertyChanged", "TimeChanged", typeArgument: "TimeSpan"),
+            new ("Slider", "DragCompleted", "OnDragCompleted"),
+            new ("Slider", "DragStarted", "OnDragStarted"),
+            new ("Slider", "ValueChanged", "ValueChanged", typeArgument: "bool"),
+            new ("Switch", "PropertyChanged", "IsToggledChanged", typeArgument: "bool"),
             new ("VisualElement", "Focused", "OnFocused"),
             new ("VisualElement", "Unfocused", "OnUnfocused"),
             new ("VisualElement", "SizeChanged", "OnSizeChanged"),
         };
 
-        private bool _isPropertyChangedEvent;
         private Type _eventHandlerType;
+        private bool _isBindEvent;
 
-        private bool IsBindEvent => ComponentPropertyName.EndsWith("Changed");
+        private bool IsPropertyChangedEvent => MauiPropertyName == "PropertyChanged";
+        private Type EventArgsType => _eventHandlerType.GetMethod("Invoke").GetParameters()[1].ParameterType;
 
         public string GetHandleEventCallbackProperty()
         {
@@ -56,9 +63,10 @@ namespace ComponentWrapperGenerator
             var eventName = MauiPropertyName;
             string argument;
 
-            if (IsBindEvent)
+            if (_isBindEvent)
             {
-                argument = $"NativeControl.{ComponentPropertyName.Replace("Changed", "")}";
+                var bindedPropertyName = ComponentPropertyName.Replace("Changed", "");
+                argument = $"NativeControl.{bindedPropertyName}";
             }
             else
             {
@@ -67,10 +75,20 @@ namespace ComponentWrapperGenerator
 
             var localFunctionName = $"NativeControl{eventName}";
 
+            var localFunctionBody = _isBindEvent && IsPropertyChangedEvent
+                ? $@"
+                        {{
+                            if (e.PropertyName == nameof({argument}))
+                            {{
+                                {ComponentPropertyName}.InvokeAsync({argument});
+                            }}
+                        }}"
+                : $" => {ComponentPropertyName}.InvokeAsync({argument});";
+
             return $@"                case nameof({ComponentPropertyName}):
                     if (!Equals({ComponentPropertyName}, value))
                     {{
-                        void {localFunctionName}(object sender, {EventHandlerTypeString()} e) => {ComponentPropertyName}.InvokeAsync({argument});
+                        void {localFunctionName}(object sender, {GetTypeNameAndAddNamespace(EventArgsType)} e){localFunctionBody}
 
                         {ComponentPropertyName} = ({ComponentPropertyType})value;
                         NativeControl.{eventName} -= {localFunctionName};
@@ -101,7 +119,7 @@ namespace ComponentWrapperGenerator
                         GeneratedPropertyKind.EventCallback,
                         usings);
 
-                    generatedPropertyInfo._isPropertyChangedEvent = info.IsPropertyChangedEvent;
+                    generatedPropertyInfo._isBindEvent = info.TypeArgument != null;
                     generatedPropertyInfo._eventHandlerType = eventInfo.EventHandlerType;
                     return generatedPropertyInfo;
                 })
@@ -114,9 +132,10 @@ namespace ComponentWrapperGenerator
             {
                 return $"EventCallback<{callbackTypeArgument}>";
             }
-            else if (eventInfo is null || eventInfo.EventHandlerType.IsGenericType)
+
+            var eventArgType = eventInfo.EventHandlerType.GetMethod("Invoke").GetParameters()[1].ParameterType;
+            if (eventArgType != typeof(EventArgs))
             {
-                var eventArgType = eventInfo.EventHandlerType.GetGenericArguments()[0];
                 return $"EventCallback<{ComponentWrapperGenerator.GetTypeNameAndAddNamespace(eventArgType, usings)}>";
             }
             else
@@ -125,26 +144,18 @@ namespace ComponentWrapperGenerator
             }
         }
 
-        private string EventHandlerTypeString()
-        {
-            return !_eventHandlerType.IsGenericType
-                ? "System.EventArgs"
-                : GetTypeNameAndAddNamespace(_eventHandlerType.GenericTypeArguments[0]);
-        }
-
         class EventToGenerate
         {
-            public EventToGenerate(string typeName, string mauiEventName, string componentEventName, string typeArgument = null, bool isPropertyChanged = false)
+            public EventToGenerate(string typeName, string mauiEventName, string componentEventName, string typeArgument = null)
             {
                 TypeName = typeName;
                 MauiEventName = mauiEventName;
                 ComponentEventName = componentEventName;
-                IsPropertyChangedEvent = isPropertyChanged;
                 TypeArgument = typeArgument;
             }
 
-            public EventToGenerate(string typeName, string eventName, bool isPropertyChanged = false)
-                : this(typeName, eventName, eventName, null, isPropertyChanged)
+            public EventToGenerate(string typeName, string eventName)
+                : this(typeName, eventName, eventName, null)
             {
             }
 
@@ -152,7 +163,6 @@ namespace ComponentWrapperGenerator
             public string MauiEventName { get; set; }
             public string ComponentEventName { get; set; }
             public string TypeArgument { get; set; }
-            public bool IsPropertyChangedEvent { get; set; }
         }
     }
 }
