@@ -4,6 +4,7 @@
 using BlazorBindings.Core;
 using BlazorBindings.Maui.Elements;
 using BlazorBindings.Maui.Elements.Compatibility.Handlers;
+using MC = Microsoft.Maui.Controls;
 using MCC = Microsoft.Maui.Controls.Compatibility;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Maui;
@@ -18,34 +19,46 @@ namespace BlazorBindings.Maui.Elements.Compatibility
             RegisterAdditionalHandlers();
         }
 
-        [Parameter] public bool? CascadeInputTransparent { get; set; }
-        [Parameter] public bool? IsClippedToBounds { get; set; }
-        [Parameter] public Thickness? Padding { get; set; }
+        [Parameter] public bool CascadeInputTransparent { get; set; }
+        [Parameter] public bool IsClippedToBounds { get; set; }
+        [Parameter] public Thickness Padding { get; set; }
 
-        public new MCC.Layout NativeControl => (ElementHandler as LayoutHandler)?.LayoutControl;
+        public new MCC.Layout NativeControl => (MCC.Layout)((Element)this).NativeControl;
 
-        protected override void RenderAttributes(AttributesBuilder builder)
+
+        protected override void HandleParameter(string name, object value)
         {
-            base.RenderAttributes(builder);
+            switch (name)
+            {
+                case nameof(CascadeInputTransparent):
+                    if (!Equals(CascadeInputTransparent, value))
+                    {
+                        CascadeInputTransparent = (bool)value;
+                        NativeControl.CascadeInputTransparent = CascadeInputTransparent;
+                    }
+                    break;
+                case nameof(IsClippedToBounds):
+                    if (!Equals(IsClippedToBounds, value))
+                    {
+                        IsClippedToBounds = (bool)value;
+                        NativeControl.IsClippedToBounds = IsClippedToBounds;
+                    }
+                    break;
+                case nameof(Padding):
+                    if (!Equals(Padding, value))
+                    {
+                        Padding = (Thickness)value;
+                        NativeControl.Padding = Padding;
+                    }
+                    break;
 
-            if (CascadeInputTransparent != null)
-            {
-                builder.AddAttribute(nameof(CascadeInputTransparent), CascadeInputTransparent.Value);
+                default:
+                    base.HandleParameter(name, value);
+                    break;
             }
-            if (IsClippedToBounds != null)
-            {
-                builder.AddAttribute(nameof(IsClippedToBounds), IsClippedToBounds.Value);
-            }
-            if (Padding != null)
-            {
-                builder.AddAttribute(nameof(Padding), AttributeHelper.ThicknessToString(Padding.Value));
-            }
-
-            RenderAdditionalAttributes(builder);
         }
 
         partial void RenderAdditionalAttributes(AttributesBuilder builder);
-
         static partial void RegisterAdditionalHandlers();
     }
 }

@@ -14,9 +14,6 @@ namespace BlazorBindings.Maui.Elements
     {
         static TabbedPage()
         {
-            ElementHandlerRegistry.RegisterElementHandler<TabbedPage>(
-                renderer => new TabbedPageHandler(renderer, new MC.TabbedPage()));
-
             RegisterAdditionalHandlers();
         }
 
@@ -25,34 +22,50 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public Color SelectedTabColor { get; set; }
         [Parameter] public Color UnselectedTabColor { get; set; }
 
-        public new MC.TabbedPage NativeControl => (ElementHandler as TabbedPageHandler)?.TabbedPageControl;
+        public new MC.TabbedPage NativeControl => (MC.TabbedPage)((Element)this).NativeControl;
 
-        protected override void RenderAttributes(AttributesBuilder builder)
+        protected override MC.Element CreateNativeElement() => new MC.TabbedPage();
+
+        protected override void HandleParameter(string name, object value)
         {
-            base.RenderAttributes(builder);
+            switch (name)
+            {
+                case nameof(BarBackgroundColor):
+                    if (!Equals(BarBackgroundColor, value))
+                    {
+                        BarBackgroundColor = (Color)value;
+                        NativeControl.BarBackgroundColor = BarBackgroundColor;
+                    }
+                    break;
+                case nameof(BarTextColor):
+                    if (!Equals(BarTextColor, value))
+                    {
+                        BarTextColor = (Color)value;
+                        NativeControl.BarTextColor = BarTextColor;
+                    }
+                    break;
+                case nameof(SelectedTabColor):
+                    if (!Equals(SelectedTabColor, value))
+                    {
+                        SelectedTabColor = (Color)value;
+                        NativeControl.SelectedTabColor = SelectedTabColor;
+                    }
+                    break;
+                case nameof(UnselectedTabColor):
+                    if (!Equals(UnselectedTabColor, value))
+                    {
+                        UnselectedTabColor = (Color)value;
+                        NativeControl.UnselectedTabColor = UnselectedTabColor;
+                    }
+                    break;
 
-            if (BarBackgroundColor != null)
-            {
-                builder.AddAttribute(nameof(BarBackgroundColor), AttributeHelper.ColorToString(BarBackgroundColor));
+                default:
+                    base.HandleParameter(name, value);
+                    break;
             }
-            if (BarTextColor != null)
-            {
-                builder.AddAttribute(nameof(BarTextColor), AttributeHelper.ColorToString(BarTextColor));
-            }
-            if (SelectedTabColor != null)
-            {
-                builder.AddAttribute(nameof(SelectedTabColor), AttributeHelper.ColorToString(SelectedTabColor));
-            }
-            if (UnselectedTabColor != null)
-            {
-                builder.AddAttribute(nameof(UnselectedTabColor), AttributeHelper.ColorToString(UnselectedTabColor));
-            }
-
-            RenderAdditionalAttributes(builder);
         }
 
         partial void RenderAdditionalAttributes(AttributesBuilder builder);
-
         static partial void RegisterAdditionalHandlers();
     }
 }

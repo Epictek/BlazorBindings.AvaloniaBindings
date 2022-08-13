@@ -45,6 +45,8 @@ namespace BlazorBindings.Maui.Elements
 
         public new MC.CarouselView NativeControl => (ElementHandler as CarouselViewHandler)?.CarouselViewControl;
 
+        protected override MC.Element CreateNativeElement() => new MC.CarouselView();
+
         protected override void RenderAttributes(AttributesBuilder builder)
         {
             base.RenderAttributes(builder);

@@ -1,9 +1,9 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-using Microsoft.AspNetCore.Components;
 using BlazorBindings.Core;
 using BlazorBindings.Maui.Elements.Handlers;
+using Microsoft.AspNetCore.Components;
 using System;
 using System.Threading.Tasks;
 using MC = Microsoft.Maui.Controls;
@@ -20,6 +20,8 @@ namespace BlazorBindings.Maui.Elements
 
         [Parameter] public MC.WebViewSource Source { get; set; }
         [Parameter] public EventCallback<string> OnWebMessageReceived { get; set; }
+
+        protected override MC.Element CreateNativeElement() => new MC.WebView();
 
         protected override void RenderAttributes(AttributesBuilder builder)
         {

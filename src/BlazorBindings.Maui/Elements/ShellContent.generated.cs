@@ -13,24 +13,15 @@ namespace BlazorBindings.Maui.Elements
     {
         static ShellContent()
         {
-            ElementHandlerRegistry.RegisterElementHandler<ShellContent>(
-                renderer => new ShellContentHandler(renderer, new MC.ShellContent()));
-
             RegisterAdditionalHandlers();
         }
 
-        public new MC.ShellContent NativeControl => (ElementHandler as ShellContentHandler)?.ShellContentControl;
+        public new MC.ShellContent NativeControl => (MC.ShellContent)((Element)this).NativeControl;
 
-        protected override void RenderAttributes(AttributesBuilder builder)
-        {
-            base.RenderAttributes(builder);
+        protected override MC.Element CreateNativeElement() => new MC.ShellContent();
 
-
-            RenderAdditionalAttributes(builder);
-        }
 
         partial void RenderAdditionalAttributes(AttributesBuilder builder);
-
         static partial void RegisterAdditionalHandlers();
     }
 }

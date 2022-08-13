@@ -14,30 +14,34 @@ namespace BlazorBindings.Maui.Elements
     {
         static SolidColorBrush()
         {
-            ElementHandlerRegistry.RegisterElementHandler<SolidColorBrush>(
-                renderer => new SolidColorBrushHandler(renderer, new MC.SolidColorBrush()));
-
             RegisterAdditionalHandlers();
         }
 
         [Parameter] public Color Color { get; set; }
 
-        public new MC.SolidColorBrush NativeControl => (ElementHandler as SolidColorBrushHandler)?.SolidColorBrushControl;
+        public new MC.SolidColorBrush NativeControl => (MC.SolidColorBrush)((Element)this).NativeControl;
 
-        protected override void RenderAttributes(AttributesBuilder builder)
+        protected override MC.Element CreateNativeElement() => new MC.SolidColorBrush();
+
+        protected override void HandleParameter(string name, object value)
         {
-            base.RenderAttributes(builder);
-
-            if (Color != null)
+            switch (name)
             {
-                builder.AddAttribute(nameof(Color), AttributeHelper.ColorToString(Color));
-            }
+                case nameof(Color):
+                    if (!Equals(Color, value))
+                    {
+                        Color = (Color)value;
+                        NativeControl.Color = Color;
+                    }
+                    break;
 
-            RenderAdditionalAttributes(builder);
+                default:
+                    base.HandleParameter(name, value);
+                    break;
+            }
         }
 
         partial void RenderAdditionalAttributes(AttributesBuilder builder);
-
         static partial void RegisterAdditionalHandlers();
     }
 }

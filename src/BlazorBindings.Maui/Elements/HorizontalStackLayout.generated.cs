@@ -13,24 +13,15 @@ namespace BlazorBindings.Maui.Elements
     {
         static HorizontalStackLayout()
         {
-            ElementHandlerRegistry.RegisterElementHandler<HorizontalStackLayout>(
-                renderer => new HorizontalStackLayoutHandler(renderer, new MC.HorizontalStackLayout()));
-
             RegisterAdditionalHandlers();
         }
 
-        public new MC.HorizontalStackLayout NativeControl => (ElementHandler as HorizontalStackLayoutHandler)?.HorizontalStackLayoutControl;
+        public new MC.HorizontalStackLayout NativeControl => (MC.HorizontalStackLayout)((Element)this).NativeControl;
 
-        protected override void RenderAttributes(AttributesBuilder builder)
-        {
-            base.RenderAttributes(builder);
+        protected override MC.Element CreateNativeElement() => new MC.HorizontalStackLayout();
 
-
-            RenderAdditionalAttributes(builder);
-        }
 
         partial void RenderAdditionalAttributes(AttributesBuilder builder);
-
         static partial void RegisterAdditionalHandlers();
     }
 }

@@ -14,35 +14,53 @@ namespace BlazorBindings.Maui.Elements
     {
         static CheckBox()
         {
-            ElementHandlerRegistry.RegisterElementHandler<CheckBox>(
-                renderer => new CheckBoxHandler(renderer, new MC.CheckBox()));
-
             RegisterAdditionalHandlers();
         }
 
         [Parameter] public Color Color { get; set; }
-        [Parameter] public bool? IsChecked { get; set; }
+        [Parameter] public bool IsChecked { get; set; }
+        [Parameter] public EventCallback<double> IsCheckedChanged { get; set; }
 
-        public new MC.CheckBox NativeControl => (ElementHandler as CheckBoxHandler)?.CheckBoxControl;
+        public new MC.CheckBox NativeControl => (MC.CheckBox)((Element)this).NativeControl;
 
-        protected override void RenderAttributes(AttributesBuilder builder)
+        protected override MC.Element CreateNativeElement() => new MC.CheckBox();
+
+        protected override void HandleParameter(string name, object value)
         {
-            base.RenderAttributes(builder);
-
-            if (Color != null)
+            switch (name)
             {
-                builder.AddAttribute(nameof(Color), AttributeHelper.ColorToString(Color));
-            }
-            if (IsChecked != null)
-            {
-                builder.AddAttribute(nameof(IsChecked), IsChecked.Value);
-            }
+                case nameof(Color):
+                    if (!Equals(Color, value))
+                    {
+                        Color = (Color)value;
+                        NativeControl.Color = Color;
+                    }
+                    break;
+                case nameof(IsChecked):
+                    if (!Equals(IsChecked, value))
+                    {
+                        IsChecked = (bool)value;
+                        NativeControl.IsChecked = IsChecked;
+                    }
+                    break;
+                case nameof(IsCheckedChanged):
+                    if (!Equals(IsCheckedChanged, value))
+                    {
+                        void NativeControlCheckedChanged(object sender, MC.CheckedChangedEventArgs e) => IsCheckedChanged.InvokeAsync(NativeControl.IsChecked);
 
-            RenderAdditionalAttributes(builder);
+                        IsCheckedChanged = (EventCallback<double>)value;
+                        NativeControl.CheckedChanged -= NativeControlCheckedChanged;
+                        NativeControl.CheckedChanged += NativeControlCheckedChanged;
+                    }
+                    break;
+
+                default:
+                    base.HandleParameter(name, value);
+                    break;
+            }
         }
 
         partial void RenderAdditionalAttributes(AttributesBuilder builder);
-
         static partial void RegisterAdditionalHandlers();
     }
 }

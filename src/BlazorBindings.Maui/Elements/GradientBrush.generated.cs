@@ -16,18 +16,11 @@ namespace BlazorBindings.Maui.Elements
             RegisterAdditionalHandlers();
         }
 
-        public new MC.GradientBrush NativeControl => (ElementHandler as GradientBrushHandler)?.GradientBrushControl;
-
-        protected override void RenderAttributes(AttributesBuilder builder)
-        {
-            base.RenderAttributes(builder);
+        public new MC.GradientBrush NativeControl => (MC.GradientBrush)((Element)this).NativeControl;
 
 
-            RenderAdditionalAttributes(builder);
-        }
 
         partial void RenderAdditionalAttributes(AttributesBuilder builder);
-
         static partial void RegisterAdditionalHandlers();
     }
 }

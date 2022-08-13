@@ -14,35 +14,42 @@ namespace BlazorBindings.Maui.Elements
     {
         static RefreshView()
         {
-            ElementHandlerRegistry.RegisterElementHandler<RefreshView>(
-                renderer => new RefreshViewHandler(renderer, new MC.RefreshView()));
-
             RegisterAdditionalHandlers();
         }
 
-        [Parameter] public bool? IsRefreshing { get; set; }
+        [Parameter] public bool IsRefreshing { get; set; }
         [Parameter] public Color RefreshColor { get; set; }
 
-        public new MC.RefreshView NativeControl => (ElementHandler as RefreshViewHandler)?.RefreshViewControl;
+        public new MC.RefreshView NativeControl => (MC.RefreshView)((Element)this).NativeControl;
 
-        protected override void RenderAttributes(AttributesBuilder builder)
+        protected override MC.Element CreateNativeElement() => new MC.RefreshView();
+
+        protected override void HandleParameter(string name, object value)
         {
-            base.RenderAttributes(builder);
-
-            if (IsRefreshing != null)
+            switch (name)
             {
-                builder.AddAttribute(nameof(IsRefreshing), IsRefreshing.Value);
-            }
-            if (RefreshColor != null)
-            {
-                builder.AddAttribute(nameof(RefreshColor), AttributeHelper.ColorToString(RefreshColor));
-            }
+                case nameof(IsRefreshing):
+                    if (!Equals(IsRefreshing, value))
+                    {
+                        IsRefreshing = (bool)value;
+                        NativeControl.IsRefreshing = IsRefreshing;
+                    }
+                    break;
+                case nameof(RefreshColor):
+                    if (!Equals(RefreshColor, value))
+                    {
+                        RefreshColor = (Color)value;
+                        NativeControl.RefreshColor = RefreshColor;
+                    }
+                    break;
 
-            RenderAdditionalAttributes(builder);
+                default:
+                    base.HandleParameter(name, value);
+                    break;
+            }
         }
 
         partial void RenderAdditionalAttributes(AttributesBuilder builder);
-
         static partial void RegisterAdditionalHandlers();
     }
 }

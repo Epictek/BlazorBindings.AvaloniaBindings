@@ -16,24 +16,30 @@ namespace BlazorBindings.Maui.Elements
             RegisterAdditionalHandlers();
         }
 
-        [Parameter] public double? Spacing { get; set; }
+        [Parameter] public double Spacing { get; set; }
 
-        public new MC.StackBase NativeControl => (ElementHandler as StackBaseHandler)?.StackBaseControl;
+        public new MC.StackBase NativeControl => (MC.StackBase)((Element)this).NativeControl;
 
-        protected override void RenderAttributes(AttributesBuilder builder)
+
+        protected override void HandleParameter(string name, object value)
         {
-            base.RenderAttributes(builder);
-
-            if (Spacing != null)
+            switch (name)
             {
-                builder.AddAttribute(nameof(Spacing), AttributeHelper.DoubleToString(Spacing.Value));
-            }
+                case nameof(Spacing):
+                    if (!Equals(Spacing, value))
+                    {
+                        Spacing = (double)value;
+                        NativeControl.Spacing = Spacing;
+                    }
+                    break;
 
-            RenderAdditionalAttributes(builder);
+                default:
+                    base.HandleParameter(name, value);
+                    break;
+            }
         }
 
         partial void RenderAdditionalAttributes(AttributesBuilder builder);
-
         static partial void RegisterAdditionalHandlers();
     }
 }

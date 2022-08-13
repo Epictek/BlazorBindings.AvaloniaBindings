@@ -13,24 +13,15 @@ namespace BlazorBindings.Maui.Elements
     {
         static Tab()
         {
-            ElementHandlerRegistry.RegisterElementHandler<Tab>(
-                renderer => new TabHandler(renderer, new MC.Tab()));
-
             RegisterAdditionalHandlers();
         }
 
-        public new MC.Tab NativeControl => (ElementHandler as TabHandler)?.TabControl;
+        public new MC.Tab NativeControl => (MC.Tab)((Element)this).NativeControl;
 
-        protected override void RenderAttributes(AttributesBuilder builder)
-        {
-            base.RenderAttributes(builder);
+        protected override MC.Element CreateNativeElement() => new MC.Tab();
 
-
-            RenderAdditionalAttributes(builder);
-        }
 
         partial void RenderAdditionalAttributes(AttributesBuilder builder);
-
         static partial void RegisterAdditionalHandlers();
     }
 }

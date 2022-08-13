@@ -5,6 +5,7 @@ using BlazorBindings.Core;
 using BlazorBindings.Maui.Elements.Handlers;
 using MC = Microsoft.Maui.Controls;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Rendering;
 using System.Threading.Tasks;
 
 namespace BlazorBindings.Maui.Elements
@@ -13,24 +14,39 @@ namespace BlazorBindings.Maui.Elements
     {
         static ContentPage()
         {
-            ElementHandlerRegistry.RegisterElementHandler<ContentPage>(
-                renderer => new ContentPageHandler(renderer, new MC.ContentPage()));
-
             RegisterAdditionalHandlers();
+
+            ElementHandlerRegistry.RegisterPropertyContentHandler<ContentPage>(nameof(ChildContent),
+                _ => new ContentPropertyHandler<MC.ContentPage>((x, value) => x.Content = (MC.View)value));
         }
 
-        public new MC.ContentPage NativeControl => (ElementHandler as ContentPageHandler)?.ContentPageControl;
+        [Parameter] public RenderFragment ChildContent { get; set; }
 
-        protected override void RenderAttributes(AttributesBuilder builder)
+        public new MC.ContentPage NativeControl => (MC.ContentPage)((Element)this).NativeControl;
+
+        protected override MC.Element CreateNativeElement() => new MC.ContentPage();
+
+        protected override void HandleParameter(string name, object value)
         {
-            base.RenderAttributes(builder);
+            switch (name)
+            {
+                case nameof(ChildContent):
+                    ChildContent = (RenderFragment)value;
+                    break;
 
+                default:
+                    base.HandleParameter(name, value);
+                    break;
+            }
+        }
 
-            RenderAdditionalAttributes(builder);
+        protected override void RenderAdditionalElementContent(RenderTreeBuilder builder, ref int sequence)
+        {
+            base.RenderAdditionalElementContent(builder, ref sequence);
+            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(ContentPage), ChildContent);;
         }
 
         partial void RenderAdditionalAttributes(AttributesBuilder builder);
-
         static partial void RegisterAdditionalHandlers();
     }
 }

@@ -13,55 +13,85 @@ namespace BlazorBindings.Maui.Elements
     {
         static MenuItem()
         {
-            ElementHandlerRegistry.RegisterElementHandler<MenuItem>(
-                renderer => new MenuItemHandler(renderer, new MC.MenuItem()));
-
             RegisterAdditionalHandlers();
         }
 
         [Parameter] public string @class { get; set; }
         [Parameter] public MC.ImageSource IconImageSource { get; set; }
-        [Parameter] public bool? IsDestructive { get; set; }
-        [Parameter] public bool? IsEnabled { get; set; }
+        [Parameter] public bool IsDestructive { get; set; }
+        [Parameter] public bool IsEnabled { get; set; }
         [Parameter] public string StyleClass { get; set; }
         [Parameter] public string Text { get; set; }
+        [Parameter] public EventCallback OnClick { get; set; }
 
-        public new MC.MenuItem NativeControl => (ElementHandler as MenuItemHandler)?.MenuItemControl;
+        public new MC.MenuItem NativeControl => (MC.MenuItem)((Element)this).NativeControl;
 
-        protected override void RenderAttributes(AttributesBuilder builder)
+        protected override MC.Element CreateNativeElement() => new MC.MenuItem();
+
+        protected override void HandleParameter(string name, object value)
         {
-            base.RenderAttributes(builder);
+            switch (name)
+            {
+                case nameof(@class):
+                    if (!Equals(@class, value))
+                    {
+                        @class = (string)value;
+                        NativeControl.@class = AttributeHelper.GetStringList(@class);
+                    }
+                    break;
+                case nameof(IconImageSource):
+                    if (!Equals(IconImageSource, value))
+                    {
+                        IconImageSource = (MC.ImageSource)value;
+                        NativeControl.IconImageSource = IconImageSource;
+                    }
+                    break;
+                case nameof(IsDestructive):
+                    if (!Equals(IsDestructive, value))
+                    {
+                        IsDestructive = (bool)value;
+                        NativeControl.IsDestructive = IsDestructive;
+                    }
+                    break;
+                case nameof(IsEnabled):
+                    if (!Equals(IsEnabled, value))
+                    {
+                        IsEnabled = (bool)value;
+                        NativeControl.IsEnabled = IsEnabled;
+                    }
+                    break;
+                case nameof(StyleClass):
+                    if (!Equals(StyleClass, value))
+                    {
+                        StyleClass = (string)value;
+                        NativeControl.StyleClass = AttributeHelper.GetStringList(StyleClass);
+                    }
+                    break;
+                case nameof(Text):
+                    if (!Equals(Text, value))
+                    {
+                        Text = (string)value;
+                        NativeControl.Text = Text;
+                    }
+                    break;
+                case nameof(OnClick):
+                    if (!Equals(OnClick, value))
+                    {
+                        void NativeControlClicked(object sender, System.EventArgs e) => OnClick.InvokeAsync();
 
-            if (@class != null)
-            {
-                builder.AddAttribute(nameof(@class), @class);
-            }
-            if (IconImageSource != null)
-            {
-                builder.AddAttribute(nameof(IconImageSource), AttributeHelper.ObjectToDelegate(IconImageSource));
-            }
-            if (IsDestructive != null)
-            {
-                builder.AddAttribute(nameof(IsDestructive), IsDestructive.Value);
-            }
-            if (IsEnabled != null)
-            {
-                builder.AddAttribute(nameof(IsEnabled), IsEnabled.Value);
-            }
-            if (StyleClass != null)
-            {
-                builder.AddAttribute(nameof(StyleClass), StyleClass);
-            }
-            if (Text != null)
-            {
-                builder.AddAttribute(nameof(Text), Text);
-            }
+                        OnClick = (EventCallback)value;
+                        NativeControl.Clicked -= NativeControlClicked;
+                        NativeControl.Clicked += NativeControlClicked;
+                    }
+                    break;
 
-            RenderAdditionalAttributes(builder);
+                default:
+                    base.HandleParameter(name, value);
+                    break;
+            }
         }
 
         partial void RenderAdditionalAttributes(AttributesBuilder builder);
-
         static partial void RegisterAdditionalHandlers();
     }
 }

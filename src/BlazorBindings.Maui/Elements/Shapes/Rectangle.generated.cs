@@ -4,6 +4,7 @@
 using BlazorBindings.Core;
 using BlazorBindings.Maui.Elements;
 using BlazorBindings.Maui.Elements.Shapes.Handlers;
+using MC = Microsoft.Maui.Controls;
 using MCS = Microsoft.Maui.Controls.Shapes;
 using Microsoft.AspNetCore.Components;
 using System.Threading.Tasks;
@@ -14,35 +15,42 @@ namespace BlazorBindings.Maui.Elements.Shapes
     {
         static Rectangle()
         {
-            ElementHandlerRegistry.RegisterElementHandler<Rectangle>(
-                renderer => new RectangleHandler(renderer, new MCS.Rectangle()));
-
             RegisterAdditionalHandlers();
         }
 
-        [Parameter] public double? RadiusX { get; set; }
-        [Parameter] public double? RadiusY { get; set; }
+        [Parameter] public double RadiusX { get; set; }
+        [Parameter] public double RadiusY { get; set; }
 
-        public new MCS.Rectangle NativeControl => (ElementHandler as RectangleHandler)?.RectangleControl;
+        public new MCS.Rectangle NativeControl => (MCS.Rectangle)((Element)this).NativeControl;
 
-        protected override void RenderAttributes(AttributesBuilder builder)
+        protected override MC.Element CreateNativeElement() => new MCS.Rectangle();
+
+        protected override void HandleParameter(string name, object value)
         {
-            base.RenderAttributes(builder);
-
-            if (RadiusX != null)
+            switch (name)
             {
-                builder.AddAttribute(nameof(RadiusX), AttributeHelper.DoubleToString(RadiusX.Value));
-            }
-            if (RadiusY != null)
-            {
-                builder.AddAttribute(nameof(RadiusY), AttributeHelper.DoubleToString(RadiusY.Value));
-            }
+                case nameof(RadiusX):
+                    if (!Equals(RadiusX, value))
+                    {
+                        RadiusX = (double)value;
+                        NativeControl.RadiusX = RadiusX;
+                    }
+                    break;
+                case nameof(RadiusY):
+                    if (!Equals(RadiusY, value))
+                    {
+                        RadiusY = (double)value;
+                        NativeControl.RadiusY = RadiusY;
+                    }
+                    break;
 
-            RenderAdditionalAttributes(builder);
+                default:
+                    base.HandleParameter(name, value);
+                    break;
+            }
         }
 
         partial void RenderAdditionalAttributes(AttributesBuilder builder);
-
         static partial void RegisterAdditionalHandlers();
     }
 }

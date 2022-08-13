@@ -4,6 +4,7 @@
 using BlazorBindings.Core;
 using BlazorBindings.Maui.Elements;
 using BlazorBindings.Maui.Elements.Shapes.Handlers;
+using MC = Microsoft.Maui.Controls;
 using MCS = Microsoft.Maui.Controls.Shapes;
 using Microsoft.AspNetCore.Components;
 using System.Threading.Tasks;
@@ -14,30 +15,34 @@ namespace BlazorBindings.Maui.Elements.Shapes
     {
         static Polyline()
         {
-            ElementHandlerRegistry.RegisterElementHandler<Polyline>(
-                renderer => new PolylineHandler(renderer, new MCS.Polyline()));
-
             RegisterAdditionalHandlers();
         }
 
-        [Parameter] public MCS.FillRule? FillRule { get; set; }
+        [Parameter] public MCS.FillRule FillRule { get; set; }
 
-        public new MCS.Polyline NativeControl => (ElementHandler as PolylineHandler)?.PolylineControl;
+        public new MCS.Polyline NativeControl => (MCS.Polyline)((Element)this).NativeControl;
 
-        protected override void RenderAttributes(AttributesBuilder builder)
+        protected override MC.Element CreateNativeElement() => new MCS.Polyline();
+
+        protected override void HandleParameter(string name, object value)
         {
-            base.RenderAttributes(builder);
-
-            if (FillRule != null)
+            switch (name)
             {
-                builder.AddAttribute(nameof(FillRule), (int)FillRule.Value);
-            }
+                case nameof(FillRule):
+                    if (!Equals(FillRule, value))
+                    {
+                        FillRule = (MCS.FillRule)value;
+                        NativeControl.FillRule = FillRule;
+                    }
+                    break;
 
-            RenderAdditionalAttributes(builder);
+                default:
+                    base.HandleParameter(name, value);
+                    break;
+            }
         }
 
         partial void RenderAdditionalAttributes(AttributesBuilder builder);
-
         static partial void RegisterAdditionalHandlers();
     }
 }

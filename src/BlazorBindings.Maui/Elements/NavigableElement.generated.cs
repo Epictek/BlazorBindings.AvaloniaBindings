@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace BlazorBindings.Maui.Elements
 {
-    public partial class NavigableElement : Element
+    public abstract partial class NavigableElement : Element
     {
         static NavigableElement()
         {
@@ -19,26 +19,35 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public string @class { get; set; }
         [Parameter] public string StyleClass { get; set; }
 
-        public new MC.NavigableElement NativeControl => (ElementHandler as NavigableElementHandler)?.NavigableElementControl;
+        public new MC.NavigableElement NativeControl => (MC.NavigableElement)((Element)this).NativeControl;
 
-        protected override void RenderAttributes(AttributesBuilder builder)
+
+        protected override void HandleParameter(string name, object value)
         {
-            base.RenderAttributes(builder);
-
-            if (@class != null)
+            switch (name)
             {
-                builder.AddAttribute(nameof(@class), @class);
-            }
-            if (StyleClass != null)
-            {
-                builder.AddAttribute(nameof(StyleClass), StyleClass);
-            }
+                case nameof(@class):
+                    if (!Equals(@class, value))
+                    {
+                        @class = (string)value;
+                        NativeControl.@class = AttributeHelper.GetStringList(@class);
+                    }
+                    break;
+                case nameof(StyleClass):
+                    if (!Equals(StyleClass, value))
+                    {
+                        StyleClass = (string)value;
+                        NativeControl.StyleClass = AttributeHelper.GetStringList(StyleClass);
+                    }
+                    break;
 
-            RenderAdditionalAttributes(builder);
+                default:
+                    base.HandleParameter(name, value);
+                    break;
+            }
         }
 
         partial void RenderAdditionalAttributes(AttributesBuilder builder);
-
         static partial void RegisterAdditionalHandlers();
     }
 }

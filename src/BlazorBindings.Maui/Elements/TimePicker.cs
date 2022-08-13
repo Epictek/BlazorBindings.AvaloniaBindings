@@ -2,9 +2,8 @@
 // Licensed under the MIT license.
 
 using Microsoft.AspNetCore.Components;
-using BlazorBindings.Core;
 using System;
-using System.Threading.Tasks;
+using System.ComponentModel;
 
 namespace BlazorBindings.Maui.Elements
 {
@@ -12,14 +11,26 @@ namespace BlazorBindings.Maui.Elements
     {
         [Parameter] public EventCallback<TimeSpan> TimeChanged { get; set; }
 
-        partial void RenderAdditionalAttributes(AttributesBuilder builder)
+        protected override bool HandleAdditionalParameter(string name, object value)
         {
-            builder.AddAttribute("ontimechanged", EventCallback.Factory.Create<ChangeEventArgs>(this, HandleTimeChanged));
+            if (name == nameof(TimeChanged))
+            {
+                NativeControl.PropertyChanged -= NativeControl_PropertyChanged;
+                NativeControl.PropertyChanged += NativeControl_PropertyChanged;
+                return true;
+            }
+            else
+            {
+                return base.HandleAdditionalParameter(name, value);
+            }
         }
 
-        private Task HandleTimeChanged(ChangeEventArgs evt)
+        private void NativeControl_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            return TimeChanged.InvokeAsync((TimeSpan)evt.Value);
+            if (e.PropertyName == nameof(NativeControl.Time))
+            {
+                TimeChanged.InvokeAsync(NativeControl.Time);
+            }
         }
     }
 }

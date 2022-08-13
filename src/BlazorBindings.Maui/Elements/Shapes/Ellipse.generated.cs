@@ -4,6 +4,7 @@
 using BlazorBindings.Core;
 using BlazorBindings.Maui.Elements;
 using BlazorBindings.Maui.Elements.Shapes.Handlers;
+using MC = Microsoft.Maui.Controls;
 using MCS = Microsoft.Maui.Controls.Shapes;
 using Microsoft.AspNetCore.Components;
 using System.Threading.Tasks;
@@ -14,24 +15,15 @@ namespace BlazorBindings.Maui.Elements.Shapes
     {
         static Ellipse()
         {
-            ElementHandlerRegistry.RegisterElementHandler<Ellipse>(
-                renderer => new EllipseHandler(renderer, new MCS.Ellipse()));
-
             RegisterAdditionalHandlers();
         }
 
-        public new MCS.Ellipse NativeControl => (ElementHandler as EllipseHandler)?.EllipseControl;
+        public new MCS.Ellipse NativeControl => (MCS.Ellipse)((Element)this).NativeControl;
 
-        protected override void RenderAttributes(AttributesBuilder builder)
-        {
-            base.RenderAttributes(builder);
+        protected override MC.Element CreateNativeElement() => new MCS.Ellipse();
 
-
-            RenderAdditionalAttributes(builder);
-        }
 
         partial void RenderAdditionalAttributes(AttributesBuilder builder);
-
         static partial void RegisterAdditionalHandlers();
     }
 }

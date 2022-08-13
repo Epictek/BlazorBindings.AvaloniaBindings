@@ -16,18 +16,11 @@ namespace BlazorBindings.Maui.Elements
             RegisterAdditionalHandlers();
         }
 
-        public new MC.Brush NativeControl => (ElementHandler as BrushHandler)?.BrushControl;
-
-        protected override void RenderAttributes(AttributesBuilder builder)
-        {
-            base.RenderAttributes(builder);
+        public new MC.Brush NativeControl => (MC.Brush)((Element)this).NativeControl;
 
 
-            RenderAdditionalAttributes(builder);
-        }
 
         partial void RenderAdditionalAttributes(AttributesBuilder builder);
-
         static partial void RegisterAdditionalHandlers();
     }
 }

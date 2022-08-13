@@ -13,35 +13,42 @@ namespace BlazorBindings.Maui.Elements
     {
         static ToolbarItem()
         {
-            ElementHandlerRegistry.RegisterElementHandler<ToolbarItem>(
-                renderer => new ToolbarItemHandler(renderer, new MC.ToolbarItem()));
-
             RegisterAdditionalHandlers();
         }
 
-        [Parameter] public MC.ToolbarItemOrder? Order { get; set; }
-        [Parameter] public int? Priority { get; set; }
+        [Parameter] public MC.ToolbarItemOrder Order { get; set; }
+        [Parameter] public int Priority { get; set; }
 
-        public new MC.ToolbarItem NativeControl => (ElementHandler as ToolbarItemHandler)?.ToolbarItemControl;
+        public new MC.ToolbarItem NativeControl => (MC.ToolbarItem)((Element)this).NativeControl;
 
-        protected override void RenderAttributes(AttributesBuilder builder)
+        protected override MC.Element CreateNativeElement() => new MC.ToolbarItem();
+
+        protected override void HandleParameter(string name, object value)
         {
-            base.RenderAttributes(builder);
-
-            if (Order != null)
+            switch (name)
             {
-                builder.AddAttribute(nameof(Order), (int)Order.Value);
-            }
-            if (Priority != null)
-            {
-                builder.AddAttribute(nameof(Priority), Priority.Value);
-            }
+                case nameof(Order):
+                    if (!Equals(Order, value))
+                    {
+                        Order = (MC.ToolbarItemOrder)value;
+                        NativeControl.Order = Order;
+                    }
+                    break;
+                case nameof(Priority):
+                    if (!Equals(Priority, value))
+                    {
+                        Priority = (int)value;
+                        NativeControl.Priority = Priority;
+                    }
+                    break;
 
-            RenderAdditionalAttributes(builder);
+                default:
+                    base.HandleParameter(name, value);
+                    break;
+            }
         }
 
         partial void RenderAdditionalAttributes(AttributesBuilder builder);
-
         static partial void RegisterAdditionalHandlers();
     }
 }

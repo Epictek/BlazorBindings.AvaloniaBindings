@@ -13,30 +13,34 @@ namespace BlazorBindings.Maui.Elements
     {
         static ShellGroupItem()
         {
-            ElementHandlerRegistry.RegisterElementHandler<ShellGroupItem>(
-                renderer => new ShellGroupItemHandler(renderer, new MC.ShellGroupItem()));
-
             RegisterAdditionalHandlers();
         }
 
-        [Parameter] public MC.FlyoutDisplayOptions? FlyoutDisplayOptions { get; set; }
+        [Parameter] public MC.FlyoutDisplayOptions FlyoutDisplayOptions { get; set; }
 
-        public new MC.ShellGroupItem NativeControl => (ElementHandler as ShellGroupItemHandler)?.ShellGroupItemControl;
+        public new MC.ShellGroupItem NativeControl => (MC.ShellGroupItem)((Element)this).NativeControl;
 
-        protected override void RenderAttributes(AttributesBuilder builder)
+        protected override MC.Element CreateNativeElement() => new MC.ShellGroupItem();
+
+        protected override void HandleParameter(string name, object value)
         {
-            base.RenderAttributes(builder);
-
-            if (FlyoutDisplayOptions != null)
+            switch (name)
             {
-                builder.AddAttribute(nameof(FlyoutDisplayOptions), (int)FlyoutDisplayOptions.Value);
-            }
+                case nameof(FlyoutDisplayOptions):
+                    if (!Equals(FlyoutDisplayOptions, value))
+                    {
+                        FlyoutDisplayOptions = (MC.FlyoutDisplayOptions)value;
+                        NativeControl.FlyoutDisplayOptions = FlyoutDisplayOptions;
+                    }
+                    break;
 
-            RenderAdditionalAttributes(builder);
+                default:
+                    base.HandleParameter(name, value);
+                    break;
+            }
         }
 
         partial void RenderAdditionalAttributes(AttributesBuilder builder);
-
         static partial void RegisterAdditionalHandlers();
     }
 }

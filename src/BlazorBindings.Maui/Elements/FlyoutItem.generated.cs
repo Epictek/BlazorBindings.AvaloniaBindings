@@ -13,24 +13,15 @@ namespace BlazorBindings.Maui.Elements
     {
         static FlyoutItem()
         {
-            ElementHandlerRegistry.RegisterElementHandler<FlyoutItem>(
-                renderer => new FlyoutItemHandler(renderer, new MC.FlyoutItem()));
-
             RegisterAdditionalHandlers();
         }
 
-        public new MC.FlyoutItem NativeControl => (ElementHandler as FlyoutItemHandler)?.FlyoutItemControl;
+        public new MC.FlyoutItem NativeControl => (MC.FlyoutItem)((Element)this).NativeControl;
 
-        protected override void RenderAttributes(AttributesBuilder builder)
-        {
-            base.RenderAttributes(builder);
+        protected override MC.Element CreateNativeElement() => new MC.FlyoutItem();
 
-
-            RenderAdditionalAttributes(builder);
-        }
 
         partial void RenderAdditionalAttributes(AttributesBuilder builder);
-
         static partial void RegisterAdditionalHandlers();
     }
 }

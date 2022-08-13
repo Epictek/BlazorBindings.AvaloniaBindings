@@ -18,15 +18,7 @@ namespace BlazorBindings.Maui.Elements
                     (shellItem, dataTemplate) => MC.Shell.SetItemTemplate(shellItem, dataTemplate)));
         }
 
-        [Parameter] public EventCallback OnAppearing { get; set; }
-        [Parameter] public EventCallback OnDisappearing { get; set; }
         [Parameter] public RenderFragment<MC.BaseShellItem> ItemTemplate { get; set; }
-
-        partial void RenderAdditionalAttributes(AttributesBuilder builder)
-        {
-            builder.AddAttribute("onappearing", OnAppearing);
-            builder.AddAttribute("ondisappearing", OnDisappearing);
-        }
 
         protected override void RenderAdditionalElementContent(RenderTreeBuilder builder, ref int sequence)
         {

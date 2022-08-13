@@ -13,24 +13,15 @@ namespace BlazorBindings.Maui.Elements
     {
         static TemplatedPage()
         {
-            ElementHandlerRegistry.RegisterElementHandler<TemplatedPage>(
-                renderer => new TemplatedPageHandler(renderer, new MC.TemplatedPage()));
-
             RegisterAdditionalHandlers();
         }
 
-        public new MC.TemplatedPage NativeControl => (ElementHandler as TemplatedPageHandler)?.TemplatedPageControl;
+        public new MC.TemplatedPage NativeControl => (MC.TemplatedPage)((Element)this).NativeControl;
 
-        protected override void RenderAttributes(AttributesBuilder builder)
-        {
-            base.RenderAttributes(builder);
+        protected override MC.Element CreateNativeElement() => new MC.TemplatedPage();
 
-
-            RenderAdditionalAttributes(builder);
-        }
 
         partial void RenderAdditionalAttributes(AttributesBuilder builder);
-
         static partial void RegisterAdditionalHandlers();
     }
 }

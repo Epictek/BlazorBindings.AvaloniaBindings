@@ -14,75 +14,117 @@ namespace BlazorBindings.Maui.Elements
     {
         static Editor()
         {
-            ElementHandlerRegistry.RegisterElementHandler<Editor>(
-                renderer => new EditorHandler(renderer, new MC.Editor()));
-
             RegisterAdditionalHandlers();
         }
 
-        [Parameter] public MC.EditorAutoSizeOption? AutoSize { get; set; }
-        [Parameter] public int? CursorPosition { get; set; }
-        [Parameter] public MC.FontAttributes? FontAttributes { get; set; }
-        [Parameter] public bool? FontAutoScalingEnabled { get; set; }
+        [Parameter] public MC.EditorAutoSizeOption AutoSize { get; set; }
+        [Parameter] public int CursorPosition { get; set; }
+        [Parameter] public MC.FontAttributes FontAttributes { get; set; }
+        [Parameter] public bool FontAutoScalingEnabled { get; set; }
         [Parameter] public string FontFamily { get; set; }
-        [Parameter] public double? FontSize { get; set; }
-        [Parameter] public TextAlignment? HorizontalTextAlignment { get; set; }
-        [Parameter] public bool? IsTextPredictionEnabled { get; set; }
-        [Parameter] public int? SelectionLength { get; set; }
-        [Parameter] public TextAlignment? VerticalTextAlignment { get; set; }
+        [Parameter] public double FontSize { get; set; }
+        [Parameter] public TextAlignment HorizontalTextAlignment { get; set; }
+        [Parameter] public bool IsTextPredictionEnabled { get; set; }
+        [Parameter] public int SelectionLength { get; set; }
+        [Parameter] public TextAlignment VerticalTextAlignment { get; set; }
+        [Parameter] public EventCallback OnCompleted { get; set; }
 
-        public new MC.Editor NativeControl => (ElementHandler as EditorHandler)?.EditorControl;
+        public new MC.Editor NativeControl => (MC.Editor)((Element)this).NativeControl;
 
-        protected override void RenderAttributes(AttributesBuilder builder)
+        protected override MC.Element CreateNativeElement() => new MC.Editor();
+
+        protected override void HandleParameter(string name, object value)
         {
-            base.RenderAttributes(builder);
+            switch (name)
+            {
+                case nameof(AutoSize):
+                    if (!Equals(AutoSize, value))
+                    {
+                        AutoSize = (MC.EditorAutoSizeOption)value;
+                        NativeControl.AutoSize = AutoSize;
+                    }
+                    break;
+                case nameof(CursorPosition):
+                    if (!Equals(CursorPosition, value))
+                    {
+                        CursorPosition = (int)value;
+                        NativeControl.CursorPosition = CursorPosition;
+                    }
+                    break;
+                case nameof(FontAttributes):
+                    if (!Equals(FontAttributes, value))
+                    {
+                        FontAttributes = (MC.FontAttributes)value;
+                        NativeControl.FontAttributes = FontAttributes;
+                    }
+                    break;
+                case nameof(FontAutoScalingEnabled):
+                    if (!Equals(FontAutoScalingEnabled, value))
+                    {
+                        FontAutoScalingEnabled = (bool)value;
+                        NativeControl.FontAutoScalingEnabled = FontAutoScalingEnabled;
+                    }
+                    break;
+                case nameof(FontFamily):
+                    if (!Equals(FontFamily, value))
+                    {
+                        FontFamily = (string)value;
+                        NativeControl.FontFamily = FontFamily;
+                    }
+                    break;
+                case nameof(FontSize):
+                    if (!Equals(FontSize, value))
+                    {
+                        FontSize = (double)value;
+                        NativeControl.FontSize = FontSize;
+                    }
+                    break;
+                case nameof(HorizontalTextAlignment):
+                    if (!Equals(HorizontalTextAlignment, value))
+                    {
+                        HorizontalTextAlignment = (TextAlignment)value;
+                        NativeControl.HorizontalTextAlignment = HorizontalTextAlignment;
+                    }
+                    break;
+                case nameof(IsTextPredictionEnabled):
+                    if (!Equals(IsTextPredictionEnabled, value))
+                    {
+                        IsTextPredictionEnabled = (bool)value;
+                        NativeControl.IsTextPredictionEnabled = IsTextPredictionEnabled;
+                    }
+                    break;
+                case nameof(SelectionLength):
+                    if (!Equals(SelectionLength, value))
+                    {
+                        SelectionLength = (int)value;
+                        NativeControl.SelectionLength = SelectionLength;
+                    }
+                    break;
+                case nameof(VerticalTextAlignment):
+                    if (!Equals(VerticalTextAlignment, value))
+                    {
+                        VerticalTextAlignment = (TextAlignment)value;
+                        NativeControl.VerticalTextAlignment = VerticalTextAlignment;
+                    }
+                    break;
+                case nameof(OnCompleted):
+                    if (!Equals(OnCompleted, value))
+                    {
+                        void NativeControlCompleted(object sender, System.EventArgs e) => OnCompleted.InvokeAsync();
 
-            if (AutoSize != null)
-            {
-                builder.AddAttribute(nameof(AutoSize), (int)AutoSize.Value);
-            }
-            if (CursorPosition != null)
-            {
-                builder.AddAttribute(nameof(CursorPosition), CursorPosition.Value);
-            }
-            if (FontAttributes != null)
-            {
-                builder.AddAttribute(nameof(FontAttributes), (int)FontAttributes.Value);
-            }
-            if (FontAutoScalingEnabled != null)
-            {
-                builder.AddAttribute(nameof(FontAutoScalingEnabled), FontAutoScalingEnabled.Value);
-            }
-            if (FontFamily != null)
-            {
-                builder.AddAttribute(nameof(FontFamily), FontFamily);
-            }
-            if (FontSize != null)
-            {
-                builder.AddAttribute(nameof(FontSize), AttributeHelper.DoubleToString(FontSize.Value));
-            }
-            if (HorizontalTextAlignment != null)
-            {
-                builder.AddAttribute(nameof(HorizontalTextAlignment), (int)HorizontalTextAlignment.Value);
-            }
-            if (IsTextPredictionEnabled != null)
-            {
-                builder.AddAttribute(nameof(IsTextPredictionEnabled), IsTextPredictionEnabled.Value);
-            }
-            if (SelectionLength != null)
-            {
-                builder.AddAttribute(nameof(SelectionLength), SelectionLength.Value);
-            }
-            if (VerticalTextAlignment != null)
-            {
-                builder.AddAttribute(nameof(VerticalTextAlignment), (int)VerticalTextAlignment.Value);
-            }
+                        OnCompleted = (EventCallback)value;
+                        NativeControl.Completed -= NativeControlCompleted;
+                        NativeControl.Completed += NativeControlCompleted;
+                    }
+                    break;
 
-            RenderAdditionalAttributes(builder);
+                default:
+                    base.HandleParameter(name, value);
+                    break;
+            }
         }
 
         partial void RenderAdditionalAttributes(AttributesBuilder builder);
-
         static partial void RegisterAdditionalHandlers();
     }
 }

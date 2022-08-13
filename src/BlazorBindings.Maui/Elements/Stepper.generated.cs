@@ -13,45 +13,69 @@ namespace BlazorBindings.Maui.Elements
     {
         static Stepper()
         {
-            ElementHandlerRegistry.RegisterElementHandler<Stepper>(
-                renderer => new StepperHandler(renderer, new MC.Stepper()));
-
             RegisterAdditionalHandlers();
         }
 
-        [Parameter] public double? Increment { get; set; }
-        [Parameter] public double? Maximum { get; set; }
-        [Parameter] public double? Minimum { get; set; }
-        [Parameter] public double? Value { get; set; }
+        [Parameter] public double Increment { get; set; }
+        [Parameter] public double Maximum { get; set; }
+        [Parameter] public double Minimum { get; set; }
+        [Parameter] public double Value { get; set; }
+        [Parameter] public EventCallback<double> ValueChanged { get; set; }
 
-        public new MC.Stepper NativeControl => (ElementHandler as StepperHandler)?.StepperControl;
+        public new MC.Stepper NativeControl => (MC.Stepper)((Element)this).NativeControl;
 
-        protected override void RenderAttributes(AttributesBuilder builder)
+        protected override MC.Element CreateNativeElement() => new MC.Stepper();
+
+        protected override void HandleParameter(string name, object value)
         {
-            base.RenderAttributes(builder);
+            switch (name)
+            {
+                case nameof(Increment):
+                    if (!Equals(Increment, value))
+                    {
+                        Increment = (double)value;
+                        NativeControl.Increment = Increment;
+                    }
+                    break;
+                case nameof(Maximum):
+                    if (!Equals(Maximum, value))
+                    {
+                        Maximum = (double)value;
+                        NativeControl.Maximum = Maximum;
+                    }
+                    break;
+                case nameof(Minimum):
+                    if (!Equals(Minimum, value))
+                    {
+                        Minimum = (double)value;
+                        NativeControl.Minimum = Minimum;
+                    }
+                    break;
+                case nameof(Value):
+                    if (!Equals(Value, value))
+                    {
+                        Value = (double)value;
+                        NativeControl.Value = Value;
+                    }
+                    break;
+                case nameof(ValueChanged):
+                    if (!Equals(ValueChanged, value))
+                    {
+                        void NativeControlValueChanged(object sender, MC.ValueChangedEventArgs e) => ValueChanged.InvokeAsync(NativeControl.Value);
 
-            if (Increment != null)
-            {
-                builder.AddAttribute(nameof(Increment), AttributeHelper.DoubleToString(Increment.Value));
-            }
-            if (Maximum != null)
-            {
-                builder.AddAttribute(nameof(Maximum), AttributeHelper.DoubleToString(Maximum.Value));
-            }
-            if (Minimum != null)
-            {
-                builder.AddAttribute(nameof(Minimum), AttributeHelper.DoubleToString(Minimum.Value));
-            }
-            if (Value != null)
-            {
-                builder.AddAttribute(nameof(Value), AttributeHelper.DoubleToString(Value.Value));
-            }
+                        ValueChanged = (EventCallback<double>)value;
+                        NativeControl.ValueChanged -= NativeControlValueChanged;
+                        NativeControl.ValueChanged += NativeControlValueChanged;
+                    }
+                    break;
 
-            RenderAdditionalAttributes(builder);
+                default:
+                    base.HandleParameter(name, value);
+                    break;
+            }
         }
 
         partial void RenderAdditionalAttributes(AttributesBuilder builder);
-
         static partial void RegisterAdditionalHandlers();
     }
 }

@@ -14,35 +14,42 @@ namespace BlazorBindings.Maui.Elements
     {
         static RadialGradientBrush()
         {
-            ElementHandlerRegistry.RegisterElementHandler<RadialGradientBrush>(
-                renderer => new RadialGradientBrushHandler(renderer, new MC.RadialGradientBrush()));
-
             RegisterAdditionalHandlers();
         }
 
-        [Parameter] public Point? Center { get; set; }
-        [Parameter] public double? Radius { get; set; }
+        [Parameter] public Point Center { get; set; }
+        [Parameter] public double Radius { get; set; }
 
-        public new MC.RadialGradientBrush NativeControl => (ElementHandler as RadialGradientBrushHandler)?.RadialGradientBrushControl;
+        public new MC.RadialGradientBrush NativeControl => (MC.RadialGradientBrush)((Element)this).NativeControl;
 
-        protected override void RenderAttributes(AttributesBuilder builder)
+        protected override MC.Element CreateNativeElement() => new MC.RadialGradientBrush();
+
+        protected override void HandleParameter(string name, object value)
         {
-            base.RenderAttributes(builder);
-
-            if (Center != null)
+            switch (name)
             {
-                builder.AddAttribute(nameof(Center), AttributeHelper.PointToString(Center.Value));
-            }
-            if (Radius != null)
-            {
-                builder.AddAttribute(nameof(Radius), AttributeHelper.DoubleToString(Radius.Value));
-            }
+                case nameof(Center):
+                    if (!Equals(Center, value))
+                    {
+                        Center = (Point)value;
+                        NativeControl.Center = Center;
+                    }
+                    break;
+                case nameof(Radius):
+                    if (!Equals(Radius, value))
+                    {
+                        Radius = (double)value;
+                        NativeControl.Radius = Radius;
+                    }
+                    break;
 
-            RenderAdditionalAttributes(builder);
+                default:
+                    base.HandleParameter(name, value);
+                    break;
+            }
         }
 
         partial void RenderAdditionalAttributes(AttributesBuilder builder);
-
         static partial void RegisterAdditionalHandlers();
     }
 }

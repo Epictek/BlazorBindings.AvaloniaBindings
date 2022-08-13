@@ -5,8 +5,6 @@ using BlazorBindings.Core;
 using BlazorBindings.Maui.Elements.Handlers;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
-using System;
-using System.Threading.Tasks;
 using MC = Microsoft.Maui.Controls;
 
 namespace BlazorBindings.Maui.Elements
@@ -67,28 +65,10 @@ namespace BlazorBindings.Maui.Elements
                     (shell, dataTemplate) => MC.Shell.SetMenuItemTemplate(shell, dataTemplate)));
         }
 
+        [Parameter] public RenderFragment ChildContent { get; set; }
         [Parameter] public RenderFragment FlyoutHeader { get; set; }
         [Parameter] public RenderFragment<MC.BaseShellItem> ItemTemplate { get; set; }
         [Parameter] public RenderFragment<MC.BaseShellItem> MenuItemTemplate { get; set; }
-
-        [Parameter] public EventCallback<MC.ShellNavigatedEventArgs> OnNavigated { get; set; }
-        [Parameter] public EventCallback<MC.ShellNavigatingEventArgs> OnNavigating { get; set; }
-
-        partial void RenderAdditionalAttributes(AttributesBuilder builder)
-        {
-            builder.AddAttribute("onnavigated", OnNavigated);
-            builder.AddAttribute("onnavigating", OnNavigating);
-        }
-
-        public async Task GoTo(MC.ShellNavigationState state, bool animate = true)
-        {
-            if (state is null)
-            {
-                throw new ArgumentNullException(nameof(state));
-            }
-
-            await NativeControl.GoToAsync(state, animate).ConfigureAwait(true);
-        }
 
         protected override RenderFragment GetChildContent() => ChildContent;
 

@@ -14,40 +14,50 @@ namespace BlazorBindings.Maui.Elements
     {
         static Switch()
         {
-            ElementHandlerRegistry.RegisterElementHandler<Switch>(
-                renderer => new SwitchHandler(renderer, new MC.Switch()));
-
             RegisterAdditionalHandlers();
         }
 
-        [Parameter] public bool? IsToggled { get; set; }
+        [Parameter] public bool IsToggled { get; set; }
         [Parameter] public Color OnColor { get; set; }
         [Parameter] public Color ThumbColor { get; set; }
 
-        public new MC.Switch NativeControl => (ElementHandler as SwitchHandler)?.SwitchControl;
+        public new MC.Switch NativeControl => (MC.Switch)((Element)this).NativeControl;
 
-        protected override void RenderAttributes(AttributesBuilder builder)
+        protected override MC.Element CreateNativeElement() => new MC.Switch();
+
+        protected override void HandleParameter(string name, object value)
         {
-            base.RenderAttributes(builder);
+            switch (name)
+            {
+                case nameof(IsToggled):
+                    if (!Equals(IsToggled, value))
+                    {
+                        IsToggled = (bool)value;
+                        NativeControl.IsToggled = IsToggled;
+                    }
+                    break;
+                case nameof(OnColor):
+                    if (!Equals(OnColor, value))
+                    {
+                        OnColor = (Color)value;
+                        NativeControl.OnColor = OnColor;
+                    }
+                    break;
+                case nameof(ThumbColor):
+                    if (!Equals(ThumbColor, value))
+                    {
+                        ThumbColor = (Color)value;
+                        NativeControl.ThumbColor = ThumbColor;
+                    }
+                    break;
 
-            if (IsToggled != null)
-            {
-                builder.AddAttribute(nameof(IsToggled), IsToggled.Value);
+                default:
+                    base.HandleParameter(name, value);
+                    break;
             }
-            if (OnColor != null)
-            {
-                builder.AddAttribute(nameof(OnColor), AttributeHelper.ColorToString(OnColor));
-            }
-            if (ThumbColor != null)
-            {
-                builder.AddAttribute(nameof(ThumbColor), AttributeHelper.ColorToString(ThumbColor));
-            }
-
-            RenderAdditionalAttributes(builder);
         }
 
         partial void RenderAdditionalAttributes(AttributesBuilder builder);
-
         static partial void RegisterAdditionalHandlers();
     }
 }

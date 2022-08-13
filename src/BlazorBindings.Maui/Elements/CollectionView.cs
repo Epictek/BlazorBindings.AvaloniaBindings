@@ -16,5 +16,7 @@ namespace BlazorBindings.Maui.Elements
         }
 
         public new MC.CollectionView NativeControl => (ElementHandler as CollectionViewHandler)?.CollectionViewControl;
+
+        protected override MC.Element CreateNativeElement() => new MC.CollectionView();
     }
 }

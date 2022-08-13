@@ -5,6 +5,7 @@ using BlazorBindings.Core;
 using BlazorBindings.Maui.Elements.Handlers;
 using MC = Microsoft.Maui.Controls;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Rendering;
 using System.Threading.Tasks;
 
 namespace BlazorBindings.Maui.Elements
@@ -13,40 +14,70 @@ namespace BlazorBindings.Maui.Elements
     {
         static FlyoutPage()
         {
-            ElementHandlerRegistry.RegisterElementHandler<FlyoutPage>(
-                renderer => new FlyoutPageHandler(renderer, new MC.FlyoutPage()));
-
             RegisterAdditionalHandlers();
+
+            ElementHandlerRegistry.RegisterPropertyContentHandler<FlyoutPage>(nameof(Detail),
+                _ => new ContentPropertyHandler<MC.FlyoutPage>((x, value) => x.Detail = (MC.Page)value));
+            ElementHandlerRegistry.RegisterPropertyContentHandler<FlyoutPage>(nameof(Flyout),
+                _ => new ContentPropertyHandler<MC.FlyoutPage>((x, value) => x.Flyout = (MC.Page)value));
         }
 
-        [Parameter] public MC.FlyoutLayoutBehavior? FlyoutLayoutBehavior { get; set; }
-        [Parameter] public bool? IsGestureEnabled { get; set; }
-        [Parameter] public bool? IsPresented { get; set; }
+        [Parameter] public MC.FlyoutLayoutBehavior FlyoutLayoutBehavior { get; set; }
+        [Parameter] public bool IsGestureEnabled { get; set; }
+        [Parameter] public bool IsPresented { get; set; }
+        [Parameter] public RenderFragment Detail { get; set; }
+        [Parameter] public RenderFragment Flyout { get; set; }
 
-        public new MC.FlyoutPage NativeControl => (ElementHandler as FlyoutPageHandler)?.FlyoutPageControl;
+        public new MC.FlyoutPage NativeControl => (MC.FlyoutPage)((Element)this).NativeControl;
 
-        protected override void RenderAttributes(AttributesBuilder builder)
+        protected override MC.Element CreateNativeElement() => new MC.FlyoutPage();
+
+        protected override void HandleParameter(string name, object value)
         {
-            base.RenderAttributes(builder);
+            switch (name)
+            {
+                case nameof(FlyoutLayoutBehavior):
+                    if (!Equals(FlyoutLayoutBehavior, value))
+                    {
+                        FlyoutLayoutBehavior = (MC.FlyoutLayoutBehavior)value;
+                        NativeControl.FlyoutLayoutBehavior = FlyoutLayoutBehavior;
+                    }
+                    break;
+                case nameof(IsGestureEnabled):
+                    if (!Equals(IsGestureEnabled, value))
+                    {
+                        IsGestureEnabled = (bool)value;
+                        NativeControl.IsGestureEnabled = IsGestureEnabled;
+                    }
+                    break;
+                case nameof(IsPresented):
+                    if (!Equals(IsPresented, value))
+                    {
+                        IsPresented = (bool)value;
+                        NativeControl.IsPresented = IsPresented;
+                    }
+                    break;
+                case nameof(Detail):
+                    Detail = (RenderFragment)value;
+                    break;
+                case nameof(Flyout):
+                    Flyout = (RenderFragment)value;
+                    break;
 
-            if (FlyoutLayoutBehavior != null)
-            {
-                builder.AddAttribute(nameof(FlyoutLayoutBehavior), (int)FlyoutLayoutBehavior.Value);
+                default:
+                    base.HandleParameter(name, value);
+                    break;
             }
-            if (IsGestureEnabled != null)
-            {
-                builder.AddAttribute(nameof(IsGestureEnabled), IsGestureEnabled.Value);
-            }
-            if (IsPresented != null)
-            {
-                builder.AddAttribute(nameof(IsPresented), IsPresented.Value);
-            }
+        }
 
-            RenderAdditionalAttributes(builder);
+        protected override void RenderAdditionalElementContent(RenderTreeBuilder builder, ref int sequence)
+        {
+            base.RenderAdditionalElementContent(builder, ref sequence);
+            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(FlyoutPage), Detail);
+            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(FlyoutPage), Flyout);;
         }
 
         partial void RenderAdditionalAttributes(AttributesBuilder builder);
-
         static partial void RegisterAdditionalHandlers();
     }
 }

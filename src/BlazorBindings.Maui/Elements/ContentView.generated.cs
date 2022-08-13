@@ -5,6 +5,7 @@ using BlazorBindings.Core;
 using BlazorBindings.Maui.Elements.Handlers;
 using MC = Microsoft.Maui.Controls;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Rendering;
 using System.Threading.Tasks;
 
 namespace BlazorBindings.Maui.Elements
@@ -13,24 +14,39 @@ namespace BlazorBindings.Maui.Elements
     {
         static ContentView()
         {
-            ElementHandlerRegistry.RegisterElementHandler<ContentView>(
-                renderer => new ContentViewHandler(renderer, new MC.ContentView()));
-
             RegisterAdditionalHandlers();
+
+            ElementHandlerRegistry.RegisterPropertyContentHandler<ContentView>(nameof(ChildContent),
+                _ => new ContentPropertyHandler<MC.ContentView>((x, value) => x.Content = (MC.View)value));
         }
 
-        public new MC.ContentView NativeControl => (ElementHandler as ContentViewHandler)?.ContentViewControl;
+        [Parameter] public RenderFragment ChildContent { get; set; }
 
-        protected override void RenderAttributes(AttributesBuilder builder)
+        public new MC.ContentView NativeControl => (MC.ContentView)((Element)this).NativeControl;
+
+        protected override MC.Element CreateNativeElement() => new MC.ContentView();
+
+        protected override void HandleParameter(string name, object value)
         {
-            base.RenderAttributes(builder);
+            switch (name)
+            {
+                case nameof(ChildContent):
+                    ChildContent = (RenderFragment)value;
+                    break;
 
+                default:
+                    base.HandleParameter(name, value);
+                    break;
+            }
+        }
 
-            RenderAdditionalAttributes(builder);
+        protected override void RenderAdditionalElementContent(RenderTreeBuilder builder, ref int sequence)
+        {
+            base.RenderAdditionalElementContent(builder, ref sequence);
+            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(ContentView), ChildContent);;
         }
 
         partial void RenderAdditionalAttributes(AttributesBuilder builder);
-
         static partial void RegisterAdditionalHandlers();
     }
 }

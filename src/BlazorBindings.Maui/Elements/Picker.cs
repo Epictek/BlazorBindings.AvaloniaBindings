@@ -1,11 +1,11 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
+using BlazorBindings.Core;
+using BlazorBindings.Maui.Elements.Handlers;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Maui;
 using Microsoft.Maui.Graphics;
-using BlazorBindings.Core;
-using BlazorBindings.Maui.Elements.Handlers;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -140,5 +140,7 @@ namespace BlazorBindings.Maui.Elements
         {
             return SelectedIndexChanged.InvokeAsync((int)evt.Value);
         }
+
+        protected override MC.Element CreateNativeElement() => new MC.Picker();
     }
 }

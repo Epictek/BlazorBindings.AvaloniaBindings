@@ -14,35 +14,42 @@ namespace BlazorBindings.Maui.Elements
     {
         static ActivityIndicator()
         {
-            ElementHandlerRegistry.RegisterElementHandler<ActivityIndicator>(
-                renderer => new ActivityIndicatorHandler(renderer, new MC.ActivityIndicator()));
-
             RegisterAdditionalHandlers();
         }
 
         [Parameter] public Color Color { get; set; }
-        [Parameter] public bool? IsRunning { get; set; }
+        [Parameter] public bool IsRunning { get; set; }
 
-        public new MC.ActivityIndicator NativeControl => (ElementHandler as ActivityIndicatorHandler)?.ActivityIndicatorControl;
+        public new MC.ActivityIndicator NativeControl => (MC.ActivityIndicator)((Element)this).NativeControl;
 
-        protected override void RenderAttributes(AttributesBuilder builder)
+        protected override MC.Element CreateNativeElement() => new MC.ActivityIndicator();
+
+        protected override void HandleParameter(string name, object value)
         {
-            base.RenderAttributes(builder);
-
-            if (Color != null)
+            switch (name)
             {
-                builder.AddAttribute(nameof(Color), AttributeHelper.ColorToString(Color));
-            }
-            if (IsRunning != null)
-            {
-                builder.AddAttribute(nameof(IsRunning), IsRunning.Value);
-            }
+                case nameof(Color):
+                    if (!Equals(Color, value))
+                    {
+                        Color = (Color)value;
+                        NativeControl.Color = Color;
+                    }
+                    break;
+                case nameof(IsRunning):
+                    if (!Equals(IsRunning, value))
+                    {
+                        IsRunning = (bool)value;
+                        NativeControl.IsRunning = IsRunning;
+                    }
+                    break;
 
-            RenderAdditionalAttributes(builder);
+                default:
+                    base.HandleParameter(name, value);
+                    break;
+            }
         }
 
         partial void RenderAdditionalAttributes(AttributesBuilder builder);
-
         static partial void RegisterAdditionalHandlers();
     }
 }

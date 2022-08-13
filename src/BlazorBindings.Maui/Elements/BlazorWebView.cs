@@ -1,9 +1,10 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-using Microsoft.AspNetCore.Components;
 using BlazorBindings.Core;
 using BlazorBindings.Maui.Elements.Handlers;
+using Microsoft.AspNetCore.Components;
+using MC = Microsoft.Maui.Controls;
 using WVM = Microsoft.AspNetCore.Components.WebView.Maui;
 
 namespace BlazorBindings.Maui.Elements
@@ -18,6 +19,8 @@ namespace BlazorBindings.Maui.Elements
 
         [Parameter] public string HostPage { get; set; }
         [Parameter] public RenderFragment RootComponents { get; set; }
+
+        protected override MC.Element CreateNativeElement() => new WVM.BlazorWebView();
 
         protected override RenderFragment GetChildContent() => RootComponents;
 

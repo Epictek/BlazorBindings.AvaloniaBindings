@@ -27,5 +27,7 @@ namespace BlazorBindings.Maui
             AttachedPropertyRegistry.RegisterAttachedPropertyHandler("AbsoluteLayout.LayoutFlags",
                 (element, value) => MC.AbsoluteLayout.SetLayoutFlags(element, AttributeHelper.GetEnum<AbsoluteLayoutFlags>(value)));
         }
+
+        protected override MC.Element CreateNativeElement() => new MC.AbsoluteLayout();
     }
 }

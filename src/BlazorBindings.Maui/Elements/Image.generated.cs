@@ -14,45 +14,58 @@ namespace BlazorBindings.Maui.Elements
     {
         static Image()
         {
-            ElementHandlerRegistry.RegisterElementHandler<Image>(
-                renderer => new ImageHandler(renderer, new MC.Image()));
-
             RegisterAdditionalHandlers();
         }
 
-        [Parameter] public Aspect? Aspect { get; set; }
-        [Parameter] public bool? IsAnimationPlaying { get; set; }
-        [Parameter] public bool? IsOpaque { get; set; }
+        [Parameter] public Aspect Aspect { get; set; }
+        [Parameter] public bool IsAnimationPlaying { get; set; }
+        [Parameter] public bool IsOpaque { get; set; }
         [Parameter] public MC.ImageSource Source { get; set; }
 
-        public new MC.Image NativeControl => (ElementHandler as ImageHandler)?.ImageControl;
+        public new MC.Image NativeControl => (MC.Image)((Element)this).NativeControl;
 
-        protected override void RenderAttributes(AttributesBuilder builder)
+        protected override MC.Element CreateNativeElement() => new MC.Image();
+
+        protected override void HandleParameter(string name, object value)
         {
-            base.RenderAttributes(builder);
+            switch (name)
+            {
+                case nameof(Aspect):
+                    if (!Equals(Aspect, value))
+                    {
+                        Aspect = (Aspect)value;
+                        NativeControl.Aspect = Aspect;
+                    }
+                    break;
+                case nameof(IsAnimationPlaying):
+                    if (!Equals(IsAnimationPlaying, value))
+                    {
+                        IsAnimationPlaying = (bool)value;
+                        NativeControl.IsAnimationPlaying = IsAnimationPlaying;
+                    }
+                    break;
+                case nameof(IsOpaque):
+                    if (!Equals(IsOpaque, value))
+                    {
+                        IsOpaque = (bool)value;
+                        NativeControl.IsOpaque = IsOpaque;
+                    }
+                    break;
+                case nameof(Source):
+                    if (!Equals(Source, value))
+                    {
+                        Source = (MC.ImageSource)value;
+                        NativeControl.Source = Source;
+                    }
+                    break;
 
-            if (Aspect != null)
-            {
-                builder.AddAttribute(nameof(Aspect), (int)Aspect.Value);
+                default:
+                    base.HandleParameter(name, value);
+                    break;
             }
-            if (IsAnimationPlaying != null)
-            {
-                builder.AddAttribute(nameof(IsAnimationPlaying), IsAnimationPlaying.Value);
-            }
-            if (IsOpaque != null)
-            {
-                builder.AddAttribute(nameof(IsOpaque), IsOpaque.Value);
-            }
-            if (Source != null)
-            {
-                builder.AddAttribute(nameof(Source), AttributeHelper.ObjectToDelegate(Source));
-            }
-
-            RenderAdditionalAttributes(builder);
         }
 
         partial void RenderAdditionalAttributes(AttributesBuilder builder);
-
         static partial void RegisterAdditionalHandlers();
     }
 }

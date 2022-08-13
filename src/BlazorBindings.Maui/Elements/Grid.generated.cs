@@ -13,35 +13,42 @@ namespace BlazorBindings.Maui.Elements
     {
         static Grid()
         {
-            ElementHandlerRegistry.RegisterElementHandler<Grid>(
-                renderer => new GridHandler(renderer, new MC.Grid()));
-
             RegisterAdditionalHandlers();
         }
 
-        [Parameter] public double? ColumnSpacing { get; set; }
-        [Parameter] public double? RowSpacing { get; set; }
+        [Parameter] public double ColumnSpacing { get; set; }
+        [Parameter] public double RowSpacing { get; set; }
 
-        public new MC.Grid NativeControl => (ElementHandler as GridHandler)?.GridControl;
+        public new MC.Grid NativeControl => (MC.Grid)((Element)this).NativeControl;
 
-        protected override void RenderAttributes(AttributesBuilder builder)
+        protected override MC.Element CreateNativeElement() => new MC.Grid();
+
+        protected override void HandleParameter(string name, object value)
         {
-            base.RenderAttributes(builder);
-
-            if (ColumnSpacing != null)
+            switch (name)
             {
-                builder.AddAttribute(nameof(ColumnSpacing), AttributeHelper.DoubleToString(ColumnSpacing.Value));
-            }
-            if (RowSpacing != null)
-            {
-                builder.AddAttribute(nameof(RowSpacing), AttributeHelper.DoubleToString(RowSpacing.Value));
-            }
+                case nameof(ColumnSpacing):
+                    if (!Equals(ColumnSpacing, value))
+                    {
+                        ColumnSpacing = (double)value;
+                        NativeControl.ColumnSpacing = ColumnSpacing;
+                    }
+                    break;
+                case nameof(RowSpacing):
+                    if (!Equals(RowSpacing, value))
+                    {
+                        RowSpacing = (double)value;
+                        NativeControl.RowSpacing = RowSpacing;
+                    }
+                    break;
 
-            RenderAdditionalAttributes(builder);
+                default:
+                    base.HandleParameter(name, value);
+                    break;
+            }
         }
 
         partial void RenderAdditionalAttributes(AttributesBuilder builder);
-
         static partial void RegisterAdditionalHandlers();
     }
 }

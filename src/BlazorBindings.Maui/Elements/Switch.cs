@@ -2,8 +2,6 @@
 // Licensed under the MIT license.
 
 using Microsoft.AspNetCore.Components;
-using BlazorBindings.Core;
-using System.Threading.Tasks;
 
 namespace BlazorBindings.Maui.Elements
 {
@@ -11,14 +9,26 @@ namespace BlazorBindings.Maui.Elements
     {
         [Parameter] public EventCallback<bool> IsToggledChanged { get; set; }
 
-        partial void RenderAdditionalAttributes(AttributesBuilder builder)
+        protected override bool HandleAdditionalParameter(string name, object value)
         {
-            builder.AddAttribute("onistoggledchanged", EventCallback.Factory.Create<ChangeEventArgs>(this, HandleIsToggledChanged));
+            if (name == nameof(IsToggledChanged))
+            {
+                NativeControl.PropertyChanged -= NativeControl_PropertyChanged;
+                NativeControl.PropertyChanged += NativeControl_PropertyChanged; ;
+                return true;
+            }
+            else
+            {
+                return base.HandleAdditionalParameter(name, value);
+            }
         }
 
-        private Task HandleIsToggledChanged(ChangeEventArgs evt)
+        private void NativeControl_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            return IsToggledChanged.InvokeAsync((bool)evt.Value);
+            if (e.PropertyName == nameof(NativeControl.IsToggled))
+            {
+                IsToggledChanged.InvokeAsync(NativeControl.IsToggled);
+            }
         }
     }
 }

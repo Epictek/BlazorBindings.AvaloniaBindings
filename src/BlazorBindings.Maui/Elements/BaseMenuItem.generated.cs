@@ -16,18 +16,11 @@ namespace BlazorBindings.Maui.Elements
             RegisterAdditionalHandlers();
         }
 
-        public new MC.BaseMenuItem NativeControl => (ElementHandler as BaseMenuItemHandler)?.BaseMenuItemControl;
-
-        protected override void RenderAttributes(AttributesBuilder builder)
-        {
-            base.RenderAttributes(builder);
+        public new MC.BaseMenuItem NativeControl => (MC.BaseMenuItem)((Element)this).NativeControl;
 
 
-            RenderAdditionalAttributes(builder);
-        }
 
         partial void RenderAdditionalAttributes(AttributesBuilder builder);
-
         static partial void RegisterAdditionalHandlers();
     }
 }

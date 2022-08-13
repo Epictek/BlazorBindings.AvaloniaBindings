@@ -4,6 +4,7 @@
 using BlazorBindings.Core;
 using BlazorBindings.Maui.Elements;
 using BlazorBindings.Maui.Elements.Shapes.Handlers;
+using MC = Microsoft.Maui.Controls;
 using MCS = Microsoft.Maui.Controls.Shapes;
 using Microsoft.AspNetCore.Components;
 using System.Threading.Tasks;
@@ -14,45 +15,58 @@ namespace BlazorBindings.Maui.Elements.Shapes
     {
         static Line()
         {
-            ElementHandlerRegistry.RegisterElementHandler<Line>(
-                renderer => new LineHandler(renderer, new MCS.Line()));
-
             RegisterAdditionalHandlers();
         }
 
-        [Parameter] public double? X1 { get; set; }
-        [Parameter] public double? X2 { get; set; }
-        [Parameter] public double? Y1 { get; set; }
-        [Parameter] public double? Y2 { get; set; }
+        [Parameter] public double X1 { get; set; }
+        [Parameter] public double X2 { get; set; }
+        [Parameter] public double Y1 { get; set; }
+        [Parameter] public double Y2 { get; set; }
 
-        public new MCS.Line NativeControl => (ElementHandler as LineHandler)?.LineControl;
+        public new MCS.Line NativeControl => (MCS.Line)((Element)this).NativeControl;
 
-        protected override void RenderAttributes(AttributesBuilder builder)
+        protected override MC.Element CreateNativeElement() => new MCS.Line();
+
+        protected override void HandleParameter(string name, object value)
         {
-            base.RenderAttributes(builder);
+            switch (name)
+            {
+                case nameof(X1):
+                    if (!Equals(X1, value))
+                    {
+                        X1 = (double)value;
+                        NativeControl.X1 = X1;
+                    }
+                    break;
+                case nameof(X2):
+                    if (!Equals(X2, value))
+                    {
+                        X2 = (double)value;
+                        NativeControl.X2 = X2;
+                    }
+                    break;
+                case nameof(Y1):
+                    if (!Equals(Y1, value))
+                    {
+                        Y1 = (double)value;
+                        NativeControl.Y1 = Y1;
+                    }
+                    break;
+                case nameof(Y2):
+                    if (!Equals(Y2, value))
+                    {
+                        Y2 = (double)value;
+                        NativeControl.Y2 = Y2;
+                    }
+                    break;
 
-            if (X1 != null)
-            {
-                builder.AddAttribute(nameof(X1), AttributeHelper.DoubleToString(X1.Value));
+                default:
+                    base.HandleParameter(name, value);
+                    break;
             }
-            if (X2 != null)
-            {
-                builder.AddAttribute(nameof(X2), AttributeHelper.DoubleToString(X2.Value));
-            }
-            if (Y1 != null)
-            {
-                builder.AddAttribute(nameof(Y1), AttributeHelper.DoubleToString(Y1.Value));
-            }
-            if (Y2 != null)
-            {
-                builder.AddAttribute(nameof(Y2), AttributeHelper.DoubleToString(Y2.Value));
-            }
-
-            RenderAdditionalAttributes(builder);
         }
 
         partial void RenderAdditionalAttributes(AttributesBuilder builder);
-
         static partial void RegisterAdditionalHandlers();
     }
 }

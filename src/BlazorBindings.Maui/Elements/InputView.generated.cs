@@ -11,76 +11,109 @@ using System.Threading.Tasks;
 
 namespace BlazorBindings.Maui.Elements
 {
-    public partial class InputView : View
+    public abstract partial class InputView : View
     {
         static InputView()
         {
             RegisterAdditionalHandlers();
         }
 
-        [Parameter] public double? CharacterSpacing { get; set; }
-        [Parameter] public bool? IsReadOnly { get; set; }
-        [Parameter] public bool? IsSpellCheckEnabled { get; set; }
+        [Parameter] public double CharacterSpacing { get; set; }
+        [Parameter] public bool IsReadOnly { get; set; }
+        [Parameter] public bool IsSpellCheckEnabled { get; set; }
         [Parameter] public Keyboard Keyboard { get; set; }
-        [Parameter] public int? MaxLength { get; set; }
+        [Parameter] public int MaxLength { get; set; }
         [Parameter] public string Placeholder { get; set; }
         [Parameter] public Color PlaceholderColor { get; set; }
         [Parameter] public string Text { get; set; }
         [Parameter] public Color TextColor { get; set; }
-        [Parameter] public TextTransform? TextTransform { get; set; }
+        [Parameter] public TextTransform TextTransform { get; set; }
 
-        public new MC.InputView NativeControl => (ElementHandler as InputViewHandler)?.InputViewControl;
+        public new MC.InputView NativeControl => (MC.InputView)((Element)this).NativeControl;
 
-        protected override void RenderAttributes(AttributesBuilder builder)
+
+        protected override void HandleParameter(string name, object value)
         {
-            base.RenderAttributes(builder);
+            switch (name)
+            {
+                case nameof(CharacterSpacing):
+                    if (!Equals(CharacterSpacing, value))
+                    {
+                        CharacterSpacing = (double)value;
+                        NativeControl.CharacterSpacing = CharacterSpacing;
+                    }
+                    break;
+                case nameof(IsReadOnly):
+                    if (!Equals(IsReadOnly, value))
+                    {
+                        IsReadOnly = (bool)value;
+                        NativeControl.IsReadOnly = IsReadOnly;
+                    }
+                    break;
+                case nameof(IsSpellCheckEnabled):
+                    if (!Equals(IsSpellCheckEnabled, value))
+                    {
+                        IsSpellCheckEnabled = (bool)value;
+                        NativeControl.IsSpellCheckEnabled = IsSpellCheckEnabled;
+                    }
+                    break;
+                case nameof(Keyboard):
+                    if (!Equals(Keyboard, value))
+                    {
+                        Keyboard = (Keyboard)value;
+                        NativeControl.Keyboard = Keyboard;
+                    }
+                    break;
+                case nameof(MaxLength):
+                    if (!Equals(MaxLength, value))
+                    {
+                        MaxLength = (int)value;
+                        NativeControl.MaxLength = MaxLength;
+                    }
+                    break;
+                case nameof(Placeholder):
+                    if (!Equals(Placeholder, value))
+                    {
+                        Placeholder = (string)value;
+                        NativeControl.Placeholder = Placeholder;
+                    }
+                    break;
+                case nameof(PlaceholderColor):
+                    if (!Equals(PlaceholderColor, value))
+                    {
+                        PlaceholderColor = (Color)value;
+                        NativeControl.PlaceholderColor = PlaceholderColor;
+                    }
+                    break;
+                case nameof(Text):
+                    if (!Equals(Text, value))
+                    {
+                        Text = (string)value;
+                        NativeControl.Text = Text;
+                    }
+                    break;
+                case nameof(TextColor):
+                    if (!Equals(TextColor, value))
+                    {
+                        TextColor = (Color)value;
+                        NativeControl.TextColor = TextColor;
+                    }
+                    break;
+                case nameof(TextTransform):
+                    if (!Equals(TextTransform, value))
+                    {
+                        TextTransform = (TextTransform)value;
+                        NativeControl.TextTransform = TextTransform;
+                    }
+                    break;
 
-            if (CharacterSpacing != null)
-            {
-                builder.AddAttribute(nameof(CharacterSpacing), AttributeHelper.DoubleToString(CharacterSpacing.Value));
+                default:
+                    base.HandleParameter(name, value);
+                    break;
             }
-            if (IsReadOnly != null)
-            {
-                builder.AddAttribute(nameof(IsReadOnly), IsReadOnly.Value);
-            }
-            if (IsSpellCheckEnabled != null)
-            {
-                builder.AddAttribute(nameof(IsSpellCheckEnabled), IsSpellCheckEnabled.Value);
-            }
-            if (Keyboard != null)
-            {
-                builder.AddAttribute(nameof(Keyboard), AttributeHelper.ObjectToDelegate(Keyboard));
-            }
-            if (MaxLength != null)
-            {
-                builder.AddAttribute(nameof(MaxLength), MaxLength.Value);
-            }
-            if (Placeholder != null)
-            {
-                builder.AddAttribute(nameof(Placeholder), Placeholder);
-            }
-            if (PlaceholderColor != null)
-            {
-                builder.AddAttribute(nameof(PlaceholderColor), AttributeHelper.ColorToString(PlaceholderColor));
-            }
-            if (Text != null)
-            {
-                builder.AddAttribute(nameof(Text), Text);
-            }
-            if (TextColor != null)
-            {
-                builder.AddAttribute(nameof(TextColor), AttributeHelper.ColorToString(TextColor));
-            }
-            if (TextTransform != null)
-            {
-                builder.AddAttribute(nameof(TextTransform), (int)TextTransform.Value);
-            }
-
-            RenderAdditionalAttributes(builder);
         }
 
         partial void RenderAdditionalAttributes(AttributesBuilder builder);
-
         static partial void RegisterAdditionalHandlers();
     }
 }

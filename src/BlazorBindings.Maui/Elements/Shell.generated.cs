@@ -15,75 +15,128 @@ namespace BlazorBindings.Maui.Elements
     {
         static Shell()
         {
-            ElementHandlerRegistry.RegisterElementHandler<Shell>(
-                renderer => new ShellHandler(renderer, new MC.Shell()));
-
             RegisterAdditionalHandlers();
         }
 
         [Parameter] public Color FlyoutBackgroundColor { get; set; }
         [Parameter] public MC.ImageSource FlyoutBackgroundImage { get; set; }
-        [Parameter] public Aspect? FlyoutBackgroundImageAspect { get; set; }
-        [Parameter] public FlyoutBehavior? FlyoutBehavior { get; set; }
-        [Parameter] public MC.FlyoutHeaderBehavior? FlyoutHeaderBehavior { get; set; }
-        [Parameter] public double? FlyoutHeight { get; set; }
+        [Parameter] public Aspect FlyoutBackgroundImageAspect { get; set; }
+        [Parameter] public FlyoutBehavior FlyoutBehavior { get; set; }
+        [Parameter] public MC.FlyoutHeaderBehavior FlyoutHeaderBehavior { get; set; }
+        [Parameter] public double FlyoutHeight { get; set; }
         [Parameter] public MC.ImageSource FlyoutIcon { get; set; }
-        [Parameter] public bool? FlyoutIsPresented { get; set; }
-        [Parameter] public MC.ScrollMode? FlyoutVerticalScrollMode { get; set; }
-        [Parameter] public double? FlyoutWidth { get; set; }
+        [Parameter] public bool FlyoutIsPresented { get; set; }
+        [Parameter] public MC.ScrollMode FlyoutVerticalScrollMode { get; set; }
+        [Parameter] public double FlyoutWidth { get; set; }
+        [Parameter] public EventCallback<MC.ShellNavigatedEventArgs> OnNavigated { get; set; }
+        [Parameter] public EventCallback<MC.ShellNavigatingEventArgs> OnNavigating { get; set; }
 
-        public new MC.Shell NativeControl => (ElementHandler as ShellHandler)?.ShellControl;
+        public new MC.Shell NativeControl => (MC.Shell)((Element)this).NativeControl;
 
-        protected override void RenderAttributes(AttributesBuilder builder)
+        protected override MC.Element CreateNativeElement() => new MC.Shell();
+
+        protected override void HandleParameter(string name, object value)
         {
-            base.RenderAttributes(builder);
+            switch (name)
+            {
+                case nameof(FlyoutBackgroundColor):
+                    if (!Equals(FlyoutBackgroundColor, value))
+                    {
+                        FlyoutBackgroundColor = (Color)value;
+                        NativeControl.FlyoutBackgroundColor = FlyoutBackgroundColor;
+                    }
+                    break;
+                case nameof(FlyoutBackgroundImage):
+                    if (!Equals(FlyoutBackgroundImage, value))
+                    {
+                        FlyoutBackgroundImage = (MC.ImageSource)value;
+                        NativeControl.FlyoutBackgroundImage = FlyoutBackgroundImage;
+                    }
+                    break;
+                case nameof(FlyoutBackgroundImageAspect):
+                    if (!Equals(FlyoutBackgroundImageAspect, value))
+                    {
+                        FlyoutBackgroundImageAspect = (Aspect)value;
+                        NativeControl.FlyoutBackgroundImageAspect = FlyoutBackgroundImageAspect;
+                    }
+                    break;
+                case nameof(FlyoutBehavior):
+                    if (!Equals(FlyoutBehavior, value))
+                    {
+                        FlyoutBehavior = (FlyoutBehavior)value;
+                        NativeControl.FlyoutBehavior = FlyoutBehavior;
+                    }
+                    break;
+                case nameof(FlyoutHeaderBehavior):
+                    if (!Equals(FlyoutHeaderBehavior, value))
+                    {
+                        FlyoutHeaderBehavior = (MC.FlyoutHeaderBehavior)value;
+                        NativeControl.FlyoutHeaderBehavior = FlyoutHeaderBehavior;
+                    }
+                    break;
+                case nameof(FlyoutHeight):
+                    if (!Equals(FlyoutHeight, value))
+                    {
+                        FlyoutHeight = (double)value;
+                        NativeControl.FlyoutHeight = FlyoutHeight;
+                    }
+                    break;
+                case nameof(FlyoutIcon):
+                    if (!Equals(FlyoutIcon, value))
+                    {
+                        FlyoutIcon = (MC.ImageSource)value;
+                        NativeControl.FlyoutIcon = FlyoutIcon;
+                    }
+                    break;
+                case nameof(FlyoutIsPresented):
+                    if (!Equals(FlyoutIsPresented, value))
+                    {
+                        FlyoutIsPresented = (bool)value;
+                        NativeControl.FlyoutIsPresented = FlyoutIsPresented;
+                    }
+                    break;
+                case nameof(FlyoutVerticalScrollMode):
+                    if (!Equals(FlyoutVerticalScrollMode, value))
+                    {
+                        FlyoutVerticalScrollMode = (MC.ScrollMode)value;
+                        NativeControl.FlyoutVerticalScrollMode = FlyoutVerticalScrollMode;
+                    }
+                    break;
+                case nameof(FlyoutWidth):
+                    if (!Equals(FlyoutWidth, value))
+                    {
+                        FlyoutWidth = (double)value;
+                        NativeControl.FlyoutWidth = FlyoutWidth;
+                    }
+                    break;
+                case nameof(OnNavigated):
+                    if (!Equals(OnNavigated, value))
+                    {
+                        void NativeControlNavigated(object sender, MC.ShellNavigatedEventArgs e) => OnNavigated.InvokeAsync(e);
 
-            if (FlyoutBackgroundColor != null)
-            {
-                builder.AddAttribute(nameof(FlyoutBackgroundColor), AttributeHelper.ColorToString(FlyoutBackgroundColor));
-            }
-            if (FlyoutBackgroundImage != null)
-            {
-                builder.AddAttribute(nameof(FlyoutBackgroundImage), AttributeHelper.ObjectToDelegate(FlyoutBackgroundImage));
-            }
-            if (FlyoutBackgroundImageAspect != null)
-            {
-                builder.AddAttribute(nameof(FlyoutBackgroundImageAspect), (int)FlyoutBackgroundImageAspect.Value);
-            }
-            if (FlyoutBehavior != null)
-            {
-                builder.AddAttribute(nameof(FlyoutBehavior), (int)FlyoutBehavior.Value);
-            }
-            if (FlyoutHeaderBehavior != null)
-            {
-                builder.AddAttribute(nameof(FlyoutHeaderBehavior), (int)FlyoutHeaderBehavior.Value);
-            }
-            if (FlyoutHeight != null)
-            {
-                builder.AddAttribute(nameof(FlyoutHeight), AttributeHelper.DoubleToString(FlyoutHeight.Value));
-            }
-            if (FlyoutIcon != null)
-            {
-                builder.AddAttribute(nameof(FlyoutIcon), AttributeHelper.ObjectToDelegate(FlyoutIcon));
-            }
-            if (FlyoutIsPresented != null)
-            {
-                builder.AddAttribute(nameof(FlyoutIsPresented), FlyoutIsPresented.Value);
-            }
-            if (FlyoutVerticalScrollMode != null)
-            {
-                builder.AddAttribute(nameof(FlyoutVerticalScrollMode), (int)FlyoutVerticalScrollMode.Value);
-            }
-            if (FlyoutWidth != null)
-            {
-                builder.AddAttribute(nameof(FlyoutWidth), AttributeHelper.DoubleToString(FlyoutWidth.Value));
-            }
+                        OnNavigated = (EventCallback<MC.ShellNavigatedEventArgs>)value;
+                        NativeControl.Navigated -= NativeControlNavigated;
+                        NativeControl.Navigated += NativeControlNavigated;
+                    }
+                    break;
+                case nameof(OnNavigating):
+                    if (!Equals(OnNavigating, value))
+                    {
+                        void NativeControlNavigating(object sender, MC.ShellNavigatingEventArgs e) => OnNavigating.InvokeAsync(e);
 
-            RenderAdditionalAttributes(builder);
+                        OnNavigating = (EventCallback<MC.ShellNavigatingEventArgs>)value;
+                        NativeControl.Navigating -= NativeControlNavigating;
+                        NativeControl.Navigating += NativeControlNavigating;
+                    }
+                    break;
+
+                default:
+                    base.HandleParameter(name, value);
+                    break;
+            }
         }
 
         partial void RenderAdditionalAttributes(AttributesBuilder builder);
-
         static partial void RegisterAdditionalHandlers();
     }
 }

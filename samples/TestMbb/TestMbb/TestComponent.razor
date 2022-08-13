@@ -1,0 +1,33 @@
+﻿@page "/main"
+
+<ContentPage AutomationId="Test">
+    <ChildContent>
+        <StackLayout Spacing="25"
+                     Padding="new(30,0)"
+                     VerticalOptions="LayoutOptions.Center">
+            <Label FontSize="32"
+                   HorizontalOptions="LayoutOptions.Center">
+                Hello world! @i
+            </Label>
+
+            <Button Text="+1" OnClick="Increment" />
+            <Button Text="Display" OnClick="() => display = !display" />
+
+            @if (display)
+            {
+                <Label Text="wtf" />
+            }
+
+        </StackLayout>
+    </ChildContent>
+</ContentPage>
+
+@code {
+    int i = 0;
+    bool display = false;
+
+    void Increment()
+    {
+        i++;
+    }
+}
