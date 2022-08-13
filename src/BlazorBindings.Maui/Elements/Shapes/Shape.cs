@@ -28,19 +28,33 @@ namespace BlazorBindings.Maui.Elements.Shapes
         [Parameter] public RenderFragment Stroke { get; set; }
         [Parameter] public Color StrokeColor { get; set; }
 
-        partial void RenderAdditionalAttributes(AttributesBuilder builder)
+        protected override bool HandleAdditionalParameter(string name, object value)
         {
-            if (StrokeDashArray != null)
+            switch (name)
             {
-                builder.AddAttribute(nameof(StrokeDashArray), StrokeDashArray);
-            }
-            if (FillColor != null)
-            {
-                builder.AddAttribute(nameof(FillColor), AttributeHelper.ColorToString(FillColor));
-            }
-            if (StrokeColor != null)
-            {
-                builder.AddAttribute(nameof(StrokeColor), AttributeHelper.ColorToString(StrokeColor));
+                case nameof(StrokeDashArray):
+                    if (!Equals(StrokeDashArray, value))
+                    {
+                        NativeControl.StrokeDashArray = AttributeHelper.StringToDoubleCollection((string)value);
+                        StrokeDashArray = (string)value;
+                    }
+                    return true;
+                case nameof(FillColor):
+                    if (!Equals(FillColor, value))
+                    {
+                        NativeControl.Fill = (Color)value;
+                        FillColor = (Color)value;
+                    }
+                    return true;
+                case nameof(StrokeColor):
+                    if (!Equals(StrokeColor, value))
+                    {
+                        NativeControl.Stroke = (Color)value;
+                        StrokeColor = (Color)value;
+                    }
+                    return true;
+                default:
+                    return base.HandleAdditionalParameter(name, value);
             }
         }
 
@@ -49,6 +63,5 @@ namespace BlazorBindings.Maui.Elements.Shapes
             RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(Shape), Fill);
             RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(Shape), Stroke);
         }
-
     }
 }

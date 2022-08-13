@@ -124,7 +124,6 @@ namespace BlazorBindings.Maui.Elements
             }
         }
 
-        partial void RenderAdditionalAttributes(AttributesBuilder builder);
         static partial void RegisterAdditionalHandlers();
     }
 }

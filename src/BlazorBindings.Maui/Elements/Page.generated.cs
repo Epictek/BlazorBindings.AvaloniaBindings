@@ -117,7 +117,6 @@ namespace BlazorBindings.Maui.Elements
             RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(Page), ToolbarItems);;
         }
 
-        partial void RenderAdditionalAttributes(AttributesBuilder builder);
         static partial void RegisterAdditionalHandlers();
     }
 }

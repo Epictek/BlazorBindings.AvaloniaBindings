@@ -50,7 +50,6 @@ namespace BlazorBindings.Maui.Elements.Shapes
             }
         }
 
-        partial void RenderAdditionalAttributes(AttributesBuilder builder);
         static partial void RegisterAdditionalHandlers();
     }
 }

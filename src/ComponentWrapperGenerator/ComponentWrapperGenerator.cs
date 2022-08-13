@@ -173,7 +173,6 @@ namespace {componentNamespace}
 {createNativeElement}
 {handleParameter}{renderAdditionalElementContent}
 
-        partial void RenderAdditionalAttributes(AttributesBuilder builder);
         static partial void RegisterAdditionalHandlers();
     }}
 }}

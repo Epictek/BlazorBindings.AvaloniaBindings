@@ -21,7 +21,6 @@ namespace BlazorBindings.Maui.Elements
         protected override MC.Element CreateNativeElement() => new MC.ShellSection();
 
 
-        partial void RenderAdditionalAttributes(AttributesBuilder builder);
         static partial void RegisterAdditionalHandlers();
     }
 }

@@ -27,7 +27,7 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public double Value { get; set; }
         [Parameter] public EventCallback OnDragCompleted { get; set; }
         [Parameter] public EventCallback OnDragStarted { get; set; }
-        [Parameter] public EventCallback<bool> ValueChanged { get; set; }
+        [Parameter] public EventCallback<double> ValueChanged { get; set; }
 
         public new MC.Slider NativeControl => (MC.Slider)((Element)this).NativeControl;
 
@@ -111,7 +111,7 @@ namespace BlazorBindings.Maui.Elements
                     {
                         void NativeControlValueChanged(object sender, MC.ValueChangedEventArgs e) => ValueChanged.InvokeAsync(NativeControl.Value);
 
-                        ValueChanged = (EventCallback<bool>)value;
+                        ValueChanged = (EventCallback<double>)value;
                         NativeControl.ValueChanged -= NativeControlValueChanged;
                         NativeControl.ValueChanged += NativeControlValueChanged;
                     }
@@ -123,7 +123,6 @@ namespace BlazorBindings.Maui.Elements
             }
         }
 
-        partial void RenderAdditionalAttributes(AttributesBuilder builder);
         static partial void RegisterAdditionalHandlers();
     }
 }

@@ -1,51 +1,156 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-using Microsoft.AspNetCore.Components;
 using BlazorBindings.Core;
-using BlazorBindings.Maui.Elements.Handlers;
+using Microsoft.AspNetCore.Components;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using MC = Microsoft.Maui.Controls;
 
 namespace BlazorBindings.Maui.Elements
 {
-    public class GridCell : NativeControlComponentBase
+    public class GridCell : NativeControlComponentBase, IMauiContainerElementHandler, INonChildContainerElement
     {
-        static GridCell()
+        [Parameter] public int Column { get; set; }
+        [Parameter] public int ColumnSpan { get; set; } = 1;
+        [Parameter] public int Row { get; set; }
+        [Parameter] public int RowSpan { get; set; } = 1;
+
+        [Parameter] public RenderFragment ChildContent { get; set; }
+
+
+        private readonly List<MC.View> _children = new();
+        private MC.Grid _parentGrid;
+
+        MC.Element IMauiElementHandler.ElementControl => null;
+        object IElementHandler.TargetElement => null;
+
+        public override Task SetParametersAsync(ParameterView parameters)
         {
-            ElementHandlerRegistry
-                .RegisterElementHandler<GridCell>(renderer => new GridCellHandler(renderer, new GridCellPlaceholderElement()));
+            foreach (var parameterValue in parameters)
+            {
+                switch (parameterValue.Name)
+                {
+                    case nameof(Column):
+                        var columnValue = (int)parameterValue.Value;
+                        if (columnValue != Column)
+                        {
+                            Column = columnValue;
+                            _children.ForEach(c => MC.Grid.SetColumn(c, Column));
+                        }
+                        break;
+                    case nameof(Row):
+                        var rowValue = (int)parameterValue.Value;
+                        if (rowValue != Row)
+                        {
+                            Row = rowValue;
+                            _children.ForEach(c => MC.Grid.SetRow(c, Row));
+                        }
+                        break;
+                    case nameof(ColumnSpan):
+                        var colSpanValue = (int)parameterValue.Value;
+                        if (colSpanValue != ColumnSpan)
+                        {
+                            ColumnSpan = colSpanValue;
+                            _children.ForEach(c => MC.Grid.SetColumnSpan(c, ColumnSpan));
+                        }
+                        break;
+                    case nameof(RowSpan):
+                        var rowSpanValue = (int)parameterValue.Value;
+                        if (rowSpanValue != RowSpan)
+                        {
+                            RowSpan = rowSpanValue;
+                            _children.ForEach(c => MC.Grid.SetRowSpan(c, RowSpan));
+                        }
+                        break;
+                    case nameof(ChildContent):
+                        {
+                            ChildContent = (RenderFragment)parameterValue.Value;
+                            break;
+                        }
+                }
+            }
+
+            return base.SetParametersAsync(ParameterView.Empty);
         }
 
-        [Parameter] public int? Column { get; set; }
-        [Parameter] public int? ColumnSpan { get; set; }
-        [Parameter] public int? Row { get; set; }
-        [Parameter] public int? RowSpan { get; set; }
-
-#pragma warning disable CA1721 // Property names should not match get methods
-        [Parameter] public RenderFragment ChildContent { get; set; }
-#pragma warning restore CA1721 // Property names should not match get methods
-
-        protected override void RenderAttributes(AttributesBuilder builder)
+        void IElementHandler.ApplyAttribute(ulong attributeEventHandlerId, string attributeName, object attributeValue, string attributeEventUpdatesAttributeName)
         {
-            base.RenderAttributes(builder);
-
-            if (Column != null)
-            {
-                builder.AddAttribute(nameof(Column), Column.Value);
-            }
-            if (ColumnSpan != null)
-            {
-                builder.AddAttribute(nameof(ColumnSpan), ColumnSpan.Value);
-            }
-            if (Row != null)
-            {
-                builder.AddAttribute(nameof(Row), Row.Value);
-            }
-            if (RowSpan != null)
-            {
-                builder.AddAttribute(nameof(RowSpan), RowSpan.Value);
-            }
         }
 
         protected override RenderFragment GetChildContent() => ChildContent;
+
+        public void AddChild(MC.Element child, int physicalSiblingIndex)
+        {
+            if (child is not MC.View childView)
+            {
+                throw new ArgumentException($"Expected parent to be of type {typeof(MC.View).FullName} but it is of type {child?.GetType().FullName}.", nameof(child));
+            }
+
+            MC.Grid.SetColumn(childView, Column);
+            MC.Grid.SetColumnSpan(childView, ColumnSpan);
+            MC.Grid.SetRow(childView, Row);
+            MC.Grid.SetRowSpan(childView, RowSpan);
+
+            _children.Add(childView);
+            _parentGrid.Children.Add(childView);
+        }
+
+        public void RemoveChild(MC.Element child)
+        {
+            if (child is not MC.View childView)
+            {
+                throw new ArgumentException($"Expected parent to be of type {typeof(MC.View).FullName} but it is of type {child?.GetType().FullName}.", nameof(child));
+            }
+
+            _children.Remove(childView);
+            _parentGrid.Children.Remove(childView);
+        }
+
+        public int GetChildIndex(MC.Element child)
+        {
+            return child is MC.View childView
+                ? _children.IndexOf(childView)
+                : -1;
+        }
+
+        void INonPhysicalChild.SetParent(object parentElement)
+        {
+            if (parentElement is not MC.Grid parentGrid)
+            {
+                throw new ArgumentException($"Expected parent to be of type {typeof(MC.Grid).FullName} but it is of type {parentElement?.GetType().FullName}.", nameof(parentElement));
+            }
+
+            _parentGrid = parentGrid;
+        }
+
+        void INonPhysicalChild.Remove()
+        {
+            if (_parentGrid != null)
+            {
+                foreach (var child in _children)
+                {
+                    _parentGrid.Children.Remove(child);
+                }
+
+                _children.Clear();
+                _parentGrid = null;
+            }
+        }
+
+        bool IMauiElementHandler.IsParented()
+        {
+            // Because this is a 'fake' element, all matters related to physical trees
+            // should be no-ops.
+            return false;
+        }
+
+        void IMauiElementHandler.SetParent(MC.Element parent)
+        {
+            // This should never get called. Instead, INonChildContainerElement.SetParent() implemented
+            // in this class should get called.
+            throw new NotSupportedException();
+        }
     }
 }

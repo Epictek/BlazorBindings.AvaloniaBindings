@@ -6,6 +6,7 @@ using BlazorBindings.Maui.Elements.Handlers;
 using MC = Microsoft.Maui.Controls;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Maui.Graphics;
+using System.ComponentModel;
 using System.Threading.Tasks;
 
 namespace BlazorBindings.Maui.Elements
@@ -19,6 +20,7 @@ namespace BlazorBindings.Maui.Elements
 
         [Parameter] public bool IsRefreshing { get; set; }
         [Parameter] public Color RefreshColor { get; set; }
+        [Parameter] public EventCallback<bool> IsRefreshingChanged { get; set; }
 
         public new MC.RefreshView NativeControl => (MC.RefreshView)((Element)this).NativeControl;
 
@@ -42,6 +44,22 @@ namespace BlazorBindings.Maui.Elements
                         NativeControl.RefreshColor = RefreshColor;
                     }
                     break;
+                case nameof(IsRefreshingChanged):
+                    if (!Equals(IsRefreshingChanged, value))
+                    {
+                        void NativeControlPropertyChanged(object sender, PropertyChangedEventArgs e)
+                        {
+                            if (e.PropertyName == nameof(NativeControl.IsRefreshing))
+                            {
+                                IsRefreshingChanged.InvokeAsync(NativeControl.IsRefreshing);
+                            }
+                        }
+
+                        IsRefreshingChanged = (EventCallback<bool>)value;
+                        NativeControl.PropertyChanged -= NativeControlPropertyChanged;
+                        NativeControl.PropertyChanged += NativeControlPropertyChanged;
+                    }
+                    break;
 
                 default:
                     base.HandleParameter(name, value);
@@ -49,7 +67,6 @@ namespace BlazorBindings.Maui.Elements
             }
         }
 
-        partial void RenderAdditionalAttributes(AttributesBuilder builder);
         static partial void RegisterAdditionalHandlers();
     }
 }

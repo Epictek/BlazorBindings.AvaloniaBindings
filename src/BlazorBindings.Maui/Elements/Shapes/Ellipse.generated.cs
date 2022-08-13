@@ -23,7 +23,6 @@ namespace BlazorBindings.Maui.Elements.Shapes
         protected override MC.Element CreateNativeElement() => new MCS.Ellipse();
 
 
-        partial void RenderAdditionalAttributes(AttributesBuilder builder);
         static partial void RegisterAdditionalHandlers();
     }
 }

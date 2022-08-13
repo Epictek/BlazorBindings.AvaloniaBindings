@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-using BlazorBindings.Core;
 using Microsoft.AspNetCore.Components;
 
 namespace BlazorBindings.Maui.Elements.Shapes
@@ -10,12 +9,19 @@ namespace BlazorBindings.Maui.Elements.Shapes
     {
         [Parameter] public string Points { get; set; }
 
-        partial void RenderAdditionalAttributes(AttributesBuilder builder)
+        protected override bool HandleAdditionalParameter(string name, object value)
         {
-            if (Points != null)
+            if (name == nameof(Points))
             {
-                builder.AddAttribute(nameof(Points), Points);
+                if (!Equals(value, Points))
+                {
+                    NativeControl.Points = AttributeHelper.StringToPointCollection((string)value);
+                    Points = (string)value;
+                }
+                return true;
             }
+
+            return base.HandleAdditionalParameter(name, value);
         }
     }
 }

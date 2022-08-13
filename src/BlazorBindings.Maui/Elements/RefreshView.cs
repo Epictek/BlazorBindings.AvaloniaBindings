@@ -1,27 +1,41 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-using BlazorBindings.Core;
 using Microsoft.AspNetCore.Components;
+using System;
 
 namespace BlazorBindings.Maui.Elements
 {
     public partial class RefreshView : ContentView
     {
         [Parameter] public EventCallback OnRefreshing { get; set; }
-        [Parameter] public EventCallback<bool> IsRefreshingChanged { get; set; }
 
-        partial void RenderAdditionalAttributes(AttributesBuilder builder)
+        protected override bool HandleAdditionalParameter(string name, object value)
         {
-            if (OnRefreshing.HasDelegate)
+            if (name == nameof(OnRefreshing))
             {
-                builder.AddAttribute("onrefreshing", OnRefreshing);
+                if (!Equals(OnRefreshing, value))
+                {
+                    async void NativeControlRefreshing(object sender, EventArgs e)
+                    {
+                        try
+                        {
+                            await OnRefreshing.InvokeAsync();
+                        }
+                        finally
+                        {
+                            NativeControl.IsRefreshing = false;
+                        }
+                    }
+
+                    OnRefreshing = (EventCallback)value;
+                    NativeControl.Refreshing -= NativeControlRefreshing;
+                    NativeControl.Refreshing += NativeControlRefreshing;
+                }
+                return true;
             }
 
-            if (IsRefreshingChanged.HasDelegate)
-            {
-                builder.AddAttribute("onisrefreshingchanged", EventCallback.Factory.Create<ChangeEventArgs>(this, e => IsRefreshingChanged.InvokeAsync((bool)e.Value)));
-            }
+            return base.HandleAdditionalParameter(name, value);
         }
     }
 }
