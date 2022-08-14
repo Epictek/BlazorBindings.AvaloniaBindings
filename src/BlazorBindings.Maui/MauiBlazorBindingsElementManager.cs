@@ -31,15 +31,11 @@ namespace BlazorBindings.Maui
 
             if (parentHandler.ElementControl is Application parentAsApp)
             {
-                if (childHandler.ElementControl is Page childControlAsPage)
-                {
-                    //MainPage may already be set, but it is safe to replace it.
-                    parentAsApp.MainPage = childControlAsPage;
-                }
-                else
-                {
-                    throw new InvalidOperationException($"Application MainPage must be a Page; cannot set {parentAsApp.GetType().FullName}'s MainPage to {childHandler.ElementControl.GetType().FullName}");
-                }
+                var childControlAsPage = childHandler.ElementControl as Page
+                    ?? throw new InvalidOperationException($"Application MainPage must be a Page; cannot set {parentAsApp.GetType().FullName}'s MainPage to {childHandler.ElementControl.GetType().FullName}");
+
+                //MainPage may already be set, but it is safe to replace it.
+                parentAsApp.MainPage = childControlAsPage;
                 return;
             }
 

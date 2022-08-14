@@ -45,18 +45,15 @@ namespace BlazorBindings.Maui.Elements
         /// The difference is that "10, 15" is not a valid Rect string, but could be a valid 
         /// LayoutBounds <see cref="Rect"/> string (with Height and Width set to Auto).
         /// </summary>
-        public static Rect StringToBoundsRect(object rectangleString, Rect defaultValueIfNull = default)
+        public static Rect GetBoundsRect(object rectangleString, Rect defaultValueIfNull = default)
         {
-            if (rectangleString is null)
+            return rectangleString switch
             {
-                return defaultValueIfNull;
-            }
-            if (rectangleString is not string rectangleAsString)
-            {
-                throw new ArgumentException("Expected parameter instance to be a string.", nameof(rectangleString));
-            }
-
-            return (Rect)_boundsTypeConverter.ConvertFromInvariantString(rectangleAsString);
+                null => defaultValueIfNull,
+                Rect rect => rect,
+                string rectangleAsString => (Rect)_boundsTypeConverter.ConvertFromInvariantString(rectangleAsString),
+                _ => throw new ArgumentException("Expected parameter instance to be a string.", nameof(rectangleString)),
+            };
         }
     }
 }

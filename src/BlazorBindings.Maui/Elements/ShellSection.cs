@@ -2,15 +2,87 @@
 // Licensed under the MIT license.
 
 using Microsoft.AspNetCore.Components;
+using System;
+using System.Diagnostics;
+using System.Linq;
+using MC = Microsoft.Maui.Controls;
 
 namespace BlazorBindings.Maui.Elements
 {
-    public partial class ShellSection : ShellGroupItem
+    public partial class ShellSection : ShellGroupItem, IMauiContainerElementHandler
     {
-#pragma warning disable CA1721 // Property names should not match get methods
         [Parameter] public RenderFragment ChildContent { get; set; }
-#pragma warning restore CA1721 // Property names should not match get methods
 
         protected override RenderFragment GetChildContent() => ChildContent;
+
+        protected override bool HandleAdditionalParameter(string name, object value)
+        {
+            if (name == nameof(ChildContent))
+            {
+                ChildContent = (RenderFragment)value;
+                return true;
+            }
+            else
+            {
+                return base.HandleAdditionalParameter(name, value);
+            }
+        }
+
+        void IMauiContainerElementHandler.AddChild(MC.Element child, int physicalSiblingIndex)
+        {
+            ArgumentNullException.ThrowIfNull(child);
+
+            MC.ShellContent contentToAdd = child switch
+            {
+                MC.TemplatedPage childAsTemplatedPage => childAsTemplatedPage,  // Implicit conversion
+                MC.ShellContent childAsShellContent => childAsShellContent,
+                _ => throw new NotSupportedException($"Handler of type '{GetType().FullName}' doesn't support adding a child (child type is '{child.GetType().FullName}').")
+            };
+
+            // Ensure that there is non-null Content to avoid exceptions in Xamarin.Forms
+            contentToAdd.Content ??= new MC.Page();
+
+            if (NativeControl.Items.Count >= physicalSiblingIndex)
+            {
+                NativeControl.Items.Insert(physicalSiblingIndex, contentToAdd);
+            }
+            else
+            {
+                Debug.WriteLine($"WARNING: {nameof(IMauiContainerElementHandler.AddChild)} called with {nameof(physicalSiblingIndex)}={physicalSiblingIndex}, but NativeControl.Items.Count={NativeControl.Items.Count}");
+                NativeControl.Items.Add(contentToAdd);
+            }
+        }
+
+        int IMauiContainerElementHandler.GetChildIndex(MC.Element child)
+        {
+            var shellContent = GetContentForChild(child);
+            return NativeControl.Items.IndexOf(shellContent);
+        }
+
+        void IMauiContainerElementHandler.RemoveChild(MC.Element child)
+        {
+            ArgumentNullException.ThrowIfNull(child);
+
+            MC.ShellContent contentToRemove = GetContentForChild(child)
+                ?? throw new NotSupportedException($"Handler of type '{GetType().FullName}' doesn't support removing a child (child type is '{child.GetType().FullName}').");
+
+            NativeControl.Items.Remove(contentToRemove);
+        }
+
+
+        private MC.ShellContent GetContentForChild(MC.Element child)
+        {
+            return child switch
+            {
+                MC.TemplatedPage childAsTemplatedPage => GetContentForTemplatePage(childAsTemplatedPage),
+                MC.ShellContent childAsShellContent => childAsShellContent,
+                _ => null
+            };
+        }
+
+        private MC.ShellContent GetContentForTemplatePage(MC.TemplatedPage childAsTemplatedPage)
+        {
+            return NativeControl.Items.FirstOrDefault(content => content.Content == childAsTemplatedPage);
+        }
     }
 }

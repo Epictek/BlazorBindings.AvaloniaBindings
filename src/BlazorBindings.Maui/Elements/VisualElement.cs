@@ -19,6 +19,17 @@ namespace BlazorBindings.Maui.Elements
 
         [Parameter] public RenderFragment Background { get; set; }
 
+        protected override bool HandleAdditionalParameter(string name, object value)
+        {
+            if (name == nameof(Background))
+            {
+                Background = (RenderFragment)value;
+                return true;
+            }
+
+            return base.HandleAdditionalParameter(name, value);
+        }
+
         protected override void RenderAdditionalElementContent(RenderTreeBuilder builder, ref int sequence)
         {
             RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(VisualElement), Background);

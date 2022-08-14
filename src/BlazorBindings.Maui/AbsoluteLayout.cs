@@ -22,7 +22,7 @@ namespace BlazorBindings.Maui
         static void RegisterAdditionalHandlers()
         {
             AttachedPropertyRegistry.RegisterAttachedPropertyHandler("AbsoluteLayout.LayoutBounds",
-                (element, value) => MC.AbsoluteLayout.SetLayoutBounds(element, AttributeHelper.StringToBoundsRect(value)));
+                (element, value) => MC.AbsoluteLayout.SetLayoutBounds(element, AttributeHelper.GetBoundsRect(value)));
 
             AttachedPropertyRegistry.RegisterAttachedPropertyHandler("AbsoluteLayout.LayoutFlags",
                 (element, value) => MC.AbsoluteLayout.SetLayoutFlags(element, AttributeHelper.GetEnum<AbsoluteLayoutFlags>(value)));

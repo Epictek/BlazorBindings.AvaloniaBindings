@@ -16,6 +16,7 @@ namespace BlazorBindings.Maui.Elements
             return value switch
             {
                 null => defaultValueIfNull,
+                bool b => b,
                 string str when str == "1" => true,
                 string str when str == "0" => false,
                 string str when bool.TryParse(str, out var bln) => bln,
@@ -28,6 +29,7 @@ namespace BlazorBindings.Maui.Elements
             return value switch
             {
                 null => defaultValueIfNull,
+                int i => i,
                 string str => int.Parse(str, CultureInfo.InvariantCulture),
                 _ => throw new NotSupportedException($"Cannot get int value from {value.GetType().Name} attribute.")
             };
@@ -38,6 +40,7 @@ namespace BlazorBindings.Maui.Elements
             return value switch
             {
                 null => defaultValueIfNull,
+                T t => t,
                 string str when int.TryParse(str, out var i) => Unsafe.As<int, T>(ref i),
                 string str when Enum.TryParse<T>(str, out var e) => e,
                 _ => throw new NotSupportedException($"Cannot get {typeof(T).Name} value from {value.GetType().Name} attribute.")
