@@ -38,7 +38,7 @@ namespace BlazorBindings.Maui.Elements.Handlers
                     ImageButtonControl.Aspect = (Aspect)AttributeHelper.GetInt(attributeValue, (int)AspectDefaultValue);
                     break;
                 case nameof(MC.ImageButton.BorderColor):
-                    ImageButtonControl.BorderColor = AttributeHelper.StringToColor((string)attributeValue, BorderColorDefaultValue);
+                    ImageButtonControl.BorderColor = AttributeHelper.GetString((string)attributeValue, BorderColorDefaultValue);
                     break;
                 case nameof(MC.ImageButton.BorderWidth):
                     ImageButtonControl.BorderWidth = AttributeHelper.StringToDouble((string)attributeValue, BorderWidthDefaultValue);

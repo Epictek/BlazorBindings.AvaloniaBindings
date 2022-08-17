@@ -37,16 +37,16 @@ namespace BlazorBindings.Maui.Elements.Handlers
                     SliderControl.Maximum = AttributeHelper.StringToDouble((string)attributeValue, MaximumDefaultValue);
                     break;
                 case nameof(MC.Slider.MaximumTrackColor):
-                    SliderControl.MaximumTrackColor = AttributeHelper.StringToColor((string)attributeValue, MaximumTrackColorDefaultValue);
+                    SliderControl.MaximumTrackColor = AttributeHelper.GetString((string)attributeValue, MaximumTrackColorDefaultValue);
                     break;
                 case nameof(MC.Slider.Minimum):
                     SliderControl.Minimum = AttributeHelper.StringToDouble((string)attributeValue, MinimumDefaultValue);
                     break;
                 case nameof(MC.Slider.MinimumTrackColor):
-                    SliderControl.MinimumTrackColor = AttributeHelper.StringToColor((string)attributeValue, MinimumTrackColorDefaultValue);
+                    SliderControl.MinimumTrackColor = AttributeHelper.GetString((string)attributeValue, MinimumTrackColorDefaultValue);
                     break;
                 case nameof(MC.Slider.ThumbColor):
-                    SliderControl.ThumbColor = AttributeHelper.StringToColor((string)attributeValue, ThumbColorDefaultValue);
+                    SliderControl.ThumbColor = AttributeHelper.GetString((string)attributeValue, ThumbColorDefaultValue);
                     break;
                 case nameof(MC.Slider.ThumbImageSource):
                     SliderControl.ThumbImageSource = AttributeHelper.DelegateToObject<MC.ImageSource>(attributeValue, ThumbImageSourceDefaultValue);

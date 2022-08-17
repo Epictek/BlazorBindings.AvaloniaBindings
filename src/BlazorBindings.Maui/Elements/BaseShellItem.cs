@@ -5,11 +5,12 @@ using BlazorBindings.Core;
 using BlazorBindings.Maui.Elements.Handlers;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
+using System;
 using MC = Microsoft.Maui.Controls;
 
 namespace BlazorBindings.Maui.Elements
 {
-    public partial class BaseShellItem : NavigableElement
+    public partial class BaseShellItem : NavigableElement, IMauiElementHandler
     {
         static partial void RegisterAdditionalHandlers()
         {
@@ -25,6 +26,15 @@ namespace BlazorBindings.Maui.Elements
             base.RenderAdditionalElementContent(builder, ref sequence);
 
             RenderTreeBuilderHelper.AddDataTemplateProperty(builder, sequence++, typeof(BaseShellItem), ItemTemplate);
+        }
+
+        void IMauiElementHandler.SetParent(MC.Element parent)
+        {
+            if (NativeControl.Parent == null)
+            {
+                // The Parent should already be set
+                throw new InvalidOperationException("Shouldn't need to set parent here...");
+            }
         }
     }
 }

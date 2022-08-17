@@ -30,7 +30,7 @@ namespace BlazorBindings.Maui.Elements.Handlers
             switch (attributeName)
             {
                 case nameof(MC.BoxView.Color):
-                    BoxViewControl.Color = AttributeHelper.StringToColor((string)attributeValue, ColorDefaultValue);
+                    BoxViewControl.Color = AttributeHelper.GetString((string)attributeValue, ColorDefaultValue);
                     break;
                 case nameof(MC.BoxView.CornerRadius):
                     BoxViewControl.CornerRadius = AttributeHelper.StringToCornerRadius(attributeValue, CornerRadiusDefaultValue);

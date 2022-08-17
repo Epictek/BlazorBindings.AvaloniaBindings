@@ -38,7 +38,7 @@ namespace BlazorBindings.Maui.Elements.Handlers
             switch (attributeName)
             {
                 case nameof(MC.Shell.FlyoutBackgroundColor):
-                    ShellControl.FlyoutBackgroundColor = AttributeHelper.StringToColor((string)attributeValue, FlyoutBackgroundColorDefaultValue);
+                    ShellControl.FlyoutBackgroundColor = AttributeHelper.GetString((string)attributeValue, FlyoutBackgroundColorDefaultValue);
                     break;
                 case nameof(MC.Shell.FlyoutBackgroundImage):
                     ShellControl.FlyoutBackgroundImage = AttributeHelper.DelegateToObject<MC.ImageSource>(attributeValue, FlyoutBackgroundImageDefaultValue);

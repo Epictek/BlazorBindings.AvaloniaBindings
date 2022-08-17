@@ -31,16 +31,16 @@ namespace BlazorBindings.Maui.Elements.Handlers
             switch (attributeName)
             {
                 case nameof(MC.TabbedPage.BarBackgroundColor):
-                    TabbedPageControl.BarBackgroundColor = AttributeHelper.StringToColor((string)attributeValue, BarBackgroundColorDefaultValue);
+                    TabbedPageControl.BarBackgroundColor = AttributeHelper.GetString((string)attributeValue, BarBackgroundColorDefaultValue);
                     break;
                 case nameof(MC.TabbedPage.BarTextColor):
-                    TabbedPageControl.BarTextColor = AttributeHelper.StringToColor((string)attributeValue, BarTextColorDefaultValue);
+                    TabbedPageControl.BarTextColor = AttributeHelper.GetString((string)attributeValue, BarTextColorDefaultValue);
                     break;
                 case nameof(MC.TabbedPage.SelectedTabColor):
-                    TabbedPageControl.SelectedTabColor = AttributeHelper.StringToColor((string)attributeValue, SelectedTabColorDefaultValue);
+                    TabbedPageControl.SelectedTabColor = AttributeHelper.GetString((string)attributeValue, SelectedTabColorDefaultValue);
                     break;
                 case nameof(MC.TabbedPage.UnselectedTabColor):
-                    TabbedPageControl.UnselectedTabColor = AttributeHelper.StringToColor((string)attributeValue, UnselectedTabColorDefaultValue);
+                    TabbedPageControl.UnselectedTabColor = AttributeHelper.GetString((string)attributeValue, UnselectedTabColorDefaultValue);
                     break;
                 default:
                     base.ApplyAttribute(attributeEventHandlerId, attributeName, attributeValue, attributeEventUpdatesAttributeName);

@@ -77,7 +77,7 @@ namespace BlazorBindings.Maui.Elements.Handlers
                     LabelControl.Text = (string)attributeValue ?? TextDefaultValue;
                     break;
                 case nameof(MC.Label.TextColor):
-                    LabelControl.TextColor = AttributeHelper.StringToColor((string)attributeValue, TextColorDefaultValue);
+                    LabelControl.TextColor = AttributeHelper.GetString((string)attributeValue, TextColorDefaultValue);
                     break;
                 case nameof(MC.Label.TextDecorations):
                     LabelControl.TextDecorations = (TextDecorations)AttributeHelper.GetInt(attributeValue, (int)TextDecorationsDefaultValue);

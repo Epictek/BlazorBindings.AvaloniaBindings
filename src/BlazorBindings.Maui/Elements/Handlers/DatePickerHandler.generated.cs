@@ -64,7 +64,7 @@ namespace BlazorBindings.Maui.Elements.Handlers
                     DatePickerControl.MinimumDate = AttributeHelper.StringToDateTime(attributeValue, MinimumDateDefaultValue);
                     break;
                 case nameof(MC.DatePicker.TextColor):
-                    DatePickerControl.TextColor = AttributeHelper.StringToColor((string)attributeValue, TextColorDefaultValue);
+                    DatePickerControl.TextColor = AttributeHelper.GetString((string)attributeValue, TextColorDefaultValue);
                     break;
                 default:
                     base.ApplyAttribute(attributeEventHandlerId, attributeName, attributeValue, attributeEventUpdatesAttributeName);

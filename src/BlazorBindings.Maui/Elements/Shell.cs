@@ -27,34 +27,34 @@ namespace BlazorBindings.Maui.Elements
                 (element, value) => MC.Shell.SetTabBarIsVisible(element, AttributeHelper.GetBool(value)));
 
             AttachedPropertyRegistry.RegisterAttachedPropertyHandler("Shell.BackgroundColor",
-                (element, value) => MC.Shell.SetBackgroundColor(element, AttributeHelper.StringToColor(value)));
+                (element, value) => MC.Shell.SetBackgroundColor(element, AttributeHelper.GetString(value)));
 
             AttachedPropertyRegistry.RegisterAttachedPropertyHandler("Shell.DisabledColor",
-                (element, value) => MC.Shell.SetDisabledColor(element, AttributeHelper.StringToColor(value)));
+                (element, value) => MC.Shell.SetDisabledColor(element, AttributeHelper.GetString(value)));
 
             AttachedPropertyRegistry.RegisterAttachedPropertyHandler("Shell.ForegroundColor",
-                (element, value) => MC.Shell.SetForegroundColor(element, AttributeHelper.StringToColor(value)));
+                (element, value) => MC.Shell.SetForegroundColor(element, AttributeHelper.GetString(value)));
 
             AttachedPropertyRegistry.RegisterAttachedPropertyHandler("Shell.TabBarBackgroundColor",
-                (element, value) => MC.Shell.SetTabBarBackgroundColor(element, AttributeHelper.StringToColor(value)));
+                (element, value) => MC.Shell.SetTabBarBackgroundColor(element, AttributeHelper.GetString(value)));
 
             AttachedPropertyRegistry.RegisterAttachedPropertyHandler("Shell.TabBarDisabledColor",
-                (element, value) => MC.Shell.SetTabBarDisabledColor(element, AttributeHelper.StringToColor(value)));
+                (element, value) => MC.Shell.SetTabBarDisabledColor(element, AttributeHelper.GetString(value)));
 
             AttachedPropertyRegistry.RegisterAttachedPropertyHandler("Shell.TabBarForegroundColor",
-                (element, value) => MC.Shell.SetTabBarForegroundColor(element, AttributeHelper.StringToColor(value)));
+                (element, value) => MC.Shell.SetTabBarForegroundColor(element, AttributeHelper.GetString(value)));
 
             AttachedPropertyRegistry.RegisterAttachedPropertyHandler("Shell.TabBarTitleColor",
-                (element, value) => MC.Shell.SetTabBarTitleColor(element, AttributeHelper.StringToColor(value)));
+                (element, value) => MC.Shell.SetTabBarTitleColor(element, AttributeHelper.GetString(value)));
 
             AttachedPropertyRegistry.RegisterAttachedPropertyHandler("Shell.TabBarUnselectedColor",
-                (element, value) => MC.Shell.SetTabBarUnselectedColor(element, AttributeHelper.StringToColor(value)));
+                (element, value) => MC.Shell.SetTabBarUnselectedColor(element, AttributeHelper.GetString(value)));
 
             AttachedPropertyRegistry.RegisterAttachedPropertyHandler("Shell.TitleColor",
-                (element, value) => MC.Shell.SetTitleColor(element, AttributeHelper.StringToColor(value)));
+                (element, value) => MC.Shell.SetTitleColor(element, AttributeHelper.GetString(value)));
 
             AttachedPropertyRegistry.RegisterAttachedPropertyHandler("Shell.UnselectedColor",
-                (element, value) => MC.Shell.SetUnselectedColor(element, AttributeHelper.StringToColor(value)));
+                (element, value) => MC.Shell.SetUnselectedColor(element, AttributeHelper.GetString(value)));
 
             ElementHandlerRegistry.RegisterPropertyContentHandler<Shell>(nameof(FlyoutHeader),
                 renderer => new ContentPropertyHandler<MC.Shell>(

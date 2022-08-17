@@ -28,7 +28,7 @@ namespace BlazorBindings.Maui.Elements.Handlers
             switch (attributeName)
             {
                 case nameof(MC.SolidColorBrush.Color):
-                    SolidColorBrushControl.Color = AttributeHelper.StringToColor((string)attributeValue, ColorDefaultValue);
+                    SolidColorBrushControl.Color = AttributeHelper.GetString((string)attributeValue, ColorDefaultValue);
                     break;
                 default:
                     base.ApplyAttribute(attributeEventHandlerId, attributeName, attributeValue, attributeEventUpdatesAttributeName);

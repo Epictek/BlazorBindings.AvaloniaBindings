@@ -10,10 +10,10 @@
                     ShapeControl.StrokeDashArray = AttributeHelper.StringToDoubleCollection(attributeValue);
                     return true;
                 case nameof(Shape.StrokeColor):
-                    ShapeControl.Stroke = AttributeHelper.StringToColor(attributeValue);
+                    ShapeControl.Stroke = AttributeHelper.GetString(attributeValue);
                     return true;
                 case nameof(Shape.FillColor):
-                    ShapeControl.Fill = AttributeHelper.StringToColor(attributeValue);
+                    ShapeControl.Fill = AttributeHelper.GetString(attributeValue);
                     return true;
                 default:
                     return base.ApplyAdditionalAttribute(attributeEventHandlerId, attributeName, attributeValue, attributeEventUpdatesAttributeName);

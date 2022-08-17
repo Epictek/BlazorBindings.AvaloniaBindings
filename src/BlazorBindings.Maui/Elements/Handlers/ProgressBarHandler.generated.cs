@@ -32,7 +32,7 @@ namespace BlazorBindings.Maui.Elements.Handlers
                     ProgressBarControl.Progress = AttributeHelper.StringToDouble((string)attributeValue, ProgressDefaultValue);
                     break;
                 case nameof(MC.ProgressBar.ProgressColor):
-                    ProgressBarControl.ProgressColor = AttributeHelper.StringToColor((string)attributeValue, ProgressColorDefaultValue);
+                    ProgressBarControl.ProgressColor = AttributeHelper.GetString((string)attributeValue, ProgressColorDefaultValue);
                     break;
                 default:
                     base.ApplyAttribute(attributeEventHandlerId, attributeName, attributeValue, attributeEventUpdatesAttributeName);

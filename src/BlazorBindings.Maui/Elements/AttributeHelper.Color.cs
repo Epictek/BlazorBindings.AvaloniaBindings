@@ -24,18 +24,15 @@ namespace BlazorBindings.Maui.Elements
         /// <summary>
         /// Helper method to deserialize <see cref="Color" /> objects.
         /// </summary>
-        public static Color StringToColor(object colorString, Color defaultValueIfNull = null)
+        public static Color GetString(object obj, Color defaultValueIfNull = null)
         {
-            if (colorString is null)
+            return obj switch
             {
-                return defaultValueIfNull;
-            }
-            if (!(colorString is string colorAsString))
-            {
-                throw new ArgumentException("Expected parameter instance to be a string.", nameof(colorString));
-            }
-
-            return Color.FromRgba(colorAsString);
+                null => null,
+                Color color => color,
+                string colorAsString => Color.FromRgba(colorAsString),
+                _ => throw new ArgumentException("Cannot convert parameter to Color.", nameof(obj))
+            };
         }
     }
 }

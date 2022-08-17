@@ -29,7 +29,7 @@ namespace BlazorBindings.Maui.Elements.Handlers
             switch (attributeName)
             {
                 case nameof(MC.GradientStop.Color):
-                    GradientStopControl.Color = AttributeHelper.StringToColor((string)attributeValue, ColorDefaultValue);
+                    GradientStopControl.Color = AttributeHelper.GetString((string)attributeValue, ColorDefaultValue);
                     break;
                 case nameof(MC.GradientStop.Offset):
                     GradientStopControl.Offset = AttributeHelper.StringToSingle((string)attributeValue, OffsetDefaultValue);

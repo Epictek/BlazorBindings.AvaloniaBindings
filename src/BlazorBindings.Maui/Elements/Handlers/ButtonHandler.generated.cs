@@ -42,7 +42,7 @@ namespace BlazorBindings.Maui.Elements.Handlers
             switch (attributeName)
             {
                 case nameof(MC.Button.BorderColor):
-                    ButtonControl.BorderColor = AttributeHelper.StringToColor((string)attributeValue, BorderColorDefaultValue);
+                    ButtonControl.BorderColor = AttributeHelper.GetString((string)attributeValue, BorderColorDefaultValue);
                     break;
                 case nameof(MC.Button.BorderWidth):
                     ButtonControl.BorderWidth = AttributeHelper.StringToDouble((string)attributeValue, BorderWidthDefaultValue);
@@ -78,7 +78,7 @@ namespace BlazorBindings.Maui.Elements.Handlers
                     ButtonControl.Text = (string)attributeValue ?? TextDefaultValue;
                     break;
                 case nameof(MC.Button.TextColor):
-                    ButtonControl.TextColor = AttributeHelper.StringToColor((string)attributeValue, TextColorDefaultValue);
+                    ButtonControl.TextColor = AttributeHelper.GetString((string)attributeValue, TextColorDefaultValue);
                     break;
                 case nameof(MC.Button.TextTransform):
                     ButtonControl.TextTransform = (TextTransform)AttributeHelper.GetInt(attributeValue, (int)TextTransformDefaultValue);

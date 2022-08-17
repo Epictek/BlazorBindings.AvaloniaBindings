@@ -56,13 +56,13 @@ namespace BlazorBindings.Maui.Elements.Handlers
                     InputViewControl.Placeholder = (string)attributeValue ?? PlaceholderDefaultValue;
                     break;
                 case nameof(MC.InputView.PlaceholderColor):
-                    InputViewControl.PlaceholderColor = AttributeHelper.StringToColor((string)attributeValue, PlaceholderColorDefaultValue);
+                    InputViewControl.PlaceholderColor = AttributeHelper.GetString((string)attributeValue, PlaceholderColorDefaultValue);
                     break;
                 case nameof(MC.InputView.Text):
                     InputViewControl.Text = (string)attributeValue ?? TextDefaultValue;
                     break;
                 case nameof(MC.InputView.TextColor):
-                    InputViewControl.TextColor = AttributeHelper.StringToColor((string)attributeValue, TextColorDefaultValue);
+                    InputViewControl.TextColor = AttributeHelper.GetString((string)attributeValue, TextColorDefaultValue);
                     break;
                 case nameof(MC.InputView.TextTransform):
                     InputViewControl.TextTransform = (TextTransform)AttributeHelper.GetInt(attributeValue, (int)TextTransformDefaultValue);

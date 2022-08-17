@@ -81,13 +81,13 @@ namespace BlazorBindings.Maui.Elements.Handlers
                     }
                     break;
                 case nameof(MC.Picker.TextColor):
-                    PickerControl.TextColor = AttributeHelper.StringToColor((string)attributeValue);
+                    PickerControl.TextColor = AttributeHelper.GetString((string)attributeValue);
                     break;
                 case nameof(MC.Picker.Title):
                     PickerControl.Title = (string)attributeValue;
                     break;
                 case nameof(MC.Picker.TitleColor):
-                    PickerControl.TitleColor = AttributeHelper.StringToColor((string)attributeValue);
+                    PickerControl.TitleColor = AttributeHelper.GetString((string)attributeValue);
                     break;
                 case nameof(MC.Picker.SelectedIndex):
                     var index = AttributeHelper.GetInt(attributeValue);

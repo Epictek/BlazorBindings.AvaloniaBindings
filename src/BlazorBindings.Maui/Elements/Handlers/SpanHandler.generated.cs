@@ -39,7 +39,7 @@ namespace BlazorBindings.Maui.Elements.Handlers
             switch (attributeName)
             {
                 case nameof(MC.Span.BackgroundColor):
-                    SpanControl.BackgroundColor = AttributeHelper.StringToColor((string)attributeValue, BackgroundColorDefaultValue);
+                    SpanControl.BackgroundColor = AttributeHelper.GetString((string)attributeValue, BackgroundColorDefaultValue);
                     break;
                 case nameof(MC.Span.CharacterSpacing):
                     SpanControl.CharacterSpacing = AttributeHelper.StringToDouble((string)attributeValue, CharacterSpacingDefaultValue);
@@ -63,7 +63,7 @@ namespace BlazorBindings.Maui.Elements.Handlers
                     SpanControl.Text = (string)attributeValue ?? TextDefaultValue;
                     break;
                 case nameof(MC.Span.TextColor):
-                    SpanControl.TextColor = AttributeHelper.StringToColor((string)attributeValue, TextColorDefaultValue);
+                    SpanControl.TextColor = AttributeHelper.GetString((string)attributeValue, TextColorDefaultValue);
                     break;
                 case nameof(MC.Span.TextDecorations):
                     SpanControl.TextDecorations = (TextDecorations)AttributeHelper.GetInt(attributeValue, (int)TextDecorationsDefaultValue);

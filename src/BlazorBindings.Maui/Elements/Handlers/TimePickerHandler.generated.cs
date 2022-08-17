@@ -53,7 +53,7 @@ namespace BlazorBindings.Maui.Elements.Handlers
                     TimePickerControl.Format = (string)attributeValue ?? FormatDefaultValue;
                     break;
                 case nameof(MC.TimePicker.TextColor):
-                    TimePickerControl.TextColor = AttributeHelper.StringToColor((string)attributeValue, TextColorDefaultValue);
+                    TimePickerControl.TextColor = AttributeHelper.GetString((string)attributeValue, TextColorDefaultValue);
                     break;
                 case nameof(MC.TimePicker.Time):
                     TimePickerControl.Time = AttributeHelper.StringToTimeSpan(attributeValue, TimeDefaultValue);

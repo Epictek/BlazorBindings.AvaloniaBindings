@@ -56,7 +56,7 @@ namespace BlazorBindings.Maui.Elements.Handlers
                     VisualElementControl.AnchorY = AttributeHelper.StringToDouble((string)attributeValue, AnchorYDefaultValue);
                     break;
                 case nameof(MC.VisualElement.BackgroundColor):
-                    VisualElementControl.BackgroundColor = AttributeHelper.StringToColor((string)attributeValue, BackgroundColorDefaultValue);
+                    VisualElementControl.BackgroundColor = AttributeHelper.GetString((string)attributeValue, BackgroundColorDefaultValue);
                     break;
                 case nameof(MC.VisualElement.FlowDirection):
                     VisualElementControl.FlowDirection = (FlowDirection)AttributeHelper.GetInt(attributeValue, (int)FlowDirectionDefaultValue);

@@ -40,7 +40,7 @@ namespace BlazorBindings.Maui.Elements.Handlers
             switch (attributeName)
             {
                 case nameof(MC.RadioButton.BorderColor):
-                    RadioButtonControl.BorderColor = AttributeHelper.StringToColor((string)attributeValue, BorderColorDefaultValue);
+                    RadioButtonControl.BorderColor = AttributeHelper.GetString((string)attributeValue, BorderColorDefaultValue);
                     break;
                 case nameof(MC.RadioButton.BorderWidth):
                     RadioButtonControl.BorderWidth = AttributeHelper.StringToDouble((string)attributeValue, BorderWidthDefaultValue);
@@ -70,7 +70,7 @@ namespace BlazorBindings.Maui.Elements.Handlers
                     RadioButtonControl.IsChecked = AttributeHelper.GetBool(attributeValue, IsCheckedDefaultValue);
                     break;
                 case nameof(MC.RadioButton.TextColor):
-                    RadioButtonControl.TextColor = AttributeHelper.StringToColor((string)attributeValue, TextColorDefaultValue);
+                    RadioButtonControl.TextColor = AttributeHelper.GetString((string)attributeValue, TextColorDefaultValue);
                     break;
                 case nameof(MC.RadioButton.TextTransform):
                     RadioButtonControl.TextTransform = (TextTransform)AttributeHelper.GetInt(attributeValue, (int)TextTransformDefaultValue);

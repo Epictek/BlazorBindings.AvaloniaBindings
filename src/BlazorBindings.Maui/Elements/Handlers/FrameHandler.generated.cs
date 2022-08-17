@@ -30,7 +30,7 @@ namespace BlazorBindings.Maui.Elements.Handlers
             switch (attributeName)
             {
                 case nameof(MC.Frame.BorderColor):
-                    FrameControl.BorderColor = AttributeHelper.StringToColor((string)attributeValue, BorderColorDefaultValue);
+                    FrameControl.BorderColor = AttributeHelper.GetString((string)attributeValue, BorderColorDefaultValue);
                     break;
                 case nameof(MC.Frame.CornerRadius):
                     FrameControl.CornerRadius = AttributeHelper.StringToSingle((string)attributeValue, CornerRadiusDefaultValue);

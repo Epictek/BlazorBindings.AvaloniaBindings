@@ -33,10 +33,10 @@ namespace BlazorBindings.Maui.Elements.Handlers
                     SwitchControl.IsToggled = AttributeHelper.GetBool(attributeValue, IsToggledDefaultValue);
                     break;
                 case nameof(MC.Switch.OnColor):
-                    SwitchControl.OnColor = AttributeHelper.StringToColor((string)attributeValue, OnColorDefaultValue);
+                    SwitchControl.OnColor = AttributeHelper.GetString((string)attributeValue, OnColorDefaultValue);
                     break;
                 case nameof(MC.Switch.ThumbColor):
-                    SwitchControl.ThumbColor = AttributeHelper.StringToColor((string)attributeValue, ThumbColorDefaultValue);
+                    SwitchControl.ThumbColor = AttributeHelper.GetString((string)attributeValue, ThumbColorDefaultValue);
                     break;
                 default:
                     base.ApplyAttribute(attributeEventHandlerId, attributeName, attributeValue, attributeEventUpdatesAttributeName);

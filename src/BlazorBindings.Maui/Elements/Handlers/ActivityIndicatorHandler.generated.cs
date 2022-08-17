@@ -29,7 +29,7 @@ namespace BlazorBindings.Maui.Elements.Handlers
             switch (attributeName)
             {
                 case nameof(MC.ActivityIndicator.Color):
-                    ActivityIndicatorControl.Color = AttributeHelper.StringToColor((string)attributeValue, ColorDefaultValue);
+                    ActivityIndicatorControl.Color = AttributeHelper.GetString((string)attributeValue, ColorDefaultValue);
                     break;
                 case nameof(MC.ActivityIndicator.IsRunning):
                     ActivityIndicatorControl.IsRunning = AttributeHelper.GetBool(attributeValue, IsRunningDefaultValue);

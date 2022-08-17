@@ -32,7 +32,7 @@ namespace BlazorBindings.Maui.Elements.Handlers
                     RefreshViewControl.IsRefreshing = AttributeHelper.GetBool(attributeValue, IsRefreshingDefaultValue);
                     break;
                 case nameof(MC.RefreshView.RefreshColor):
-                    RefreshViewControl.RefreshColor = AttributeHelper.StringToColor((string)attributeValue, RefreshColorDefaultValue);
+                    RefreshViewControl.RefreshColor = AttributeHelper.GetString((string)attributeValue, RefreshColorDefaultValue);
                     break;
                 default:
                     base.ApplyAttribute(attributeEventHandlerId, attributeName, attributeValue, attributeEventUpdatesAttributeName);

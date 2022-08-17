@@ -29,7 +29,7 @@ namespace BlazorBindings.Maui.Elements.Handlers
             switch (attributeName)
             {
                 case nameof(MC.CheckBox.Color):
-                    CheckBoxControl.Color = AttributeHelper.StringToColor((string)attributeValue, ColorDefaultValue);
+                    CheckBoxControl.Color = AttributeHelper.GetString((string)attributeValue, ColorDefaultValue);
                     break;
                 case nameof(MC.CheckBox.IsChecked):
                     CheckBoxControl.IsChecked = AttributeHelper.GetBool(attributeValue, IsCheckedDefaultValue);
