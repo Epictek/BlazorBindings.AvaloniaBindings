@@ -187,5 +187,10 @@ namespace ComponentWrapperGenerator
         {
             return ComponentWrapperGenerator.GetTypeNameAndAddNamespace(type, _usings);
         }
+
+        private string GetTypeNameAndAddNamespace(string @namespace, string typeName)
+        {
+            return ComponentWrapperGenerator.GetTypeNameAndAddNamespace(@namespace, typeName, _usings);
+        }
     }
 }

@@ -3,7 +3,6 @@
 
 using BlazorBindings.Core;
 using BlazorBindings.Maui.Elements;
-using BlazorBindings.Maui.Elements.Compatibility.Handlers;
 using MC = Microsoft.Maui.Controls;
 using MCC = Microsoft.Maui.Controls.Compatibility;
 using Microsoft.AspNetCore.Components;

@@ -1,0 +1,11 @@
+﻿<ContentPage Title="DatePicker">
+    <VerticalStackLayout Margin="20">
+        <DatePicker @bind-Date="_date" />
+        <Label>Selected date: @_date.ToShortDateString()</Label>
+    </VerticalStackLayout>
+</ContentPage>
+
+@code
+{
+    private DateTime _date;
+}

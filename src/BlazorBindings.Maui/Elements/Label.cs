@@ -34,6 +34,9 @@ namespace BlazorBindings.Maui.Elements
 
         void IHandleChildContentText.HandleText(int index, string text)
         {
+            if (Text != null && string.IsNullOrWhiteSpace(text))
+                return;
+
             if (NativeControl.FormattedText != null)
             {
                 if (!string.IsNullOrWhiteSpace(text))

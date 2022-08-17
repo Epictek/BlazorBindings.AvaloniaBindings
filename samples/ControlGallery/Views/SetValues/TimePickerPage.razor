@@ -1,0 +1,11 @@
+﻿<ContentPage Title="TimePicker">
+    <VerticalStackLayout Margin="20">
+        <TimePicker @bind-Time="_time" />
+        <Label>Selected time: @_time</Label>
+    </VerticalStackLayout>
+</ContentPage>
+
+@code
+{
+    private TimeSpan _time;
+}

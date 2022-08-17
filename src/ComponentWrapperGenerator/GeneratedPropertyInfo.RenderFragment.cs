@@ -45,13 +45,15 @@ namespace ComponentWrapperGenerator
             {
                 // new ListContentPropertyHandler<MC.Page, MC.ToolbarItem>(page => page.ToolbarItems)
                 var itemTypeName = GetTypeNameAndAddNamespace(type.GenericTypeArguments[0]);
-                return $"new ListContentPropertyHandler<{MauiDeclaringTypeName}, {itemTypeName}>(x => x.{_propertyInfo.Name})";
+                var listContentHandlerTypeName = GetTypeNameAndAddNamespace("BlazorBindings.Maui.Elements.Handlers", "ListContentPropertyHandler");
+                return $"new {listContentHandlerTypeName}<{MauiDeclaringTypeName}, {itemTypeName}>(x => x.{_propertyInfo.Name})";
             }
             else
             {
                 // new ContentPropertyHandler<MC.ContentPage>((page, value) => page.Content = (MC.View)value));
                 var propTypeName = GetTypeNameAndAddNamespace(type);
-                return $"new ContentPropertyHandler<{MauiDeclaringTypeName}>((x, value) => x.{_propertyInfo.Name} = ({propTypeName})value)";
+                var contentHandlerTypeName = GetTypeNameAndAddNamespace("BlazorBindings.Maui.Elements.Handlers", "ContentPropertyHandler");
+                return $"new {contentHandlerTypeName}<{MauiDeclaringTypeName}>((x, value) => x.{_propertyInfo.Name} = ({propTypeName})value)";
             }
         }
 

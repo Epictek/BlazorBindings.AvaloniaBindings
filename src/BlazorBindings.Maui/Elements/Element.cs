@@ -14,10 +14,14 @@ namespace BlazorBindings.Maui.Elements
         private MC.Element _nativeControl;
 
         [Parameter] public string AutomationId { get; set; }
-        [Parameter] public string ClassId { set { } }
-        [Parameter] public string StyleId { set { } }
+        [Parameter] public string ClassId { get; set; }
+        [Parameter] public string StyleId { get; set; }
 
-        public MC.Element NativeControl => _nativeControl ??= CreateNativeElement();
+        public MC.Element NativeControl
+        {
+            get => _nativeControl ??= CreateNativeElement();
+            internal set => _nativeControl = value;
+        }
 
         public override Task SetParametersAsync(ParameterView parameters)
         {
@@ -46,10 +50,18 @@ namespace BlazorBindings.Maui.Elements
                     }
                     break;
                 case nameof(ClassId):
-                    NativeControl.ClassId = (string)value;
+                    if (!Equals(ClassId, value))
+                    {
+                        ClassId = (string)value;
+                        NativeControl.ClassId = ClassId;
+                    }
                     break;
                 case nameof(StyleId):
-                    NativeControl.StyleId = (string)value;
+                    if (!Equals(StyleId, value))
+                    {
+                        StyleId = (string)value;
+                        NativeControl.StyleId = StyleId;
+                    }
                     break;
 
                 default:

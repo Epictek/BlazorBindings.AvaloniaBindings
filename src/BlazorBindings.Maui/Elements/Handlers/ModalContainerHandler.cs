@@ -82,7 +82,6 @@ namespace BlazorBindings.Maui.Elements.Handlers
         public void RemoveChild(MC.Element child)
         {
             // TODO: This could probably be implemented at some point, but it isn't needed right now
-            throw new NotImplementedException();
         }
 
         public bool IsParented()

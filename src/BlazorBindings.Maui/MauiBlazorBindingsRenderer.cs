@@ -2,7 +2,7 @@
 // Licensed under the MIT license.
 
 using BlazorBindings.Core;
-using BlazorBindings.Maui.Elements.Handlers;
+using BlazorBindings.Maui.Elements;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 using System;
@@ -42,22 +42,30 @@ namespace BlazorBindings.Maui
             return new MauiBlazorBindingsElementManager();
         }
 
-        private static ElementHandler CreateHandler(MC.Element parent, MauiBlazorBindingsRenderer renderer)
+        private static IElementHandler CreateHandler(MC.Element parent, MauiBlazorBindingsRenderer renderer)
         {
             return parent switch
             {
-                MC.ContentPage contentPage => new ContentPageHandler(renderer, contentPage),
-                MC.ContentView contentView => new ContentViewHandler(renderer, contentView),
-                MC.Label label => new LabelHandler(renderer, label),
-                MC.FlyoutPage flyoutPage => new FlyoutPageHandler(renderer, flyoutPage),
-                MC.ScrollView scrollView => new ScrollViewHandler(renderer, scrollView),
-                MC.ShellContent shellContent => new ShellContentHandler(renderer, shellContent),
-                MC.Shell shell => new ShellHandler(renderer, shell),
-                MC.ShellItem shellItem => new ShellItemHandler(renderer, shellItem),
-                MC.ShellSection shellSection => new ShellSectionHandler(renderer, shellSection),
-                MC.TabbedPage tabbedPage => new TabbedPageHandler(renderer, tabbedPage),
-                _ => new ElementHandler(renderer, parent),
+                MC.ContentPage => CreateHandler<ContentPage>(),
+                MC.ContentView => CreateHandler<ContentView>(),
+                MC.FlyoutPage => CreateHandler<FlyoutPage>(),
+                MC.ScrollView => CreateHandler<ScrollView>(),
+                MC.ShellContent => CreateHandler<ShellContent>(),
+                MC.Shell => CreateHandler<Shell>(),
+                MC.ShellItem => CreateHandler<ShellItem>(),
+                MC.ShellSection => CreateHandler<ShellSection>(),
+                MC.TabbedPage => CreateHandler<TabbedPage>(),
+                _ => new InitializedElement(parent)
             };
+
+            IElementHandler CreateHandler<T>() where T : Element, new() => new T { NativeControl = parent };
+        }
+
+        private class InitializedElement : Element
+        {
+            private readonly MC.Element _element;
+            public InitializedElement(MC.Element element) => _element = element;
+            protected override MC.Element CreateNativeElement() => _element;
         }
     }
 }
