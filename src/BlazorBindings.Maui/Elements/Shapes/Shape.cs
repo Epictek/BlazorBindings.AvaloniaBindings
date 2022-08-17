@@ -53,6 +53,9 @@ namespace BlazorBindings.Maui.Elements.Shapes
                         StrokeColor = (Color)value;
                     }
                     return true;
+                case nameof(Fill):
+                    Fill = (RenderFragment)value;
+                    return true;
                 default:
                     return base.HandleAdditionalParameter(name, value);
             }
