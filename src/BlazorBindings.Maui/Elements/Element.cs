@@ -62,8 +62,6 @@ namespace BlazorBindings.Maui.Elements
                         break;
                     }
 
-                    break;
-
                     throw new NotImplementedException($"{GetType().FullName} doesn't recognize parameter '{name}'");
 
             }
