@@ -4,6 +4,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.Maui.Controls;
 using System.Collections.Generic;
+using System.Linq;
 using MC = Microsoft.Maui.Controls;
 
 namespace BlazorBindings.Maui.Elements
@@ -33,7 +34,12 @@ namespace BlazorBindings.Maui.Elements
                     if (!Equals(SelectedItems, value))
                     {
                         SelectedItems = (IList<object>)value;
-                        NativeControl.SelectedItems = SelectedItems;
+
+                        // Don't assign value if lists content is equal. Otherwise leads to infinite loop when binded. 
+                        if (!Enumerable.SequenceEqual(NativeControl.SelectedItems, SelectedItems))
+                        {
+                            NativeControl.SelectedItems = SelectedItems;
+                        }
                     }
                     break;
                 case nameof(SelectedItem):
