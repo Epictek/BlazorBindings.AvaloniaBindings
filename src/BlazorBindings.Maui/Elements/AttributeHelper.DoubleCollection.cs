@@ -9,11 +9,6 @@ namespace BlazorBindings.Maui.Elements
     {
         private static readonly DoubleCollectionConverter _doubleCollectionConverter = new();
 
-        public static string DoubleCollectionToString(DoubleCollection doubleCollection)
-        {
-            return _doubleCollectionConverter.ConvertToInvariantString(doubleCollection);
-        }
-
         public static DoubleCollection StringToDoubleCollection(object doubleCollectionString)
         {
             return (DoubleCollection)_doubleCollectionConverter.ConvertFromInvariantString((string)doubleCollectionString);

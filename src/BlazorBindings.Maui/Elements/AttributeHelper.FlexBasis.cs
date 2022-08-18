@@ -10,11 +10,6 @@ namespace BlazorBindings.Maui.Elements
     {
         private static readonly FlexBasisTypeConverter _flexBasisConverter = new();
 
-        public static string FlexBasisToString(FlexBasis flexBasis)
-        {
-            return _flexBasisConverter.ConvertToInvariantString(flexBasis);
-        }
-
         public static FlexBasis StringToFlexBasis(object flexBasisString)
         {
             return (FlexBasis)_flexBasisConverter.ConvertFromInvariantString((string)flexBasisString);

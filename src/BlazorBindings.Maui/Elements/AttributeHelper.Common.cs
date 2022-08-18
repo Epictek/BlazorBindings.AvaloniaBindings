@@ -48,34 +48,6 @@ namespace BlazorBindings.Maui.Elements
         }
 
         /// <summary>
-        /// Helper method to serialize <see cref="double" /> objects.
-        /// </summary>
-        public static string DoubleToString(double value)
-        {
-            return value.ToString("R", CultureInfo.InvariantCulture); // "R" --> Round-trip format specifier guarantees fidelity when parsing
-        }
-
-        /// <summary>
-        /// Helper method to deserialize <see cref="double" /> objects.
-        /// </summary>
-        public static double StringToDouble(string doubleString, double defaultValueIfNull = default)
-        {
-            if (doubleString is null)
-            {
-                return defaultValueIfNull;
-            }
-            return double.Parse(doubleString, CultureInfo.InvariantCulture);
-        }
-
-        /// <summary>
-        /// Helper method to serialize <see cref="float" /> objects.
-        /// </summary>
-        public static string SingleToString(float value)
-        {
-            return value.ToString("R", CultureInfo.InvariantCulture); // "R" --> Round-trip format specifier guarantees fidelity when parsing
-        }
-
-        /// <summary>
         /// Helper method to deserialize <see cref="float" /> objects.
         /// </summary>
         public static float StringToSingle(string singleString, float defaultValueIfNull = default)
