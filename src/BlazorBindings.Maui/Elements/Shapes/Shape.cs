@@ -35,7 +35,7 @@ namespace BlazorBindings.Maui.Elements.Shapes
                 case nameof(StrokeDashArray):
                     if (!Equals(StrokeDashArray, value))
                     {
-                        NativeControl.StrokeDashArray = AttributeHelper.StringToDoubleCollection((string)value);
+                        NativeControl.StrokeDashArray = AttributeHelper.GetDoubleCollection((string)value);
                         StrokeDashArray = (string)value;
                     }
                     return true;

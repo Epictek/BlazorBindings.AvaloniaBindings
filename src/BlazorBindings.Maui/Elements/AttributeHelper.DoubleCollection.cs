@@ -2,6 +2,7 @@
 // Licensed under the MIT license.
 
 using Microsoft.Maui.Controls;
+using System;
 
 namespace BlazorBindings.Maui.Elements
 {
@@ -9,9 +10,17 @@ namespace BlazorBindings.Maui.Elements
     {
         private static readonly DoubleCollectionConverter _doubleCollectionConverter = new();
 
-        public static DoubleCollection StringToDoubleCollection(object doubleCollectionString)
+        public static DoubleCollection GetDoubleCollection(object value)
         {
-            return (DoubleCollection)_doubleCollectionConverter.ConvertFromInvariantString((string)doubleCollectionString);
+            return value switch
+            {
+                null => null,
+                DoubleCollection doubleCollection => doubleCollection,
+                double[] doubleArray => (DoubleCollection)doubleArray,
+                float[] floatArray => (DoubleCollection)floatArray,
+                string => (DoubleCollection)_doubleCollectionConverter.ConvertFromInvariantString((string)value),
+                _ => throw new ArgumentException("Cannot convert value to DoubleCollection.", nameof(value))
+            };
         }
     }
 }

@@ -50,13 +50,16 @@ namespace BlazorBindings.Maui.Elements
         /// <summary>
         /// Helper method to deserialize <see cref="float" /> objects.
         /// </summary>
-        public static float StringToSingle(string singleString, float defaultValueIfNull = default)
+        public static float GetSingle(object value, float defaultValueIfNull = default)
         {
-            if (singleString is null)
+            return value switch
             {
-                return defaultValueIfNull;
-            }
-            return float.Parse(singleString, CultureInfo.InvariantCulture);
+                null => defaultValueIfNull,
+                float f => f,
+                int i => i,
+                string str => float.Parse(str, CultureInfo.InvariantCulture),
+                _ => throw new ArgumentException("Cannot convert value to Single.", nameof(value))
+            };
         }
 
         /// <summary>

@@ -1,8 +1,8 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-using MC = Microsoft.Maui.Controls;
 using Microsoft.Maui.Layouts;
+using MC = Microsoft.Maui.Controls;
 
 namespace BlazorBindings.Maui.Elements
 {
@@ -14,10 +14,10 @@ namespace BlazorBindings.Maui.Elements
                 (element, value) => MC.FlexLayout.SetAlignSelf(element, (FlexAlignSelf)AttributeHelper.GetInt(value)));
 
             AttachedPropertyRegistry.RegisterAttachedPropertyHandler("FlexLayout.Grow",
-                (element, value) => MC.FlexLayout.SetGrow(element, AttributeHelper.StringToSingle((string)value)));
+                (element, value) => MC.FlexLayout.SetGrow(element, AttributeHelper.GetSingle(value)));
 
             AttachedPropertyRegistry.RegisterAttachedPropertyHandler("FlexLayout.Shrink",
-                (element, value) => MC.FlexLayout.SetShrink(element, AttributeHelper.StringToSingle((string)value)));
+                (element, value) => MC.FlexLayout.SetShrink(element, AttributeHelper.GetSingle(value)));
 
             AttachedPropertyRegistry.RegisterAttachedPropertyHandler("FlexLayout.Order",
                 (element, value) => MC.FlexLayout.SetOrder(element, AttributeHelper.GetInt(value)));
