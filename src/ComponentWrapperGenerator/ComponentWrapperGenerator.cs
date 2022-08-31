@@ -1,12 +1,13 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
+using ComponentWrapperGenerator.Extensions;
+using Microsoft.CodeAnalysis;
 using Microsoft.Maui.Graphics;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Xml;
 
@@ -217,7 +218,7 @@ namespace {componentNamespace}
             return allText;
         }
 
-        private string GetXmlDocContents(PropertyInfo prop, string indent)
+        private string GetXmlDocContents(IPropertySymbol prop, string indent)
         {
             foreach (var xmlDoc in XmlDocs)
             {
@@ -229,7 +230,7 @@ namespace {componentNamespace}
                 //     <value>A <see cref="T:Xamarin.Forms.Color" /> used to display the ActivityIndicator. Default is <see cref="P:Xamarin.Forms.Color.Default" />.</value>
                 //     <remarks />
                 // </member>
-                var xmlDocNodeName = $"P:{prop.DeclaringType.Namespace}.{prop.DeclaringType.Name}.{prop.Name}";
+                var xmlDocNodeName = $"P:{prop.ContainingType.ContainingNamespace}.{prop.ContainingType.Name}.{prop.Name}";
                 var xmlDocNode = xmlDoc.SelectSingleNode($"//member[@name='{xmlDocNodeName}']");
                 if (xmlDocNode != null)
                 {
@@ -276,7 +277,7 @@ namespace {componentNamespace}
             return @using.Alias == null ? typeName : $"{@using.Alias}.{typeName}";
         }
 
-        internal static string GetTypeNameAndAddNamespace(Type type, IList<UsingStatement> usings)
+        internal static string GetTypeNameAndAddNamespace(ITypeSymbol type, IList<UsingStatement> usings)
         {
             var typeName = GetCSharpType(type);
             if (typeName != null)
@@ -287,10 +288,11 @@ namespace {componentNamespace}
             // Check if there's a 'using' already. If so, check if it has an alias. If not, add a new 'using'.
             var namespaceAlias = string.Empty;
 
-            var existingUsing = usings.FirstOrDefault(u => u.Namespace == type.Namespace);
+            var nsName = type.ContainingNamespace.GetFullName();
+            var existingUsing = usings.FirstOrDefault(u => u.Namespace == nsName);
             if (existingUsing == null)
             {
-                usings.Add(new UsingStatement { Namespace = type.Namespace, IsUsed = true, });
+                usings.Add(new UsingStatement { Namespace = nsName, IsUsed = true, });
             }
             else
             {
@@ -304,16 +306,16 @@ namespace {componentNamespace}
             return typeName;
         }
 
-        private static string FormatTypeName(Type type, IList<UsingStatement> usings)
+        private static string FormatTypeName(ITypeSymbol type, IList<UsingStatement> usings)
         {
-            if (!type.IsGenericType)
+            if (type is not INamedTypeSymbol namedType || !namedType.IsGenericType)
             {
                 return type.Name;
             }
             var typeNameBuilder = new StringBuilder();
             typeNameBuilder.Append(type.Name.Substring(0, type.Name.IndexOf('`', StringComparison.Ordinal)));
             typeNameBuilder.Append('<');
-            var genericArgs = type.GetGenericArguments();
+            var genericArgs = namedType.TypeArguments;
             for (var i = 0; i < genericArgs.Length; i++)
             {
                 if (i > 0)
@@ -328,28 +330,28 @@ namespace {componentNamespace}
         }
 
 
-        private static readonly Dictionary<Type, string> TypeToCSharpName = new Dictionary<Type, string>
+        private static readonly Dictionary<SpecialType, string> TypeToCSharpName = new()
         {
-            { typeof(bool), "bool" },
-            { typeof(byte), "byte" },
-            { typeof(sbyte), "sbyte" },
-            { typeof(char), "char" },
-            { typeof(decimal), "decimal" },
-            { typeof(double), "double" },
-            { typeof(float), "float" },
-            { typeof(int), "int" },
-            { typeof(uint), "uint" },
-            { typeof(long), "long" },
-            { typeof(ulong), "ulong" },
-            { typeof(object), "object" },
-            { typeof(short), "short" },
-            { typeof(ushort), "ushort" },
-            { typeof(string), "string" },
+            { SpecialType.System_Boolean, "bool" },
+            { SpecialType.System_Byte, "byte" },
+            { SpecialType.System_SByte, "sbyte" },
+            { SpecialType.System_Char, "char" },
+            { SpecialType.System_Decimal, "decimal" },
+            { SpecialType.System_Double, "double" },
+            { SpecialType.System_Single, "float" },
+            { SpecialType.System_Int32, "int" },
+            { SpecialType.System_UInt32, "uint" },
+            { SpecialType.System_Int64, "long" },
+            { SpecialType.System_UInt64, "ulong" },
+            { SpecialType.System_Object, "object" },
+            { SpecialType.System_Int16, "short" },
+            { SpecialType.System_UInt16, "ushort" },
+            { SpecialType.System_String, "string" },
         };
 
-        private static string GetCSharpType(Type propertyType)
+        private static string GetCSharpType(ITypeSymbol propertyType)
         {
-            return TypeToCSharpName.TryGetValue(propertyType, out var typeName) ? typeName : null;
+            return TypeToCSharpName.TryGetValue(propertyType.SpecialType, out var typeName) ? typeName : null;
         }
 
         /// <summary>

@@ -1,11 +1,9 @@
-﻿using Microsoft.Maui;
-using Microsoft.Maui.Controls;
+﻿using ComponentWrapperGenerator.Extensions;
+using Microsoft.CodeAnalysis;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Reflection;
-using System.Windows.Input;
 
 namespace ComponentWrapperGenerator
 {
@@ -16,63 +14,66 @@ namespace ComponentWrapperGenerator
             ["FlyoutPage.Detail"] = "Detail"
         };
 
-        private readonly PropertyInfo _propertyInfo;
+        private readonly IPropertySymbol _propertyInfo;
         private readonly IList<UsingStatement> _usings;
         private readonly Lazy<string> _componentPropertyNameLazy;
-        private readonly Lazy<string> _componentPropertyTypeLazy;
+        private readonly Lazy<string> _componentTypeLazy;
 
         public GeneratedPropertyKind Kind { get; }
         public string MauiPropertyName { get; }
-        public string MauiDeclaringTypeName { get; }
+        public string MauiContainingTypeName { get; }
         public string ComponentName { get; }
         public string ComponentPropertyName => _componentPropertyNameLazy.Value;
-        public string ComponentPropertyType => _componentPropertyTypeLazy.Value;
+        public string ComponentType => _componentTypeLazy.Value;
 
         private GeneratedPropertyInfo(string mauiPropertyName,
-                                      string mauiDeclaringTypeName,
+                                      string mauiContainingTypeName,
                                       string componentName,
                                       string componentPropertyName,
-                                      string componentPropertyType,
+                                      string componentType,
                                       GeneratedPropertyKind kind,
                                       IList<UsingStatement> usings)
         {
             Kind = kind;
             MauiPropertyName = mauiPropertyName;
-            MauiDeclaringTypeName = mauiDeclaringTypeName;
+            MauiContainingTypeName = mauiContainingTypeName;
             ComponentName = componentName;
-            _componentPropertyTypeLazy = new Lazy<string>(componentPropertyType);
+            _componentTypeLazy = new Lazy<string>(componentType);
             _componentPropertyNameLazy = new Lazy<string>(componentPropertyName);
             _usings = usings;
         }
 
-        private GeneratedPropertyInfo(PropertyInfo propertyInfo, GeneratedPropertyKind kind, IList<UsingStatement> usings)
+        private GeneratedPropertyInfo(IPropertySymbol propertyInfo, GeneratedPropertyKind kind, IList<UsingStatement> usings)
         {
             _propertyInfo = propertyInfo;
             _usings = usings;
             Kind = kind;
 
             MauiPropertyName = propertyInfo.Name;
-            MauiDeclaringTypeName = GetTypeNameAndAddNamespace(propertyInfo.DeclaringType);
+            MauiContainingTypeName = GetTypeNameAndAddNamespace(propertyInfo.ContainingType);
 
-            ComponentName = ComponentWrapperGenerator.GetIdentifierName(_propertyInfo.DeclaringType.Name);
+            ComponentName = ComponentWrapperGenerator.GetIdentifierName(_propertyInfo.ContainingType.Name);
             _componentPropertyNameLazy = new Lazy<string>(GetComponentPropertyName);
-            _componentPropertyTypeLazy = new Lazy<string>(GetComponentPropertyType);
+            _componentTypeLazy = new Lazy<string>(GetComponentType);
 
             string GetComponentPropertyName()
             {
-                if (Aliases.TryGetValue($"{_propertyInfo.DeclaringType.Name}.{MauiPropertyName}", out var aliasName))
+                if (Aliases.TryGetValue($"{_propertyInfo.ContainingType.Name}.{MauiPropertyName}", out var aliasName))
                     return aliasName;
 
-                if (IsRenderFragmentProperty && _propertyInfo.DeclaringType.GetCustomAttribute<ContentPropertyAttribute>()?.Name == _propertyInfo.Name)
+                if (IsRenderFragmentProperty && _propertyInfo.ContainingType.GetAttributes().Any(a
+                    => a.AttributeClass.Name == "ContentPropertyAttribute" && Equals(a.ConstructorArguments.FirstOrDefault().Value, _propertyInfo.Name)))
+                {
                     return "ChildContent";
+                }
 
                 return ComponentWrapperGenerator.GetIdentifierName(_propertyInfo.Name);
             }
 
-            string GetComponentPropertyType()
+            string GetComponentType()
             {
-                var elementPropertyType = _propertyInfo?.PropertyType;
-                if (elementPropertyType == typeof(IList<string>))
+                var elementType = _propertyInfo?.Type;
+                if (elementType == typeof(IList<string>))
                 {
                     // Lists of strings are special-cased because they are handled specially by the handlers as a comma-separated list
                     return "string";
@@ -83,7 +84,7 @@ namespace ComponentWrapperGenerator
                 }
                 else
                 {
-                    return GetTypeNameAndAddNamespace(elementPropertyType);
+                    return GetTypeNameAndAddNamespace(elementType);
                 }
             }
         }
@@ -95,7 +96,7 @@ namespace ComponentWrapperGenerator
             //var xmlDocContents = _propertyInfo is null ? "" : ComponentWrapperGenerator.GetXmlDocContents(_propertyInfo, indent);
             var xmlDocContents = "";
 
-            return $@"{xmlDocContents}{indent}[Parameter] public {ComponentPropertyType} {ComponentPropertyName} {{ get; set; }}
+            return $@"{xmlDocContents}{indent}[Parameter] public {ComponentType} {ComponentPropertyName} {{ get; set; }}
 ";
         }
 
@@ -106,41 +107,41 @@ namespace ComponentWrapperGenerator
             return $@"                case nameof({propName}):
                     if (!Equals({propName}, value))
                     {{
-                        {propName} = ({ComponentPropertyType})value;
-                        NativeControl.{propName} = {GetConvertedProperty(_propertyInfo.PropertyType, propName)};
+                        {propName} = ({ComponentType})value;
+                        NativeControl.{propName} = {GetConvertedProperty(_propertyInfo.Type, propName)};
                     }}
                     break;
 ";
 
-            static string GetConvertedProperty(Type propertyType, string propName)
+            static string GetConvertedProperty(ITypeSymbol propertyType, string propName)
             {
-                if (propertyType == typeof(IList<string>))
+                if (propertyType is INamedTypeSymbol namedType && namedType.IsGenericType
+                    && namedType.TypeArguments[0].SpecialType == SpecialType.System_String
+                    && namedType.ConstructUnboundGenericType().SpecialType == SpecialType.System_Collections_Generic_IList_T)
+                {
                     return $"AttributeHelper.GetStringList({propName})";
+                }
 
                 return propName;
             }
         }
 
-        internal static GeneratedPropertyInfo[] GetValueProperties(Type componentType, IList<UsingStatement> usings)
+        internal static GeneratedPropertyInfo[] GetValueProperties(ITypeSymbol componentType, IList<UsingStatement> usings)
         {
-            var props = componentType.GetProperties()
+            var props = componentType.GetMembers().OfType<IPropertySymbol>()
                     .Where(IsPublicProperty)
                     .Where(HasPublicSetter)
-                    .Where(prop => prop.DeclaringType == componentType)
-                    .Where(prop => !DisallowedComponentPropertyTypes.Contains(prop.PropertyType))
+                    .Where(prop => !DisallowedComponentTypes.Contains(prop.Type.GetFullName()))
                     .OrderBy(prop => prop.Name, StringComparer.OrdinalIgnoreCase);
 
             return props.Select(prop => new GeneratedPropertyInfo(prop, GeneratedPropertyKind.Value, usings)).ToArray();
         }
 
-        private static bool IsPublicProperty(PropertyInfo propertyInfo)
+        private static bool IsPublicProperty(IPropertySymbol propertyInfo)
         {
-            return propertyInfo.GetGetMethod() != null && IsPropertyBrowsable(propertyInfo) && !IsIndexProperty(propertyInfo);
+            return propertyInfo.GetMethod?.DeclaredAccessibility == Accessibility.Public && IsPropertyBrowsable(propertyInfo) && !propertyInfo.IsIndexer;
 
-            static bool IsIndexProperty(PropertyInfo propInfo)
-                => propInfo.GetIndexParameters().Length > 0;
-
-            static bool IsPropertyBrowsable(PropertyInfo propInfo)
+            static bool IsPropertyBrowsable(IPropertySymbol propInfo)
             {
                 // [EditorBrowsable(EditorBrowsableState.Never)]
                 var attr = (EditorBrowsableAttribute)Attribute.GetCustomAttribute(propInfo, typeof(EditorBrowsableAttribute));
@@ -148,42 +149,43 @@ namespace ComponentWrapperGenerator
             }
         }
 
-        private static bool HasPublicSetter(PropertyInfo propertyInfo)
+        private static bool HasPublicSetter(IPropertySymbol propertyInfo)
         {
-            return propertyInfo.GetSetMethod() != null;
+            return propertyInfo.SetMethod != null;
         }
 
-        private static readonly List<Type> DisallowedComponentPropertyTypes = new List<Type>
+        private static readonly List<string> DisallowedComponentTypes = new()
         {
-            typeof(Brush),
-            typeof(Button.ButtonContentLayout), // TODO: This is temporary; should be possible to add support later
-            typeof(ColumnDefinitionCollection),
-            typeof(PointCollection),
-            typeof(DoubleCollection),
-            typeof(ControlTemplate),
-            typeof(DataTemplate),
-            typeof(Element),
-            // typeof(Maui.Font), // TODO: This is temporary; should be possible to add support later
-            typeof(FormattedString),
-            typeof(Microsoft.Maui.Controls.Shapes.Geometry),
-            typeof(GradientStopCollection),
-            typeof(ICommand),
-            typeof(object),
-            typeof(Page),
-            typeof(ResourceDictionary),
-            typeof(RowDefinitionCollection),
-            typeof(Shadow),
-            typeof(ShellContent),
-            typeof(ShellItem),
-            typeof(ShellSection),
-            typeof(Style), // TODO: This is temporary; should be possible to add support later
-            typeof(IVisual),
-            typeof(View),
-            typeof(IView),
-            typeof(IViewHandler)
+            "Microsoft.Maui.Controls.Brush",
+            "Microsoft.Maui.Controls.Button.ButtonContentLayout", // TODO: This is temporary; should be possible to add support later
+            "Microsoft.Maui.Controls.ColumnDefinitionCollection",
+
+            "Microsoft.Maui.Controls.PointCollection",
+            "Microsoft.Maui.Controls.DoubleCollection",
+            "Microsoft.Maui.Controls.ControlTemplate",
+            "Microsoft.Maui.Controls.DataTemplate",
+            "Microsoft.Maui.Controls.Element",
+            // "Microsoft.Maui.Controls.Font", // TODO: This is temporary; should be possible to add support later
+            "Microsoft.Maui.Controls.FormattedString",
+            "Microsoft.Maui.Controls.Shapes.Geometry",
+            "Microsoft.Maui.Controls.GradientStopCollection",
+            "System.Windows.Input.ICommand",
+            "System.Object",
+            "Microsoft.Maui.Controls.Page",
+            "Microsoft.Maui.Controls.ResourceDictionary",
+            "Microsoft.Maui.Controls.RowDefinitionCollection",
+            "Microsoft.Maui.Controls.Shadow",
+            "Microsoft.Maui.Controls.ShellContent",
+            "Microsoft.Maui.Controls.ShellItem",
+            "Microsoft.Maui.Controls.ShellSection",
+            "Microsoft.Maui.Controls.Style", // TODO: This is temporary; should be possible to add support later
+            "Microsoft.Maui.Controls.IVisual",
+            "Microsoft.Maui.Controls.View",
+            "Microsoft.Maui.IView",
+            "Microsoft.Maui.IViewHandler"
         };
 
-        private string GetTypeNameAndAddNamespace(Type type)
+        private string GetTypeNameAndAddNamespace(ITypeSymbol type)
         {
             return ComponentWrapperGenerator.GetTypeNameAndAddNamespace(type, _usings);
         }

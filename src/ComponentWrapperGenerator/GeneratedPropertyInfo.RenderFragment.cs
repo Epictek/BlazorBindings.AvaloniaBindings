@@ -1,18 +1,16 @@
-﻿using Microsoft.Maui;
-using Microsoft.Maui.Controls;
+﻿using Microsoft.CodeAnalysis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 
 namespace ComponentWrapperGenerator
 {
     public partial class GeneratedPropertyInfo
     {
-        private static readonly Type[] ContentTypes = new[]
+        private static readonly string[] ContentTypes = new[]
         {
-            typeof(IView),
-            typeof(BaseMenuItem)
+            "Microsoft.Maui.IView",
+            "Microsoft.Maui.Controls.BaseMenuItem"
         };
 
         public bool IsRenderFragmentProperty => Kind == GeneratedPropertyKind.RenderFragment;
@@ -39,21 +37,21 @@ namespace ComponentWrapperGenerator
 
         private string GetContentHandler()
         {
-            var type = _propertyInfo.PropertyType;
+            var type = (INamedTypeSymbol)_propertyInfo.Type;
 
-            if (type.IsGenericType && type.GetGenericTypeDefinition().IsAssignableTo(typeof(IList<>)))
+            if (type.IsGenericType && type.ConstructUnboundGenericType().IsAssignableTo(typeof(IList<>)))
             {
                 // new ListContentPropertyHandler<MC.Page, MC.ToolbarItem>(page => page.ToolbarItems)
-                var itemTypeName = GetTypeNameAndAddNamespace(type.GenericTypeArguments[0]);
+                var itemTypeName = GetTypeNameAndAddNamespace(type.TypeArguments[0]);
                 var listContentHandlerTypeName = GetTypeNameAndAddNamespace("BlazorBindings.Maui.Elements.Handlers", "ListContentPropertyHandler");
-                return $"new {listContentHandlerTypeName}<{MauiDeclaringTypeName}, {itemTypeName}>(x => x.{_propertyInfo.Name})";
+                return $"new {listContentHandlerTypeName}<{MauiContainingTypeName}, {itemTypeName}>(x => x.{_propertyInfo.Name})";
             }
             else
             {
                 // new ContentPropertyHandler<MC.ContentPage>((page, value) => page.Content = (MC.View)value));
                 var propTypeName = GetTypeNameAndAddNamespace(type);
                 var contentHandlerTypeName = GetTypeNameAndAddNamespace("BlazorBindings.Maui.Elements.Handlers", "ContentPropertyHandler");
-                return $"new {contentHandlerTypeName}<{MauiDeclaringTypeName}>((x, value) => x.{_propertyInfo.Name} = ({propTypeName})value)";
+                return $"new {contentHandlerTypeName}<{MauiContainingTypeName}>((x, value) => x.{_propertyInfo.Name} = ({propTypeName})value)";
             }
         }
 
@@ -67,16 +65,16 @@ namespace ComponentWrapperGenerator
         {
             var propInfos = componentType.GetProperties()
                     .Where(IsPublicProperty)
-                    .Where(prop => prop.DeclaringType == componentType)
-                    .Where(prop => IsRenderFragmentPropertyInfo(prop))
+                    .Where(prop => prop.ContainingType == componentType)
+                    .Where(prop => IsRenderFragmentIPropertySymbol(prop))
                     .OrderBy(prop => prop.Name, StringComparer.OrdinalIgnoreCase);
 
-            return propInfos.Select(prop => new GeneratedPropertyInfo(prop, GeneratedPropertyKind.RenderFragment, usings)).ToArray();
+            return propInfos.Select(prop => new GeneratedIPropertySymbol(prop, GeneratedPropertyKind.RenderFragment, usings)).ToArray();
         }
 
-        private static bool IsRenderFragmentPropertyInfo(PropertyInfo prop)
+        private static bool IsRenderFragmentIPropertySymbol(IPropertySymbol prop)
         {
-            var type = prop.PropertyType;
+            var type = prop.Type;
             if (IsContent(type) && HasPublicSetter(prop))
                 return true;
 
@@ -87,7 +85,7 @@ namespace ComponentWrapperGenerator
 
             return false;
 
-            static bool IsContent(Type type) => ContentTypes.Any(t => type.IsAssignableTo(t));
+            static bool IsContent(ITypeSymbol type) => ContentTypes.Any(t => type.IsAssignableTo(t));
         }
     }
 }

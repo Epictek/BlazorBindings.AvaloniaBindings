@@ -91,7 +91,7 @@ namespace ComponentWrapperGenerator
                     {{
                         void {localFunctionName}(object sender, {GetTypeNameAndAddNamespace(EventArgsType)} e){localFunctionBody}
 
-                        {ComponentPropertyName} = ({ComponentPropertyType})value;
+                        {ComponentPropertyName} = ({ComponentType})value;
                         NativeControl.{eventName} -= {localFunctionName};
                         NativeControl.{eventName} += {localFunctionName};
                     }}
@@ -111,23 +111,23 @@ namespace ComponentWrapperGenerator
                     if (eventInfo is null)
                         throw new Exception($"Cannot find event {info.TypeName}.{info.MauiEventName}.");
 
-                    var generatedPropertyInfo = new GeneratedPropertyInfo(
+                    var generatedIPropertySymbol = new GeneratedPropertyInfo(
                         info.MauiEventName,
                         ComponentWrapperGenerator.GetTypeNameAndAddNamespace(componentType, usings),
                         ComponentWrapperGenerator.GetIdentifierName(componentType.Name),
                         info.ComponentEventName,
-                        GetRenderFragmentPropertyType(eventInfo, info.TypeArgument, usings),
+                        GetRenderFragmentType(eventInfo, info.TypeArgument, usings),
                         GeneratedPropertyKind.EventCallback,
                         usings);
 
-                    generatedPropertyInfo._isBindEvent = info.TypeArgument != null;
-                    generatedPropertyInfo._eventHandlerType = eventInfo.EventHandlerType;
-                    return generatedPropertyInfo;
+                    generatedIPropertySymbol._isBindEvent = info.TypeArgument != null;
+                    generatedIPropertySymbol._eventHandlerType = eventInfo.EventHandlerType;
+                    return generatedIPropertySymbol;
                 })
                 .ToArray();
         }
 
-        private static string GetRenderFragmentPropertyType(EventInfo eventInfo, string callbackTypeArgument, IList<UsingStatement> usings)
+        private static string GetRenderFragmentType(EventInfo eventInfo, string callbackTypeArgument, IList<UsingStatement> usings)
         {
             if (callbackTypeArgument != null)
             {
