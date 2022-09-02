@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ComponentWrapperGenerator.Extensions;
+using Microsoft.CodeAnalysis;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -40,11 +42,11 @@ namespace ComponentWrapperGenerator
             new ("VisualElement", "SizeChanged", "OnSizeChanged"),
         };
 
-        private Type _eventHandlerType;
+        private INamedTypeSymbol _eventHandlerType;
         private bool _isBindEvent;
 
         private bool IsPropertyChangedEvent => MauiPropertyName == "PropertyChanged";
-        private Type EventArgsType => _eventHandlerType.GetMethod("Invoke").GetParameters()[1].ParameterType;
+        private ITypeSymbol EventArgsType => _eventHandlerType.GetMethod("Invoke")?.Parameters[1].Type;
 
         public string GetHandleEventCallbackProperty()
         {
@@ -99,7 +101,7 @@ namespace ComponentWrapperGenerator
 ";
         }
 
-        internal static GeneratedPropertyInfo[] GetEventCallbackProperties(Type componentType, IList<UsingStatement> usings)
+        internal static GeneratedPropertyInfo[] GetEventCallbackProperties(Compilation compilation, ITypeSymbol componentType, IList<UsingStatement> usings)
         {
             return EventsToGenerate
                 .Where(e => e.TypeName == componentType.Name)
@@ -112,6 +114,7 @@ namespace ComponentWrapperGenerator
                         throw new Exception($"Cannot find event {info.TypeName}.{info.MauiEventName}.");
 
                     var generatedIPropertySymbol = new GeneratedPropertyInfo(
+                        compilation,
                         info.MauiEventName,
                         ComponentWrapperGenerator.GetTypeNameAndAddNamespace(componentType, usings),
                         ComponentWrapperGenerator.GetIdentifierName(componentType.Name),
@@ -121,21 +124,21 @@ namespace ComponentWrapperGenerator
                         usings);
 
                     generatedIPropertySymbol._isBindEvent = info.TypeArgument != null;
-                    generatedIPropertySymbol._eventHandlerType = eventInfo.EventHandlerType;
+                    generatedIPropertySymbol._eventHandlerType = (INamedTypeSymbol)eventInfo.Type;
                     return generatedIPropertySymbol;
                 })
                 .ToArray();
         }
 
-        private static string GetRenderFragmentType(EventInfo eventInfo, string callbackTypeArgument, IList<UsingStatement> usings)
+        private static string GetRenderFragmentType(IEventSymbol eventInfo, string callbackTypeArgument, IList<UsingStatement> usings)
         {
             if (callbackTypeArgument != null)
             {
                 return $"EventCallback<{callbackTypeArgument}>";
             }
 
-            var eventArgType = eventInfo.EventHandlerType.GetMethod("Invoke").GetParameters()[1].ParameterType;
-            if (eventArgType != typeof(EventArgs))
+            var eventArgType = eventInfo.Type.GetMethod("Invoke").Parameters[1].Type;
+            if (eventArgType.Name != nameof(EventArgs))
             {
                 return $"EventCallback<{ComponentWrapperGenerator.GetTypeNameAndAddNamespace(eventArgType, usings)}>";
             }

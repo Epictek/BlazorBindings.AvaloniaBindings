@@ -6,7 +6,22 @@ namespace ComponentWrapperGenerator.Extensions
 {
     internal static class SymbolExtensions
     {
-        internal static string GetFullName(this INamespaceOrTypeSymbol namespaceOrType)
+        public static IMethodSymbol GetMethod(this ITypeSymbol typeSymbol, string method)
+        {
+            return typeSymbol.GetMembers(method).FirstOrDefault() as IMethodSymbol;
+        }
+
+        public static IEventSymbol GetEvent(this ITypeSymbol typeSymbol, string eventName)
+        {
+            return typeSymbol.GetMembers(eventName).FirstOrDefault() as IEventSymbol;
+        }
+
+        public static IPropertySymbol GetProperty(this ITypeSymbol typeSymbol, string propName)
+        {
+            return typeSymbol.GetMembers(propName).FirstOrDefault() as IPropertySymbol;
+        }
+
+        public static string GetFullName(this INamespaceOrTypeSymbol namespaceOrType)
         {
             var stack = new Stack<string>();
 

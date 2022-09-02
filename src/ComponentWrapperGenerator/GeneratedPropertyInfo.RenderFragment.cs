@@ -1,4 +1,5 @@
 ﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,7 +40,7 @@ namespace ComponentWrapperGenerator
         {
             var type = (INamedTypeSymbol)_propertyInfo.Type;
 
-            if (type.IsGenericType && type.ConstructUnboundGenericType().IsAssignableTo(typeof(IList<>)))
+            if (type.IsGenericType && type.ConstructUnboundGenericType().SpecialType == SpecialType.System_Collections_Generic_IList_T)
             {
                 // new ListContentPropertyHandler<MC.Page, MC.ToolbarItem>(page => page.ToolbarItems)
                 var itemTypeName = GetTypeNameAndAddNamespace(type.TypeArguments[0]);
@@ -61,31 +62,36 @@ namespace ComponentWrapperGenerator
             return $"\r\n            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof({ComponentName}), {ComponentPropertyName});";
         }
 
-        internal static GeneratedPropertyInfo[] GetContentProperties(Type componentType, IList<UsingStatement> usings)
+        internal static GeneratedPropertyInfo[] GetContentProperties(Compilation compilation, ITypeSymbol componentType, IList<UsingStatement> usings)
         {
-            var propInfos = componentType.GetProperties()
+            var propInfos = componentType.GetMembers().OfType<IPropertySymbol>()
                     .Where(IsPublicProperty)
-                    .Where(prop => prop.ContainingType == componentType)
-                    .Where(prop => IsRenderFragmentIPropertySymbol(prop))
+                    .Where(prop => SymbolEqualityComparer.Default.Equals(prop.ContainingType, componentType))
+                    .Where(prop => IsRenderFragmentPropertySymbol(compilation, prop))
                     .OrderBy(prop => prop.Name, StringComparer.OrdinalIgnoreCase);
 
-            return propInfos.Select(prop => new GeneratedIPropertySymbol(prop, GeneratedPropertyKind.RenderFragment, usings)).ToArray();
+            return propInfos.Select(prop => new GeneratedPropertyInfo(compilation, prop, GeneratedPropertyKind.RenderFragment, usings)).ToArray();
         }
 
-        private static bool IsRenderFragmentIPropertySymbol(IPropertySymbol prop)
+        private static bool IsRenderFragmentPropertySymbol(Compilation compilation, IPropertySymbol prop)
         {
             var type = prop.Type;
             if (IsContent(type) && HasPublicSetter(prop))
                 return true;
 
-            if (type.IsGenericType
-                && type.GetGenericTypeDefinition().IsAssignableTo(typeof(IList<>))
-                && IsContent(type.GenericTypeArguments[0]))
+            if (type is INamedTypeSymbol namedType
+                && namedType.IsGenericType
+                && namedType.ConstructUnboundGenericType().SpecialType == SpecialType.System_Collections_Generic_IList_T
+                && IsContent(namedType.TypeArguments[0]))
                 return true;
 
             return false;
 
-            static bool IsContent(ITypeSymbol type) => ContentTypes.Any(t => type.IsAssignableTo(t));
+            bool IsContent(ITypeSymbol type) => ContentTypes.Any(t =>
+            {
+                var contentTypeSymbol = compilation.GetTypeByMetadataName(t);
+                return compilation.ClassifyConversion(contentTypeSymbol, type).IsReference;
+            });
         }
     }
 }

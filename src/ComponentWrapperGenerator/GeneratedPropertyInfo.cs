@@ -23,10 +23,12 @@ namespace ComponentWrapperGenerator
         public string MauiPropertyName { get; }
         public string MauiContainingTypeName { get; }
         public string ComponentName { get; }
+        public Compilation Compilation { get; }
         public string ComponentPropertyName => _componentPropertyNameLazy.Value;
         public string ComponentType => _componentTypeLazy.Value;
 
-        private GeneratedPropertyInfo(string mauiPropertyName,
+        private GeneratedPropertyInfo(Compilation compilation,
+                                      string mauiPropertyName,
                                       string mauiContainingTypeName,
                                       string componentName,
                                       string componentPropertyName,
@@ -34,6 +36,7 @@ namespace ComponentWrapperGenerator
                                       GeneratedPropertyKind kind,
                                       IList<UsingStatement> usings)
         {
+            Compilation = compilation;
             Kind = kind;
             MauiPropertyName = mauiPropertyName;
             MauiContainingTypeName = mauiContainingTypeName;
@@ -43,12 +46,13 @@ namespace ComponentWrapperGenerator
             _usings = usings;
         }
 
-        private GeneratedPropertyInfo(IPropertySymbol propertyInfo, GeneratedPropertyKind kind, IList<UsingStatement> usings)
+        private GeneratedPropertyInfo(Compilation compilation, IPropertySymbol propertyInfo, GeneratedPropertyKind kind, IList<UsingStatement> usings)
         {
             _propertyInfo = propertyInfo;
             _usings = usings;
             Kind = kind;
 
+            Compilation = compilation;
             MauiPropertyName = propertyInfo.Name;
             MauiContainingTypeName = GetTypeNameAndAddNamespace(propertyInfo.ContainingType);
 
@@ -72,8 +76,9 @@ namespace ComponentWrapperGenerator
 
             string GetComponentType()
             {
-                var elementType = _propertyInfo?.Type;
-                if (elementType == typeof(IList<string>))
+                var elementType = (INamedTypeSymbol)_propertyInfo?.Type;
+                if (elementType.GetFullName() == "System.Collections.Generic.IList`1"
+                    && elementType.TypeArguments[0].SpecialType == SpecialType.System_String)
                 {
                     // Lists of strings are special-cased because they are handled specially by the handlers as a comma-separated list
                     return "string";
@@ -126,7 +131,7 @@ namespace ComponentWrapperGenerator
             }
         }
 
-        internal static GeneratedPropertyInfo[] GetValueProperties(ITypeSymbol componentType, IList<UsingStatement> usings)
+        internal static GeneratedPropertyInfo[] GetValueProperties(Compilation compilation, ITypeSymbol componentType, IList<UsingStatement> usings)
         {
             var props = componentType.GetMembers().OfType<IPropertySymbol>()
                     .Where(IsPublicProperty)
@@ -134,7 +139,7 @@ namespace ComponentWrapperGenerator
                     .Where(prop => !DisallowedComponentTypes.Contains(prop.Type.GetFullName()))
                     .OrderBy(prop => prop.Name, StringComparer.OrdinalIgnoreCase);
 
-            return props.Select(prop => new GeneratedPropertyInfo(prop, GeneratedPropertyKind.Value, usings)).ToArray();
+            return props.Select(prop => new GeneratedPropertyInfo(compilation, prop, GeneratedPropertyKind.Value, usings)).ToArray();
         }
 
         private static bool IsPublicProperty(IPropertySymbol propertyInfo)
@@ -144,8 +149,8 @@ namespace ComponentWrapperGenerator
             static bool IsPropertyBrowsable(IPropertySymbol propInfo)
             {
                 // [EditorBrowsable(EditorBrowsableState.Never)]
-                var attr = (EditorBrowsableAttribute)Attribute.GetCustomAttribute(propInfo, typeof(EditorBrowsableAttribute));
-                return (attr == null) || (attr.State != EditorBrowsableState.Never);
+                return propInfo.GetAttributes().Any(a => a.AttributeClass.Name == nameof(EditorBrowsableAttribute)
+                    && a.ConstructorArguments.FirstOrDefault().Value?.Equals((int)EditorBrowsableState.Never) == true);
             }
         }
 

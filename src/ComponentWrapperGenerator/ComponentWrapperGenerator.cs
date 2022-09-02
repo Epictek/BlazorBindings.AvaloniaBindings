@@ -28,14 +28,14 @@ namespace ComponentWrapperGenerator
             ElementNamespaces = namespaces ?? throw new ArgumentNullException(nameof(namespaces));
         }
 
-        public void GenerateComponentWrapper(Type typeToGenerate, string outputFolder)
+        public void GenerateComponentWrapper(Compilation compilation, INamedTypeSymbol typeToGenerate, string outputFolder)
         {
             typeToGenerate = typeToGenerate ?? throw new ArgumentNullException(nameof(typeToGenerate));
 
-            GenerateComponentFile(typeToGenerate, outputFolder);
+            GenerateComponentFile(compilation, typeToGenerate, outputFolder);
         }
 
-        private void GenerateComponentFile(Type typeToGenerate, string outputFolder)
+        private void GenerateComponentFile(Compilation compilation, INamedTypeSymbol typeToGenerate, string outputFolder)
         {
             var subPath = GetSubPath(typeToGenerate);
             var fileName = Path.Combine(outputFolder, subPath, $"{typeToGenerate.Name}.generated.cs");
@@ -45,7 +45,7 @@ namespace ComponentWrapperGenerator
                 Directory.CreateDirectory(directoryName);
             }
 
-            Console.WriteLine($"Generating component for type '{typeToGenerate.FullName}' into file '{fileName}'.");
+            Console.WriteLine($"Generating component for type '{typeToGenerate.Name}' into file '{fileName}'.");
 
             var componentName = typeToGenerate.Name;
             var componentHandlerName = $"{componentName}Handler";
@@ -80,9 +80,9 @@ namespace ComponentWrapperGenerator
             var componentNamespacePrefix = GetNamespacePrefix(typeToGenerate, usings);
 
             // props
-            var valueProperties = GeneratedPropertyInfo.GetValueProperties(typeToGenerate, usings);
-            var contentProperties = GeneratedPropertyInfo.GetContentProperties(typeToGenerate, usings);
-            var eventCallbackProperties = GeneratedPropertyInfo.GetEventCallbackProperties(typeToGenerate, usings);
+            var valueProperties = GeneratedPropertyInfo.GetValueProperties(compilation, typeToGenerate, usings);
+            var contentProperties = GeneratedPropertyInfo.GetContentProperties(compilation, typeToGenerate, usings);
+            var eventCallbackProperties = GeneratedPropertyInfo.GetEventCallbackProperties(compilation, typeToGenerate, usings);
             var allProperties = valueProperties.Concat(contentProperties).Concat(eventCallbackProperties);
             var propertyDeclarationBuilder = new StringBuilder();
             if (allProperties.Any())
@@ -110,7 +110,7 @@ namespace ComponentWrapperGenerator
             }
             var handleProperties = handlePropertiesBuilder.ToString();
 
-            var isComponentAbstract = typeToGenerate.IsAbstract || typeToGenerate.GetConstructor(Array.Empty<Type>()) is null;
+            var isComponentAbstract = typeToGenerate.IsAbstract || !typeToGenerate.Constructors.Any(c => c.Parameters.Length == 0);
             var classModifiers = string.Empty;
             if (isComponentAbstract)
             {
@@ -182,15 +182,16 @@ namespace {componentNamespace}
             File.WriteAllText(fileName, outputBuilder.ToString());
         }
 
-        private static string GetNamespacePrefix(Type type, List<UsingStatement> usings)
+        private static string GetNamespacePrefix(INamedTypeSymbol type, List<UsingStatement> usings)
         {
             // Check if there's a 'using' already. If so, check if it has an alias. If not, add a new 'using'.
             var namespaceAlias = string.Empty;
+            var namespaceName = type.ContainingNamespace.GetFullName();
 
-            var existingUsing = usings.FirstOrDefault(u => u.Namespace == type.Namespace);
+            var existingUsing = usings.FirstOrDefault(u => u.Namespace == namespaceName);
             if (existingUsing == null)
             {
-                usings.Add(new UsingStatement { Namespace = type.Namespace, IsUsed = true, });
+                usings.Add(new UsingStatement { Namespace = namespaceName, IsUsed = true, });
                 return string.Empty;
             }
             else
@@ -361,7 +362,7 @@ namespace {componentNamespace}
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        private static Type GetBaseTypeOfInterest(Type type)
+        private static INamedTypeSymbol GetBaseTypeOfInterest(INamedTypeSymbol type)
         {
             do
             {
@@ -386,18 +387,19 @@ namespace {componentNamespace}
         private static readonly List<string> ReservedKeywords = new List<string>
             { "class", };
 
-        private string GetNamespacePart(Type typeToGenerate)
+        private string GetNamespacePart(INamedTypeSymbol typeToGenerate)
         {
-            var rootNamespace = ElementNamespaces.First(n => typeToGenerate.Namespace.StartsWith(n, StringComparison.Ordinal));
+            var namespaceName = typeToGenerate.ContainingNamespace.GetFullName();
+            var rootNamespace = ElementNamespaces.First(n => namespaceName.StartsWith(n, StringComparison.Ordinal));
 
-            var remainingNamespacePart = typeToGenerate.Namespace == rootNamespace
+            var remainingNamespacePart = namespaceName == rootNamespace
                 ? ""
-                : typeToGenerate.Namespace[(rootNamespace.Length + 1)..];
+                : namespaceName[(rootNamespace.Length + 1)..];
 
             return remainingNamespacePart;
         }
 
-        private string GetComponentNamespace(Type typeToGenerate)
+        private string GetComponentNamespace(INamedTypeSymbol typeToGenerate)
         {
             var namespacePart = GetNamespacePart(typeToGenerate);
             var componentNamespace = string.IsNullOrEmpty(namespacePart)
@@ -407,7 +409,7 @@ namespace {componentNamespace}
             return componentNamespace;
         }
 
-        private string GetSubPath(Type typeToGenerate)
+        private string GetSubPath(INamedTypeSymbol typeToGenerate)
         {
             return GetNamespacePart(typeToGenerate).Replace('.', Path.DirectorySeparatorChar);
         }
