@@ -12,27 +12,23 @@ using System.Xml;
 
 namespace ComponentWrapperGenerator
 {
-#pragma warning disable CA1724 // Type name conflicts with namespace name
     public partial class ComponentWrapperGenerator
-#pragma warning restore CA1724 // Type name conflicts with namespace name
     {
         private GeneratorSettings Settings { get; }
-        private IList<XmlDocument> XmlDocs { get; }
         private IList<string> ElementNamespaces { get; }
 
-        public ComponentWrapperGenerator(GeneratorSettings settings, IList<XmlDocument> xmlDocs, IList<string> namespaces)
+        public ComponentWrapperGenerator(GeneratorSettings settings, IList<string> namespaces)
         {
             Settings = settings ?? throw new ArgumentNullException(nameof(settings));
-            XmlDocs = xmlDocs ?? throw new ArgumentNullException(nameof(xmlDocs));
             ElementNamespaces = namespaces ?? throw new ArgumentNullException(nameof(namespaces));
         }
 
         public string GenerateComponentFile(Compilation compilation, INamedTypeSymbol typeToGenerate)
         {
-            if (!System.Diagnostics.Debugger.IsAttached)
-            {
-                //System.Diagnostics.Debugger.Launch();
-            }
+            //if (!System.Diagnostics.Debugger.IsAttached)
+            //{
+            //    System.Diagnostics.Debugger.Launch();
+            //}
 
             var componentName = typeToGenerate.Name;
             var componentHandlerName = $"{componentName}Handler";
@@ -195,58 +191,56 @@ namespace {componentNamespace}
             }
         }
 
-        private static string GetXmlDocText(XmlElement xmlDocElement)
+        internal static string GetXmlDocContents(IPropertySymbol prop, string indent)
         {
-            var allText = xmlDocElement?.InnerXml;
-            allText = allText.Replace("To be added.", string.Empty);
-            if (string.IsNullOrWhiteSpace(allText))
+            var xmlDocString = prop.GetDocumentationCommentXml();
+
+            if (string.IsNullOrEmpty(xmlDocString))
             {
                 return null;
             }
-            return allText;
-        }
 
-        private string GetXmlDocContents(IPropertySymbol prop, string indent)
-        {
-            foreach (var xmlDoc in XmlDocs)
+            var xmlDoc = new XmlDocument();
+            // Returned XML doc string has no root element, which does not allow to parse it.
+            xmlDoc.LoadXml($"<member>{xmlDocString}</member>");
+            var xmlDocNode = xmlDoc.FirstChild;
+
+            var xmlDocContents = string.Empty;
+            // Format of XML docs we're looking for in a given property:
+            // <member name="P:Xamarin.Forms.ActivityIndicator.Color">
+            //     <summary>Gets or sets the <see cref="T:Xamarin.Forms.Color" /> of the ActivityIndicator. This is a bindable property.</summary>
+            //     <value>A <see cref="T:Xamarin.Forms.Color" /> used to display the ActivityIndicator. Default is <see cref="P:Xamarin.Forms.Color.Default" />.</value>
+            //     <remarks />
+            // </member>
+
+            var summaryText = GetXmlDocText(xmlDocNode["summary"]);
+            var valueText = GetXmlDocText(xmlDocNode["value"]);
+
+            if (summaryText != null || valueText != null)
             {
-
-                var xmlDocContents = string.Empty;
-                // Format of XML docs we're looking for in a given property:
-                // <member name="P:Xamarin.Forms.ActivityIndicator.Color">
-                //     <summary>Gets or sets the <see cref="T:Xamarin.Forms.Color" /> of the ActivityIndicator. This is a bindable property.</summary>
-                //     <value>A <see cref="T:Xamarin.Forms.Color" /> used to display the ActivityIndicator. Default is <see cref="P:Xamarin.Forms.Color.Default" />.</value>
-                //     <remarks />
-                // </member>
-                var xmlDocNodeName = $"P:{prop.ContainingType.ContainingNamespace}.{prop.ContainingType.Name}.{prop.Name}";
-                var xmlDocNode = xmlDoc.SelectSingleNode($"//member[@name='{xmlDocNodeName}']");
-                if (xmlDocNode != null)
+                var xmlDocContentBuilder = new StringBuilder();
+                if (summaryText != null)
                 {
-                    var summaryText = GetXmlDocText(xmlDocNode["summary"]);
-                    var valueText = GetXmlDocText(xmlDocNode["value"]);
-
-                    if (summaryText != null || valueText != null)
-                    {
-                        var xmlDocContentBuilder = new StringBuilder();
-                        if (summaryText != null)
-                        {
-                            xmlDocContentBuilder.AppendLine($"{indent}/// <summary>");
-                            xmlDocContentBuilder.AppendLine($"{indent}/// {summaryText}");
-                            xmlDocContentBuilder.AppendLine($"{indent}/// </summary>");
-                        }
-                        if (valueText != null)
-                        {
-                            xmlDocContentBuilder.AppendLine($"{indent}/// <value>");
-                            xmlDocContentBuilder.AppendLine($"{indent}/// {valueText}");
-                            xmlDocContentBuilder.AppendLine($"{indent}/// </value>");
-                        }
-                        xmlDocContents = xmlDocContentBuilder.ToString();
-                    }
-                    return xmlDocContents;
+                    xmlDocContentBuilder.AppendLine($"{indent}/// <summary>");
+                    xmlDocContentBuilder.AppendLine($"{indent}/// {summaryText}");
+                    xmlDocContentBuilder.AppendLine($"{indent}/// </summary>");
                 }
+                if (valueText != null)
+                {
+                    xmlDocContentBuilder.AppendLine($"{indent}/// <value>");
+                    xmlDocContentBuilder.AppendLine($"{indent}/// {valueText}");
+                    xmlDocContentBuilder.AppendLine($"{indent}/// </value>");
+                }
+                xmlDocContents = xmlDocContentBuilder.ToString();
             }
+            return xmlDocContents;
 
-            return null;
+            static string GetXmlDocText(XmlElement xmlDocElement)
+            {
+                var allText = xmlDocElement?.InnerXml;
+                allText = allText.Replace("To be added.", string.Empty);
+                return string.IsNullOrWhiteSpace(allText) ? null : allText;
+            }
         }
 
         internal static string GetTypeNameAndAddNamespace(string @namespace, string typeName, IList<UsingStatement> usings)

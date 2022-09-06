@@ -1,9 +1,7 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Xml;
 
 namespace ComponentWrapperGenerator
 {
@@ -29,7 +27,7 @@ namespace ComponentWrapperGenerator
             {
                 FileHeader = "// Copyright (c) Microsoft Corporation.\r\n// Licensed under the MIT license.\r\n",
                 RootNamespace = "BlazorBindings.Maui.Elements"
-            }, new List<XmlDocument>(), new[] {
+            }, new[] {
                 "Microsoft.Maui.Controls" });
 
         public void Initialize(IncrementalGeneratorInitializationContext context)
@@ -40,9 +38,9 @@ namespace ComponentWrapperGenerator
 
             var enumDeclarations = context.SyntaxProvider
                 .CreateSyntaxProvider(
-                    predicate: static (s, _) => IsSyntaxTargetForGeneration(s), // select enums with attributes
-                    transform: static (ctx, _) => GetSemanticTargetForGeneration(ctx)) // sect the enum with the [EnumExtensions] attribute
-                .Where(static m => m != null); // filter out attributed enums that we don't care about
+                    predicate: static (s, _) => IsSyntaxTargetForGeneration(s), // Select assembly targeted attributes.
+                    transform: static (ctx, _) => GetSemanticTargetForGeneration(ctx)) // 
+                .Where(static m => m != null);
 
             var compilationAndEnums = context.CompilationProvider.Combine(enumDeclarations.Collect());
 
@@ -51,24 +49,21 @@ namespace ComponentWrapperGenerator
         }
 
         static bool IsSyntaxTargetForGeneration(SyntaxNode node)
-            => node is AttributeSyntax attribute
-            && attribute.Parent is AttributeListSyntax attributeList && attributeList.Target?.Identifier.IsKind(SyntaxKind.AssemblyKeyword) == true;
+        {
+            return node is AttributeSyntax attribute
+                    && attribute.Parent is AttributeListSyntax attributeList && attributeList.Target?.Identifier.IsKind(SyntaxKind.AssemblyKeyword) == true;
+        }
 
         static INamedTypeSymbol GetSemanticTargetForGeneration(GeneratorSyntaxContext context)
         {
-
-            // we know the node is a AttributeSyntax thanks to IsSyntaxTargetForGeneration
             var attributeSyntax = (AttributeSyntax)context.Node;
 
             var typeName = context.SemanticModel.GetTypeInfo(attributeSyntax).Type?.ToDisplayString();
 
-            // Is the attribute the [EnumExtensions] attribute?
             if (typeName != "BlazorBindings.Maui.ComponentGenerator.GenerateComponentAttribute")
                 return null;
 
-            var typeOf = attributeSyntax.ArgumentList.Arguments.FirstOrDefault()?.Expression as TypeOfExpressionSyntax;
-
-            if (typeOf is null)
+            if (attributeSyntax.ArgumentList.Arguments.FirstOrDefault()?.Expression is not TypeOfExpressionSyntax typeOf)
                 return null;
 
             var typeSymbol = context.SemanticModel.GetSymbolInfo(typeOf.Type).Symbol;

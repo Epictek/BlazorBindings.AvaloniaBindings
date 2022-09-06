@@ -6,21 +6,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<None Remove="TypesToGenerate.txt" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Content Include="TypesToGenerate.txt">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</Content>
-	</ItemGroup>
-
-	<ItemGroup>
 	  <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.2.0" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <None Remove="bin\Debug\netstandard2.0\\ComponentWrapperGenerator.dll" />
 	</ItemGroup>
 
 	<!-- This ensures the library will be packaged as a source generator when we use `dotnet pack` -->

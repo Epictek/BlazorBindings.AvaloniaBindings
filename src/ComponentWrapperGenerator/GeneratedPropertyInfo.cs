@@ -99,8 +99,7 @@ namespace ComponentWrapperGenerator
         {
             const string indent = "        ";
 
-            //var xmlDocContents = _propertyInfo is null ? "" : ComponentWrapperGenerator.GetXmlDocContents(_propertyInfo, indent);
-            var xmlDocContents = "";
+            var xmlDocContents = _propertyInfo is null ? "" : ComponentWrapperGenerator.GetXmlDocContents(_propertyInfo, indent);
 
             return $@"{xmlDocContents}{indent}[Parameter] public {ComponentType} {ComponentPropertyName} {{ get; set; }}
 ";
