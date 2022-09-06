@@ -29,6 +29,11 @@ namespace ComponentWrapperGenerator
 
         public string GenerateComponentFile(Compilation compilation, INamedTypeSymbol typeToGenerate)
         {
+            if (!System.Diagnostics.Debugger.IsAttached)
+            {
+                //System.Diagnostics.Debugger.Launch();
+            }
+
             var componentName = typeToGenerate.Name;
             var componentHandlerName = $"{componentName}Handler";
 
@@ -92,7 +97,7 @@ namespace ComponentWrapperGenerator
             }
             var handleProperties = handlePropertiesBuilder.ToString();
 
-            var isComponentAbstract = typeToGenerate.IsAbstract || !typeToGenerate.Constructors.Any(c => c.Parameters.Length == 0);
+            var isComponentAbstract = typeToGenerate.IsAbstract || !typeToGenerate.Constructors.Any(c => c.DeclaredAccessibility == Accessibility.Public && c.Parameters.Length == 0);
             var classModifiers = string.Empty;
             if (isComponentAbstract)
             {
@@ -296,7 +301,7 @@ namespace {componentNamespace}
                 return type.Name;
             }
             var typeNameBuilder = new StringBuilder();
-            typeNameBuilder.Append(type.Name.Substring(0, type.Name.IndexOf('`')));
+            typeNameBuilder.Append(type.Name);
             typeNameBuilder.Append('<');
             var genericArgs = namedType.TypeArguments;
             for (var i = 0; i < genericArgs.Length; i++)

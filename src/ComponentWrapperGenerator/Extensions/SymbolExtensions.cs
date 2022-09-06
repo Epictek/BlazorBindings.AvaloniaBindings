@@ -11,9 +11,22 @@ namespace ComponentWrapperGenerator.Extensions
             return typeSymbol.GetMembers(method).FirstOrDefault() as IMethodSymbol;
         }
 
-        public static IEventSymbol GetEvent(this ITypeSymbol typeSymbol, string eventName)
+        public static IEventSymbol GetEvent(this ITypeSymbol typeSymbol, string eventName, bool includeBaseTypes)
         {
-            return typeSymbol.GetMembers(eventName).FirstOrDefault() as IEventSymbol;
+            var currentType = typeSymbol;
+
+            while (currentType != null)
+            {
+                var eventSymbol = currentType.GetMembers(eventName).FirstOrDefault() as IEventSymbol;
+
+                if (eventSymbol != null || !includeBaseTypes)
+                    return eventSymbol;
+
+                currentType = currentType.BaseType;
+            }
+
+
+            return null;
         }
 
         public static IPropertySymbol GetProperty(this ITypeSymbol typeSymbol, string propName)

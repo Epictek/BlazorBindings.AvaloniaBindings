@@ -77,7 +77,8 @@ namespace ComponentWrapperGenerator
             string GetComponentType()
             {
                 var elementType = (INamedTypeSymbol)_propertyInfo?.Type;
-                if (elementType.GetFullName() == "System.Collections.Generic.IList`1"
+                if (elementType.IsGenericType
+                    && elementType.ConstructedFrom.SpecialType == SpecialType.System_Collections_Generic_IList_T
                     && elementType.TypeArguments[0].SpecialType == SpecialType.System_String)
                 {
                     // Lists of strings are special-cased because they are handled specially by the handlers as a comma-separated list
@@ -121,8 +122,8 @@ namespace ComponentWrapperGenerator
             static string GetConvertedProperty(ITypeSymbol propertyType, string propName)
             {
                 if (propertyType is INamedTypeSymbol namedType && namedType.IsGenericType
-                    && namedType.TypeArguments[0].SpecialType == SpecialType.System_String
-                    && namedType.ConstructUnboundGenericType().SpecialType == SpecialType.System_Collections_Generic_IList_T)
+                    && namedType.ConstructedFrom.SpecialType == SpecialType.System_Collections_Generic_IList_T
+                    && namedType.TypeArguments[0].SpecialType == SpecialType.System_String)
                 {
                     return $"AttributeHelper.GetStringList({propName})";
                 }
@@ -149,14 +150,14 @@ namespace ComponentWrapperGenerator
             static bool IsPropertyBrowsable(IPropertySymbol propInfo)
             {
                 // [EditorBrowsable(EditorBrowsableState.Never)]
-                return propInfo.GetAttributes().Any(a => a.AttributeClass.Name == nameof(EditorBrowsableAttribute)
+                return !propInfo.GetAttributes().Any(a => a.AttributeClass.Name == nameof(EditorBrowsableAttribute)
                     && a.ConstructorArguments.FirstOrDefault().Value?.Equals((int)EditorBrowsableState.Never) == true);
             }
         }
 
         private static bool HasPublicSetter(IPropertySymbol propertyInfo)
         {
-            return propertyInfo.SetMethod != null;
+            return propertyInfo.SetMethod?.DeclaredAccessibility == Accessibility.Public;
         }
 
         private static readonly List<string> DisallowedComponentTypes = new()

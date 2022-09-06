@@ -40,7 +40,7 @@ namespace ComponentWrapperGenerator
         {
             var type = (INamedTypeSymbol)_propertyInfo.Type;
 
-            if (type.IsGenericType && type.ConstructUnboundGenericType().SpecialType == SpecialType.System_Collections_Generic_IList_T)
+            if (type.IsGenericType && type.ConstructedFrom.SpecialType == SpecialType.System_Collections_Generic_IList_T)
             {
                 // new ListContentPropertyHandler<MC.Page, MC.ToolbarItem>(page => page.ToolbarItems)
                 var itemTypeName = GetTypeNameAndAddNamespace(type.TypeArguments[0]);
@@ -81,16 +81,18 @@ namespace ComponentWrapperGenerator
 
             if (type is INamedTypeSymbol namedType
                 && namedType.IsGenericType
-                && namedType.ConstructUnboundGenericType().SpecialType == SpecialType.System_Collections_Generic_IList_T
+                && namedType.ConstructedFrom.SpecialType == SpecialType.System_Collections_Generic_IList_T
                 && IsContent(namedType.TypeArguments[0]))
+            {
                 return true;
+            }
 
             return false;
 
             bool IsContent(ITypeSymbol type) => ContentTypes.Any(t =>
             {
                 var contentTypeSymbol = compilation.GetTypeByMetadataName(t);
-                return compilation.ClassifyConversion(contentTypeSymbol, type).IsReference;
+                return compilation.ClassifyConversion(type, contentTypeSymbol) is { IsIdentity: true } or { IsReference: true, IsImplicit: true };
             });
         }
     }

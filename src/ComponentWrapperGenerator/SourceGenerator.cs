@@ -27,7 +27,7 @@ namespace ComponentWrapperGenerator
         private static readonly ComponentWrapperGenerator componentWrapperGenerator = new(
             new GeneratorSettings
             {
-                FileHeader = "",
+                FileHeader = "// Copyright (c) Microsoft Corporation.\r\n// Licensed under the MIT license.\r\n",
                 RootNamespace = "BlazorBindings.Maui.Elements"
             }, new List<XmlDocument>(), new[] {
                 "Microsoft.Maui.Controls" });

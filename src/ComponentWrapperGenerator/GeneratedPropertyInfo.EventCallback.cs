@@ -3,7 +3,6 @@ using Microsoft.CodeAnalysis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 
 namespace ComponentWrapperGenerator
 {
@@ -108,7 +107,7 @@ namespace ComponentWrapperGenerator
                 .Select(info =>
                 {
                     var isBindEvent = info.ComponentEventName.EndsWith("Changed");
-                    var eventInfo = componentType.GetEvent(info.MauiEventName);
+                    var eventInfo = componentType.GetEvent(info.MauiEventName, includeBaseTypes: true);
 
                     if (eventInfo is null)
                         throw new Exception($"Cannot find event {info.TypeName}.{info.MauiEventName}.");
