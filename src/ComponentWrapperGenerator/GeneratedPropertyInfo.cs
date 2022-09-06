@@ -41,8 +41,8 @@ namespace ComponentWrapperGenerator
             MauiPropertyName = mauiPropertyName;
             MauiContainingTypeName = mauiContainingTypeName;
             ComponentName = componentName;
-            _componentTypeLazy = new Lazy<string>(componentType);
-            _componentPropertyNameLazy = new Lazy<string>(componentPropertyName);
+            _componentTypeLazy = new Lazy<string>(() => componentType);
+            _componentPropertyNameLazy = new Lazy<string>(() => componentPropertyName);
             _usings = usings;
         }
 

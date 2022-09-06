@@ -3,7 +3,6 @@
 
 using ComponentWrapperGenerator.Extensions;
 using Microsoft.CodeAnalysis;
-using Microsoft.Maui.Graphics;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -28,25 +27,8 @@ namespace ComponentWrapperGenerator
             ElementNamespaces = namespaces ?? throw new ArgumentNullException(nameof(namespaces));
         }
 
-        public void GenerateComponentWrapper(Compilation compilation, INamedTypeSymbol typeToGenerate, string outputFolder)
+        public string GenerateComponentFile(Compilation compilation, INamedTypeSymbol typeToGenerate)
         {
-            typeToGenerate = typeToGenerate ?? throw new ArgumentNullException(nameof(typeToGenerate));
-
-            GenerateComponentFile(compilation, typeToGenerate, outputFolder);
-        }
-
-        private void GenerateComponentFile(Compilation compilation, INamedTypeSymbol typeToGenerate, string outputFolder)
-        {
-            var subPath = GetSubPath(typeToGenerate);
-            var fileName = Path.Combine(outputFolder, subPath, $"{typeToGenerate.Name}.generated.cs");
-            var directoryName = Path.GetDirectoryName(fileName);
-            if (!string.IsNullOrEmpty(directoryName))
-            {
-                Directory.CreateDirectory(directoryName);
-            }
-
-            Console.WriteLine($"Generating component for type '{typeToGenerate.Name}' into file '{fileName}'.");
-
             var componentName = typeToGenerate.Name;
             var componentHandlerName = $"{componentName}Handler";
 
@@ -179,7 +161,7 @@ namespace {componentNamespace}
 }}
 ");
 
-            File.WriteAllText(fileName, outputBuilder.ToString());
+            return outputBuilder.ToString();
         }
 
         private static string GetNamespacePrefix(INamedTypeSymbol type, List<UsingStatement> usings)
@@ -211,7 +193,7 @@ namespace {componentNamespace}
         private static string GetXmlDocText(XmlElement xmlDocElement)
         {
             var allText = xmlDocElement?.InnerXml;
-            allText = allText.Replace("To be added.", string.Empty, StringComparison.Ordinal);
+            allText = allText.Replace("To be added.", string.Empty);
             if (string.IsNullOrWhiteSpace(allText))
             {
                 return null;
@@ -314,7 +296,7 @@ namespace {componentNamespace}
                 return type.Name;
             }
             var typeNameBuilder = new StringBuilder();
-            typeNameBuilder.Append(type.Name.Substring(0, type.Name.IndexOf('`', StringComparison.Ordinal)));
+            typeNameBuilder.Append(type.Name.Substring(0, type.Name.IndexOf('`')));
             typeNameBuilder.Append('<');
             var genericArgs = namedType.TypeArguments;
             for (var i = 0; i < genericArgs.Length; i++)
@@ -394,7 +376,7 @@ namespace {componentNamespace}
 
             var remainingNamespacePart = namespaceName == rootNamespace
                 ? ""
-                : namespaceName[(rootNamespace.Length + 1)..];
+                : namespaceName.Substring(rootNamespace.Length + 1);
 
             return remainingNamespacePart;
         }

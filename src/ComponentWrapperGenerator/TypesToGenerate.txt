@@ -1,88 +1,88 @@
 # Microsoft.Maui.Controls components
-ActivityIndicator
-BaseMenuItem
-BaseShellItem
-BoxView
-Brush
-Button
-#CarouselView // Manually written to use custom logic for generics and binding
-CheckBox
-#CollectionView // Manually written to use custom logic for generics and binding
-ContentPage
-ContentView
-DatePicker
-Editor
-#Element // Element is special so we don't generate it
-Entry
-FlexLayout
-FlyoutItem
-#FormattedString // Not used anymore because Label directly contains Span elements
-Frame
-GestureElement
-GradientBrush
-GradientStop
-Grid
-#GroupableItemsView // Manually written to use custom logic for generics and binding
-#GridCell // Not based on real XF type
-HorizontalStackLayout
-Image
-ImageButton
-InputView
-#ItemsView // Manually written to use custom logic for generics and binding
-Label
-Layout
-LinearGradientBrush
-#FlyoutDetailPage // Not based on real XF type
-#FlyoutFlyoutPage // Not based on real XF type
-FlyoutPage
-MenuItem
-#ModalContainer // Not based on real XF type
-NavigableElement
-Page
-#Picker // Manually written to use custom logic for generics and binding
-ProgressBar
-RadialGradientBrush
-RadioButton
-RefreshView
-ScrollView
-#SelectableItemsView // Manually written to use custom logic for generics and binding
-Shell
-ShellContent
-#ShellFlyoutHeader // Not based on real XF type
-ShellGroupItem
-ShellItem
-ShellSection
-SolidColorBrush
-Slider
-Span
-StackBase
-StackLayout
-Stepper
-#StructuredItemsView  // Manually written to use custom logic for generics and binding
-#StyleSheet // Not based on real XF type
-Switch
-Tab
-TabBar
-TabbedPage
-TemplatedPage
-TemplatedView
-TimePicker
-ToolbarItem
-VerticalStackLayout
-View
-VisualElement
-WebView
+Microsoft.Maui.Controls.ActivityIndicator
+Microsoft.Maui.Controls.BaseMenuItem
+Microsoft.Maui.Controls.BaseShellItem
+Microsoft.Maui.Controls.BoxView
+Microsoft.Maui.Controls.Brush
+Microsoft.Maui.Controls.Button
+#Microsoft.Maui.Controls.CarouselView // Manually written to use custom logic for generics and binding
+Microsoft.Maui.Controls.CheckBox
+#Microsoft.Maui.Controls.CollectionView // Manually written to use custom logic for generics and binding
+Microsoft.Maui.Controls.ContentPage
+Microsoft.Maui.Controls.ContentView
+Microsoft.Maui.Controls.DatePicker
+Microsoft.Maui.Controls.Editor
+#Microsoft.Maui.Controls.Element // Element is special so we don't generate it
+Microsoft.Maui.Controls.Entry
+Microsoft.Maui.Controls.FlexLayout
+Microsoft.Maui.Controls.FlyoutItem
+#Microsoft.Maui.Controls.FormattedString // Not used anymore because Label directly contains Span elements
+Microsoft.Maui.Controls.Frame
+Microsoft.Maui.Controls.GestureElement
+Microsoft.Maui.Controls.GradientBrush
+Microsoft.Maui.Controls.GradientStop
+Microsoft.Maui.Controls.Grid
+#Microsoft.Maui.Controls.GroupableItemsView // Manually written to use custom logic for generics and binding
+#Microsoft.Maui.Controls.GridCell // Not based on real XF type
+Microsoft.Maui.Controls.HorizontalStackLayout
+Microsoft.Maui.Controls.Image
+Microsoft.Maui.Controls.ImageButton
+Microsoft.Maui.Controls.InputView
+#Microsoft.Maui.Controls.ItemsView // Manually written to use custom logic for generics and binding
+Microsoft.Maui.Controls.Label
+Microsoft.Maui.Controls.Layout
+Microsoft.Maui.Controls.LinearGradientBrush
+#Microsoft.Maui.Controls.FlyoutDetailPage // Not based on real XF type
+#Microsoft.Maui.Controls.FlyoutFlyoutPage // Not based on real XF type
+Microsoft.Maui.Controls.FlyoutPage
+Microsoft.Maui.Controls.MenuItem
+#Microsoft.Maui.Controls.ModalContainer // Not based on real XF type
+Microsoft.Maui.Controls.NavigableElement
+Microsoft.Maui.Controls.Page
+#Microsoft.Maui.Controls.Picker // Manually written to use custom logic for generics and binding
+Microsoft.Maui.Controls.ProgressBar
+Microsoft.Maui.Controls.RadialGradientBrush
+Microsoft.Maui.Controls.RadioButton
+Microsoft.Maui.Controls.RefreshView
+Microsoft.Maui.Controls.ScrollView
+#Microsoft.Maui.Controls.SelectableItemsView // Manually written to use custom logic for generics and binding
+Microsoft.Maui.Controls.Shell
+Microsoft.Maui.Controls.ShellContent
+#Microsoft.Maui.Controls.ShellFlyoutHeader // Not based on real XF type
+Microsoft.Maui.Controls.ShellGroupItem
+Microsoft.Maui.Controls.ShellItem
+Microsoft.Maui.Controls.ShellSection
+Microsoft.Maui.Controls.SolidColorBrush
+Microsoft.Maui.Controls.Slider
+Microsoft.Maui.Controls.Span
+Microsoft.Maui.Controls.StackBase
+Microsoft.Maui.Controls.StackLayout
+Microsoft.Maui.Controls.Stepper
+#Microsoft.Maui.Controls.StructuredItemsView  // Manually written to use custom logic for generics and binding
+#Microsoft.Maui.Controls.StyleSheet // Not based on real XF type
+Microsoft.Maui.Controls.Switch
+Microsoft.Maui.Controls.Tab
+Microsoft.Maui.Controls.TabBar
+Microsoft.Maui.Controls.TabbedPage
+Microsoft.Maui.Controls.TemplatedPage
+Microsoft.Maui.Controls.TemplatedView
+Microsoft.Maui.Controls.TimePicker
+Microsoft.Maui.Controls.ToolbarItem
+Microsoft.Maui.Controls.VerticalStackLayout
+Microsoft.Maui.Controls.View
+Microsoft.Maui.Controls.VisualElement
+Microsoft.Maui.Controls.WebView
 
 # Microsoft.Maui.Controls.Shapes components
-Shapes.Ellipse
-Shapes.Line
-Shapes.Polygon
-Shapes.Polyline
-Shapes.Rectangle
-Shapes.Shape
+Microsoft.Maui.Controls.Shapes.Ellipse
+Microsoft.Maui.Controls.Shapes.Line
+Microsoft.Maui.Controls.Shapes.Polygon
+Microsoft.Maui.Controls.Shapes.Polyline
+Microsoft.Maui.Controls.Shapes.Rectangle
+Microsoft.Maui.Controls.Shapes.Shape
 
 # Microsoft.Maui.Controls.Compatibility components
-Compatibility.Layout
+Microsoft.Maui.Controls.Compatibility.Layout
 
 # Xamarin.Forms.DualScreen components
 # TwoPaneView

@@ -17,6 +17,14 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Elements\ActivityIndicator.generated.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="Elements\ActivityIndicator.generated.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<!--We cannot use Microsoft.NET.Sdk.Razor because of this bug https://github.com/dotnet/maui/issues/3536.
 		Therefore we reference WebView.Maui package directly, but excluding .targets files.-->
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebView.Maui" Version="$(MauiVersion)" IncludeAssets="compile;runtime" />
@@ -24,6 +32,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\BlazorBindings.Core\BlazorBindings.Core.csproj" />
+		<ProjectReference Include="..\ComponentWrapperGenerator\ComponentWrapperGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
 	</ItemGroup>
 
 </Project>
