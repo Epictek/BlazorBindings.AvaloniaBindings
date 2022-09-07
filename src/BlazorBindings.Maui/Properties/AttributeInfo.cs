@@ -3,6 +3,7 @@
 
 using BlazorBindings.Maui.ComponentGenerator;
 using Microsoft.Maui.Controls;
+using Microsoft.Maui.Controls.Shapes;
 using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("BlazorBindings.UnitTests")]
@@ -70,3 +71,14 @@ using System.Runtime.CompilerServices;
 [assembly: GenerateComponent(typeof(View))]
 [assembly: GenerateComponent(typeof(VisualElement))]
 [assembly: GenerateComponent(typeof(WebView))]
+
+// Compatibility
+[assembly: GenerateComponent(typeof(Microsoft.Maui.Controls.Compatibility.Layout))]
+
+// Shapes
+[assembly: GenerateComponent(typeof(Ellipse))]
+[assembly: GenerateComponent(typeof(Line))]
+[assembly: GenerateComponent(typeof(Polygon))]
+[assembly: GenerateComponent(typeof(Polyline))]
+[assembly: GenerateComponent(typeof(Rectangle))]
+[assembly: GenerateComponent(typeof(Shape))]

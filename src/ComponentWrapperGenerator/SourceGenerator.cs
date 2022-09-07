@@ -80,8 +80,9 @@ namespace ComponentWrapperGenerator
         {
             foreach (var generatedInfo in types)
             {
-                var result = componentWrapperGenerator.GenerateComponentFile(compilation, generatedInfo);
-                context.AddSource($"{generatedInfo.TypeSymbol.Name}.generated.cs", result);
+                var (groupName, name, source) = componentWrapperGenerator.GenerateComponentFile(compilation, generatedInfo);
+                var hintName = string.IsNullOrEmpty(groupName) ? $"{name}.generated.cs" : $"{groupName}.{name}.generated.cs";
+                context.AddSource(hintName, source);
             }
         }
     }
