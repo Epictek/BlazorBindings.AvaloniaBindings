@@ -8,20 +8,6 @@ namespace ComponentWrapperGenerator
     [Generator]
     public class SourceGenerator : IIncrementalGenerator
     {
-        private const string GenerateComponentAttribute =
-@"namespace BlazorBindings.Maui.ComponentGenerator
-{
-    [System.AttributeUsage(System.AttributeTargets.Assembly, AllowMultiple = true)]
-    internal class GenerateComponentAttribute : System.Attribute
-    { 
-        public GenerateComponentAttribute(System.Type typeToGenerate)
-        {
-        }
-
-        public string[] Aliases { get; set; }
-    }
-}";
-
         private static readonly ComponentWrapperGenerator componentWrapperGenerator = new(
             new GeneratorSettings
             {
@@ -30,10 +16,6 @@ namespace ComponentWrapperGenerator
 
         public void Initialize(IncrementalGeneratorInitializationContext context)
         {
-            context.RegisterPostInitializationOutput(ctx => ctx.AddSource(
-                "GenerateComponentAttribute.generated.cs",
-                GenerateComponentAttribute));
-
             var enumDeclarations = context.SyntaxProvider
                 .CreateSyntaxProvider(
                     predicate: static (s, _) => IsSyntaxTargetForGeneration(s), // Select assembly targeted attributes.
