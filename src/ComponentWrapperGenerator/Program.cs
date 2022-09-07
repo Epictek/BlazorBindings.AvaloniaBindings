@@ -3,7 +3,9 @@
 
 using Buildalyzer;
 using Buildalyzer.Workspaces;
+using CommandLine;
 using Microsoft.CodeAnalysis;
+using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,36 +20,77 @@ namespace ComponentWrapperGenerator
                 FileHeader = "// Copyright (c) Microsoft Corporation.\r\n// Licensed under the MIT license.\r\n"
             });
 
-        public static async Task Main()
+        public static async Task Main(string[] args)
         {
-            var csprojPath = @"C:\Users\ollia\source\repos\MobileBlazorBindings\src\BlazorBindings.Maui\BlazorBindings.Maui.csproj";
-            var outPath = Path.Combine(csprojPath, "..", "Elements");
+            await Parser.Default
+                .ParseArguments<Options>(args)
+                .WithParsedAsync(async o =>
+                {
+                    if (o.ProjectPath is null)
+                    {
+                        o.ProjectPath = Directory.GetFiles(Directory.GetCurrentDirectory()).FirstOrDefault(f
+                            => f.EndsWith(".csproj", StringComparison.InvariantCultureIgnoreCase))
+                            ?? throw new Exception("Cannot find any csproj files.");
+                    }
+                    if (o.OutPath is null)
+                    {
+                        o.OutPath = Path.Combine(o.ProjectPath, "..", "Elements");
+                    }
 
-            AnalyzerManager manager = new AnalyzerManager();
-            IProjectAnalyzer analyzer = manager.GetProject(csprojPath);
-            AdhocWorkspace workspace = analyzer.GetWorkspace();
-            var compilation = await workspace.CurrentSolution.Projects.First().GetCompilationAsync();
+                    var compilation = await CreateComplitation(o);
+
+                    var typesToGenerate = GetTypesToGenerate(compilation);
+
+                    Console.WriteLine($"Generating {typesToGenerate.Length} files.");
+
+                    foreach (var generatedType in typesToGenerate)
+                    {
+                        var (groupName, name, source) = componentWrapperGenerator.GenerateComponentFile(compilation, generatedType);
+
+                        var fileName = $"{name}.generated.cs";
+                        var path = string.IsNullOrEmpty(groupName)
+                            ? Path.Combine(o.OutPath, fileName)
+                            : Path.Combine(o.OutPath, groupName, fileName);
+
+                        Directory.GetParent(path).Create();
+
+                        File.WriteAllText(path, source);
+                    }
+                });
+        }
+
+        private static GeneratedComponentInfo[] GetTypesToGenerate(Compilation compilation)
+        {
+            Console.WriteLine("Finding types to generate.");
 
             var attributes = compilation.Assembly.GetAttributes();
             var typesToGenerate = attributes
                 .Where(a => a.AttributeClass?.ToDisplayString() == "BlazorBindings.Maui.ComponentGenerator.GenerateComponentAttribute")
                 .Select(a => a.ConstructorArguments.FirstOrDefault().Value as INamedTypeSymbol)
                 .Where(type => type != null)
-                .Select(type => new GeneratedComponentInfo { TypeSymbol = type });
+                .Select(type => new GeneratedComponentInfo { TypeSymbol = type })
+                .ToArray();
+            return typesToGenerate;
+        }
 
-             foreach (var generatedType in typesToGenerate)
-            {
-                var (groupName, name, source) = componentWrapperGenerator.GenerateComponentFile(compilation, generatedType);
+        private static async Task<Compilation> CreateComplitation(Options o)
+        {
+            Console.WriteLine("Creating project compilation.");
 
-                var fileName = $"{name}.generated.cs";
-                var path = string.IsNullOrEmpty(groupName)
-                    ? Path.Combine(outPath, fileName)
-                    : Path.Combine(outPath, groupName, fileName);
+            AnalyzerManager manager = new AnalyzerManager();
+            IProjectAnalyzer analyzer = manager.GetProject(o.ProjectPath);
+            AdhocWorkspace workspace = analyzer.GetWorkspace();
+            var compilation = await workspace.CurrentSolution.Projects.First().GetCompilationAsync();
+            return compilation;
+        }
 
-                Directory.GetParent(path).Create();
+        private class Options
+        {
+            [Value(0, HelpText = "Project file path to run generator.")]
+            public string ProjectPath { get; set; }
 
-                File.WriteAllText(path, source);
-            }
+            [Option('o', "out-path", HelpText = "Out path for generated files.")]
+            public string OutPath { get; set; }
         }
     }
 }

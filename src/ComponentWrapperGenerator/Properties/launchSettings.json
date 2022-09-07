@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ComponentWrapperGenerator": {
+      "commandName": "Project",
+      "commandLineArgs": "C:\\Users\\master\\source\\repos\\MobileBlazorBindings\\AlohaKitSample\\AlohaKitSample.csproj"
+    }
+  }
+}

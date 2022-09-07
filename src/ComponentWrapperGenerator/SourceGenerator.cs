@@ -1,4 +1,8 @@
-﻿using Microsoft.CodeAnalysis;
+﻿// Unfortunately, source generator approach doesn't really work with razor files so far.
+
+#if FALSE
+
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Collections.Immutable;
@@ -69,3 +73,4 @@ namespace ComponentWrapperGenerator
         }
     }
 }
+#endif

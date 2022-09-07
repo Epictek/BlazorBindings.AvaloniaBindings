@@ -1,12 +1,15 @@
-﻿namespace BlazorBindings.Maui.ComponentGenerator
+﻿using System;
+
+namespace BlazorBindings.Maui.ComponentGenerator
 {
     [System.AttributeUsage(System.AttributeTargets.Assembly, AllowMultiple = true)]
-    internal class GenerateComponentAttribute : System.Attribute
+    public class GenerateComponentAttribute : System.Attribute
     {
+        private readonly Type typeToGenerate;
+
         public GenerateComponentAttribute(System.Type typeToGenerate)
         {
+            this.typeToGenerate = typeToGenerate;
         }
-
-        public string[] Aliases { get; set; }
     }
 }
