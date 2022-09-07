@@ -25,10 +25,8 @@ namespace ComponentWrapperGenerator
         private static readonly ComponentWrapperGenerator componentWrapperGenerator = new(
             new GeneratorSettings
             {
-                FileHeader = "// Copyright (c) Microsoft Corporation.\r\n// Licensed under the MIT license.\r\n",
-                RootNamespace = "BlazorBindings.Maui.Elements"
-            }, new[] {
-                "Microsoft.Maui.Controls" });
+                FileHeader = "// Copyright (c) Microsoft Corporation.\r\n// Licensed under the MIT license.\r\n"
+            });
 
         public void Initialize(IncrementalGeneratorInitializationContext context)
         {
@@ -39,7 +37,7 @@ namespace ComponentWrapperGenerator
             var enumDeclarations = context.SyntaxProvider
                 .CreateSyntaxProvider(
                     predicate: static (s, _) => IsSyntaxTargetForGeneration(s), // Select assembly targeted attributes.
-                    transform: static (ctx, _) => GetSemanticTargetForGeneration(ctx)) // 
+                    transform: static (ctx, _) => GetSemanticTargetForGeneration(ctx))
                 .Where(static m => m != null);
 
             var compilationAndEnums = context.CompilationProvider.Combine(enumDeclarations.Collect());
@@ -51,32 +49,39 @@ namespace ComponentWrapperGenerator
         static bool IsSyntaxTargetForGeneration(SyntaxNode node)
         {
             return node is AttributeSyntax attribute
-                    && attribute.Parent is AttributeListSyntax attributeList && attributeList.Target?.Identifier.IsKind(SyntaxKind.AssemblyKeyword) == true;
+                && attribute.Parent is AttributeListSyntax attributeList
+                && attributeList.Target?.Identifier.IsKind(SyntaxKind.AssemblyKeyword) == true;
         }
 
-        static INamedTypeSymbol GetSemanticTargetForGeneration(GeneratorSyntaxContext context)
+        static GeneratedComponentInfo GetSemanticTargetForGeneration(GeneratorSyntaxContext context)
         {
             var attributeSyntax = (AttributeSyntax)context.Node;
-
-            var typeName = context.SemanticModel.GetTypeInfo(attributeSyntax).Type?.ToDisplayString();
-
-            if (typeName != "BlazorBindings.Maui.ComponentGenerator.GenerateComponentAttribute")
-                return null;
 
             if (attributeSyntax.ArgumentList.Arguments.FirstOrDefault()?.Expression is not TypeOfExpressionSyntax typeOf)
                 return null;
 
+            var attributeTypeSymbol = context.SemanticModel.GetTypeInfo(attributeSyntax).Type;
+
+            if (attributeTypeSymbol?.ToDisplayString() != "BlazorBindings.Maui.ComponentGenerator.GenerateComponentAttribute")
+                return null;
+
             var typeSymbol = context.SemanticModel.GetSymbolInfo(typeOf.Type).Symbol;
 
-            return typeSymbol as INamedTypeSymbol;
+            if (typeSymbol is not INamedTypeSymbol namedTypeSymbol)
+                return null;
+
+            return new GeneratedComponentInfo
+            {
+                TypeSymbol = namedTypeSymbol
+            };
         }
 
-        static void Execute(Compilation compilation, ImmutableArray<INamedTypeSymbol> types, SourceProductionContext context)
+        static void Execute(Compilation compilation, ImmutableArray<GeneratedComponentInfo> types, SourceProductionContext context)
         {
-            foreach (var type in types)
+            foreach (var generatedInfo in types)
             {
-                var result = componentWrapperGenerator.GenerateComponentFile(compilation, type);
-                context.AddSource($"{type.Name}.generated.cs", result);
+                var result = componentWrapperGenerator.GenerateComponentFile(compilation, generatedInfo);
+                context.AddSource($"{generatedInfo.TypeSymbol.Name}.generated.cs", result);
             }
         }
     }

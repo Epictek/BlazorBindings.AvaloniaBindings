@@ -28,6 +28,7 @@ using System.Runtime.CompilerServices;
 [assembly: GenerateComponent(typeof(GestureElement))]
 [assembly: GenerateComponent(typeof(GradientBrush))]
 [assembly: GenerateComponent(typeof(GradientStop))]
+[assembly: GenerateComponent(typeof(GraphicsView))]
 [assembly: GenerateComponent(typeof(Grid))]
 //[assembly: GenerateComponent(typeof(GroupableItemsView))] // Manually written to use custom logic for generics and binding
 [assembly: GenerateComponent(typeof(HorizontalStackLayout))]

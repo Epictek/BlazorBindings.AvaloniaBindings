@@ -5,7 +5,6 @@ using ComponentWrapperGenerator.Extensions;
 using Microsoft.CodeAnalysis;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml;
@@ -14,31 +13,30 @@ namespace ComponentWrapperGenerator
 {
     public partial class ComponentWrapperGenerator
     {
-        private GeneratorSettings Settings { get; }
-        private IList<string> ElementNamespaces { get; }
+        const string MauiComponentsNamespace = "BlazorBindings.Maui.Elements";
 
-        public ComponentWrapperGenerator(GeneratorSettings settings, IList<string> namespaces)
+        private GeneratorSettings Settings { get; }
+
+        public ComponentWrapperGenerator(GeneratorSettings settings)
         {
             Settings = settings ?? throw new ArgumentNullException(nameof(settings));
-            ElementNamespaces = namespaces ?? throw new ArgumentNullException(nameof(namespaces));
         }
 
-        public string GenerateComponentFile(Compilation compilation, INamedTypeSymbol typeToGenerate)
+        public (string HintName, string Source) GenerateComponentFile(Compilation compilation, GeneratedComponentInfo generatedInfo)
         {
             //if (!System.Diagnostics.Debugger.IsAttached)
             //{
             //    System.Diagnostics.Debugger.Launch();
             //}
 
+            var typeToGenerate = generatedInfo.TypeSymbol;
             var componentName = typeToGenerate.Name;
-            var componentHandlerName = $"{componentName}Handler";
+            var componentNamespace = GetComponentNamespace(typeToGenerate);
 
             var baseType = GetBaseTypeOfInterest(typeToGenerate);
-            var componentBaseName = GetComponentNamespace(typeToGenerate) == GetComponentNamespace(baseType)
+            var componentBaseName = componentNamespace == GetComponentNamespace(baseType)
                 ? baseType.Name
                 : $"{GetComponentNamespace(baseType)}.{baseType.Name}";
-
-            var componentNamespace = GetComponentNamespace(typeToGenerate);
 
             // header
             var headerText = Settings.FileHeader;
@@ -49,15 +47,19 @@ namespace ComponentWrapperGenerator
                 new UsingStatement { Namespace = "Microsoft.AspNetCore.Components", IsUsed = true, },
                 new UsingStatement { Namespace = "BlazorBindings.Core", IsUsed = true, },
                 new UsingStatement { Namespace = "System.Threading.Tasks", IsUsed = true, },
-                new UsingStatement { Namespace = "Microsoft.Maui.Controls", Alias = "MC", IsUsed = true },
-                new UsingStatement { Namespace = "Microsoft.Maui.Controls.Compatibility", Alias = "MCC" },
-                new UsingStatement { Namespace = "Microsoft.Maui.Controls.Shapes", Alias = "MCS" },
-                //new UsingStatement { Namespace = "Xamarin.Forms.DualScreen", Alias = "XFD" },
+                new UsingStatement { Namespace = "Microsoft.Maui.Controls", Alias = "MC", IsUsed = true }
             };
 
-            if (componentNamespace != Settings.RootNamespace)
+            var typeNamespace = typeToGenerate.ContainingNamespace.GetFullName();
+            if (typeNamespace != "Microsoft.Maui.Controls")
             {
-                usings.Add(new UsingStatement { Namespace = Settings.RootNamespace, IsUsed = true });
+                var typeNamespaceAlias = GetNamespaceAlias(typeToGenerate.ContainingNamespace);
+                usings.Add(new UsingStatement { Namespace = typeNamespace, Alias = typeNamespaceAlias, IsUsed = true });
+            }
+
+            if (componentNamespace != MauiComponentsNamespace)
+            {
+                usings.Add(new UsingStatement { Namespace = MauiComponentsNamespace, IsUsed = true });
             }
 
             var componentNamespacePrefix = GetNamespacePrefix(typeToGenerate, usings);
@@ -108,7 +110,7 @@ namespace ComponentWrapperGenerator
             staticConstructorBody += "\r\n            RegisterAdditionalHandlers();";
 
             var createNativeElement = isComponentAbstract ? "" : $@"
-        protected override MC.Element CreateNativeElement() => new {componentNamespacePrefix}{componentName}();";
+        protected override MC.Element CreateNativeElement() => new {GetTypeNameAndAddNamespace(typeToGenerate, usings)}();";
 
             var handleParameter = !allProperties.Any() ? "" : $@"
         protected override void HandleParameter(string name, object value)
@@ -368,31 +370,39 @@ namespace {componentNamespace}
         private static readonly List<string> ReservedKeywords = new List<string>
             { "class", };
 
-        private string GetNamespacePart(INamedTypeSymbol typeToGenerate)
-        {
-            var namespaceName = typeToGenerate.ContainingNamespace.GetFullName();
-            var rootNamespace = ElementNamespaces.First(n => namespaceName.StartsWith(n, StringComparison.Ordinal));
-
-            var remainingNamespacePart = namespaceName == rootNamespace
-                ? ""
-                : namespaceName.Substring(rootNamespace.Length + 1);
-
-            return remainingNamespacePart;
-        }
-
         private string GetComponentNamespace(INamedTypeSymbol typeToGenerate)
         {
-            var namespacePart = GetNamespacePart(typeToGenerate);
-            var componentNamespace = string.IsNullOrEmpty(namespacePart)
-                ? Settings.RootNamespace
-                : $"{Settings.RootNamespace}.{namespacePart}";
+            var assemblyName = typeToGenerate.ContainingAssembly.Name;
 
-            return componentNamespace;
+            if (assemblyName == "Microsoft.Maui.Controls")
+            {
+                var nsName = typeToGenerate.ContainingNamespace.GetFullName();
+
+                if (nsName == "Microsoft.Maui.Controls")
+                    return "BlazorBindings.Maui.Elements";
+
+                var part = nsName.Replace("Microsoft.Maui.Controls.", "");
+                return $"BlazorBindings.Maui.Elements.{part}";
+            }
+            else
+            {
+                var part = assemblyName.Replace(".Maui", "").Replace(".Views", "").Replace(".Controls", "");
+                return $"BlazorBindings.Maui.Elements.{part}";
+            }
         }
 
-        private string GetSubPath(INamedTypeSymbol typeToGenerate)
+        private static string GetNamespaceAlias(INamespaceSymbol namespaceSymbol)
         {
-            return GetNamespacePart(typeToGenerate).Replace('.', Path.DirectorySeparatorChar);
+            var alias = "";
+            while (!namespaceSymbol.IsGlobalNamespace)
+            {
+                if (namespaceSymbol.Name != "Microsoft")
+                    alias = namespaceSymbol.Name[0] + alias;
+
+                namespaceSymbol = namespaceSymbol.ContainingNamespace;
+            }
+
+            return alias;
         }
     }
 }
