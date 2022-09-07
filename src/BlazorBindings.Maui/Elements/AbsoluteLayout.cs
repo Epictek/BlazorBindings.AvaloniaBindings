@@ -1,11 +1,10 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-using BlazorBindings.Maui.Elements;
 using Microsoft.Maui.Layouts;
 using MC = Microsoft.Maui.Controls;
 
-namespace BlazorBindings.Maui
+namespace BlazorBindings.Maui.Elements
 {
     public class AbsoluteLayout : Layout
     {
