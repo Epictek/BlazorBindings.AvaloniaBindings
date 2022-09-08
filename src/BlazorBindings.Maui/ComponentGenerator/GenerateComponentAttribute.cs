@@ -2,14 +2,11 @@
 
 namespace BlazorBindings.Maui.ComponentGenerator
 {
-    [System.AttributeUsage(System.AttributeTargets.Assembly, AllowMultiple = true)]
-    public class GenerateComponentAttribute : System.Attribute
+    [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]
+    public class GenerateComponentAttribute : Attribute
     {
-        private readonly Type typeToGenerate;
-
-        public GenerateComponentAttribute(System.Type typeToGenerate)
+        public GenerateComponentAttribute(Type typeToGenerate)
         {
-            this.typeToGenerate = typeToGenerate;
         }
     }
 }

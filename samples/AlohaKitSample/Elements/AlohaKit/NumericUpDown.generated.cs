@@ -26,6 +26,7 @@ namespace BlazorBindings.Maui.Elements.AlohaKit
         [Parameter] public AC.NumericUpDownDrawable NumericUpDownDrawable { get; set; }
         [Parameter] public Color TextColor { get; set; }
         [Parameter] public double Value { get; set; }
+        [Parameter] public EventCallback<double> ValueChanged { get; set; }
 
         public new AC.NumericUpDown NativeControl => (AC.NumericUpDown)((Element)this).NativeControl;
 
@@ -89,6 +90,16 @@ namespace BlazorBindings.Maui.Elements.AlohaKit
                     {
                         Value = (double)value;
                         NativeControl.Value = Value;
+                    }
+                    break;
+                case nameof(ValueChanged):
+                    if (!Equals(ValueChanged, value))
+                    {
+                        void NativeControlValueChanged(object sender, MC.ValueChangedEventArgs e) => ValueChanged.InvokeAsync(NativeControl.Value);
+
+                        ValueChanged = (EventCallback<double>)value;
+                        NativeControl.ValueChanged -= NativeControlValueChanged;
+                        NativeControl.ValueChanged += NativeControlValueChanged;
                     }
                     break;
 

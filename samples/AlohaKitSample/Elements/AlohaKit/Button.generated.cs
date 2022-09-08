@@ -29,9 +29,9 @@ namespace BlazorBindings.Maui.Elements.AlohaKit
         [Parameter] public string Text { get; set; }
         [Parameter] public Color TextColor { get; set; }
         [Parameter] public TextAlignment VerticalTextAlignment { get; set; }
-        [Parameter] public EventCallback OnClick { get; set; }
         [Parameter] public EventCallback OnPress { get; set; }
         [Parameter] public EventCallback OnRelease { get; set; }
+        [Parameter] public EventCallback OnClick { get; set; }
 
         public new AC.Button NativeControl => (AC.Button)((Element)this).NativeControl;
 
@@ -104,16 +104,6 @@ namespace BlazorBindings.Maui.Elements.AlohaKit
                         NativeControl.VerticalTextAlignment = VerticalTextAlignment;
                     }
                     break;
-                case nameof(OnClick):
-                    if (!Equals(OnClick, value))
-                    {
-                        void NativeControlClicked(object sender, EventArgs e) => OnClick.InvokeAsync();
-
-                        OnClick = (EventCallback)value;
-                        NativeControl.Clicked -= NativeControlClicked;
-                        NativeControl.Clicked += NativeControlClicked;
-                    }
-                    break;
                 case nameof(OnPress):
                     if (!Equals(OnPress, value))
                     {
@@ -132,6 +122,16 @@ namespace BlazorBindings.Maui.Elements.AlohaKit
                         OnRelease = (EventCallback)value;
                         NativeControl.Released -= NativeControlReleased;
                         NativeControl.Released += NativeControlReleased;
+                    }
+                    break;
+                case nameof(OnClick):
+                    if (!Equals(OnClick, value))
+                    {
+                        void NativeControlClicked(object sender, EventArgs e) => OnClick.InvokeAsync();
+
+                        OnClick = (EventCallback)value;
+                        NativeControl.Clicked -= NativeControlClicked;
+                        NativeControl.Clicked += NativeControlClicked;
                     }
                     break;
 

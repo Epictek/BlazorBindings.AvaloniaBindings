@@ -28,6 +28,7 @@ namespace BlazorBindings.Maui.Elements.AlohaKit
         [Parameter] public Color UnSelectedStroke { get; set; }
         [Parameter] public double UnSelectedStrokeWidth { get; set; }
         [Parameter] public int Value { get; set; }
+        [Parameter] public EventCallback<int> ValueChanged { get; set; }
 
         public new AC.Rating NativeControl => (AC.Rating)((Element)this).NativeControl;
 
@@ -105,6 +106,16 @@ namespace BlazorBindings.Maui.Elements.AlohaKit
                     {
                         Value = (int)value;
                         NativeControl.Value = Value;
+                    }
+                    break;
+                case nameof(ValueChanged):
+                    if (!Equals(ValueChanged, value))
+                    {
+                        void NativeControlValueChanged(object sender, AC.RatingValueChangedEventArgs e) => ValueChanged.InvokeAsync(NativeControl.Value);
+
+                        ValueChanged = (EventCallback<int>)value;
+                        NativeControl.ValueChanged -= NativeControlValueChanged;
+                        NativeControl.ValueChanged += NativeControlValueChanged;
                     }
                     break;
 

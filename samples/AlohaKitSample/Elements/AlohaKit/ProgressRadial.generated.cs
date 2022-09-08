@@ -27,6 +27,7 @@ namespace BlazorBindings.Maui.Elements.AlohaKit
         [Parameter] public Color StrokeColor { get; set; }
         [Parameter] public Color TextColor { get; set; }
         [Parameter] public int Value { get; set; }
+        [Parameter] public EventCallback<int> ValueChanged { get; set; }
 
         public new AC.ProgressRadial NativeControl => (AC.ProgressRadial)((Element)this).NativeControl;
 
@@ -97,6 +98,16 @@ namespace BlazorBindings.Maui.Elements.AlohaKit
                     {
                         Value = (int)value;
                         NativeControl.Value = Value;
+                    }
+                    break;
+                case nameof(ValueChanged):
+                    if (!Equals(ValueChanged, value))
+                    {
+                        void NativeControlValueChanged(object sender, MC.ValueChangedEventArgs e) => ValueChanged.InvokeAsync(NativeControl.Value);
+
+                        ValueChanged = (EventCallback<int>)value;
+                        NativeControl.ValueChanged -= NativeControlValueChanged;
+                        NativeControl.ValueChanged += NativeControlValueChanged;
                     }
                     break;
 

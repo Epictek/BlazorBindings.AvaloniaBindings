@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "GenerateAlohaKit": {
+      "commandName": "Project",
+      "commandLineArgs": "..\\..\\..\\..\\..\\samples\\AlohaKitSample\\AlohaKitSample.csproj"
+    },
+    "GenerateBlazorBindings.Maui": {
+      "commandName": "Project",
+      "commandLineArgs": "..\\..\\..\\..\\BlazorBindings.Maui\\BlazorBindings.Maui.csproj"
+    }
+  }
+}

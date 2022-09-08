@@ -7,6 +7,7 @@ using BlazorBindings.Maui.Elements;
 using MC = Microsoft.Maui.Controls;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Maui.Graphics;
+using System;
 using System.Threading.Tasks;
 
 namespace BlazorBindings.Maui.Elements.AlohaKit
@@ -22,6 +23,7 @@ namespace BlazorBindings.Maui.Elements.AlohaKit
         [Parameter] public Color PulseColor { get; set; }
         [Parameter] public AC.PulseIconDrawable PulseIconDrawable { get; set; }
         [Parameter] public string Source { get; set; }
+        [Parameter] public EventCallback OnClick { get; set; }
 
         public new AC.PulseIcon NativeControl => (AC.PulseIcon)((Element)this).NativeControl;
 
@@ -57,6 +59,16 @@ namespace BlazorBindings.Maui.Elements.AlohaKit
                     {
                         Source = (string)value;
                         NativeControl.Source = Source;
+                    }
+                    break;
+                case nameof(OnClick):
+                    if (!Equals(OnClick, value))
+                    {
+                        void NativeControlClicked(object sender, EventArgs e) => OnClick.InvokeAsync();
+
+                        OnClick = (EventCallback)value;
+                        NativeControl.Clicked -= NativeControlClicked;
+                        NativeControl.Clicked += NativeControlClicked;
                     }
                     break;
 

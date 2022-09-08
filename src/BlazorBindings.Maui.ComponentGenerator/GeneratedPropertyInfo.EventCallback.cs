@@ -3,6 +3,7 @@ using Microsoft.CodeAnalysis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace ComponentWrapperGenerator
 {
@@ -10,35 +11,8 @@ namespace ComponentWrapperGenerator
     {
         private static readonly EventToGenerate[] EventsToGenerate = new EventToGenerate[]
         {
-            new ("BaseShellItem","Appearing","OnAppearing"),
-            new ("BaseShellItem","Disappearing","OnDisappearing"),
-            new ("CheckBox","CheckedChanged","IsCheckedChanged", typeArgument:"bool"),
-            new ("DatePicker","DateSelected","DateChanged", typeArgument:"DateTime"),
-            new ("Editor", "Completed", "OnCompleted"),
-            new ("Entry", "Completed", "OnCompleted"),
-            new ("ImageButton", "Clicked", "OnClick"),
-            new ("ImageButton", "Pressed", "OnPress"),
-            new ("ImageButton", "Released", "OnRelease"),
-            new ("InputView", "TextChanged", "TextChanged", typeArgument: "string"),
-            new ("MenuItem", "Clicked", "OnClick"),
-            new ("Page","Appearing","OnAppearing"),
-            new ("Page","Disappearing","OnDisappearing"),
-            new ("Shell","Navigated","OnNavigated"),
-            new ("Shell","Navigating","OnNavigating"),
-            new ("Button", "Clicked", "OnClick"),
-            new ("Button", "Pressed", "OnPress"),
-            new ("Button", "Released", "OnRelease"),
             new ("RefreshView", "PropertyChanged", "IsRefreshingChanged", typeArgument: "bool"),
-            new ("ScrollView", "Scrolled", "OnScrolled"),
-            new ("Stepper", "ValueChanged", "ValueChanged", typeArgument: "double"),
             new ("TimePicker", "PropertyChanged", "TimeChanged", typeArgument: "TimeSpan"),
-            new ("Slider", "DragCompleted", "OnDragCompleted"),
-            new ("Slider", "DragStarted", "OnDragStarted"),
-            new ("Slider", "ValueChanged", "ValueChanged", typeArgument: "double"),
-            new ("Switch", "PropertyChanged", "IsToggledChanged", typeArgument: "bool"),
-            new ("VisualElement", "Focused", "OnFocused"),
-            new ("VisualElement", "Unfocused", "OnUnfocused"),
-            new ("VisualElement", "SizeChanged", "OnSizeChanged"),
         };
 
         private INamedTypeSymbol _eventHandlerType;
@@ -102,17 +76,16 @@ namespace ComponentWrapperGenerator
 
         internal static GeneratedPropertyInfo[] GetEventCallbackProperties(Compilation compilation, ITypeSymbol componentType, IList<UsingStatement> usings)
         {
-            return EventsToGenerate
+            var requestedEvents = EventsToGenerate
                 .Where(e => e.TypeName == componentType.Name)
                 .Select(info =>
                 {
-                    var isBindEvent = info.ComponentEventName.EndsWith("Changed");
                     var eventInfo = componentType.GetEvent(info.MauiEventName, includeBaseTypes: true);
 
                     if (eventInfo is null)
                         throw new Exception($"Cannot find event {info.TypeName}.{info.MauiEventName}.");
 
-                    var generatedIPropertySymbol = new GeneratedPropertyInfo(
+                    var generatedPropertyInfo = new GeneratedPropertyInfo(
                         compilation,
                         info.MauiEventName,
                         ComponentWrapperGenerator.GetTypeNameAndAddNamespace(componentType, usings),
@@ -122,11 +95,36 @@ namespace ComponentWrapperGenerator
                         GeneratedPropertyKind.EventCallback,
                         usings);
 
-                    generatedIPropertySymbol._isBindEvent = info.TypeArgument != null;
+                    generatedPropertyInfo._isBindEvent = info.TypeArgument != null;
+                    generatedPropertyInfo._eventHandlerType = (INamedTypeSymbol)eventInfo.Type;
+                    return generatedPropertyInfo;
+                });
+
+            var inferredEvents = componentType.GetMembers().OfType<IEventSymbol>()
+                .Select(eventInfo =>
+                {
+                    var isBindEvent = IsBindEvent(eventInfo, out var bindedProperty);
+
+                    var eventCallbackName = isBindEvent ? $"{bindedProperty.Name}Changed" : GetEventCallbackName(eventInfo);
+
+                    var typeArgumentName = bindedProperty is null ? null : ComponentWrapperGenerator.GetTypeNameAndAddNamespace(bindedProperty.Type, usings);
+
+                    var generatedIPropertySymbol = new GeneratedPropertyInfo(
+                        compilation,
+                        eventInfo.Name,
+                        ComponentWrapperGenerator.GetTypeNameAndAddNamespace(componentType, usings),
+                        ComponentWrapperGenerator.GetIdentifierName(componentType.Name),
+                        eventCallbackName,
+                        GetRenderFragmentType(eventInfo, typeArgumentName, usings),
+                        GeneratedPropertyKind.EventCallback,
+                        usings);
+
+                    generatedIPropertySymbol._isBindEvent = isBindEvent;
                     generatedIPropertySymbol._eventHandlerType = (INamedTypeSymbol)eventInfo.Type;
                     return generatedIPropertySymbol;
-                })
-                .ToArray();
+                });
+
+            return requestedEvents.Concat(inferredEvents).ToArray();
         }
 
         private static string GetRenderFragmentType(IEventSymbol eventInfo, string callbackTypeArgument, IList<UsingStatement> usings)
@@ -145,6 +143,30 @@ namespace ComponentWrapperGenerator
             {
                 return "EventCallback";
             }
+        }
+
+        private static string GetEventCallbackName(IEventSymbol eventSymbol)
+        {
+            return eventSymbol.Name switch
+            {
+                "Clicked" => "OnClick",
+                "Pressed" => "OnPress",
+                "Released" => "OnRelease",
+                _ => $"On{eventSymbol.Name}"
+            };
+        }
+
+        private static bool IsBindEvent(IEventSymbol eventSymbol, out IPropertySymbol property)
+        {
+            var properties = eventSymbol.ContainingType.GetMembers().OfType<IPropertySymbol>();
+
+            property = properties.FirstOrDefault(p =>
+                eventSymbol.Name == $"{p.Name}Changed"
+                || eventSymbol.Name == $"{p.Name}Selected"
+                || eventSymbol.Name == $"Is{p.Name}Changed"
+                || $"Is{eventSymbol.Name}" == $"{p.Name}Changed");
+
+            return property != null;
         }
 
         class EventToGenerate

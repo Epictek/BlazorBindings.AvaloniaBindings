@@ -20,6 +20,7 @@ namespace BlazorBindings.Maui.Elements.AlohaKit
         [Parameter] public bool HasShadow { get; set; }
         [Parameter] public bool IsOn { get; set; }
         [Parameter] public AC.ToggleSwitchDrawable ToggleSwitchDrawable { get; set; }
+        [Parameter] public EventCallback<MC.ToggledEventArgs> OnToggled { get; set; }
 
         public new AC.ToggleSwitch NativeControl => (AC.ToggleSwitch)((Element)this).NativeControl;
 
@@ -48,6 +49,16 @@ namespace BlazorBindings.Maui.Elements.AlohaKit
                     {
                         ToggleSwitchDrawable = (AC.ToggleSwitchDrawable)value;
                         NativeControl.ToggleSwitchDrawable = ToggleSwitchDrawable;
+                    }
+                    break;
+                case nameof(OnToggled):
+                    if (!Equals(OnToggled, value))
+                    {
+                        void NativeControlToggled(object sender, MC.ToggledEventArgs e) => OnToggled.InvokeAsync(e);
+
+                        OnToggled = (EventCallback<MC.ToggledEventArgs>)value;
+                        NativeControl.Toggled -= NativeControlToggled;
+                        NativeControl.Toggled += NativeControlToggled;
                     }
                     break;
 
