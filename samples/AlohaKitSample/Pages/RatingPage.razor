@@ -1,15 +1,61 @@
-﻿<ContentPage>
+﻿@using BlazorBindings.Maui.Elements.AlohaKit
+
+<ContentPage>
     <ScrollView>
-        <VerticalStackLayout>
-            <Rating ItemsCount="5" Value="3" />
+        <VerticalStackLayout Margin="20" Spacing="8">
+            <Label>Rating: @RatingDescription</Label>
+            <Rating ItemsCount="5" @bind-Value="ratingValue" />
+
+            <BoxView HeightRequest="1" Color="Colors.Gray" />
+
+            <Label>Avatar for: Inara Serra</Label>
             <Avatar Name="Inara Serra" BackgroundColor="Colors.LightPink" />
-            <BlazorBindings.Maui.Elements.AlohaKit.CheckBox />
-            <ProgressRadial />
+
+            <BoxView HeightRequest="1" Color="Colors.Gray" />
+
+            <BlazorBindings.Maui.Elements.Slider Minimum="0" Maximum="1" @bind-Value="sliderValue" />
+
+            <Grid ColumnDefinitions="*,Auto">
+                <VerticalProgressBar Progress="sliderValue" Grid.Column="1" />
+                <VerticalStackLayout>
+                    <HorizontalProgressBar Progress="sliderValue" />
+                    <ProgressRadial Minimum="0" Maximum="100" Value="(int)(sliderValue*100)" />
+                </VerticalStackLayout>
+            </Grid>
+
+            <BoxView HeightRequest="1" Color="Colors.Gray" />
+
+            <NumericUpDown @bind-Value="numericUpDownValue" />
+
+            <BoxView HeightRequest="1" Color="Colors.Gray" />
+
+            <HorizontalStackLayout>
+                <BlazorBindings.Maui.Elements.AlohaKit.CheckBox @bind-IsChecked="checkboxChecked" />
+                <Label>Are you busy?</Label>
+            </HorizontalStackLayout>
+            <BlazorBindings.Maui.Elements.AlohaKit.BusyIndicator IsVisible="@checkboxChecked" />
+
         </VerticalStackLayout>
 
     </ScrollView>
 </ContentPage>
 
 @code {
+    int ratingValue = 3;
+    string RatingDescription => ratingValue switch
+    {
+        1 => "Garbage",
+        2 => "Bad",
+        3 => "Mediocre",
+        4 => "Good",
+        5 => "Awesome",
+        _ => "Why am I here?"
+    };
 
+    double sliderValue;
+
+    double numericUpDownValue;
+
+    bool checkboxChecked;
+    bool switchToggled;
 }
