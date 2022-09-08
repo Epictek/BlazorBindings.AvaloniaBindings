@@ -62,13 +62,13 @@ namespace ComponentWrapperGenerator
             return $"\r\n            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof({ComponentName}), {ComponentPropertyName});";
         }
 
-        internal static GeneratedPropertyInfo[] GetContentProperties(Compilation compilation, ITypeSymbol componentType, IList<UsingStatement> usings)
+        internal static GeneratedPropertyInfo[] GetContentProperties(Compilation compilation, GeneratedComponentInfo componentInfo, IList<UsingStatement> usings)
         {
-            var propInfos = componentType.GetMembers().OfType<IPropertySymbol>()
-                    .Where(IsPublicProperty)
-                    .Where(prop => SymbolEqualityComparer.Default.Equals(prop.ContainingType, componentType))
-                    .Where(prop => IsRenderFragmentPropertySymbol(compilation, prop))
-                    .OrderBy(prop => prop.Name, StringComparer.OrdinalIgnoreCase);
+            var propInfos = componentInfo.TypeSymbol.GetMembers().OfType<IPropertySymbol>()
+                .Where(e => !componentInfo.Exclude.Contains(e.Name))
+                .Where(IsPublicProperty)
+                .Where(prop => IsRenderFragmentPropertySymbol(compilation, prop))
+                .OrderBy(prop => prop.Name, StringComparer.OrdinalIgnoreCase);
 
             return propInfos.Select(prop => new GeneratedPropertyInfo(compilation, prop, GeneratedPropertyKind.RenderFragment, usings)).ToArray();
         }

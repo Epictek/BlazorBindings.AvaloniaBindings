@@ -74,8 +74,10 @@ namespace ComponentWrapperGenerator
 ";
         }
 
-        internal static GeneratedPropertyInfo[] GetEventCallbackProperties(Compilation compilation, ITypeSymbol componentType, IList<UsingStatement> usings)
+        internal static GeneratedPropertyInfo[] GetEventCallbackProperties(Compilation compilation, GeneratedComponentInfo componentInfo, IList<UsingStatement> usings)
         {
+            var componentType = componentInfo.TypeSymbol;
+
             var requestedEvents = EventsToGenerate
                 .Where(e => e.TypeName == componentType.Name)
                 .Select(info =>
@@ -101,6 +103,8 @@ namespace ComponentWrapperGenerator
                 });
 
             var inferredEvents = componentType.GetMembers().OfType<IEventSymbol>()
+                .Where(e => !componentInfo.Exclude.Contains(e.Name))
+                .Where(e => e.DeclaredAccessibility == Accessibility.Public && IsBrowsable(e))
                 .Select(eventInfo =>
                 {
                     var isBindEvent = IsBindEvent(eventInfo, out var bindedProperty);
@@ -158,13 +162,15 @@ namespace ComponentWrapperGenerator
 
         private static bool IsBindEvent(IEventSymbol eventSymbol, out IPropertySymbol property)
         {
-            var properties = eventSymbol.ContainingType.GetMembers().OfType<IPropertySymbol>();
+            var properties = eventSymbol.ContainingType.GetMembers().OfType<IPropertySymbol>()
+                .Where(p => IsPublicProperty(p) && HasPublicSetter(p));
 
             property = properties.FirstOrDefault(p =>
-                eventSymbol.Name == $"{p.Name}Changed"
-                || eventSymbol.Name == $"{p.Name}Selected"
-                || eventSymbol.Name == $"Is{p.Name}Changed"
-                || $"Is{eventSymbol.Name}" == $"{p.Name}Changed");
+                eventSymbol.Name == $"{p.Name}Changed"  // e.g. Value - ValueChanged
+                || eventSymbol.Name == $"{p.Name}Selected"  // e.g. Date - DateSelected
+                || eventSymbol.Name == $"Is{p.Name}Changed"  // e.g. Selected - IsSelectedChanged
+                || $"Is{eventSymbol.Name}" == $"{p.Name}Changed"  // e.g. IsSelected - SelectedChanged
+                || $"Is{eventSymbol.Name}" == $"{p.Name}");  // e.g. IsToggled - Toggled
 
             return property != null;
         }

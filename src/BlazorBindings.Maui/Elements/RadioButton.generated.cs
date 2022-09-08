@@ -29,6 +29,7 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public bool IsChecked { get; set; }
         [Parameter] public Color TextColor { get; set; }
         [Parameter] public TextTransform TextTransform { get; set; }
+        [Parameter] public EventCallback<bool> IsCheckedChanged { get; set; }
 
         public new MC.RadioButton NativeControl => (MC.RadioButton)((Element)this).NativeControl;
 
@@ -120,6 +121,16 @@ namespace BlazorBindings.Maui.Elements
                     {
                         TextTransform = (TextTransform)value;
                         NativeControl.TextTransform = TextTransform;
+                    }
+                    break;
+                case nameof(IsCheckedChanged):
+                    if (!Equals(IsCheckedChanged, value))
+                    {
+                        void NativeControlCheckedChanged(object sender, MC.CheckedChangedEventArgs e) => IsCheckedChanged.InvokeAsync(NativeControl.IsChecked);
+
+                        IsCheckedChanged = (EventCallback<bool>)value;
+                        NativeControl.CheckedChanged -= NativeControlCheckedChanged;
+                        NativeControl.CheckedChanged += NativeControlCheckedChanged;
                     }
                     break;
 

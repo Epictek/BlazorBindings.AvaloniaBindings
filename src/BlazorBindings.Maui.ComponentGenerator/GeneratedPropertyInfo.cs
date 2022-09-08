@@ -131,27 +131,27 @@ namespace ComponentWrapperGenerator
             }
         }
 
-        internal static GeneratedPropertyInfo[] GetValueProperties(Compilation compilation, ITypeSymbol componentType, IList<UsingStatement> usings)
+        internal static GeneratedPropertyInfo[] GetValueProperties(Compilation compilation, GeneratedComponentInfo componentInfo, IList<UsingStatement> usings)
         {
-            var props = componentType.GetMembers().OfType<IPropertySymbol>()
-                    .Where(IsPublicProperty)
-                    .Where(HasPublicSetter)
-                    .Where(prop => !DisallowedComponentTypes.Contains(prop.Type.GetFullName()))
-                    .OrderBy(prop => prop.Name, StringComparer.OrdinalIgnoreCase);
+            var props = componentInfo.TypeSymbol.GetMembers().OfType<IPropertySymbol>()
+                .Where(p => !componentInfo.Exclude.Contains(p.Name))
+                .Where(IsPublicProperty)
+                .Where(HasPublicSetter)
+                .Where(prop => !DisallowedComponentTypes.Contains(prop.Type.GetFullName()))
+                .OrderBy(prop => prop.Name, StringComparer.OrdinalIgnoreCase);
 
             return props.Select(prop => new GeneratedPropertyInfo(compilation, prop, GeneratedPropertyKind.Value, usings)).ToArray();
         }
 
         private static bool IsPublicProperty(IPropertySymbol propertyInfo)
         {
-            return propertyInfo.GetMethod?.DeclaredAccessibility == Accessibility.Public && IsPropertyBrowsable(propertyInfo) && !propertyInfo.IsIndexer;
-
-            static bool IsPropertyBrowsable(IPropertySymbol propInfo)
-            {
-                // [EditorBrowsable(EditorBrowsableState.Never)]
-                return !propInfo.GetAttributes().Any(a => a.AttributeClass.Name == nameof(EditorBrowsableAttribute)
-                    && a.ConstructorArguments.FirstOrDefault().Value?.Equals((int)EditorBrowsableState.Never) == true);
-            }
+            return propertyInfo.GetMethod?.DeclaredAccessibility == Accessibility.Public && IsBrowsable(propertyInfo) && !propertyInfo.IsIndexer;
+        }
+        private static bool IsBrowsable(ISymbol propInfo)
+        {
+            // [EditorBrowsable(EditorBrowsableState.Never)]
+            return !propInfo.GetAttributes().Any(a => a.AttributeClass.Name == nameof(EditorBrowsableAttribute)
+                && a.ConstructorArguments.FirstOrDefault().Value?.Equals((int)EditorBrowsableState.Never) == true);
         }
 
         private static bool HasPublicSetter(IPropertySymbol propertyInfo)

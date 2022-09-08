@@ -30,6 +30,10 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public string Title { get; set; }
         [Parameter] public RenderFragment MenuBarItems { get; set; }
         [Parameter] public RenderFragment ToolbarItems { get; set; }
+        [Parameter] public EventCallback<MC.NavigatedToEventArgs> OnNavigatedTo { get; set; }
+        [Parameter] public EventCallback<MC.NavigatingFromEventArgs> OnNavigatingFrom { get; set; }
+        [Parameter] public EventCallback<MC.NavigatedFromEventArgs> OnNavigatedFrom { get; set; }
+        [Parameter] public EventCallback OnLayoutChanged { get; set; }
         [Parameter] public EventCallback OnAppearing { get; set; }
         [Parameter] public EventCallback OnDisappearing { get; set; }
 
@@ -81,6 +85,46 @@ namespace BlazorBindings.Maui.Elements
                     break;
                 case nameof(ToolbarItems):
                     ToolbarItems = (RenderFragment)value;
+                    break;
+                case nameof(OnNavigatedTo):
+                    if (!Equals(OnNavigatedTo, value))
+                    {
+                        void NativeControlNavigatedTo(object sender, MC.NavigatedToEventArgs e) => OnNavigatedTo.InvokeAsync(e);
+
+                        OnNavigatedTo = (EventCallback<MC.NavigatedToEventArgs>)value;
+                        NativeControl.NavigatedTo -= NativeControlNavigatedTo;
+                        NativeControl.NavigatedTo += NativeControlNavigatedTo;
+                    }
+                    break;
+                case nameof(OnNavigatingFrom):
+                    if (!Equals(OnNavigatingFrom, value))
+                    {
+                        void NativeControlNavigatingFrom(object sender, MC.NavigatingFromEventArgs e) => OnNavigatingFrom.InvokeAsync(e);
+
+                        OnNavigatingFrom = (EventCallback<MC.NavigatingFromEventArgs>)value;
+                        NativeControl.NavigatingFrom -= NativeControlNavigatingFrom;
+                        NativeControl.NavigatingFrom += NativeControlNavigatingFrom;
+                    }
+                    break;
+                case nameof(OnNavigatedFrom):
+                    if (!Equals(OnNavigatedFrom, value))
+                    {
+                        void NativeControlNavigatedFrom(object sender, MC.NavigatedFromEventArgs e) => OnNavigatedFrom.InvokeAsync(e);
+
+                        OnNavigatedFrom = (EventCallback<MC.NavigatedFromEventArgs>)value;
+                        NativeControl.NavigatedFrom -= NativeControlNavigatedFrom;
+                        NativeControl.NavigatedFrom += NativeControlNavigatedFrom;
+                    }
+                    break;
+                case nameof(OnLayoutChanged):
+                    if (!Equals(OnLayoutChanged, value))
+                    {
+                        void NativeControlLayoutChanged(object sender, EventArgs e) => OnLayoutChanged.InvokeAsync();
+
+                        OnLayoutChanged = (EventCallback)value;
+                        NativeControl.LayoutChanged -= NativeControlLayoutChanged;
+                        NativeControl.LayoutChanged += NativeControlLayoutChanged;
+                    }
                     break;
                 case nameof(OnAppearing):
                     if (!Equals(OnAppearing, value))

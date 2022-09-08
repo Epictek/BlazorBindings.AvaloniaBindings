@@ -7,6 +7,7 @@ using MC = Microsoft.Maui.Controls;
 using MCC = Microsoft.Maui.Controls.Compatibility;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Maui;
+using System;
 using System.Threading.Tasks;
 
 namespace BlazorBindings.Maui.Elements.Compatibility
@@ -21,6 +22,7 @@ namespace BlazorBindings.Maui.Elements.Compatibility
         [Parameter] public bool CascadeInputTransparent { get; set; }
         [Parameter] public bool IsClippedToBounds { get; set; }
         [Parameter] public Thickness Padding { get; set; }
+        [Parameter] public EventCallback OnLayoutChanged { get; set; }
 
         public new MCC.Layout NativeControl => (MCC.Layout)((Element)this).NativeControl;
 
@@ -48,6 +50,16 @@ namespace BlazorBindings.Maui.Elements.Compatibility
                     {
                         Padding = (Thickness)value;
                         NativeControl.Padding = Padding;
+                    }
+                    break;
+                case nameof(OnLayoutChanged):
+                    if (!Equals(OnLayoutChanged, value))
+                    {
+                        void NativeControlLayoutChanged(object sender, EventArgs e) => OnLayoutChanged.InvokeAsync();
+
+                        OnLayoutChanged = (EventCallback)value;
+                        NativeControl.LayoutChanged -= NativeControlLayoutChanged;
+                        NativeControl.LayoutChanged += NativeControlLayoutChanged;
                     }
                     break;
 

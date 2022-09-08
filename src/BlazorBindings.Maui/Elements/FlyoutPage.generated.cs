@@ -6,6 +6,7 @@ using BlazorBindings.Maui.Elements.Handlers;
 using MC = Microsoft.Maui.Controls;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
+using System;
 using System.Threading.Tasks;
 
 namespace BlazorBindings.Maui.Elements
@@ -26,6 +27,7 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public bool IsPresented { get; set; }
         [Parameter] public RenderFragment Detail { get; set; }
         [Parameter] public RenderFragment Flyout { get; set; }
+        [Parameter] public EventCallback<bool> IsPresentedChanged { get; set; }
 
         public new MC.FlyoutPage NativeControl => (MC.FlyoutPage)((Element)this).NativeControl;
 
@@ -61,6 +63,16 @@ namespace BlazorBindings.Maui.Elements
                     break;
                 case nameof(Flyout):
                     Flyout = (RenderFragment)value;
+                    break;
+                case nameof(IsPresentedChanged):
+                    if (!Equals(IsPresentedChanged, value))
+                    {
+                        void NativeControlIsPresentedChanged(object sender, EventArgs e) => IsPresentedChanged.InvokeAsync(NativeControl.IsPresented);
+
+                        IsPresentedChanged = (EventCallback<bool>)value;
+                        NativeControl.IsPresentedChanged -= NativeControlIsPresentedChanged;
+                        NativeControl.IsPresentedChanged += NativeControlIsPresentedChanged;
+                    }
                     break;
 
                 default:

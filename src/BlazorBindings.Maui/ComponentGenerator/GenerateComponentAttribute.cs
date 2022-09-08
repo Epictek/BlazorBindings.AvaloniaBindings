@@ -8,5 +8,7 @@ namespace BlazorBindings.Maui.ComponentGenerator
         public GenerateComponentAttribute(Type typeToGenerate)
         {
         }
+
+        public string[] Exclude { get; set; }
     }
 }

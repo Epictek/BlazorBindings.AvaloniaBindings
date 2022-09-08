@@ -42,9 +42,13 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public double TranslationY { get; set; }
         [Parameter] public double WidthRequest { get; set; }
         [Parameter] public int ZIndex { get; set; }
+        [Parameter] public EventCallback OnLoaded { get; set; }
+        [Parameter] public EventCallback OnUnloaded { get; set; }
+        [Parameter] public EventCallback OnChildrenReordered { get; set; }
         [Parameter] public EventCallback<MC.FocusEventArgs> OnFocused { get; set; }
-        [Parameter] public EventCallback<MC.FocusEventArgs> OnUnfocused { get; set; }
+        [Parameter] public EventCallback OnMeasureInvalidated { get; set; }
         [Parameter] public EventCallback OnSizeChanged { get; set; }
+        [Parameter] public EventCallback<MC.FocusEventArgs> OnUnfocused { get; set; }
 
         public new MC.VisualElement NativeControl => (MC.VisualElement)((Element)this).NativeControl;
 
@@ -221,6 +225,36 @@ namespace BlazorBindings.Maui.Elements
                         NativeControl.ZIndex = ZIndex;
                     }
                     break;
+                case nameof(OnLoaded):
+                    if (!Equals(OnLoaded, value))
+                    {
+                        void NativeControlLoaded(object sender, EventArgs e) => OnLoaded.InvokeAsync();
+
+                        OnLoaded = (EventCallback)value;
+                        NativeControl.Loaded -= NativeControlLoaded;
+                        NativeControl.Loaded += NativeControlLoaded;
+                    }
+                    break;
+                case nameof(OnUnloaded):
+                    if (!Equals(OnUnloaded, value))
+                    {
+                        void NativeControlUnloaded(object sender, EventArgs e) => OnUnloaded.InvokeAsync();
+
+                        OnUnloaded = (EventCallback)value;
+                        NativeControl.Unloaded -= NativeControlUnloaded;
+                        NativeControl.Unloaded += NativeControlUnloaded;
+                    }
+                    break;
+                case nameof(OnChildrenReordered):
+                    if (!Equals(OnChildrenReordered, value))
+                    {
+                        void NativeControlChildrenReordered(object sender, EventArgs e) => OnChildrenReordered.InvokeAsync();
+
+                        OnChildrenReordered = (EventCallback)value;
+                        NativeControl.ChildrenReordered -= NativeControlChildrenReordered;
+                        NativeControl.ChildrenReordered += NativeControlChildrenReordered;
+                    }
+                    break;
                 case nameof(OnFocused):
                     if (!Equals(OnFocused, value))
                     {
@@ -231,14 +265,14 @@ namespace BlazorBindings.Maui.Elements
                         NativeControl.Focused += NativeControlFocused;
                     }
                     break;
-                case nameof(OnUnfocused):
-                    if (!Equals(OnUnfocused, value))
+                case nameof(OnMeasureInvalidated):
+                    if (!Equals(OnMeasureInvalidated, value))
                     {
-                        void NativeControlUnfocused(object sender, MC.FocusEventArgs e) => OnUnfocused.InvokeAsync(e);
+                        void NativeControlMeasureInvalidated(object sender, EventArgs e) => OnMeasureInvalidated.InvokeAsync();
 
-                        OnUnfocused = (EventCallback<MC.FocusEventArgs>)value;
-                        NativeControl.Unfocused -= NativeControlUnfocused;
-                        NativeControl.Unfocused += NativeControlUnfocused;
+                        OnMeasureInvalidated = (EventCallback)value;
+                        NativeControl.MeasureInvalidated -= NativeControlMeasureInvalidated;
+                        NativeControl.MeasureInvalidated += NativeControlMeasureInvalidated;
                     }
                     break;
                 case nameof(OnSizeChanged):
@@ -249,6 +283,16 @@ namespace BlazorBindings.Maui.Elements
                         OnSizeChanged = (EventCallback)value;
                         NativeControl.SizeChanged -= NativeControlSizeChanged;
                         NativeControl.SizeChanged += NativeControlSizeChanged;
+                    }
+                    break;
+                case nameof(OnUnfocused):
+                    if (!Equals(OnUnfocused, value))
+                    {
+                        void NativeControlUnfocused(object sender, MC.FocusEventArgs e) => OnUnfocused.InvokeAsync(e);
+
+                        OnUnfocused = (EventCallback<MC.FocusEventArgs>)value;
+                        NativeControl.Unfocused -= NativeControlUnfocused;
+                        NativeControl.Unfocused += NativeControlUnfocused;
                     }
                     break;
 

@@ -46,7 +46,7 @@ using System.Runtime.CompilerServices;
 [assembly: GenerateComponent(typeof(ProgressBar))]
 [assembly: GenerateComponent(typeof(RadialGradientBrush))]
 [assembly: GenerateComponent(typeof(RadioButton))]
-[assembly: GenerateComponent(typeof(RefreshView))]
+[assembly: GenerateComponent(typeof(RefreshView), Exclude = new[] { nameof(RefreshView.Refreshing) })]
 [assembly: GenerateComponent(typeof(ScrollView))]
 [assembly: GenerateComponent(typeof(Shell))]
 [assembly: GenerateComponent(typeof(ShellContent))]

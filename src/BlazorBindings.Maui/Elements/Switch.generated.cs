@@ -5,7 +5,6 @@ using BlazorBindings.Core;
 using MC = Microsoft.Maui.Controls;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Maui.Graphics;
-using System.ComponentModel;
 using System.Threading.Tasks;
 
 namespace BlazorBindings.Maui.Elements
@@ -54,17 +53,11 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(IsToggledChanged):
                     if (!Equals(IsToggledChanged, value))
                     {
-                        void NativeControlPropertyChanged(object sender, PropertyChangedEventArgs e)
-                        {
-                            if (e.PropertyName == nameof(NativeControl.IsToggled))
-                            {
-                                IsToggledChanged.InvokeAsync(NativeControl.IsToggled);
-                            }
-                        }
+                        void NativeControlToggled(object sender, MC.ToggledEventArgs e) => IsToggledChanged.InvokeAsync(NativeControl.IsToggled);
 
                         IsToggledChanged = (EventCallback<bool>)value;
-                        NativeControl.PropertyChanged -= NativeControlPropertyChanged;
-                        NativeControl.PropertyChanged += NativeControlPropertyChanged;
+                        NativeControl.Toggled -= NativeControlToggled;
+                        NativeControl.Toggled += NativeControlToggled;
                     }
                     break;
 

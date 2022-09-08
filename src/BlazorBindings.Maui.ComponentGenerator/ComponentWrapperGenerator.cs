@@ -65,9 +65,9 @@ namespace ComponentWrapperGenerator
             var componentNamespacePrefix = GetNamespacePrefix(typeToGenerate, usings);
 
             // props
-            var valueProperties = GeneratedPropertyInfo.GetValueProperties(compilation, typeToGenerate, usings);
-            var contentProperties = GeneratedPropertyInfo.GetContentProperties(compilation, typeToGenerate, usings);
-            var eventCallbackProperties = GeneratedPropertyInfo.GetEventCallbackProperties(compilation, typeToGenerate, usings);
+            var valueProperties = GeneratedPropertyInfo.GetValueProperties(compilation, generatedInfo, usings);
+            var contentProperties = GeneratedPropertyInfo.GetContentProperties(compilation, generatedInfo, usings);
+            var eventCallbackProperties = GeneratedPropertyInfo.GetEventCallbackProperties(compilation, generatedInfo, usings);
             var allProperties = valueProperties.Concat(contentProperties).Concat(eventCallbackProperties);
             var propertyDeclarationBuilder = new StringBuilder();
             if (allProperties.Any())

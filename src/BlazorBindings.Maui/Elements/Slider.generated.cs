@@ -24,9 +24,9 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public Color ThumbColor { get; set; }
         [Parameter] public MC.ImageSource ThumbImageSource { get; set; }
         [Parameter] public double Value { get; set; }
-        [Parameter] public EventCallback OnDragCompleted { get; set; }
-        [Parameter] public EventCallback OnDragStarted { get; set; }
         [Parameter] public EventCallback<double> ValueChanged { get; set; }
+        [Parameter] public EventCallback OnDragStarted { get; set; }
+        [Parameter] public EventCallback OnDragCompleted { get; set; }
 
         public new MC.Slider NativeControl => (MC.Slider)((Element)this).NativeControl;
 
@@ -85,14 +85,14 @@ namespace BlazorBindings.Maui.Elements
                         NativeControl.Value = Value;
                     }
                     break;
-                case nameof(OnDragCompleted):
-                    if (!Equals(OnDragCompleted, value))
+                case nameof(ValueChanged):
+                    if (!Equals(ValueChanged, value))
                     {
-                        void NativeControlDragCompleted(object sender, EventArgs e) => OnDragCompleted.InvokeAsync();
+                        void NativeControlValueChanged(object sender, MC.ValueChangedEventArgs e) => ValueChanged.InvokeAsync(NativeControl.Value);
 
-                        OnDragCompleted = (EventCallback)value;
-                        NativeControl.DragCompleted -= NativeControlDragCompleted;
-                        NativeControl.DragCompleted += NativeControlDragCompleted;
+                        ValueChanged = (EventCallback<double>)value;
+                        NativeControl.ValueChanged -= NativeControlValueChanged;
+                        NativeControl.ValueChanged += NativeControlValueChanged;
                     }
                     break;
                 case nameof(OnDragStarted):
@@ -105,14 +105,14 @@ namespace BlazorBindings.Maui.Elements
                         NativeControl.DragStarted += NativeControlDragStarted;
                     }
                     break;
-                case nameof(ValueChanged):
-                    if (!Equals(ValueChanged, value))
+                case nameof(OnDragCompleted):
+                    if (!Equals(OnDragCompleted, value))
                     {
-                        void NativeControlValueChanged(object sender, MC.ValueChangedEventArgs e) => ValueChanged.InvokeAsync(NativeControl.Value);
+                        void NativeControlDragCompleted(object sender, EventArgs e) => OnDragCompleted.InvokeAsync();
 
-                        ValueChanged = (EventCallback<double>)value;
-                        NativeControl.ValueChanged -= NativeControlValueChanged;
-                        NativeControl.ValueChanged += NativeControlValueChanged;
+                        OnDragCompleted = (EventCallback)value;
+                        NativeControl.DragCompleted -= NativeControlDragCompleted;
+                        NativeControl.DragCompleted += NativeControlDragCompleted;
                     }
                     break;
 

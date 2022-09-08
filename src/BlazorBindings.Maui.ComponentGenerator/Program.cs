@@ -66,11 +66,32 @@ namespace ComponentWrapperGenerator
             var attributes = compilation.Assembly.GetAttributes();
             var typesToGenerate = attributes
                 .Where(a => a.AttributeClass?.ToDisplayString() == "BlazorBindings.Maui.ComponentGenerator.GenerateComponentAttribute")
-                .Select(a => a.ConstructorArguments.FirstOrDefault().Value as INamedTypeSymbol)
-                .Where(type => type != null)
-                .Select(type => new GeneratedComponentInfo { TypeSymbol = type })
+                .Select(a =>
+                {
+                    return new GeneratedComponentInfo
+                    {
+                        TypeSymbol = a.ConstructorArguments.FirstOrDefault().Value as INamedTypeSymbol,
+                        Exclude = GetNamedArgumentValues<string>(a, "Exclude").ToHashSet()
+                    };
+                })
+                .Where(type => type.TypeSymbol != null)
                 .ToArray();
             return typesToGenerate;
+        }
+
+        private static T[] GetNamedArgumentValues<T>(AttributeData attribute, string name) where T : class
+        {
+            var argumentConstant = attribute.NamedArguments.FirstOrDefault(a => a.Key == name).Value;
+
+            if (argumentConstant.Kind != TypedConstantKind.Array)
+                return Array.Empty<T>();
+
+            var values = argumentConstant.Values;
+
+            if (values.IsDefaultOrEmpty)
+                return Array.Empty<T>();
+
+            return values.Select(a => a.Value as T).Where(v => v is not null).ToArray();
         }
 
         private static async Task<Compilation> CreateComplitation(Options o)
