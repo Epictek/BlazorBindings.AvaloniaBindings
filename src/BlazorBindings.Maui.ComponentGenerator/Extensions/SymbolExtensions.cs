@@ -70,5 +70,21 @@ namespace ComponentWrapperGenerator.Extensions
                 return namespaceOrType.Name;
             }
         }
+
+        public static bool IsHidingMember(this ISymbol symbol)
+        {
+            var currentType = symbol.ContainingType?.BaseType;
+
+            while (currentType != null)
+            {
+                var containsMember = currentType.GetMembers(symbol.Name).Any(s => s.Kind == symbol.Kind);
+                if (containsMember)
+                    return true;
+
+                currentType = currentType.BaseType;
+            }
+
+            return false;
+        }
     }
 }

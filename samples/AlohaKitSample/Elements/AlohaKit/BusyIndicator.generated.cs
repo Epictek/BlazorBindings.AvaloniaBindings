@@ -18,7 +18,6 @@ namespace BlazorBindings.Maui.Elements.AlohaKit
             RegisterAdditionalHandlers();
         }
 
-        [Parameter] public Color BackgroundColor { get; set; }
         [Parameter] public AC.BusyIndicatorDrawable BusyIndicatorDrawable { get; set; }
         [Parameter] public Color Color { get; set; }
         [Parameter] public bool HasShadow { get; set; }

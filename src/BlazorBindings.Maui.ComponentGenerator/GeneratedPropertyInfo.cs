@@ -97,6 +97,12 @@ namespace ComponentWrapperGenerator
 
         public string GetPropertyDeclaration()
         {
+            // razor compiler doesn't allow 'new' properties, it condiders them as duplicates.
+            if (_propertyInfo is not null && _propertyInfo.IsHidingMember())
+            {
+                return "";
+            }
+
             const string indent = "        ";
 
             var xmlDocContents = _propertyInfo is null ? "" : ComponentWrapperGenerator.GetXmlDocContents(_propertyInfo, indent);
