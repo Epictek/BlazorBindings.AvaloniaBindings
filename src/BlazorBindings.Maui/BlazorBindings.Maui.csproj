@@ -5,7 +5,7 @@
 		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net6.0-windows10.0.19041.0</TargetFrameworks>
 		<UseMaui>true</UseMaui>
 		<Title>Maui binding for Blazor</Title>
-		<Description>Experimental Maui Blazor Bindings enables using Blazor syntax in .razor files to build native apps for iOS and Android.</Description>
+		<Description>Maui Blazor Bindings enables using Blazor syntax in .razor files to build native apps for iOS and Android.</Description>
 		<PackageTags>blazor;blazorbindings</PackageTags>
 
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">10.0</SupportedOSPlatformVersion>

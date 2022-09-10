@@ -3,6 +3,11 @@
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
 		<TargetFrameworks>net6.0</TargetFrameworks>
+
+		<Description>Dotnet tool which generate BlazorBindings.Maui components for MAUI elements.</Description>
+		<PackAsTool>true</PackAsTool>
+		<ToolCommandName>dotnet-generate-maui-blazor-components</ToolCommandName>
+		<PackageTags>blazor;blazorbindings</PackageTags>
 	</PropertyGroup>
 
 	<ItemGroup>
