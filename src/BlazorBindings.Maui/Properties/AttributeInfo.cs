@@ -11,6 +11,7 @@ using System.Runtime.CompilerServices;
 [assembly: GenerateComponent(typeof(ActivityIndicator))]
 [assembly: GenerateComponent(typeof(BaseMenuItem))]
 [assembly: GenerateComponent(typeof(BaseShellItem))]
+[assembly: GenerateComponent(typeof(Border))]
 [assembly: GenerateComponent(typeof(BoxView))]
 [assembly: GenerateComponent(typeof(Brush))]
 [assembly: GenerateComponent(typeof(Button))]

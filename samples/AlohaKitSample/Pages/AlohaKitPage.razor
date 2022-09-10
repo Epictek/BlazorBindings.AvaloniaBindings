@@ -1,6 +1,6 @@
 ﻿@using BlazorBindings.Maui.Elements.AlohaKit
 
-<ContentPage>
+<ContentPage Title="AlohaKit">
     <ScrollView>
         <VerticalStackLayout Margin="20" Spacing="8">
             <Label>Rating: @RatingDescription</Label>
@@ -17,7 +17,7 @@
 
             <Grid ColumnDefinitions="*,Auto">
                 <VerticalProgressBar Progress="sliderValue" Grid.Column="1" />
-                <VerticalStackLayout>
+                <VerticalStackLayout Spacing="8">
                     <HorizontalProgressBar Progress="sliderValue" />
                     <ProgressRadial Minimum="0" Maximum="100" Value="(int)(sliderValue*100)" />
                 </VerticalStackLayout>
@@ -56,6 +56,5 @@
 
     double numericUpDownValue;
 
-    bool checkboxChecked;
-    bool switchToggled;
+    bool checkboxChecked = true;
 }

@@ -10,7 +10,7 @@ namespace AlohaKitSample
     {
         public App(MauiBlazorBindingsRenderer renderer)
         {
-            renderer.AddComponent<RatingPage>(this);
+            renderer.AddComponent<AppShell>(this);
         }
     }
 }

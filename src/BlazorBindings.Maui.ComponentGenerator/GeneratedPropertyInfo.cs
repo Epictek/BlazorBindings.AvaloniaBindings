@@ -176,7 +176,8 @@ namespace ComponentWrapperGenerator
             "Microsoft.Maui.Controls.ControlTemplate",
             "Microsoft.Maui.Controls.DataTemplate",
             "Microsoft.Maui.Controls.Element",
-            // "Microsoft.Maui.Controls.Font", // TODO: This is temporary; should be possible to add support later
+            "Microsoft.Maui.Font", // TODO: This is temporary; should be possible to add support later
+            "Microsoft.Maui.Graphics.Font", // TODO: This is temporary; should be possible to add support later
             "Microsoft.Maui.Controls.FormattedString",
             "Microsoft.Maui.Controls.Shapes.Geometry",
             "Microsoft.Maui.Controls.GradientStopCollection",

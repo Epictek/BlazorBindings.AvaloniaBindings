@@ -1,6 +1,7 @@
 ﻿using AlohaKit.Controls;
 using BlazorBindings.Maui.ComponentGenerator;
 
+// AlohaKit
 [assembly: GenerateComponent(typeof(Rating))]
 [assembly: GenerateComponent(typeof(BusyIndicator))]
 [assembly: GenerateComponent(typeof(Avatar))]
@@ -12,3 +13,10 @@ using BlazorBindings.Maui.ComponentGenerator;
 [assembly: GenerateComponent(typeof(ProgressRadial))]
 [assembly: GenerateComponent(typeof(AlohaKit.Controls.Slider))]
 [assembly: GenerateComponent(typeof(PulseIcon))]
+
+// CommunityToolkit
+[assembly: GenerateComponent(typeof(CommunityToolkit.Maui.Views.AvatarView))]
+[assembly: GenerateComponent(typeof(CommunityToolkit.Maui.Views.DrawingView))]
+
+// XCalendar
+[assembly: GenerateComponent(typeof(XCalendar.Maui.Views.CalendarView))]

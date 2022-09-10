@@ -1,4 +1,5 @@
 ﻿using BlazorBindings.Maui;
+using CommunityToolkit.Maui;
 
 namespace AlohaKitSample
 {
@@ -10,6 +11,7 @@ namespace AlohaKitSample
             builder
                 .UseMauiApp<App>()
                 .UseMauiBlazorBindings()
+                .UseMauiCommunityToolkit()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
