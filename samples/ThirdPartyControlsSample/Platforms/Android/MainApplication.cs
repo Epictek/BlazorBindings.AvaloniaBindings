@@ -1,7 +1,7 @@
 ﻿using Android.App;
 using Android.Runtime;
 
-namespace AlohaKitSample
+namespace ThirdPartyControlsSample
 {
     [Application]
     public class MainApplication : MauiApplication

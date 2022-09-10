@@ -1,7 +1,7 @@
 ﻿using ObjCRuntime;
 using UIKit;
 
-namespace AlohaKitSample
+namespace ThirdPartyControlsSample
 {
     public class Program
     {

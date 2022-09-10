@@ -1,7 +1,7 @@
 ﻿using BlazorBindings.Maui;
 using CommunityToolkit.Maui;
 
-namespace AlohaKitSample
+namespace ThirdPartyControlsSample
 {
     public static class MauiProgram
     {

@@ -1,8 +1,8 @@
 {
   "profiles": {
-    "GenerateAlohaKit": {
+    "GenerateThirdPartyControls": {
       "commandName": "Project",
-      "commandLineArgs": "..\\..\\..\\..\\..\\samples\\AlohaKitSample\\AlohaKitSample.csproj"
+      "commandLineArgs": "..\\..\\..\\..\\..\\samples\\ThirdPartyControlsSample\\ThirdPartyControlsSample.csproj"
     },
     "GenerateBlazorBindings.Maui": {
       "commandName": "Project",

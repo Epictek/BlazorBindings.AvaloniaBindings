@@ -1,6 +1,6 @@
 ﻿using Foundation;
 
-namespace AlohaKitSample
+namespace ThirdPartyControlsSample
 {
     [Register("AppDelegate")]
     public class AppDelegate : MauiUIApplicationDelegate

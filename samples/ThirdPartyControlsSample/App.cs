@@ -1,10 +1,10 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-using AlohaKitSample.Pages;
+using ThirdPartyControlsSample.Pages;
 using BlazorBindings.Maui;
 
-namespace AlohaKitSample
+namespace ThirdPartyControlsSample
 {
     public class App : Application
     {
