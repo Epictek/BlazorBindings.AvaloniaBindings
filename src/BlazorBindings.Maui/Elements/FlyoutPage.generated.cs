@@ -26,9 +26,9 @@ namespace BlazorBindings.Maui.Elements
             RegisterAdditionalHandlers();
         }
 
-        [Parameter] public MC.FlyoutLayoutBehavior FlyoutLayoutBehavior { get; set; }
-        [Parameter] public bool IsGestureEnabled { get; set; }
-        [Parameter] public bool IsPresented { get; set; }
+        [Parameter] public MC.FlyoutLayoutBehavior? FlyoutLayoutBehavior { get; set; }
+        [Parameter] public bool? IsGestureEnabled { get; set; }
+        [Parameter] public bool? IsPresented { get; set; }
         [Parameter] public RenderFragment Detail { get; set; }
         [Parameter] public RenderFragment Flyout { get; set; }
         [Parameter] public EventCallback<bool> IsPresentedChanged { get; set; }
@@ -44,22 +44,22 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(FlyoutLayoutBehavior):
                     if (!Equals(FlyoutLayoutBehavior, value))
                     {
-                        FlyoutLayoutBehavior = (MC.FlyoutLayoutBehavior)value;
-                        NativeControl.FlyoutLayoutBehavior = FlyoutLayoutBehavior;
+                        FlyoutLayoutBehavior = (MC.FlyoutLayoutBehavior?)value;
+                        NativeControl.FlyoutLayoutBehavior = FlyoutLayoutBehavior ?? (MC.FlyoutLayoutBehavior)MC.FlyoutPage.FlyoutLayoutBehaviorProperty.DefaultValue;
                     }
                     break;
                 case nameof(IsGestureEnabled):
                     if (!Equals(IsGestureEnabled, value))
                     {
-                        IsGestureEnabled = (bool)value;
-                        NativeControl.IsGestureEnabled = IsGestureEnabled;
+                        IsGestureEnabled = (bool?)value;
+                        NativeControl.IsGestureEnabled = IsGestureEnabled ?? (bool)MC.FlyoutPage.IsGestureEnabledProperty.DefaultValue;
                     }
                     break;
                 case nameof(IsPresented):
                     if (!Equals(IsPresented, value))
                     {
-                        IsPresented = (bool)value;
-                        NativeControl.IsPresented = IsPresented;
+                        IsPresented = (bool?)value;
+                        NativeControl.IsPresented = IsPresented ?? (bool)MC.FlyoutPage.IsPresentedProperty.DefaultValue;
                     }
                     break;
                 case nameof(Detail):

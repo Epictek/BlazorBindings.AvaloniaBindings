@@ -24,10 +24,10 @@ namespace BlazorBindings.Maui.Elements
             RegisterAdditionalHandlers();
         }
 
-        [Parameter] public bool CascadeInputTransparent { get; set; }
-        [Parameter] public bool IgnoreSafeArea { get; set; }
-        [Parameter] public bool IsClippedToBounds { get; set; }
-        [Parameter] public Thickness Padding { get; set; }
+        [Parameter] public bool? CascadeInputTransparent { get; set; }
+        [Parameter] public bool? IgnoreSafeArea { get; set; }
+        [Parameter] public bool? IsClippedToBounds { get; set; }
+        [Parameter] public Thickness? Padding { get; set; }
         [Parameter] public RenderFragment ChildContent { get; set; }
 
         public new MC.Layout NativeControl => (MC.Layout)((Element)this).NativeControl;
@@ -40,29 +40,29 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(CascadeInputTransparent):
                     if (!Equals(CascadeInputTransparent, value))
                     {
-                        CascadeInputTransparent = (bool)value;
-                        NativeControl.CascadeInputTransparent = CascadeInputTransparent;
+                        CascadeInputTransparent = (bool?)value;
+                        NativeControl.CascadeInputTransparent = CascadeInputTransparent ?? (bool)MC.Layout.CascadeInputTransparentProperty.DefaultValue;
                     }
                     break;
                 case nameof(IgnoreSafeArea):
                     if (!Equals(IgnoreSafeArea, value))
                     {
-                        IgnoreSafeArea = (bool)value;
-                        NativeControl.IgnoreSafeArea = IgnoreSafeArea;
+                        IgnoreSafeArea = (bool?)value;
+                        NativeControl.IgnoreSafeArea = IgnoreSafeArea ?? default;
                     }
                     break;
                 case nameof(IsClippedToBounds):
                     if (!Equals(IsClippedToBounds, value))
                     {
-                        IsClippedToBounds = (bool)value;
-                        NativeControl.IsClippedToBounds = IsClippedToBounds;
+                        IsClippedToBounds = (bool?)value;
+                        NativeControl.IsClippedToBounds = IsClippedToBounds ?? (bool)MC.Layout.IsClippedToBoundsProperty.DefaultValue;
                     }
                     break;
                 case nameof(Padding):
                     if (!Equals(Padding, value))
                     {
-                        Padding = (Thickness)value;
-                        NativeControl.Padding = Padding;
+                        Padding = (Thickness?)value;
+                        NativeControl.Padding = Padding ?? (Thickness)MC.Layout.PaddingProperty.DefaultValue;
                     }
                     break;
                 case nameof(ChildContent):

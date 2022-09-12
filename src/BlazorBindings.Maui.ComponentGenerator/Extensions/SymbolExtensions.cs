@@ -86,5 +86,10 @@ namespace ComponentWrapperGenerator.Extensions
 
             return false;
         }
+
+        public static bool IsNullableStruct(this INamedTypeSymbol symbol)
+        {
+            return symbol.IsGenericType && symbol.ConstructedFrom.SpecialType == SpecialType.System_Nullable_T;
+        }
     }
 }

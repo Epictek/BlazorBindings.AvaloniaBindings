@@ -20,8 +20,8 @@ namespace BlazorBindings.Maui.Elements
             RegisterAdditionalHandlers();
         }
 
-        [Parameter] public Point EndPoint { get; set; }
-        [Parameter] public Point StartPoint { get; set; }
+        [Parameter] public Point? EndPoint { get; set; }
+        [Parameter] public Point? StartPoint { get; set; }
 
         public new MC.LinearGradientBrush NativeControl => (MC.LinearGradientBrush)((Element)this).NativeControl;
 
@@ -34,15 +34,15 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(EndPoint):
                     if (!Equals(EndPoint, value))
                     {
-                        EndPoint = (Point)value;
-                        NativeControl.EndPoint = EndPoint;
+                        EndPoint = (Point?)value;
+                        NativeControl.EndPoint = EndPoint ?? (Point)MC.LinearGradientBrush.EndPointProperty.DefaultValue;
                     }
                     break;
                 case nameof(StartPoint):
                     if (!Equals(StartPoint, value))
                     {
-                        StartPoint = (Point)value;
-                        NativeControl.StartPoint = StartPoint;
+                        StartPoint = (Point?)value;
+                        NativeControl.StartPoint = StartPoint ?? (Point)MC.LinearGradientBrush.StartPointProperty.DefaultValue;
                     }
                     break;
 

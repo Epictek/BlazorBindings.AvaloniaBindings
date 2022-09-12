@@ -21,13 +21,13 @@ namespace BlazorBindings.Maui.Elements
             RegisterAdditionalHandlers();
         }
 
-        [Parameter] public double Maximum { get; set; }
+        [Parameter] public double? Maximum { get; set; }
         [Parameter] public Color MaximumTrackColor { get; set; }
-        [Parameter] public double Minimum { get; set; }
+        [Parameter] public double? Minimum { get; set; }
         [Parameter] public Color MinimumTrackColor { get; set; }
         [Parameter] public Color ThumbColor { get; set; }
         [Parameter] public MC.ImageSource ThumbImageSource { get; set; }
-        [Parameter] public double Value { get; set; }
+        [Parameter] public double? Value { get; set; }
         [Parameter] public EventCallback<double> ValueChanged { get; set; }
         [Parameter] public EventCallback OnDragStarted { get; set; }
         [Parameter] public EventCallback OnDragCompleted { get; set; }
@@ -43,8 +43,8 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(Maximum):
                     if (!Equals(Maximum, value))
                     {
-                        Maximum = (double)value;
-                        NativeControl.Maximum = Maximum;
+                        Maximum = (double?)value;
+                        NativeControl.Maximum = Maximum ?? (double)MC.Slider.MaximumProperty.DefaultValue;
                     }
                     break;
                 case nameof(MaximumTrackColor):
@@ -57,8 +57,8 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(Minimum):
                     if (!Equals(Minimum, value))
                     {
-                        Minimum = (double)value;
-                        NativeControl.Minimum = Minimum;
+                        Minimum = (double?)value;
+                        NativeControl.Minimum = Minimum ?? (double)MC.Slider.MinimumProperty.DefaultValue;
                     }
                     break;
                 case nameof(MinimumTrackColor):
@@ -85,8 +85,8 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(Value):
                     if (!Equals(Value, value))
                     {
-                        Value = (double)value;
-                        NativeControl.Value = Value;
+                        Value = (double?)value;
+                        NativeControl.Value = Value ?? (double)MC.Slider.ValueProperty.DefaultValue;
                     }
                     break;
                 case nameof(ValueChanged):

@@ -21,7 +21,7 @@ namespace BlazorBindings.Maui.Elements
         }
 
         [Parameter] public Color Color { get; set; }
-        [Parameter] public bool IsRunning { get; set; }
+        [Parameter] public bool? IsRunning { get; set; }
 
         public new MC.ActivityIndicator NativeControl => (MC.ActivityIndicator)((Element)this).NativeControl;
 
@@ -41,8 +41,8 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(IsRunning):
                     if (!Equals(IsRunning, value))
                     {
-                        IsRunning = (bool)value;
-                        NativeControl.IsRunning = IsRunning;
+                        IsRunning = (bool?)value;
+                        NativeControl.IsRunning = IsRunning ?? (bool)MC.ActivityIndicator.IsRunningProperty.DefaultValue;
                     }
                     break;
 

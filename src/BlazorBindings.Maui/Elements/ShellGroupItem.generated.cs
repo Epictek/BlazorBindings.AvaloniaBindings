@@ -19,7 +19,7 @@ namespace BlazorBindings.Maui.Elements
             RegisterAdditionalHandlers();
         }
 
-        [Parameter] public MC.FlyoutDisplayOptions FlyoutDisplayOptions { get; set; }
+        [Parameter] public MC.FlyoutDisplayOptions? FlyoutDisplayOptions { get; set; }
 
         public new MC.ShellGroupItem NativeControl => (MC.ShellGroupItem)((Element)this).NativeControl;
 
@@ -32,8 +32,8 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(FlyoutDisplayOptions):
                     if (!Equals(FlyoutDisplayOptions, value))
                     {
-                        FlyoutDisplayOptions = (MC.FlyoutDisplayOptions)value;
-                        NativeControl.FlyoutDisplayOptions = FlyoutDisplayOptions;
+                        FlyoutDisplayOptions = (MC.FlyoutDisplayOptions?)value;
+                        NativeControl.FlyoutDisplayOptions = FlyoutDisplayOptions ?? (MC.FlyoutDisplayOptions)MC.ShellGroupItem.FlyoutDisplayOptionsProperty.DefaultValue;
                     }
                     break;
 

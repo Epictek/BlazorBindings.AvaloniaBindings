@@ -20,7 +20,7 @@ namespace BlazorBindings.Maui.Elements
             RegisterAdditionalHandlers();
         }
 
-        [Parameter] public double Progress { get; set; }
+        [Parameter] public double? Progress { get; set; }
         [Parameter] public Color ProgressColor { get; set; }
 
         public new MC.ProgressBar NativeControl => (MC.ProgressBar)((Element)this).NativeControl;
@@ -34,8 +34,8 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(Progress):
                     if (!Equals(Progress, value))
                     {
-                        Progress = (double)value;
-                        NativeControl.Progress = Progress;
+                        Progress = (double?)value;
+                        NativeControl.Progress = Progress ?? (double)MC.ProgressBar.ProgressProperty.DefaultValue;
                     }
                     break;
                 case nameof(ProgressColor):

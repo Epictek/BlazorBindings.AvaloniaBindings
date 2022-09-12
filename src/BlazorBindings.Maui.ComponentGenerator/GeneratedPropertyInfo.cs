@@ -88,6 +88,10 @@ namespace ComponentWrapperGenerator
                 {
                     return "RenderFragment";
                 }
+                else if (elementType.IsValueType && !elementType.IsNullableStruct())
+                {
+                    return GetTypeNameAndAddNamespace(elementType) + "?";
+                }
                 else
                 {
                     return GetTypeNameAndAddNamespace(elementType);
@@ -124,13 +128,26 @@ namespace ComponentWrapperGenerator
                     break;
 ";
 
-            static string GetConvertedProperty(ITypeSymbol propertyType, string propName)
+            string GetConvertedProperty(ITypeSymbol propertyType, string propName)
             {
-                if (propertyType is INamedTypeSymbol namedType && namedType.IsGenericType
-                    && namedType.ConstructedFrom.SpecialType == SpecialType.System_Collections_Generic_IList_T
-                    && namedType.TypeArguments[0].SpecialType == SpecialType.System_String)
+                if (propertyType is INamedTypeSymbol namedType)
                 {
-                    return $"AttributeHelper.GetStringList({propName})";
+                    if (namedType.IsGenericType
+                        && namedType.ConstructedFrom.SpecialType == SpecialType.System_Collections_Generic_IList_T
+                        && namedType.TypeArguments[0].SpecialType == SpecialType.System_String)
+                    {
+                        return $"AttributeHelper.GetStringList({propName})";
+                    }
+
+                    if (namedType.IsValueType && !namedType.IsNullableStruct())
+                    {
+                        var hasBindingProperty = !_propertyInfo.ContainingType.GetMembers($"{propName}Property").IsEmpty;
+                        var defaultValue = hasBindingProperty
+                            ? $"({GetTypeNameAndAddNamespace(propertyType)}){MauiContainingTypeName}.{propName}Property.DefaultValue"
+                            : "default";
+
+                        return $"{propName} ?? {defaultValue}";
+                    }
                 }
 
                 return propName;

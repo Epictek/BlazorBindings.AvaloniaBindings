@@ -26,13 +26,13 @@ namespace BlazorBindings.Maui.Elements
             RegisterAdditionalHandlers();
         }
 
-        [Parameter] public Thickness Padding { get; set; }
-        [Parameter] public double StrokeDashOffset { get; set; }
-        [Parameter] public PenLineCap StrokeLineCap { get; set; }
-        [Parameter] public PenLineJoin StrokeLineJoin { get; set; }
-        [Parameter] public double StrokeMiterLimit { get; set; }
+        [Parameter] public Thickness? Padding { get; set; }
+        [Parameter] public double? StrokeDashOffset { get; set; }
+        [Parameter] public PenLineCap? StrokeLineCap { get; set; }
+        [Parameter] public PenLineJoin? StrokeLineJoin { get; set; }
+        [Parameter] public double? StrokeMiterLimit { get; set; }
         [Parameter] public IShape StrokeShape { get; set; }
-        [Parameter] public double StrokeThickness { get; set; }
+        [Parameter] public double? StrokeThickness { get; set; }
         [Parameter] public RenderFragment ChildContent { get; set; }
 
         public new MC.Border NativeControl => (MC.Border)((Element)this).NativeControl;
@@ -46,36 +46,36 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(Padding):
                     if (!Equals(Padding, value))
                     {
-                        Padding = (Thickness)value;
-                        NativeControl.Padding = Padding;
+                        Padding = (Thickness?)value;
+                        NativeControl.Padding = Padding ?? (Thickness)MC.Border.PaddingProperty.DefaultValue;
                     }
                     break;
                 case nameof(StrokeDashOffset):
                     if (!Equals(StrokeDashOffset, value))
                     {
-                        StrokeDashOffset = (double)value;
-                        NativeControl.StrokeDashOffset = StrokeDashOffset;
+                        StrokeDashOffset = (double?)value;
+                        NativeControl.StrokeDashOffset = StrokeDashOffset ?? (double)MC.Border.StrokeDashOffsetProperty.DefaultValue;
                     }
                     break;
                 case nameof(StrokeLineCap):
                     if (!Equals(StrokeLineCap, value))
                     {
-                        StrokeLineCap = (PenLineCap)value;
-                        NativeControl.StrokeLineCap = StrokeLineCap;
+                        StrokeLineCap = (PenLineCap?)value;
+                        NativeControl.StrokeLineCap = StrokeLineCap ?? (PenLineCap)MC.Border.StrokeLineCapProperty.DefaultValue;
                     }
                     break;
                 case nameof(StrokeLineJoin):
                     if (!Equals(StrokeLineJoin, value))
                     {
-                        StrokeLineJoin = (PenLineJoin)value;
-                        NativeControl.StrokeLineJoin = StrokeLineJoin;
+                        StrokeLineJoin = (PenLineJoin?)value;
+                        NativeControl.StrokeLineJoin = StrokeLineJoin ?? (PenLineJoin)MC.Border.StrokeLineJoinProperty.DefaultValue;
                     }
                     break;
                 case nameof(StrokeMiterLimit):
                     if (!Equals(StrokeMiterLimit, value))
                     {
-                        StrokeMiterLimit = (double)value;
-                        NativeControl.StrokeMiterLimit = StrokeMiterLimit;
+                        StrokeMiterLimit = (double?)value;
+                        NativeControl.StrokeMiterLimit = StrokeMiterLimit ?? (double)MC.Border.StrokeMiterLimitProperty.DefaultValue;
                     }
                     break;
                 case nameof(StrokeShape):
@@ -88,8 +88,8 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(StrokeThickness):
                     if (!Equals(StrokeThickness, value))
                     {
-                        StrokeThickness = (double)value;
-                        NativeControl.StrokeThickness = StrokeThickness;
+                        StrokeThickness = (double?)value;
+                        NativeControl.StrokeThickness = StrokeThickness ?? (double)MC.Border.StrokeThicknessProperty.DefaultValue;
                     }
                     break;
                 case nameof(ChildContent):

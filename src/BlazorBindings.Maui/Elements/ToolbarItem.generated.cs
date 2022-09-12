@@ -19,8 +19,8 @@ namespace BlazorBindings.Maui.Elements
             RegisterAdditionalHandlers();
         }
 
-        [Parameter] public MC.ToolbarItemOrder Order { get; set; }
-        [Parameter] public int Priority { get; set; }
+        [Parameter] public MC.ToolbarItemOrder? Order { get; set; }
+        [Parameter] public int? Priority { get; set; }
 
         public new MC.ToolbarItem NativeControl => (MC.ToolbarItem)((Element)this).NativeControl;
 
@@ -33,15 +33,15 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(Order):
                     if (!Equals(Order, value))
                     {
-                        Order = (MC.ToolbarItemOrder)value;
-                        NativeControl.Order = Order;
+                        Order = (MC.ToolbarItemOrder?)value;
+                        NativeControl.Order = Order ?? default;
                     }
                     break;
                 case nameof(Priority):
                     if (!Equals(Priority, value))
                     {
-                        Priority = (int)value;
-                        NativeControl.Priority = Priority;
+                        Priority = (int?)value;
+                        NativeControl.Priority = Priority ?? default;
                     }
                     break;
 

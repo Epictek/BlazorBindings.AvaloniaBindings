@@ -21,8 +21,8 @@ namespace BlazorBindings.Maui.Elements.Shapes
             RegisterAdditionalHandlers();
         }
 
-        [Parameter] public double RadiusX { get; set; }
-        [Parameter] public double RadiusY { get; set; }
+        [Parameter] public double? RadiusX { get; set; }
+        [Parameter] public double? RadiusY { get; set; }
 
         public new MCS.Rectangle NativeControl => (MCS.Rectangle)((Element)this).NativeControl;
 
@@ -35,15 +35,15 @@ namespace BlazorBindings.Maui.Elements.Shapes
                 case nameof(RadiusX):
                     if (!Equals(RadiusX, value))
                     {
-                        RadiusX = (double)value;
-                        NativeControl.RadiusX = RadiusX;
+                        RadiusX = (double?)value;
+                        NativeControl.RadiusX = RadiusX ?? (double)MCS.Rectangle.RadiusXProperty.DefaultValue;
                     }
                     break;
                 case nameof(RadiusY):
                     if (!Equals(RadiusY, value))
                     {
-                        RadiusY = (double)value;
-                        NativeControl.RadiusY = RadiusY;
+                        RadiusY = (double?)value;
+                        NativeControl.RadiusY = RadiusY ?? (double)MCS.Rectangle.RadiusYProperty.DefaultValue;
                     }
                     break;
 

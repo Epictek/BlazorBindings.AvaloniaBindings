@@ -21,7 +21,7 @@ namespace BlazorBindings.Maui.Elements.Shapes
             RegisterAdditionalHandlers();
         }
 
-        [Parameter] public MCS.FillRule FillRule { get; set; }
+        [Parameter] public MCS.FillRule? FillRule { get; set; }
 
         public new MCS.Polyline NativeControl => (MCS.Polyline)((Element)this).NativeControl;
 
@@ -34,8 +34,8 @@ namespace BlazorBindings.Maui.Elements.Shapes
                 case nameof(FillRule):
                     if (!Equals(FillRule, value))
                     {
-                        FillRule = (MCS.FillRule)value;
-                        NativeControl.FillRule = FillRule;
+                        FillRule = (MCS.FillRule?)value;
+                        NativeControl.FillRule = FillRule ?? (MCS.FillRule)MCS.Polyline.FillRuleProperty.DefaultValue;
                     }
                     break;
 

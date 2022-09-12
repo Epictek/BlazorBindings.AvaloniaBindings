@@ -26,13 +26,13 @@ namespace BlazorBindings.Maui.Elements
                     (itemsView, valueElement) => itemsView.EmptyView = valueElement));
         }
 
-        [Parameter] public M.ScrollBarVisibility HorizontalScrollBarVisibility { get; set; }
+        [Parameter] public M.ScrollBarVisibility? HorizontalScrollBarVisibility { get; set; }
         [Parameter] public RenderFragment<T> ItemTemplate { get; set; }
         [Parameter] public RenderFragment EmptyView { get; set; }
         [Parameter] public IEnumerable<T> ItemsSource { get; set; }
-        [Parameter] public MC.ItemsUpdatingScrollMode ItemsUpdatingScrollMode { get; set; }
-        [Parameter] public int RemainingItemsThreshold { get; set; }
-        [Parameter] public M.ScrollBarVisibility VerticalScrollBarVisibility { get; set; }
+        [Parameter] public MC.ItemsUpdatingScrollMode? ItemsUpdatingScrollMode { get; set; }
+        [Parameter] public int? RemainingItemsThreshold { get; set; }
+        [Parameter] public M.ScrollBarVisibility? VerticalScrollBarVisibility { get; set; }
 
         [Parameter] public EventCallback OnRemainingItemsThresholdReached { get; set; }
         [Parameter] public EventCallback<MC.ItemsViewScrolledEventArgs> OnScrolled { get; set; }
@@ -47,8 +47,8 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(HorizontalScrollBarVisibility):
                     if (!Equals(HorizontalScrollBarVisibility, value))
                     {
-                        HorizontalScrollBarVisibility = (ScrollBarVisibility)value;
-                        NativeControl.HorizontalScrollBarVisibility = HorizontalScrollBarVisibility;
+                        HorizontalScrollBarVisibility = (ScrollBarVisibility?)value;
+                        NativeControl.HorizontalScrollBarVisibility = HorizontalScrollBarVisibility ?? (ScrollBarVisibility)MC.ItemsView.HorizontalScrollBarVisibilityProperty.DefaultValue;
                     }
                     break;
                 case nameof(ItemsSource):
@@ -61,22 +61,22 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(ItemsUpdatingScrollMode):
                     if (!Equals(ItemsUpdatingScrollMode, value))
                     {
-                        ItemsUpdatingScrollMode = (MC.ItemsUpdatingScrollMode)value;
-                        NativeControl.ItemsUpdatingScrollMode = ItemsUpdatingScrollMode;
+                        ItemsUpdatingScrollMode = (MC.ItemsUpdatingScrollMode?)value;
+                        NativeControl.ItemsUpdatingScrollMode = ItemsUpdatingScrollMode ?? (MC.ItemsUpdatingScrollMode)MC.ItemsView.ItemsUpdatingScrollModeProperty.DefaultValue;
                     }
                     break;
                 case nameof(RemainingItemsThreshold):
                     if (!Equals(RemainingItemsThreshold, value))
                     {
-                        RemainingItemsThreshold = (int)value;
-                        NativeControl.RemainingItemsThreshold = RemainingItemsThreshold;
+                        RemainingItemsThreshold = (int?)value;
+                        NativeControl.RemainingItemsThreshold = RemainingItemsThreshold ?? (int)MC.ItemsView.RemainingItemsThresholdProperty.DefaultValue;
                     }
                     break;
                 case nameof(VerticalScrollBarVisibility):
                     if (!Equals(VerticalScrollBarVisibility, value))
                     {
                         VerticalScrollBarVisibility = (ScrollBarVisibility)value;
-                        NativeControl.VerticalScrollBarVisibility = VerticalScrollBarVisibility;
+                        NativeControl.VerticalScrollBarVisibility = VerticalScrollBarVisibility ?? (ScrollBarVisibility)MC.ItemsView.VerticalScrollBarVisibilityProperty.DefaultValue;
                     }
                     break;
                 case nameof(ItemTemplate):

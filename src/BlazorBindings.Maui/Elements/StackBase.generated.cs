@@ -19,7 +19,7 @@ namespace BlazorBindings.Maui.Elements
             RegisterAdditionalHandlers();
         }
 
-        [Parameter] public double Spacing { get; set; }
+        [Parameter] public double? Spacing { get; set; }
 
         public new MC.StackBase NativeControl => (MC.StackBase)((Element)this).NativeControl;
 
@@ -31,8 +31,8 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(Spacing):
                     if (!Equals(Spacing, value))
                     {
-                        Spacing = (double)value;
-                        NativeControl.Spacing = Spacing;
+                        Spacing = (double?)value;
+                        NativeControl.Spacing = Spacing ?? (double)MC.StackBase.SpacingProperty.DefaultValue;
                     }
                     break;
 

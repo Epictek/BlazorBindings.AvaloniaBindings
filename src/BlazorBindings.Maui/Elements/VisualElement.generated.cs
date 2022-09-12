@@ -22,30 +22,30 @@ namespace BlazorBindings.Maui.Elements
             RegisterAdditionalHandlers();
         }
 
-        [Parameter] public double AnchorX { get; set; }
-        [Parameter] public double AnchorY { get; set; }
+        [Parameter] public double? AnchorX { get; set; }
+        [Parameter] public double? AnchorY { get; set; }
         [Parameter] public Color BackgroundColor { get; set; }
-        [Parameter] public FlowDirection FlowDirection { get; set; }
-        [Parameter] public Rect Frame { get; set; }
-        [Parameter] public double HeightRequest { get; set; }
-        [Parameter] public bool InputTransparent { get; set; }
-        [Parameter] public bool IsEnabled { get; set; }
-        [Parameter] public bool IsVisible { get; set; }
-        [Parameter] public double MaximumHeightRequest { get; set; }
-        [Parameter] public double MaximumWidthRequest { get; set; }
-        [Parameter] public double MinimumHeightRequest { get; set; }
-        [Parameter] public double MinimumWidthRequest { get; set; }
-        [Parameter] public double Opacity { get; set; }
-        [Parameter] public double Rotation { get; set; }
-        [Parameter] public double RotationX { get; set; }
-        [Parameter] public double RotationY { get; set; }
-        [Parameter] public double Scale { get; set; }
-        [Parameter] public double ScaleX { get; set; }
-        [Parameter] public double ScaleY { get; set; }
-        [Parameter] public double TranslationX { get; set; }
-        [Parameter] public double TranslationY { get; set; }
-        [Parameter] public double WidthRequest { get; set; }
-        [Parameter] public int ZIndex { get; set; }
+        [Parameter] public FlowDirection? FlowDirection { get; set; }
+        [Parameter] public Rect? Frame { get; set; }
+        [Parameter] public double? HeightRequest { get; set; }
+        [Parameter] public bool? InputTransparent { get; set; }
+        [Parameter] public bool? IsEnabled { get; set; }
+        [Parameter] public bool? IsVisible { get; set; }
+        [Parameter] public double? MaximumHeightRequest { get; set; }
+        [Parameter] public double? MaximumWidthRequest { get; set; }
+        [Parameter] public double? MinimumHeightRequest { get; set; }
+        [Parameter] public double? MinimumWidthRequest { get; set; }
+        [Parameter] public double? Opacity { get; set; }
+        [Parameter] public double? Rotation { get; set; }
+        [Parameter] public double? RotationX { get; set; }
+        [Parameter] public double? RotationY { get; set; }
+        [Parameter] public double? Scale { get; set; }
+        [Parameter] public double? ScaleX { get; set; }
+        [Parameter] public double? ScaleY { get; set; }
+        [Parameter] public double? TranslationX { get; set; }
+        [Parameter] public double? TranslationY { get; set; }
+        [Parameter] public double? WidthRequest { get; set; }
+        [Parameter] public int? ZIndex { get; set; }
         [Parameter] public EventCallback OnLoaded { get; set; }
         [Parameter] public EventCallback OnUnloaded { get; set; }
         [Parameter] public EventCallback OnChildrenReordered { get; set; }
@@ -64,15 +64,15 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(AnchorX):
                     if (!Equals(AnchorX, value))
                     {
-                        AnchorX = (double)value;
-                        NativeControl.AnchorX = AnchorX;
+                        AnchorX = (double?)value;
+                        NativeControl.AnchorX = AnchorX ?? (double)MC.VisualElement.AnchorXProperty.DefaultValue;
                     }
                     break;
                 case nameof(AnchorY):
                     if (!Equals(AnchorY, value))
                     {
-                        AnchorY = (double)value;
-                        NativeControl.AnchorY = AnchorY;
+                        AnchorY = (double?)value;
+                        NativeControl.AnchorY = AnchorY ?? (double)MC.VisualElement.AnchorYProperty.DefaultValue;
                     }
                     break;
                 case nameof(BackgroundColor):
@@ -85,148 +85,148 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(FlowDirection):
                     if (!Equals(FlowDirection, value))
                     {
-                        FlowDirection = (FlowDirection)value;
-                        NativeControl.FlowDirection = FlowDirection;
+                        FlowDirection = (FlowDirection?)value;
+                        NativeControl.FlowDirection = FlowDirection ?? (FlowDirection)MC.VisualElement.FlowDirectionProperty.DefaultValue;
                     }
                     break;
                 case nameof(Frame):
                     if (!Equals(Frame, value))
                     {
-                        Frame = (Rect)value;
-                        NativeControl.Frame = Frame;
+                        Frame = (Rect?)value;
+                        NativeControl.Frame = Frame ?? default;
                     }
                     break;
                 case nameof(HeightRequest):
                     if (!Equals(HeightRequest, value))
                     {
-                        HeightRequest = (double)value;
-                        NativeControl.HeightRequest = HeightRequest;
+                        HeightRequest = (double?)value;
+                        NativeControl.HeightRequest = HeightRequest ?? (double)MC.VisualElement.HeightRequestProperty.DefaultValue;
                     }
                     break;
                 case nameof(InputTransparent):
                     if (!Equals(InputTransparent, value))
                     {
-                        InputTransparent = (bool)value;
-                        NativeControl.InputTransparent = InputTransparent;
+                        InputTransparent = (bool?)value;
+                        NativeControl.InputTransparent = InputTransparent ?? (bool)MC.VisualElement.InputTransparentProperty.DefaultValue;
                     }
                     break;
                 case nameof(IsEnabled):
                     if (!Equals(IsEnabled, value))
                     {
-                        IsEnabled = (bool)value;
-                        NativeControl.IsEnabled = IsEnabled;
+                        IsEnabled = (bool?)value;
+                        NativeControl.IsEnabled = IsEnabled ?? (bool)MC.VisualElement.IsEnabledProperty.DefaultValue;
                     }
                     break;
                 case nameof(IsVisible):
                     if (!Equals(IsVisible, value))
                     {
-                        IsVisible = (bool)value;
-                        NativeControl.IsVisible = IsVisible;
+                        IsVisible = (bool?)value;
+                        NativeControl.IsVisible = IsVisible ?? (bool)MC.VisualElement.IsVisibleProperty.DefaultValue;
                     }
                     break;
                 case nameof(MaximumHeightRequest):
                     if (!Equals(MaximumHeightRequest, value))
                     {
-                        MaximumHeightRequest = (double)value;
-                        NativeControl.MaximumHeightRequest = MaximumHeightRequest;
+                        MaximumHeightRequest = (double?)value;
+                        NativeControl.MaximumHeightRequest = MaximumHeightRequest ?? (double)MC.VisualElement.MaximumHeightRequestProperty.DefaultValue;
                     }
                     break;
                 case nameof(MaximumWidthRequest):
                     if (!Equals(MaximumWidthRequest, value))
                     {
-                        MaximumWidthRequest = (double)value;
-                        NativeControl.MaximumWidthRequest = MaximumWidthRequest;
+                        MaximumWidthRequest = (double?)value;
+                        NativeControl.MaximumWidthRequest = MaximumWidthRequest ?? (double)MC.VisualElement.MaximumWidthRequestProperty.DefaultValue;
                     }
                     break;
                 case nameof(MinimumHeightRequest):
                     if (!Equals(MinimumHeightRequest, value))
                     {
-                        MinimumHeightRequest = (double)value;
-                        NativeControl.MinimumHeightRequest = MinimumHeightRequest;
+                        MinimumHeightRequest = (double?)value;
+                        NativeControl.MinimumHeightRequest = MinimumHeightRequest ?? (double)MC.VisualElement.MinimumHeightRequestProperty.DefaultValue;
                     }
                     break;
                 case nameof(MinimumWidthRequest):
                     if (!Equals(MinimumWidthRequest, value))
                     {
-                        MinimumWidthRequest = (double)value;
-                        NativeControl.MinimumWidthRequest = MinimumWidthRequest;
+                        MinimumWidthRequest = (double?)value;
+                        NativeControl.MinimumWidthRequest = MinimumWidthRequest ?? (double)MC.VisualElement.MinimumWidthRequestProperty.DefaultValue;
                     }
                     break;
                 case nameof(Opacity):
                     if (!Equals(Opacity, value))
                     {
-                        Opacity = (double)value;
-                        NativeControl.Opacity = Opacity;
+                        Opacity = (double?)value;
+                        NativeControl.Opacity = Opacity ?? (double)MC.VisualElement.OpacityProperty.DefaultValue;
                     }
                     break;
                 case nameof(Rotation):
                     if (!Equals(Rotation, value))
                     {
-                        Rotation = (double)value;
-                        NativeControl.Rotation = Rotation;
+                        Rotation = (double?)value;
+                        NativeControl.Rotation = Rotation ?? (double)MC.VisualElement.RotationProperty.DefaultValue;
                     }
                     break;
                 case nameof(RotationX):
                     if (!Equals(RotationX, value))
                     {
-                        RotationX = (double)value;
-                        NativeControl.RotationX = RotationX;
+                        RotationX = (double?)value;
+                        NativeControl.RotationX = RotationX ?? (double)MC.VisualElement.RotationXProperty.DefaultValue;
                     }
                     break;
                 case nameof(RotationY):
                     if (!Equals(RotationY, value))
                     {
-                        RotationY = (double)value;
-                        NativeControl.RotationY = RotationY;
+                        RotationY = (double?)value;
+                        NativeControl.RotationY = RotationY ?? (double)MC.VisualElement.RotationYProperty.DefaultValue;
                     }
                     break;
                 case nameof(Scale):
                     if (!Equals(Scale, value))
                     {
-                        Scale = (double)value;
-                        NativeControl.Scale = Scale;
+                        Scale = (double?)value;
+                        NativeControl.Scale = Scale ?? (double)MC.VisualElement.ScaleProperty.DefaultValue;
                     }
                     break;
                 case nameof(ScaleX):
                     if (!Equals(ScaleX, value))
                     {
-                        ScaleX = (double)value;
-                        NativeControl.ScaleX = ScaleX;
+                        ScaleX = (double?)value;
+                        NativeControl.ScaleX = ScaleX ?? (double)MC.VisualElement.ScaleXProperty.DefaultValue;
                     }
                     break;
                 case nameof(ScaleY):
                     if (!Equals(ScaleY, value))
                     {
-                        ScaleY = (double)value;
-                        NativeControl.ScaleY = ScaleY;
+                        ScaleY = (double?)value;
+                        NativeControl.ScaleY = ScaleY ?? (double)MC.VisualElement.ScaleYProperty.DefaultValue;
                     }
                     break;
                 case nameof(TranslationX):
                     if (!Equals(TranslationX, value))
                     {
-                        TranslationX = (double)value;
-                        NativeControl.TranslationX = TranslationX;
+                        TranslationX = (double?)value;
+                        NativeControl.TranslationX = TranslationX ?? (double)MC.VisualElement.TranslationXProperty.DefaultValue;
                     }
                     break;
                 case nameof(TranslationY):
                     if (!Equals(TranslationY, value))
                     {
-                        TranslationY = (double)value;
-                        NativeControl.TranslationY = TranslationY;
+                        TranslationY = (double?)value;
+                        NativeControl.TranslationY = TranslationY ?? (double)MC.VisualElement.TranslationYProperty.DefaultValue;
                     }
                     break;
                 case nameof(WidthRequest):
                     if (!Equals(WidthRequest, value))
                     {
-                        WidthRequest = (double)value;
-                        NativeControl.WidthRequest = WidthRequest;
+                        WidthRequest = (double?)value;
+                        NativeControl.WidthRequest = WidthRequest ?? (double)MC.VisualElement.WidthRequestProperty.DefaultValue;
                     }
                     break;
                 case nameof(ZIndex):
                     if (!Equals(ZIndex, value))
                     {
-                        ZIndex = (int)value;
-                        NativeControl.ZIndex = ZIndex;
+                        ZIndex = (int?)value;
+                        NativeControl.ZIndex = ZIndex ?? default;
                     }
                     break;
                 case nameof(OnLoaded):

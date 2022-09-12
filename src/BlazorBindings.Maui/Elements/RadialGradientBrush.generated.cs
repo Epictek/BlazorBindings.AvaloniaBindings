@@ -20,8 +20,8 @@ namespace BlazorBindings.Maui.Elements
             RegisterAdditionalHandlers();
         }
 
-        [Parameter] public Point Center { get; set; }
-        [Parameter] public double Radius { get; set; }
+        [Parameter] public Point? Center { get; set; }
+        [Parameter] public double? Radius { get; set; }
 
         public new MC.RadialGradientBrush NativeControl => (MC.RadialGradientBrush)((Element)this).NativeControl;
 
@@ -34,15 +34,15 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(Center):
                     if (!Equals(Center, value))
                     {
-                        Center = (Point)value;
-                        NativeControl.Center = Center;
+                        Center = (Point?)value;
+                        NativeControl.Center = Center ?? (Point)MC.RadialGradientBrush.CenterProperty.DefaultValue;
                     }
                     break;
                 case nameof(Radius):
                     if (!Equals(Radius, value))
                     {
-                        Radius = (double)value;
-                        NativeControl.Radius = Radius;
+                        Radius = (double?)value;
+                        NativeControl.Radius = Radius ?? (double)MC.RadialGradientBrush.RadiusProperty.DefaultValue;
                     }
                     break;
 

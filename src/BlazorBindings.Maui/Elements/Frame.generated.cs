@@ -21,8 +21,8 @@ namespace BlazorBindings.Maui.Elements
         }
 
         [Parameter] public Color BorderColor { get; set; }
-        [Parameter] public float CornerRadius { get; set; }
-        [Parameter] public bool HasShadow { get; set; }
+        [Parameter] public float? CornerRadius { get; set; }
+        [Parameter] public bool? HasShadow { get; set; }
 
         public new MC.Frame NativeControl => (MC.Frame)((Element)this).NativeControl;
 
@@ -42,15 +42,15 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(CornerRadius):
                     if (!Equals(CornerRadius, value))
                     {
-                        CornerRadius = (float)value;
-                        NativeControl.CornerRadius = CornerRadius;
+                        CornerRadius = (float?)value;
+                        NativeControl.CornerRadius = CornerRadius ?? (float)MC.Frame.CornerRadiusProperty.DefaultValue;
                     }
                     break;
                 case nameof(HasShadow):
                     if (!Equals(HasShadow, value))
                     {
-                        HasShadow = (bool)value;
-                        NativeControl.HasShadow = HasShadow;
+                        HasShadow = (bool?)value;
+                        NativeControl.HasShadow = HasShadow ?? (bool)MC.Frame.HasShadowProperty.DefaultValue;
                     }
                     break;
 

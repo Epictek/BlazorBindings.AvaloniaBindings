@@ -20,7 +20,7 @@ namespace BlazorBindings.Maui.Elements
             RegisterAdditionalHandlers();
         }
 
-        [Parameter] public bool IsToggled { get; set; }
+        [Parameter] public bool? IsToggled { get; set; }
         [Parameter] public Color OnColor { get; set; }
         [Parameter] public Color ThumbColor { get; set; }
         [Parameter] public EventCallback<bool> IsToggledChanged { get; set; }
@@ -36,8 +36,8 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(IsToggled):
                     if (!Equals(IsToggled, value))
                     {
-                        IsToggled = (bool)value;
-                        NativeControl.IsToggled = IsToggled;
+                        IsToggled = (bool?)value;
+                        NativeControl.IsToggled = IsToggled ?? (bool)MC.Switch.IsToggledProperty.DefaultValue;
                     }
                     break;
                 case nameof(OnColor):

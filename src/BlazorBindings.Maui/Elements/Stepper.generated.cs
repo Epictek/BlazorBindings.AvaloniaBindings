@@ -19,10 +19,10 @@ namespace BlazorBindings.Maui.Elements
             RegisterAdditionalHandlers();
         }
 
-        [Parameter] public double Increment { get; set; }
-        [Parameter] public double Maximum { get; set; }
-        [Parameter] public double Minimum { get; set; }
-        [Parameter] public double Value { get; set; }
+        [Parameter] public double? Increment { get; set; }
+        [Parameter] public double? Maximum { get; set; }
+        [Parameter] public double? Minimum { get; set; }
+        [Parameter] public double? Value { get; set; }
         [Parameter] public EventCallback<double> ValueChanged { get; set; }
 
         public new MC.Stepper NativeControl => (MC.Stepper)((Element)this).NativeControl;
@@ -36,29 +36,29 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(Increment):
                     if (!Equals(Increment, value))
                     {
-                        Increment = (double)value;
-                        NativeControl.Increment = Increment;
+                        Increment = (double?)value;
+                        NativeControl.Increment = Increment ?? (double)MC.Stepper.IncrementProperty.DefaultValue;
                     }
                     break;
                 case nameof(Maximum):
                     if (!Equals(Maximum, value))
                     {
-                        Maximum = (double)value;
-                        NativeControl.Maximum = Maximum;
+                        Maximum = (double?)value;
+                        NativeControl.Maximum = Maximum ?? (double)MC.Stepper.MaximumProperty.DefaultValue;
                     }
                     break;
                 case nameof(Minimum):
                     if (!Equals(Minimum, value))
                     {
-                        Minimum = (double)value;
-                        NativeControl.Minimum = Minimum;
+                        Minimum = (double?)value;
+                        NativeControl.Minimum = Minimum ?? (double)MC.Stepper.MinimumProperty.DefaultValue;
                     }
                     break;
                 case nameof(Value):
                     if (!Equals(Value, value))
                     {
-                        Value = (double)value;
-                        NativeControl.Value = Value;
+                        Value = (double?)value;
+                        NativeControl.Value = Value ?? (double)MC.Stepper.ValueProperty.DefaultValue;
                     }
                     break;
                 case nameof(ValueChanged):

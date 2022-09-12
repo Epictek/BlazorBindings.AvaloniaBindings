@@ -22,17 +22,17 @@ namespace BlazorBindings.Maui.Elements
         }
 
         [Parameter] public Color BorderColor { get; set; }
-        [Parameter] public double BorderWidth { get; set; }
-        [Parameter] public double CharacterSpacing { get; set; }
-        [Parameter] public int CornerRadius { get; set; }
-        [Parameter] public MC.FontAttributes FontAttributes { get; set; }
-        [Parameter] public bool FontAutoScalingEnabled { get; set; }
+        [Parameter] public double? BorderWidth { get; set; }
+        [Parameter] public double? CharacterSpacing { get; set; }
+        [Parameter] public int? CornerRadius { get; set; }
+        [Parameter] public MC.FontAttributes? FontAttributes { get; set; }
+        [Parameter] public bool? FontAutoScalingEnabled { get; set; }
         [Parameter] public string FontFamily { get; set; }
-        [Parameter] public double FontSize { get; set; }
+        [Parameter] public double? FontSize { get; set; }
         [Parameter] public string GroupName { get; set; }
-        [Parameter] public bool IsChecked { get; set; }
+        [Parameter] public bool? IsChecked { get; set; }
         [Parameter] public Color TextColor { get; set; }
-        [Parameter] public TextTransform TextTransform { get; set; }
+        [Parameter] public TextTransform? TextTransform { get; set; }
         [Parameter] public EventCallback<bool> IsCheckedChanged { get; set; }
 
         public new MC.RadioButton NativeControl => (MC.RadioButton)((Element)this).NativeControl;
@@ -53,36 +53,36 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(BorderWidth):
                     if (!Equals(BorderWidth, value))
                     {
-                        BorderWidth = (double)value;
-                        NativeControl.BorderWidth = BorderWidth;
+                        BorderWidth = (double?)value;
+                        NativeControl.BorderWidth = BorderWidth ?? (double)MC.RadioButton.BorderWidthProperty.DefaultValue;
                     }
                     break;
                 case nameof(CharacterSpacing):
                     if (!Equals(CharacterSpacing, value))
                     {
-                        CharacterSpacing = (double)value;
-                        NativeControl.CharacterSpacing = CharacterSpacing;
+                        CharacterSpacing = (double?)value;
+                        NativeControl.CharacterSpacing = CharacterSpacing ?? (double)MC.RadioButton.CharacterSpacingProperty.DefaultValue;
                     }
                     break;
                 case nameof(CornerRadius):
                     if (!Equals(CornerRadius, value))
                     {
-                        CornerRadius = (int)value;
-                        NativeControl.CornerRadius = CornerRadius;
+                        CornerRadius = (int?)value;
+                        NativeControl.CornerRadius = CornerRadius ?? (int)MC.RadioButton.CornerRadiusProperty.DefaultValue;
                     }
                     break;
                 case nameof(FontAttributes):
                     if (!Equals(FontAttributes, value))
                     {
-                        FontAttributes = (MC.FontAttributes)value;
-                        NativeControl.FontAttributes = FontAttributes;
+                        FontAttributes = (MC.FontAttributes?)value;
+                        NativeControl.FontAttributes = FontAttributes ?? (MC.FontAttributes)MC.RadioButton.FontAttributesProperty.DefaultValue;
                     }
                     break;
                 case nameof(FontAutoScalingEnabled):
                     if (!Equals(FontAutoScalingEnabled, value))
                     {
-                        FontAutoScalingEnabled = (bool)value;
-                        NativeControl.FontAutoScalingEnabled = FontAutoScalingEnabled;
+                        FontAutoScalingEnabled = (bool?)value;
+                        NativeControl.FontAutoScalingEnabled = FontAutoScalingEnabled ?? (bool)MC.RadioButton.FontAutoScalingEnabledProperty.DefaultValue;
                     }
                     break;
                 case nameof(FontFamily):
@@ -95,8 +95,8 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(FontSize):
                     if (!Equals(FontSize, value))
                     {
-                        FontSize = (double)value;
-                        NativeControl.FontSize = FontSize;
+                        FontSize = (double?)value;
+                        NativeControl.FontSize = FontSize ?? (double)MC.RadioButton.FontSizeProperty.DefaultValue;
                     }
                     break;
                 case nameof(GroupName):
@@ -109,8 +109,8 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(IsChecked):
                     if (!Equals(IsChecked, value))
                     {
-                        IsChecked = (bool)value;
-                        NativeControl.IsChecked = IsChecked;
+                        IsChecked = (bool?)value;
+                        NativeControl.IsChecked = IsChecked ?? (bool)MC.RadioButton.IsCheckedProperty.DefaultValue;
                     }
                     break;
                 case nameof(TextColor):
@@ -123,8 +123,8 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(TextTransform):
                     if (!Equals(TextTransform, value))
                     {
-                        TextTransform = (TextTransform)value;
-                        NativeControl.TextTransform = TextTransform;
+                        TextTransform = (TextTransform?)value;
+                        NativeControl.TextTransform = TextTransform ?? (TextTransform)MC.RadioButton.TextTransformProperty.DefaultValue;
                     }
                     break;
                 case nameof(IsCheckedChanged):

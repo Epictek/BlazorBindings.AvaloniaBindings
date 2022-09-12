@@ -23,9 +23,9 @@ namespace BlazorBindings.Maui.Elements.Compatibility
             RegisterAdditionalHandlers();
         }
 
-        [Parameter] public bool CascadeInputTransparent { get; set; }
-        [Parameter] public bool IsClippedToBounds { get; set; }
-        [Parameter] public Thickness Padding { get; set; }
+        [Parameter] public bool? CascadeInputTransparent { get; set; }
+        [Parameter] public bool? IsClippedToBounds { get; set; }
+        [Parameter] public Thickness? Padding { get; set; }
         [Parameter] public EventCallback OnLayoutChanged { get; set; }
 
         public new MCC.Layout NativeControl => (MCC.Layout)((Element)this).NativeControl;
@@ -38,22 +38,22 @@ namespace BlazorBindings.Maui.Elements.Compatibility
                 case nameof(CascadeInputTransparent):
                     if (!Equals(CascadeInputTransparent, value))
                     {
-                        CascadeInputTransparent = (bool)value;
-                        NativeControl.CascadeInputTransparent = CascadeInputTransparent;
+                        CascadeInputTransparent = (bool?)value;
+                        NativeControl.CascadeInputTransparent = CascadeInputTransparent ?? (bool)MCC.Layout.CascadeInputTransparentProperty.DefaultValue;
                     }
                     break;
                 case nameof(IsClippedToBounds):
                     if (!Equals(IsClippedToBounds, value))
                     {
-                        IsClippedToBounds = (bool)value;
-                        NativeControl.IsClippedToBounds = IsClippedToBounds;
+                        IsClippedToBounds = (bool?)value;
+                        NativeControl.IsClippedToBounds = IsClippedToBounds ?? (bool)MCC.Layout.IsClippedToBoundsProperty.DefaultValue;
                     }
                     break;
                 case nameof(Padding):
                     if (!Equals(Padding, value))
                     {
-                        Padding = (Thickness)value;
-                        NativeControl.Padding = Padding;
+                        Padding = (Thickness?)value;
+                        NativeControl.Padding = Padding ?? (Thickness)MCC.Layout.PaddingProperty.DefaultValue;
                     }
                     break;
                 case nameof(OnLayoutChanged):

@@ -23,19 +23,19 @@ namespace BlazorBindings.Maui.Elements
         }
 
         [Parameter] public Color BorderColor { get; set; }
-        [Parameter] public double BorderWidth { get; set; }
-        [Parameter] public double CharacterSpacing { get; set; }
-        [Parameter] public int CornerRadius { get; set; }
-        [Parameter] public MC.FontAttributes FontAttributes { get; set; }
-        [Parameter] public bool FontAutoScalingEnabled { get; set; }
+        [Parameter] public double? BorderWidth { get; set; }
+        [Parameter] public double? CharacterSpacing { get; set; }
+        [Parameter] public int? CornerRadius { get; set; }
+        [Parameter] public MC.FontAttributes? FontAttributes { get; set; }
+        [Parameter] public bool? FontAutoScalingEnabled { get; set; }
         [Parameter] public string FontFamily { get; set; }
-        [Parameter] public double FontSize { get; set; }
+        [Parameter] public double? FontSize { get; set; }
         [Parameter] public MC.ImageSource ImageSource { get; set; }
-        [Parameter] public LineBreakMode LineBreakMode { get; set; }
-        [Parameter] public Thickness Padding { get; set; }
+        [Parameter] public LineBreakMode? LineBreakMode { get; set; }
+        [Parameter] public Thickness? Padding { get; set; }
         [Parameter] public string Text { get; set; }
         [Parameter] public Color TextColor { get; set; }
-        [Parameter] public TextTransform TextTransform { get; set; }
+        [Parameter] public TextTransform? TextTransform { get; set; }
         [Parameter] public EventCallback OnClick { get; set; }
         [Parameter] public EventCallback OnPress { get; set; }
         [Parameter] public EventCallback OnRelease { get; set; }
@@ -58,36 +58,36 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(BorderWidth):
                     if (!Equals(BorderWidth, value))
                     {
-                        BorderWidth = (double)value;
-                        NativeControl.BorderWidth = BorderWidth;
+                        BorderWidth = (double?)value;
+                        NativeControl.BorderWidth = BorderWidth ?? (double)MC.Button.BorderWidthProperty.DefaultValue;
                     }
                     break;
                 case nameof(CharacterSpacing):
                     if (!Equals(CharacterSpacing, value))
                     {
-                        CharacterSpacing = (double)value;
-                        NativeControl.CharacterSpacing = CharacterSpacing;
+                        CharacterSpacing = (double?)value;
+                        NativeControl.CharacterSpacing = CharacterSpacing ?? (double)MC.Button.CharacterSpacingProperty.DefaultValue;
                     }
                     break;
                 case nameof(CornerRadius):
                     if (!Equals(CornerRadius, value))
                     {
-                        CornerRadius = (int)value;
-                        NativeControl.CornerRadius = CornerRadius;
+                        CornerRadius = (int?)value;
+                        NativeControl.CornerRadius = CornerRadius ?? (int)MC.Button.CornerRadiusProperty.DefaultValue;
                     }
                     break;
                 case nameof(FontAttributes):
                     if (!Equals(FontAttributes, value))
                     {
-                        FontAttributes = (MC.FontAttributes)value;
-                        NativeControl.FontAttributes = FontAttributes;
+                        FontAttributes = (MC.FontAttributes?)value;
+                        NativeControl.FontAttributes = FontAttributes ?? (MC.FontAttributes)MC.Button.FontAttributesProperty.DefaultValue;
                     }
                     break;
                 case nameof(FontAutoScalingEnabled):
                     if (!Equals(FontAutoScalingEnabled, value))
                     {
-                        FontAutoScalingEnabled = (bool)value;
-                        NativeControl.FontAutoScalingEnabled = FontAutoScalingEnabled;
+                        FontAutoScalingEnabled = (bool?)value;
+                        NativeControl.FontAutoScalingEnabled = FontAutoScalingEnabled ?? (bool)MC.Button.FontAutoScalingEnabledProperty.DefaultValue;
                     }
                     break;
                 case nameof(FontFamily):
@@ -100,8 +100,8 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(FontSize):
                     if (!Equals(FontSize, value))
                     {
-                        FontSize = (double)value;
-                        NativeControl.FontSize = FontSize;
+                        FontSize = (double?)value;
+                        NativeControl.FontSize = FontSize ?? (double)MC.Button.FontSizeProperty.DefaultValue;
                     }
                     break;
                 case nameof(ImageSource):
@@ -114,15 +114,15 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(LineBreakMode):
                     if (!Equals(LineBreakMode, value))
                     {
-                        LineBreakMode = (LineBreakMode)value;
-                        NativeControl.LineBreakMode = LineBreakMode;
+                        LineBreakMode = (LineBreakMode?)value;
+                        NativeControl.LineBreakMode = LineBreakMode ?? (LineBreakMode)MC.Button.LineBreakModeProperty.DefaultValue;
                     }
                     break;
                 case nameof(Padding):
                     if (!Equals(Padding, value))
                     {
-                        Padding = (Thickness)value;
-                        NativeControl.Padding = Padding;
+                        Padding = (Thickness?)value;
+                        NativeControl.Padding = Padding ?? (Thickness)MC.Button.PaddingProperty.DefaultValue;
                     }
                     break;
                 case nameof(Text):
@@ -142,8 +142,8 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(TextTransform):
                     if (!Equals(TextTransform, value))
                     {
-                        TextTransform = (TextTransform)value;
-                        NativeControl.TextTransform = TextTransform;
+                        TextTransform = (TextTransform?)value;
+                        NativeControl.TextTransform = TextTransform ?? (TextTransform)MC.Button.TextTransformProperty.DefaultValue;
                     }
                     break;
                 case nameof(OnClick):

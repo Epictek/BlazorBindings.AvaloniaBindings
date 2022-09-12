@@ -20,9 +20,9 @@ namespace BlazorBindings.Maui.Elements
             RegisterAdditionalHandlers();
         }
 
-        [Parameter] public Aspect Aspect { get; set; }
-        [Parameter] public bool IsAnimationPlaying { get; set; }
-        [Parameter] public bool IsOpaque { get; set; }
+        [Parameter] public Aspect? Aspect { get; set; }
+        [Parameter] public bool? IsAnimationPlaying { get; set; }
+        [Parameter] public bool? IsOpaque { get; set; }
         [Parameter] public MC.ImageSource Source { get; set; }
 
         public new MC.Image NativeControl => (MC.Image)((Element)this).NativeControl;
@@ -36,22 +36,22 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(Aspect):
                     if (!Equals(Aspect, value))
                     {
-                        Aspect = (Aspect)value;
-                        NativeControl.Aspect = Aspect;
+                        Aspect = (Aspect?)value;
+                        NativeControl.Aspect = Aspect ?? (Aspect)MC.Image.AspectProperty.DefaultValue;
                     }
                     break;
                 case nameof(IsAnimationPlaying):
                     if (!Equals(IsAnimationPlaying, value))
                     {
-                        IsAnimationPlaying = (bool)value;
-                        NativeControl.IsAnimationPlaying = IsAnimationPlaying;
+                        IsAnimationPlaying = (bool?)value;
+                        NativeControl.IsAnimationPlaying = IsAnimationPlaying ?? (bool)MC.Image.IsAnimationPlayingProperty.DefaultValue;
                     }
                     break;
                 case nameof(IsOpaque):
                     if (!Equals(IsOpaque, value))
                     {
-                        IsOpaque = (bool)value;
-                        NativeControl.IsOpaque = IsOpaque;
+                        IsOpaque = (bool?)value;
+                        NativeControl.IsOpaque = IsOpaque ?? (bool)MC.Image.IsOpaqueProperty.DefaultValue;
                     }
                     break;
                 case nameof(Source):

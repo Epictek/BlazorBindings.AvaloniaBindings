@@ -19,8 +19,8 @@ namespace BlazorBindings.Maui.Elements
             RegisterAdditionalHandlers();
         }
 
-        [Parameter] public double ColumnSpacing { get; set; }
-        [Parameter] public double RowSpacing { get; set; }
+        [Parameter] public double? ColumnSpacing { get; set; }
+        [Parameter] public double? RowSpacing { get; set; }
 
         public new MC.Grid NativeControl => (MC.Grid)((Element)this).NativeControl;
 
@@ -33,15 +33,15 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(ColumnSpacing):
                     if (!Equals(ColumnSpacing, value))
                     {
-                        ColumnSpacing = (double)value;
-                        NativeControl.ColumnSpacing = ColumnSpacing;
+                        ColumnSpacing = (double?)value;
+                        NativeControl.ColumnSpacing = ColumnSpacing ?? (double)MC.Grid.ColumnSpacingProperty.DefaultValue;
                     }
                     break;
                 case nameof(RowSpacing):
                     if (!Equals(RowSpacing, value))
                     {
-                        RowSpacing = (double)value;
-                        NativeControl.RowSpacing = RowSpacing;
+                        RowSpacing = (double?)value;
+                        NativeControl.RowSpacing = RowSpacing ?? (double)MC.Grid.RowSpacingProperty.DefaultValue;
                     }
                     break;
 

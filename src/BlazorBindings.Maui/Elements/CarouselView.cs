@@ -10,13 +10,13 @@ namespace BlazorBindings.Maui.Elements
 {
     public class CarouselView<T> : ItemsView<T>
     {
-        [Parameter] public bool IsBounceEnabled { get; set; }
-        [Parameter] public bool IsScrollAnimated { get; set; }
-        [Parameter] public bool IsSwipeEnabled { get; set; }
+        [Parameter] public bool? IsBounceEnabled { get; set; }
+        [Parameter] public bool? IsScrollAnimated { get; set; }
+        [Parameter] public bool? IsSwipeEnabled { get; set; }
         [Parameter] public MC.LinearItemsLayout ItemsLayout { get; set; }
-        [Parameter] public bool Loop { get; set; }
-        [Parameter] public Thickness PeekAreaInsets { get; set; }
-        [Parameter] public int Position { get; set; }
+        [Parameter] public bool? Loop { get; set; }
+        [Parameter] public Thickness? PeekAreaInsets { get; set; }
+        [Parameter] public int? Position { get; set; }
         [Parameter] public EventCallback<int> PositionChanged { get; set; }
         [Parameter] public EventCallback<T> CurrentItemChanged { get; set; }
         [Parameter] public T CurrentItem { get; set; }
@@ -32,22 +32,22 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(IsBounceEnabled):
                     if (!Equals(IsBounceEnabled, value))
                     {
-                        IsBounceEnabled = (bool)value;
-                        NativeControl.IsBounceEnabled = IsBounceEnabled;
+                        IsBounceEnabled = (bool?)value;
+                        NativeControl.IsBounceEnabled = IsBounceEnabled ?? (bool)CarouselView.IsBounceEnabledProperty.DefaultValue;
                     }
                     break;
                 case nameof(IsScrollAnimated):
                     if (!Equals(IsScrollAnimated, value))
                     {
-                        IsScrollAnimated = (bool)value;
-                        NativeControl.IsScrollAnimated = IsScrollAnimated;
+                        IsScrollAnimated = (bool?)value;
+                        NativeControl.IsScrollAnimated = IsScrollAnimated ?? (bool)CarouselView.IsScrollAnimatedProperty.DefaultValue;
                     }
                     break;
                 case nameof(IsSwipeEnabled):
                     if (!Equals(IsSwipeEnabled, value))
                     {
-                        IsSwipeEnabled = (bool)value;
-                        NativeControl.IsSwipeEnabled = IsSwipeEnabled;
+                        IsSwipeEnabled = (bool?)value;
+                        NativeControl.IsSwipeEnabled = IsSwipeEnabled ?? (bool)CarouselView.IsSwipeEnabledProperty.DefaultValue;
                     }
                     break;
                 case nameof(ItemsLayout):
@@ -61,21 +61,21 @@ namespace BlazorBindings.Maui.Elements
                     if (!Equals(Loop, value))
                     {
                         Loop = (bool)value;
-                        NativeControl.Loop = Loop;
+                        NativeControl.Loop = Loop ?? (bool)CarouselView.LoopProperty.DefaultValue;
                     }
                     break;
                 case nameof(PeekAreaInsets):
                     if (!Equals(PeekAreaInsets, value))
                     {
-                        PeekAreaInsets = (Thickness)value;
-                        NativeControl.PeekAreaInsets = PeekAreaInsets;
+                        PeekAreaInsets = (Thickness?)value;
+                        NativeControl.PeekAreaInsets = PeekAreaInsets ?? (Thickness)CarouselView.PeekAreaInsetsProperty.DefaultValue;
                     }
                     break;
                 case nameof(Position):
                     if (!Equals(Position, value))
                     {
-                        Position = (int)value;
-                        NativeControl.Position = Position;
+                        Position = (int?)value;
+                        NativeControl.Position = Position ?? (int)CarouselView.PositionProperty.DefaultValue;
                     }
                     break;
                 case nameof(CurrentItem):

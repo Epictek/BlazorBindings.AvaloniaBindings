@@ -19,7 +19,7 @@ namespace BlazorBindings.Maui.Elements
             RegisterAdditionalHandlers();
         }
 
-        [Parameter] public MC.StackOrientation Orientation { get; set; }
+        [Parameter] public MC.StackOrientation? Orientation { get; set; }
 
         public new MC.StackLayout NativeControl => (MC.StackLayout)((Element)this).NativeControl;
 
@@ -32,8 +32,8 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(Orientation):
                     if (!Equals(Orientation, value))
                     {
-                        Orientation = (MC.StackOrientation)value;
-                        NativeControl.Orientation = Orientation;
+                        Orientation = (MC.StackOrientation?)value;
+                        NativeControl.Orientation = Orientation ?? (MC.StackOrientation)MC.StackLayout.OrientationProperty.DefaultValue;
                     }
                     break;
 

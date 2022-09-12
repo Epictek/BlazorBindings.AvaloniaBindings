@@ -21,7 +21,7 @@ namespace BlazorBindings.Maui.Elements
             RegisterAdditionalHandlers();
         }
 
-        [Parameter] public bool IsRefreshing { get; set; }
+        [Parameter] public bool? IsRefreshing { get; set; }
         [Parameter] public Color RefreshColor { get; set; }
         [Parameter] public EventCallback<bool> IsRefreshingChanged { get; set; }
 
@@ -36,8 +36,8 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(IsRefreshing):
                     if (!Equals(IsRefreshing, value))
                     {
-                        IsRefreshing = (bool)value;
-                        NativeControl.IsRefreshing = IsRefreshing;
+                        IsRefreshing = (bool?)value;
+                        NativeControl.IsRefreshing = IsRefreshing ?? (bool)MC.RefreshView.IsRefreshingProperty.DefaultValue;
                     }
                     break;
                 case nameof(RefreshColor):

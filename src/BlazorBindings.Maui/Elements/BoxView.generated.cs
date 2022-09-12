@@ -22,7 +22,7 @@ namespace BlazorBindings.Maui.Elements
         }
 
         [Parameter] public Color Color { get; set; }
-        [Parameter] public CornerRadius CornerRadius { get; set; }
+        [Parameter] public CornerRadius? CornerRadius { get; set; }
 
         public new MC.BoxView NativeControl => (MC.BoxView)((Element)this).NativeControl;
 
@@ -42,8 +42,8 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(CornerRadius):
                     if (!Equals(CornerRadius, value))
                     {
-                        CornerRadius = (CornerRadius)value;
-                        NativeControl.CornerRadius = CornerRadius;
+                        CornerRadius = (CornerRadius?)value;
+                        NativeControl.CornerRadius = CornerRadius ?? (CornerRadius)MC.BoxView.CornerRadiusProperty.DefaultValue;
                     }
                     break;
 

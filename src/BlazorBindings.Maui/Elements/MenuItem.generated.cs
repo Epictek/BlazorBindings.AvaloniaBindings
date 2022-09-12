@@ -22,8 +22,8 @@ namespace BlazorBindings.Maui.Elements
 
         [Parameter] public string @class { get; set; }
         [Parameter] public MC.ImageSource IconImageSource { get; set; }
-        [Parameter] public bool IsDestructive { get; set; }
-        [Parameter] public bool IsEnabled { get; set; }
+        [Parameter] public bool? IsDestructive { get; set; }
+        [Parameter] public bool? IsEnabled { get; set; }
         [Parameter] public string StyleClass { get; set; }
         [Parameter] public string Text { get; set; }
         [Parameter] public EventCallback OnClick { get; set; }
@@ -53,15 +53,15 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(IsDestructive):
                     if (!Equals(IsDestructive, value))
                     {
-                        IsDestructive = (bool)value;
-                        NativeControl.IsDestructive = IsDestructive;
+                        IsDestructive = (bool?)value;
+                        NativeControl.IsDestructive = IsDestructive ?? (bool)MC.MenuItem.IsDestructiveProperty.DefaultValue;
                     }
                     break;
                 case nameof(IsEnabled):
                     if (!Equals(IsEnabled, value))
                     {
-                        IsEnabled = (bool)value;
-                        NativeControl.IsEnabled = IsEnabled;
+                        IsEnabled = (bool?)value;
+                        NativeControl.IsEnabled = IsEnabled ?? (bool)MC.MenuItem.IsEnabledProperty.DefaultValue;
                     }
                     break;
                 case nameof(StyleClass):

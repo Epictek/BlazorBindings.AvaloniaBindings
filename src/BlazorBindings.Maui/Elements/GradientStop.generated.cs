@@ -21,7 +21,7 @@ namespace BlazorBindings.Maui.Elements
         }
 
         [Parameter] public Color Color { get; set; }
-        [Parameter] public float Offset { get; set; }
+        [Parameter] public float? Offset { get; set; }
 
         public new MC.GradientStop NativeControl => (MC.GradientStop)((Element)this).NativeControl;
 
@@ -41,8 +41,8 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(Offset):
                     if (!Equals(Offset, value))
                     {
-                        Offset = (float)value;
-                        NativeControl.Offset = Offset;
+                        Offset = (float?)value;
+                        NativeControl.Offset = Offset ?? (float)MC.GradientStop.OffsetProperty.DefaultValue;
                     }
                     break;
 

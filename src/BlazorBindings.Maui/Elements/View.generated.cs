@@ -20,9 +20,9 @@ namespace BlazorBindings.Maui.Elements
             RegisterAdditionalHandlers();
         }
 
-        [Parameter] public MC.LayoutOptions HorizontalOptions { get; set; }
-        [Parameter] public Thickness Margin { get; set; }
-        [Parameter] public MC.LayoutOptions VerticalOptions { get; set; }
+        [Parameter] public MC.LayoutOptions? HorizontalOptions { get; set; }
+        [Parameter] public Thickness? Margin { get; set; }
+        [Parameter] public MC.LayoutOptions? VerticalOptions { get; set; }
 
         public new MC.View NativeControl => (MC.View)((Element)this).NativeControl;
 
@@ -34,22 +34,22 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(HorizontalOptions):
                     if (!Equals(HorizontalOptions, value))
                     {
-                        HorizontalOptions = (MC.LayoutOptions)value;
-                        NativeControl.HorizontalOptions = HorizontalOptions;
+                        HorizontalOptions = (MC.LayoutOptions?)value;
+                        NativeControl.HorizontalOptions = HorizontalOptions ?? (MC.LayoutOptions)MC.View.HorizontalOptionsProperty.DefaultValue;
                     }
                     break;
                 case nameof(Margin):
                     if (!Equals(Margin, value))
                     {
-                        Margin = (Thickness)value;
-                        NativeControl.Margin = Margin;
+                        Margin = (Thickness?)value;
+                        NativeControl.Margin = Margin ?? (Thickness)MC.View.MarginProperty.DefaultValue;
                     }
                     break;
                 case nameof(VerticalOptions):
                     if (!Equals(VerticalOptions, value))
                     {
-                        VerticalOptions = (MC.LayoutOptions)value;
-                        NativeControl.VerticalOptions = VerticalOptions;
+                        VerticalOptions = (MC.LayoutOptions?)value;
+                        NativeControl.VerticalOptions = VerticalOptions ?? (MC.LayoutOptions)MC.View.VerticalOptionsProperty.DefaultValue;
                     }
                     break;
 

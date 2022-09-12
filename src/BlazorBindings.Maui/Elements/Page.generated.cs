@@ -29,8 +29,8 @@ namespace BlazorBindings.Maui.Elements
 
         [Parameter] public MC.ImageSource BackgroundImageSource { get; set; }
         [Parameter] public MC.ImageSource IconImageSource { get; set; }
-        [Parameter] public bool IsBusy { get; set; }
-        [Parameter] public Thickness Padding { get; set; }
+        [Parameter] public bool? IsBusy { get; set; }
+        [Parameter] public Thickness? Padding { get; set; }
         [Parameter] public string Title { get; set; }
         [Parameter] public RenderFragment MenuBarItems { get; set; }
         [Parameter] public RenderFragment ToolbarItems { get; set; }
@@ -66,15 +66,15 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(IsBusy):
                     if (!Equals(IsBusy, value))
                     {
-                        IsBusy = (bool)value;
-                        NativeControl.IsBusy = IsBusy;
+                        IsBusy = (bool?)value;
+                        NativeControl.IsBusy = IsBusy ?? (bool)MC.Page.IsBusyProperty.DefaultValue;
                     }
                     break;
                 case nameof(Padding):
                     if (!Equals(Padding, value))
                     {
-                        Padding = (Thickness)value;
-                        NativeControl.Padding = Padding;
+                        Padding = (Thickness?)value;
+                        NativeControl.Padding = Padding ?? (Thickness)MC.Page.PaddingProperty.DefaultValue;
                     }
                     break;
                 case nameof(Title):

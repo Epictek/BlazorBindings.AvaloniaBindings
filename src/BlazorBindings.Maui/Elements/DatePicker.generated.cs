@@ -21,15 +21,15 @@ namespace BlazorBindings.Maui.Elements
             RegisterAdditionalHandlers();
         }
 
-        [Parameter] public double CharacterSpacing { get; set; }
-        [Parameter] public DateTime Date { get; set; }
-        [Parameter] public MC.FontAttributes FontAttributes { get; set; }
-        [Parameter] public bool FontAutoScalingEnabled { get; set; }
+        [Parameter] public double? CharacterSpacing { get; set; }
+        [Parameter] public DateTime? Date { get; set; }
+        [Parameter] public MC.FontAttributes? FontAttributes { get; set; }
+        [Parameter] public bool? FontAutoScalingEnabled { get; set; }
         [Parameter] public string FontFamily { get; set; }
-        [Parameter] public double FontSize { get; set; }
+        [Parameter] public double? FontSize { get; set; }
         [Parameter] public string Format { get; set; }
-        [Parameter] public DateTime MaximumDate { get; set; }
-        [Parameter] public DateTime MinimumDate { get; set; }
+        [Parameter] public DateTime? MaximumDate { get; set; }
+        [Parameter] public DateTime? MinimumDate { get; set; }
         [Parameter] public Color TextColor { get; set; }
         [Parameter] public EventCallback<DateTime> DateChanged { get; set; }
 
@@ -44,29 +44,29 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(CharacterSpacing):
                     if (!Equals(CharacterSpacing, value))
                     {
-                        CharacterSpacing = (double)value;
-                        NativeControl.CharacterSpacing = CharacterSpacing;
+                        CharacterSpacing = (double?)value;
+                        NativeControl.CharacterSpacing = CharacterSpacing ?? (double)MC.DatePicker.CharacterSpacingProperty.DefaultValue;
                     }
                     break;
                 case nameof(Date):
                     if (!Equals(Date, value))
                     {
-                        Date = (DateTime)value;
-                        NativeControl.Date = Date;
+                        Date = (DateTime?)value;
+                        NativeControl.Date = Date ?? (DateTime)MC.DatePicker.DateProperty.DefaultValue;
                     }
                     break;
                 case nameof(FontAttributes):
                     if (!Equals(FontAttributes, value))
                     {
-                        FontAttributes = (MC.FontAttributes)value;
-                        NativeControl.FontAttributes = FontAttributes;
+                        FontAttributes = (MC.FontAttributes?)value;
+                        NativeControl.FontAttributes = FontAttributes ?? (MC.FontAttributes)MC.DatePicker.FontAttributesProperty.DefaultValue;
                     }
                     break;
                 case nameof(FontAutoScalingEnabled):
                     if (!Equals(FontAutoScalingEnabled, value))
                     {
-                        FontAutoScalingEnabled = (bool)value;
-                        NativeControl.FontAutoScalingEnabled = FontAutoScalingEnabled;
+                        FontAutoScalingEnabled = (bool?)value;
+                        NativeControl.FontAutoScalingEnabled = FontAutoScalingEnabled ?? (bool)MC.DatePicker.FontAutoScalingEnabledProperty.DefaultValue;
                     }
                     break;
                 case nameof(FontFamily):
@@ -79,8 +79,8 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(FontSize):
                     if (!Equals(FontSize, value))
                     {
-                        FontSize = (double)value;
-                        NativeControl.FontSize = FontSize;
+                        FontSize = (double?)value;
+                        NativeControl.FontSize = FontSize ?? (double)MC.DatePicker.FontSizeProperty.DefaultValue;
                     }
                     break;
                 case nameof(Format):
@@ -93,15 +93,15 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(MaximumDate):
                     if (!Equals(MaximumDate, value))
                     {
-                        MaximumDate = (DateTime)value;
-                        NativeControl.MaximumDate = MaximumDate;
+                        MaximumDate = (DateTime?)value;
+                        NativeControl.MaximumDate = MaximumDate ?? (DateTime)MC.DatePicker.MaximumDateProperty.DefaultValue;
                     }
                     break;
                 case nameof(MinimumDate):
                     if (!Equals(MinimumDate, value))
                     {
-                        MinimumDate = (DateTime)value;
-                        NativeControl.MinimumDate = MinimumDate;
+                        MinimumDate = (DateTime?)value;
+                        NativeControl.MinimumDate = MinimumDate ?? (DateTime)MC.DatePicker.MinimumDateProperty.DefaultValue;
                     }
                     break;
                 case nameof(TextColor):
