@@ -47,7 +47,8 @@ namespace ComponentWrapperGenerator
                 new UsingStatement { Namespace = "Microsoft.AspNetCore.Components", IsUsed = true, },
                 new UsingStatement { Namespace = "BlazorBindings.Core", IsUsed = true, },
                 new UsingStatement { Namespace = "System.Threading.Tasks", IsUsed = true, },
-                new UsingStatement { Namespace = "Microsoft.Maui.Controls", Alias = "MC", IsUsed = true }
+                new UsingStatement { Namespace = "Microsoft.Maui.Controls", Alias = "MC", IsUsed = true },
+                new UsingStatement { Namespace = "Microsoft.Maui.Primitives", Alias = "MMP" }
             };
 
             var typeNamespace = typeToGenerate.ContainingNamespace.GetFullName();

@@ -10,5 +10,6 @@ namespace BlazorBindings.Maui.ComponentGenerator
         }
 
         public string[] Exclude { get; set; }
+        public string[] PropertyChangedEvents { get; set; }
     }
 }

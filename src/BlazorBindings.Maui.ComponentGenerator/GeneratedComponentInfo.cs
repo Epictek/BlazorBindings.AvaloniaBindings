@@ -7,5 +7,6 @@ namespace ComponentWrapperGenerator
     {
         public INamedTypeSymbol TypeSymbol { get; set; }
         public HashSet<string> Exclude { get; set; }
+        public string[] PropertyChangedEvents { get; set; }
     }
 }

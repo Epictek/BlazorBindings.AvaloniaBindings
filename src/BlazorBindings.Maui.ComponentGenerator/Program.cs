@@ -77,7 +77,8 @@ namespace ComponentWrapperGenerator
                     return new GeneratedComponentInfo
                     {
                         TypeSymbol = a.ConstructorArguments.FirstOrDefault().Value as INamedTypeSymbol,
-                        Exclude = GetNamedArgumentValues<string>(a, "Exclude").ToHashSet()
+                        Exclude = GetNamedArgumentValues<string>(a, "Exclude").ToHashSet(),
+                        PropertyChangedEvents = GetNamedArgumentValues<string>(a, "PropertyChangedEvents")
                     };
                 })
                 .Where(type => type.TypeSymbol != null)

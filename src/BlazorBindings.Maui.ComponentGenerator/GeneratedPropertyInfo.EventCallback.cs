@@ -9,12 +9,6 @@ namespace ComponentWrapperGenerator
 {
     public partial class GeneratedPropertyInfo
     {
-        private static readonly EventToGenerate[] EventsToGenerate = new EventToGenerate[]
-        {
-            new ("RefreshView", "PropertyChanged", "IsRefreshingChanged", typeArgument: "bool"),
-            new ("TimePicker", "PropertyChanged", "TimeChanged", typeArgument: "TimeSpan"),
-        };
-
         private INamedTypeSymbol _eventHandlerType;
         private bool _isBindEvent;
 
@@ -78,26 +72,27 @@ namespace ComponentWrapperGenerator
         {
             var componentType = componentInfo.TypeSymbol;
 
-            var requestedEvents = EventsToGenerate
-                .Where(e => e.TypeName == componentType.Name)
-                .Select(info =>
+            var propertyChangedEvents = componentInfo.PropertyChangedEvents
+                .Select(propertyForEvent =>
                 {
-                    var eventInfo = componentType.GetEvent(info.MauiEventName, includeBaseTypes: true);
+                    var propertyInfo = componentType.GetProperty(propertyForEvent)
+                        ?? throw new Exception($"Cannot find property {componentType.Name}.{propertyForEvent}.");
 
-                    if (eventInfo is null)
-                        throw new Exception($"Cannot find event {info.TypeName}.{info.MauiEventName}.");
+                    var eventInfo = componentType.GetEvent("PropertyChanged", includeBaseTypes: true);
+
+                    var componentEventName = $"{propertyInfo.Name}Changed";
 
                     var generatedPropertyInfo = new GeneratedPropertyInfo(
                         compilation,
-                        info.MauiEventName,
+                        "PropertyChanged",
                         ComponentWrapperGenerator.GetTypeNameAndAddNamespace(componentType, usings),
                         ComponentWrapperGenerator.GetIdentifierName(componentType.Name),
-                        info.ComponentEventName,
-                        GetRenderFragmentType(eventInfo, info.TypeArgument, usings),
+                        componentEventName,
+                        GetRenderFragmentType(null, propertyInfo.Type, usings),
                         GeneratedPropertyKind.EventCallback,
                         usings);
 
-                    generatedPropertyInfo._isBindEvent = info.TypeArgument != null;
+                    generatedPropertyInfo._isBindEvent = true;
                     generatedPropertyInfo._eventHandlerType = (INamedTypeSymbol)eventInfo.Type;
                     return generatedPropertyInfo;
                 });
@@ -111,31 +106,30 @@ namespace ComponentWrapperGenerator
 
                     var eventCallbackName = isBindEvent ? $"{bindedProperty.Name}Changed" : GetEventCallbackName(eventInfo);
 
-                    var typeArgumentName = bindedProperty is null ? null : ComponentWrapperGenerator.GetTypeNameAndAddNamespace(bindedProperty.Type, usings);
-
-                    var generatedIPropertySymbol = new GeneratedPropertyInfo(
+                    var generatedPropertyInfo = new GeneratedPropertyInfo(
                         compilation,
                         eventInfo.Name,
                         ComponentWrapperGenerator.GetTypeNameAndAddNamespace(componentType, usings),
                         ComponentWrapperGenerator.GetIdentifierName(componentType.Name),
                         eventCallbackName,
-                        GetRenderFragmentType(eventInfo, typeArgumentName, usings),
+                        GetRenderFragmentType(eventInfo, bindedProperty?.Type, usings),
                         GeneratedPropertyKind.EventCallback,
                         usings);
 
-                    generatedIPropertySymbol._isBindEvent = isBindEvent;
-                    generatedIPropertySymbol._eventHandlerType = (INamedTypeSymbol)eventInfo.Type;
-                    return generatedIPropertySymbol;
+                    generatedPropertyInfo._isBindEvent = isBindEvent;
+                    generatedPropertyInfo._eventHandlerType = (INamedTypeSymbol)eventInfo.Type;
+                    return generatedPropertyInfo;
                 });
 
-            return requestedEvents.Concat(inferredEvents).ToArray();
+            return propertyChangedEvents.Concat(inferredEvents).ToArray();
         }
 
-        private static string GetRenderFragmentType(IEventSymbol eventInfo, string callbackTypeArgument, IList<UsingStatement> usings)
+        private static string GetRenderFragmentType(IEventSymbol eventInfo, ITypeSymbol callbackTypeArgument, IList<UsingStatement> usings)
         {
             if (callbackTypeArgument != null)
             {
-                return $"EventCallback<{callbackTypeArgument}>";
+                var typeName = ComponentWrapperGenerator.GetTypeNameAndAddNamespace(callbackTypeArgument, usings);
+                return $"EventCallback<{typeName}>";
             }
 
             var eventArgType = eventInfo.Type.GetMethod("Invoke").Parameters[1].Type;
@@ -173,27 +167,6 @@ namespace ComponentWrapperGenerator
                 || $"Is{eventSymbol.Name}" == $"{p.Name}");  // e.g. IsToggled - Toggled
 
             return property != null;
-        }
-
-        class EventToGenerate
-        {
-            public EventToGenerate(string typeName, string mauiEventName, string componentEventName, string typeArgument = null)
-            {
-                TypeName = typeName;
-                MauiEventName = mauiEventName;
-                ComponentEventName = componentEventName;
-                TypeArgument = typeArgument;
-            }
-
-            public EventToGenerate(string typeName, string eventName)
-                : this(typeName, eventName, eventName, null)
-            {
-            }
-
-            public string TypeName { get; set; }
-            public string MauiEventName { get; set; }
-            public string ComponentEventName { get; set; }
-            public string TypeArgument { get; set; }
         }
     }
 }

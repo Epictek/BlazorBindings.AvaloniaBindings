@@ -47,7 +47,9 @@ using System.Runtime.CompilerServices;
 [assembly: GenerateComponent(typeof(ProgressBar))]
 [assembly: GenerateComponent(typeof(RadialGradientBrush))]
 [assembly: GenerateComponent(typeof(RadioButton))]
-[assembly: GenerateComponent(typeof(RefreshView), Exclude = new[] { nameof(RefreshView.Refreshing) })]
+[assembly: GenerateComponent(typeof(RefreshView),
+    Exclude = new[] { nameof(RefreshView.Refreshing) },
+    PropertyChangedEvents = new[] { nameof(RefreshView.IsRefreshing) })]
 [assembly: GenerateComponent(typeof(ScrollView))]
 [assembly: GenerateComponent(typeof(Shell))]
 [assembly: GenerateComponent(typeof(ShellContent))]
@@ -66,7 +68,8 @@ using System.Runtime.CompilerServices;
 [assembly: GenerateComponent(typeof(TabbedPage))]
 [assembly: GenerateComponent(typeof(TemplatedPage))]
 [assembly: GenerateComponent(typeof(TemplatedView))]
-[assembly: GenerateComponent(typeof(TimePicker))]
+[assembly: GenerateComponent(typeof(TimePicker),
+    PropertyChangedEvents = new[] { nameof(TimePicker.Time) })]
 [assembly: GenerateComponent(typeof(ToolbarItem))]
 [assembly: GenerateComponent(typeof(VerticalStackLayout))]
 [assembly: GenerateComponent(typeof(View))]
