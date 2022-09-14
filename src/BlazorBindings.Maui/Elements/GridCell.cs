@@ -12,10 +12,10 @@ namespace BlazorBindings.Maui.Elements
 {
     public class GridCell : NativeControlComponentBase, IMauiContainerElementHandler, INonChildContainerElement
     {
-        [Parameter] public int Column { get; set; }
-        [Parameter] public int ColumnSpan { get; set; } = 1;
-        [Parameter] public int Row { get; set; }
-        [Parameter] public int RowSpan { get; set; } = 1;
+        [Parameter] public int? Column { get; set; }
+        [Parameter] public int? ColumnSpan { get; set; }
+        [Parameter] public int? Row { get; set; }
+        [Parameter] public int? RowSpan { get; set; }
 
         [Parameter] public RenderFragment ChildContent { get; set; }
 
@@ -37,7 +37,7 @@ namespace BlazorBindings.Maui.Elements
                         if (columnValue != Column)
                         {
                             Column = columnValue;
-                            _children.ForEach(c => MC.Grid.SetColumn(c, Column));
+                            _children.ForEach(c => MC.Grid.SetColumn(c, Column ?? 0));
                         }
                         break;
                     case nameof(Row):
@@ -45,7 +45,7 @@ namespace BlazorBindings.Maui.Elements
                         if (rowValue != Row)
                         {
                             Row = rowValue;
-                            _children.ForEach(c => MC.Grid.SetRow(c, Row));
+                            _children.ForEach(c => MC.Grid.SetRow(c, Row ?? 0));
                         }
                         break;
                     case nameof(ColumnSpan):
@@ -53,7 +53,7 @@ namespace BlazorBindings.Maui.Elements
                         if (colSpanValue != ColumnSpan)
                         {
                             ColumnSpan = colSpanValue;
-                            _children.ForEach(c => MC.Grid.SetColumnSpan(c, ColumnSpan));
+                            _children.ForEach(c => MC.Grid.SetColumnSpan(c, ColumnSpan ?? 1));
                         }
                         break;
                     case nameof(RowSpan):
@@ -61,7 +61,7 @@ namespace BlazorBindings.Maui.Elements
                         if (rowSpanValue != RowSpan)
                         {
                             RowSpan = rowSpanValue;
-                            _children.ForEach(c => MC.Grid.SetRowSpan(c, RowSpan));
+                            _children.ForEach(c => MC.Grid.SetRowSpan(c, RowSpan ?? 1));
                         }
                         break;
                     case nameof(ChildContent):
@@ -88,10 +88,10 @@ namespace BlazorBindings.Maui.Elements
                 throw new ArgumentException($"Expected parent to be of type {typeof(MC.View).FullName} but it is of type {child?.GetType().FullName}.", nameof(child));
             }
 
-            MC.Grid.SetColumn(childView, Column);
-            MC.Grid.SetColumnSpan(childView, ColumnSpan);
-            MC.Grid.SetRow(childView, Row);
-            MC.Grid.SetRowSpan(childView, RowSpan);
+            MC.Grid.SetColumn(childView, Column ?? 0);
+            MC.Grid.SetColumnSpan(childView, ColumnSpan ?? 1);
+            MC.Grid.SetRow(childView, Row ?? 0);
+            MC.Grid.SetRowSpan(childView, RowSpan ?? 1);
 
             _children.Add(childView);
             _parentGrid.Children.Add(childView);
