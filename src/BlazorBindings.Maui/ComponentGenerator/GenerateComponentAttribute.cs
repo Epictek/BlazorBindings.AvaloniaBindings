@@ -9,7 +9,14 @@ namespace BlazorBindings.Maui.ComponentGenerator
         {
         }
 
+        /// <summary>
+        /// Exclude members from generation.
+        /// </summary>
         public string[] Exclude { get; set; }
+
+        /// <summary>
+        /// Generate EventCallback for property based on PropertyChanged event.
+        /// </summary>
         public string[] PropertyChangedEvents { get; set; }
     }
 }
