@@ -11,6 +11,9 @@ using BlazorBindings.Maui.ComponentGenerator;
 [assembly: GenerateComponent(typeof(VerticalProgressBar))]
 [assembly: GenerateComponent(typeof(NumericUpDown))]
 [assembly: GenerateComponent(typeof(ProgressRadial))]
+[assembly: GenerateComponent(typeof(ToggleSwitch),
+    Exclude = new[] { nameof(ToggleSwitch.Toggled) },
+    PropertyChangedEvents = new[] { nameof(ToggleSwitch.IsOn) })]
 [assembly: GenerateComponent(typeof(AlohaKit.Controls.Slider))]
 [assembly: GenerateComponent(typeof(PulseIcon))]
 

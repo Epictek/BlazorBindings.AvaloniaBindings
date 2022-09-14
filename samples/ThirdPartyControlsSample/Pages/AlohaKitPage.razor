@@ -35,6 +35,11 @@
             </HorizontalStackLayout>
             <BlazorBindings.Maui.Elements.AlohaKit.BusyIndicator IsVisible="@checkboxChecked" />
 
+            <HorizontalStackLayout>
+                <Label>Toggle @(toggleOn ? "on" : "off")</Label>
+                <ToggleSwitch @bind-IsOn="toggleOn" />
+            </HorizontalStackLayout>
+
         </VerticalStackLayout>
 
     </ScrollView>
@@ -57,4 +62,5 @@
     double numericUpDownValue;
 
     bool checkboxChecked = true;
+    bool toggleOn;
 }
