@@ -20,7 +20,8 @@ using System.Runtime.CompilerServices;
 //[assembly: GenerateComponent(typeof(CollectionView))] // Manually written to use custom logic for generics and binding
 [assembly: GenerateComponent(typeof(ContentPage))]
 [assembly: GenerateComponent(typeof(ContentView))]
-[assembly: GenerateComponent(typeof(DatePicker))]
+[assembly: GenerateComponent(typeof(DatePicker),
+    Exclude = new[] { nameof(DatePicker.Date), nameof(DatePicker.DateSelected), nameof(DatePicker.MaximumDate), nameof(DatePicker.MinimumDate) })]
 [assembly: GenerateComponent(typeof(Editor))]
 [assembly: GenerateComponent(typeof(Entry))]
 [assembly: GenerateComponent(typeof(FlexLayout))]
@@ -68,8 +69,7 @@ using System.Runtime.CompilerServices;
 [assembly: GenerateComponent(typeof(TabbedPage))]
 [assembly: GenerateComponent(typeof(TemplatedPage))]
 [assembly: GenerateComponent(typeof(TemplatedView))]
-[assembly: GenerateComponent(typeof(TimePicker),
-    PropertyChangedEvents = new[] { nameof(TimePicker.Time) })]
+[assembly: GenerateComponent(typeof(TimePicker), Exclude = new[] { nameof(TimePicker.Time) })]
 [assembly: GenerateComponent(typeof(ToolbarItem))]
 [assembly: GenerateComponent(typeof(VerticalStackLayout))]
 [assembly: GenerateComponent(typeof(View))]

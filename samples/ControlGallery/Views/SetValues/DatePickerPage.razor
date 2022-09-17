@@ -1,11 +1,11 @@
 ﻿<ContentPage Title="DatePicker">
     <VerticalStackLayout Margin="20">
         <DatePicker @bind-Date="_date" />
-        <Label>Selected date: @_date.ToShortDateString()</Label>
+        <Label>Selected date: @_date</Label>
     </VerticalStackLayout>
 </ContentPage>
 
 @code
 {
-    private DateTime _date;
+    private DateOnly _date = DateOnly.FromDateTime(DateTime.Today);
 }
