@@ -1,13 +1,12 @@
 ﻿@page "/gestureplayground"
 
-<ContentPage Title="Gestures">
+<ContentPage Title="Gesture Recognizers">
     <StackLayout Margin="new Thickness(20)">
 
-        <Label @ref="panLabel" Text="Tap me or pan me"
-               FontSize="40" BackgroundColor="Colors.LightCoral"
-               OnTap="OnLabelTapped"
-               OnPanUpdate="@OnLabelPanned"
-               TranslationX="translation">
+        <Label Text="Tap me or pan me"
+               FontSize="40" BackgroundColor="Colors.LightCoral">
+            <TapGestureRecognizer NumberOfTapsRequired="1" OnTapped="@OnLabelTapped" />
+            <PanGestureRecognizer OnPanUpdated="@OnLabelPanned" />
         </Label>
 
         <Label Text="@($"The label above was clicked {count} times")" FontSize="@fontSize" BackgroundColor="Colors.AliceBlue" />
@@ -17,8 +16,6 @@
             <SwipeGestureRecognizer Direction="SwipeDirection.Right" OnSwiped="@OnSwipeLabel" />
         </Label>
 
-        <Label Text="@statusType"/>
-
     </StackLayout>
 </ContentPage>
 
@@ -27,10 +24,6 @@
     int count;
     double fontSize = 20;
     string swipeState = "none";
-    double translation;
-    Label panLabel;
-
-    string statusType;
 
     void OnLabelTapped()
     {
@@ -39,8 +32,7 @@
 
     void OnLabelPanned(PanUpdatedEventArgs e)
     {
-        statusType = e.StatusType.ToString();
-        translation = e.TotalX;
+        fontSize = 20 + e.TotalX;
     }
 
     void OnSwipeLabel(SwipedEventArgs e)
