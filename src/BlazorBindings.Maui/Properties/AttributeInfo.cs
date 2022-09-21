@@ -52,6 +52,7 @@ using System.Runtime.CompilerServices;
     Exclude = new[] { nameof(RefreshView.Refreshing) },
     PropertyChangedEvents = new[] { nameof(RefreshView.IsRefreshing) })]
 [assembly: GenerateComponent(typeof(ScrollView))]
+[assembly: GenerateComponent(typeof(Shadow))]
 [assembly: GenerateComponent(typeof(Shell))]
 [assembly: GenerateComponent(typeof(ShellContent))]
 [assembly: GenerateComponent(typeof(ShellGroupItem))]

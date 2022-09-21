@@ -15,15 +15,24 @@ namespace BlazorBindings.Maui.Elements
         {
             ElementHandlerRegistry.RegisterPropertyContentHandler<VisualElement>(nameof(Background),
                 _ => new ContentPropertyHandler<MC.VisualElement>((visualElement, contentElement) => visualElement.Background = (MC.Brush)contentElement));
+
+            ElementHandlerRegistry.RegisterPropertyContentHandler<VisualElement>(nameof(Shadow),
+                _ => new ContentPropertyHandler<MC.VisualElement>((visualElement, contentElement) => visualElement.Shadow = (MC.Shadow)contentElement));
         }
 
         [Parameter] public RenderFragment Background { get; set; }
+        [Parameter] public RenderFragment Shadow { get; set; }
 
         protected override bool HandleAdditionalParameter(string name, object value)
         {
             if (name == nameof(Background))
             {
                 Background = (RenderFragment)value;
+                return true;
+            }
+            if (name == nameof(Shadow))
+            {
+                Shadow = (RenderFragment)value;
                 return true;
             }
 
@@ -33,6 +42,7 @@ namespace BlazorBindings.Maui.Elements
         protected override void RenderAdditionalElementContent(RenderTreeBuilder builder, ref int sequence)
         {
             RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(VisualElement), Background);
+            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(VisualElement), Shadow);
         }
     }
 }
