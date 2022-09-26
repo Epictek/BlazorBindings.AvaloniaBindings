@@ -21,6 +21,13 @@
 
             <Button Text="Change selection" OnClick="ChangeSelection" />
 
+            <Label>RadioButtons with custom ControlTemplate. Selected value: @selectedStringValue</Label>
+            <RadioButtonGroup @bind-SelectedValue="selectedStringValue">
+                <RadioButtonTemplated Value=@("String 1") />
+                <RadioButtonTemplated Value=@("String 2") />
+                <RadioButtonTemplated Value=@("String 3") />
+            </RadioButtonGroup>
+
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
@@ -28,6 +35,7 @@
 @code {
     int? selectedIntValue;
     ValueEnum selectedEnumValue = ValueEnum.B;
+    string selectedStringValue;
 
     void ChangeSelection()
     {

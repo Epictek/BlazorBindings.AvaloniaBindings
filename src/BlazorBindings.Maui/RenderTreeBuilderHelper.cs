@@ -65,6 +65,31 @@ namespace BlazorBindings.Maui
             }
         }
 
+        public static void AddControlTemplateProperty(RenderTreeBuilder builder, int sequence, Type containingType, RenderFragment template,
+            [CallerArgumentExpression("template")] string propertyName = null)
+        {
+            if (builder is null)
+            {
+                throw new ArgumentNullException(nameof(builder));
+            }
+            if (containingType is null)
+            {
+                throw new ArgumentNullException(nameof(containingType));
+            }
+
+            if (template != null)
+            {
+                builder.OpenRegion(sequence);
+
+                builder.OpenComponent<ControlTemplateItemsComponent>(0);
+                builder.AddAttribute(1, nameof(ControlTemplateItemsComponent.ElementName), GetElementName(containingType, propertyName));
+                builder.AddAttribute(2, nameof(ControlTemplateItemsComponent.Template), template);
+                builder.CloseComponent();
+
+                builder.CloseRegion();
+            }
+        }
+
         private static string GetElementName(Type containingType, string propertyName)
         {
             return $"p-{containingType.FullName}.{propertyName}";

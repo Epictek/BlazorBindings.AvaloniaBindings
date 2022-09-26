@@ -130,7 +130,11 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(IsCheckedChanged):
                     if (!Equals(IsCheckedChanged, value))
                     {
-                        void NativeControlCheckedChanged(object sender, MC.CheckedChangedEventArgs e) => IsCheckedChanged.InvokeAsync(NativeControl.IsChecked);
+                        void NativeControlCheckedChanged(object sender, MC.CheckedChangedEventArgs e)
+                        {
+                            IsChecked = NativeControl.IsChecked;
+                            IsCheckedChanged.InvokeAsync(NativeControl.IsChecked);
+                        }
 
                         IsCheckedChanged = (EventCallback<bool>)value;
                         NativeControl.CheckedChanged -= NativeControlCheckedChanged;
