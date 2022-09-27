@@ -21,9 +21,9 @@ namespace BlazorBindings.Maui.Elements
         static Page()
         {
             ElementHandlerRegistry.RegisterPropertyContentHandler<Page>(nameof(MenuBarItems),
-                _ => new ListContentPropertyHandler<MC.Page, MC.MenuBarItem>(x => x.MenuBarItems));
+                (renderer, parent, component) => new ListContentPropertyHandler<MC.Page, MC.MenuBarItem>(x => x.MenuBarItems));
             ElementHandlerRegistry.RegisterPropertyContentHandler<Page>(nameof(ToolbarItems),
-                _ => new ListContentPropertyHandler<MC.Page, MC.ToolbarItem>(x => x.ToolbarItems));
+                (renderer, parent, component) => new ListContentPropertyHandler<MC.Page, MC.ToolbarItem>(x => x.ToolbarItems));
             RegisterAdditionalHandlers();
         }
 

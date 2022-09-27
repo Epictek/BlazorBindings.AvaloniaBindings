@@ -11,10 +11,12 @@ namespace ComponentWrapperGenerator
         private static readonly string[] ContentTypes = new[]
         {
             "Microsoft.Maui.IView",
-            "Microsoft.Maui.Controls.BaseMenuItem"
+            "Microsoft.Maui.Controls.BaseMenuItem",
+            "Microsoft.Maui.Controls.ControlTemplate"
         };
 
         public bool IsRenderFragmentProperty => Kind == GeneratedPropertyKind.RenderFragment;
+        public bool IsControlTemplate => _propertyInfo.Type.ToDisplayString() == "Microsoft.Maui.Controls.ControlTemplate";
 
         public string GetHandleContentProperty()
         {
@@ -27,20 +29,26 @@ namespace ComponentWrapperGenerator
         public string GetContentHandlerRegistration()
         {
             // ElementHandlerRegistry.RegisterPropertyContentHandler<ContentPage>(nameof(ChildContent),
-            //    _ => new ContentPropertyHandler<MC.ContentPage>((page, value) => page.Content = (MC.View)value));
+            //    (renderer, parent, component) => new ContentPropertyHandler<MC.ContentPage>((page, value) => page.Content = (MC.View)value));
 
             var contentHandler = GetContentHandler();
 
             return @$"
             ElementHandlerRegistry.RegisterPropertyContentHandler<{ComponentName}>(nameof({ComponentPropertyName}),
-                _ => {contentHandler});";
+                (renderer, parent, component) => {contentHandler});";
         }
 
         private string GetContentHandler()
         {
             var type = (INamedTypeSymbol)_propertyInfo.Type;
 
-            if (type.IsGenericType && type.ConstructedFrom.SpecialType == SpecialType.System_Collections_Generic_IList_T)
+            if (IsControlTemplate)
+            {
+                // new ControlTemplatePropertyHandler<MC.TemplatedView>(component, (view, controlTemplate) => view.ControlTemplate = controlTemplate)
+                var controlTemplateHandlerName = GetTypeNameAndAddNamespace("BlazorBindings.Maui.Elements.Handlers", "ControlTemplatePropertyHandler");
+                return $"new {controlTemplateHandlerName}<{MauiContainingTypeName}>(component,\r\n                    (x, controlTemplate) => x.{_propertyInfo.Name} = controlTemplate)";
+            }
+            else if (type.IsGenericType && type.ConstructedFrom.SpecialType == SpecialType.System_Collections_Generic_IList_T)
             {
                 // new ListContentPropertyHandler<MC.Page, MC.ToolbarItem>(page => page.ToolbarItems)
                 var itemTypeName = GetTypeNameAndAddNamespace(type.TypeArguments[0]);
@@ -58,8 +66,16 @@ namespace ComponentWrapperGenerator
 
         public string RenderContentProperty()
         {
-            // RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(ContentPage), ChildContent);
-            return $"\r\n            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof({ComponentName}), {ComponentPropertyName});";
+            if (IsControlTemplate)
+            {
+                // RenderTreeBuilderHelper.AddControlTemplateProperty(builder, sequence++, typeof(TemplatedView), ControlTemplate);
+                return $"\r\n            RenderTreeBuilderHelper.AddControlTemplateProperty(builder, sequence++, typeof({ComponentName}), {ComponentPropertyName});";
+            }
+            else
+            {
+                // RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(ContentPage), ChildContent);
+                return $"\r\n            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof({ComponentName}), {ComponentPropertyName});";
+            }
         }
 
         internal static GeneratedPropertyInfo[] GetContentProperties(Compilation compilation, GeneratedComponentInfo componentInfo, IList<UsingStatement> usings)

@@ -20,7 +20,7 @@ namespace BlazorBindings.Maui.Elements
         static ScrollView()
         {
             ElementHandlerRegistry.RegisterPropertyContentHandler<ScrollView>(nameof(ChildContent),
-                _ => new ContentPropertyHandler<MC.ScrollView>((x, value) => x.Content = (MC.View)value));
+                (renderer, parent, component) => new ContentPropertyHandler<MC.ScrollView>((x, value) => x.Content = (MC.View)value));
             RegisterAdditionalHandlers();
         }
 

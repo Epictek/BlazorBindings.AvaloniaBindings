@@ -68,7 +68,7 @@ using System.Runtime.CompilerServices;
 [assembly: GenerateComponent(typeof(Tab))]
 [assembly: GenerateComponent(typeof(TabBar))]
 [assembly: GenerateComponent(typeof(TabbedPage))]
-[assembly: GenerateComponent(typeof(TemplatedPage))]
+[assembly: GenerateComponent(typeof(TemplatedPage), Exclude = new[] { nameof(TemplatedPage.ControlTemplate) })]
 [assembly: GenerateComponent(typeof(TemplatedView))]
 [assembly: GenerateComponent(typeof(TimePicker), Exclude = new[] { nameof(TimePicker.Time) })]
 [assembly: GenerateComponent(typeof(ToolbarItem))]

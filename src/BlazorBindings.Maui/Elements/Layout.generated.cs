@@ -20,7 +20,7 @@ namespace BlazorBindings.Maui.Elements
         static Layout()
         {
             ElementHandlerRegistry.RegisterPropertyContentHandler<Layout>(nameof(ChildContent),
-                _ => new ListContentPropertyHandler<MC.Layout, IView>(x => x.Children));
+                (renderer, parent, component) => new ListContentPropertyHandler<MC.Layout, IView>(x => x.Children));
             RegisterAdditionalHandlers();
         }
 

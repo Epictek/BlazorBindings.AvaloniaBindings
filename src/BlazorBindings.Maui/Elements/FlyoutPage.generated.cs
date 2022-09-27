@@ -20,9 +20,9 @@ namespace BlazorBindings.Maui.Elements
         static FlyoutPage()
         {
             ElementHandlerRegistry.RegisterPropertyContentHandler<FlyoutPage>(nameof(Detail),
-                _ => new ContentPropertyHandler<MC.FlyoutPage>((x, value) => x.Detail = (MC.Page)value));
+                (renderer, parent, component) => new ContentPropertyHandler<MC.FlyoutPage>((x, value) => x.Detail = (MC.Page)value));
             ElementHandlerRegistry.RegisterPropertyContentHandler<FlyoutPage>(nameof(Flyout),
-                _ => new ContentPropertyHandler<MC.FlyoutPage>((x, value) => x.Flyout = (MC.Page)value));
+                (renderer, parent, component) => new ContentPropertyHandler<MC.FlyoutPage>((x, value) => x.Flyout = (MC.Page)value));
             RegisterAdditionalHandlers();
         }
 

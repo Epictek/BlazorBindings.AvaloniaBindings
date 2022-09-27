@@ -22,7 +22,7 @@ namespace BlazorBindings.Maui.Elements
         static Border()
         {
             ElementHandlerRegistry.RegisterPropertyContentHandler<Border>(nameof(ChildContent),
-                _ => new ContentPropertyHandler<MC.Border>((x, value) => x.Content = (MC.View)value));
+                (renderer, parent, component) => new ContentPropertyHandler<MC.Border>((x, value) => x.Content = (MC.View)value));
             RegisterAdditionalHandlers();
         }
 
