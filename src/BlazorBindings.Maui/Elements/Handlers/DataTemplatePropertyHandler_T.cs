@@ -10,21 +10,21 @@ using MC = Microsoft.Maui.Controls;
 
 namespace BlazorBindings.Maui.Elements.Handlers
 {
-    public class DataTemplatePropertyHandler<TElementType> : IMauiContainerElementHandler, INonChildContainerElement
+    public class DataTemplatePropertyHandler<TElementType, TItemType> : IMauiContainerElementHandler, INonChildContainerElement
     {
-        private readonly ControlTemplateItemsComponent _controlTemplateItemsComponent;
+        private readonly DataTemplateItemsComponent<TItemType> _dataTemplateItemsComponent;
         private readonly Action<TElementType, DataTemplate> _setPropertyAction;
 
-        public DataTemplatePropertyHandler(IComponent controlTemplateItemsComponent, Action<TElementType, DataTemplate> setPropertyAction)
+        public DataTemplatePropertyHandler(IComponent dataTemplateItemsComponent, Action<TElementType, DataTemplate> setPropertyAction)
         {
-            _controlTemplateItemsComponent = (ControlTemplateItemsComponent)controlTemplateItemsComponent;
+            _dataTemplateItemsComponent = (DataTemplateItemsComponent<TItemType>)dataTemplateItemsComponent;
             _setPropertyAction = setPropertyAction;
         }
 
         public void SetParent(object parentElement)
         {
             var parent = (TElementType)parentElement;
-            var dataTemplate = new MbbDataTemplate(_controlTemplateItemsComponent);
+            var dataTemplate = new MbbDataTemplate<TItemType>(_dataTemplateItemsComponent);
             _setPropertyAction(parent, dataTemplate);
         }
 

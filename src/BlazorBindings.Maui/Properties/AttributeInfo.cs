@@ -53,8 +53,10 @@ using System.Runtime.CompilerServices;
     PropertyChangedEvents = new[] { nameof(RefreshView.IsRefreshing) })]
 [assembly: GenerateComponent(typeof(ScrollView))]
 [assembly: GenerateComponent(typeof(Shadow))]
-[assembly: GenerateComponent(typeof(Shell))]
-[assembly: GenerateComponent(typeof(ShellContent))]
+[assembly: GenerateComponent(typeof(Shell),
+    Exclude = new[] { nameof(Shell.ItemTemplate), nameof(Shell.MenuItemTemplate), nameof(Shell.FlyoutContentTemplate), nameof(Shell.FlyoutFooterTemplate), nameof(Shell.FlyoutHeaderTemplate) })]
+[assembly: GenerateComponent(typeof(ShellContent),
+    Exclude = new[] { nameof(ShellContent.ContentTemplate) })]
 [assembly: GenerateComponent(typeof(ShellGroupItem))]
 [assembly: GenerateComponent(typeof(ShellItem))]
 [assembly: GenerateComponent(typeof(ShellSection))]

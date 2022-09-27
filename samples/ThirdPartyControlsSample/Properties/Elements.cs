@@ -22,4 +22,5 @@ using BlazorBindings.Maui.ComponentGenerator;
 [assembly: GenerateComponent(typeof(CommunityToolkit.Maui.Views.DrawingView))]
 
 // XCalendar
-[assembly: GenerateComponent(typeof(XCalendar.Maui.Views.CalendarView))]
+[assembly: GenerateComponent(typeof(XCalendar.Maui.Views.CalendarView),
+    Exclude = new[] { nameof(XCalendar.Maui.Views.CalendarView.DayNameTemplate), nameof(XCalendar.Maui.Views.CalendarView.DayTemplate) })]

@@ -12,11 +12,13 @@ namespace ComponentWrapperGenerator
         {
             "Microsoft.Maui.IView",
             "Microsoft.Maui.Controls.BaseMenuItem",
-            "Microsoft.Maui.Controls.ControlTemplate"
+            "Microsoft.Maui.Controls.ControlTemplate",
+            "Microsoft.Maui.Controls.DataTemplate",
         };
 
         public bool IsRenderFragmentProperty => Kind == GeneratedPropertyKind.RenderFragment;
         public bool IsControlTemplate => _propertyInfo.Type.ToDisplayString() == "Microsoft.Maui.Controls.ControlTemplate";
+        public bool IsDataTemplate => _propertyInfo.Type.ToDisplayString() == "Microsoft.Maui.Controls.DataTemplate";
 
         public string GetHandleContentProperty()
         {
@@ -48,6 +50,12 @@ namespace ComponentWrapperGenerator
                 var controlTemplateHandlerName = GetTypeNameAndAddNamespace("BlazorBindings.Maui.Elements.Handlers", "ControlTemplatePropertyHandler");
                 return $"new {controlTemplateHandlerName}<{MauiContainingTypeName}>(component,\r\n                    (x, controlTemplate) => x.{_propertyInfo.Name} = controlTemplate)";
             }
+            else if (IsDataTemplate)
+            {
+                // new DataTemplatePropertyHandler<MC.ItemsView>(component, (view, valueElement) => view.dataTemplate = dataTemplate)
+                var dataTemplateHandlerName = GetTypeNameAndAddNamespace("BlazorBindings.Maui.Elements.Handlers", "DataTemplatePropertyHandler");
+                return $"new {dataTemplateHandlerName}<{MauiContainingTypeName}>(component,\r\n                    (x, dataTemplate) => x.{_propertyInfo.Name} = dataTemplate)";
+            }
             else if (type.IsGenericType && type.ConstructedFrom.SpecialType == SpecialType.System_Collections_Generic_IList_T)
             {
                 // new ListContentPropertyHandler<MC.Page, MC.ToolbarItem>(page => page.ToolbarItems)
@@ -70,6 +78,11 @@ namespace ComponentWrapperGenerator
             {
                 // RenderTreeBuilderHelper.AddControlTemplateProperty(builder, sequence++, typeof(TemplatedView), ControlTemplate);
                 return $"\r\n            RenderTreeBuilderHelper.AddControlTemplateProperty(builder, sequence++, typeof({ComponentName}), {ComponentPropertyName});";
+            }
+            else if (IsDataTemplate)
+            {
+                // RenderTreeBuilderHelper.AddDataTemplateProperty(builder, sequence++, typeof(ItemsView<T>), ItemTemplate);
+                return $"\r\n            RenderTreeBuilderHelper.AddDataTemplateProperty(builder, sequence++, typeof({ComponentName}), {ComponentPropertyName});";
             }
             else
             {

@@ -65,6 +65,13 @@ namespace BlazorBindings.Maui
             }
         }
 
+        public static void AddDataTemplateProperty(RenderTreeBuilder builder, int sequence, Type containingType, RenderFragment template,
+            [CallerArgumentExpression("template")] string propertyName = null)
+        {
+            // There's not much of a difference between non-generic DataTemplate and ControlTemplate.
+            AddControlTemplateProperty(builder, sequence, containingType, template, propertyName);
+        }
+
         public static void AddControlTemplateProperty(RenderTreeBuilder builder, int sequence, Type containingType, RenderFragment template,
             [CallerArgumentExpression("template")] string propertyName = null)
         {
