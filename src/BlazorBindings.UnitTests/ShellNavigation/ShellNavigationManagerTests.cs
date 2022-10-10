@@ -31,7 +31,7 @@ namespace BlazorBindings.UnitTests.ShellNavigation
         [TestCaseSource(nameof(TryParseTestData))]
         public void TryParseTest(string s, Type type, object expectedResult, bool expectedSuccess)
         {
-            var success = ShellNavigationManager.TryParse(type, s, out var result);
+            var success = NavigationService.TryParse(type, s, out var result);
             Assert.Multiple(() =>
             {
                 Assert.AreEqual(expectedResult, result);

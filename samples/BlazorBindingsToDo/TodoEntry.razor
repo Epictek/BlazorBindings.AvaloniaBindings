@@ -1,4 +1,5 @@
 ﻿@inject AppState AppState
+@inject NavigationService Navigation
 
 <StackLayout Orientation="StackOrientation.Horizontal">
     <Switch @bind-IsToggled="ItemIsDone" />
@@ -9,37 +10,26 @@
             OnClick="OnDetailsClick" />
 </StackLayout>
 
-<ModalContainer @ref="todoEntryDialog" OnClosed="OnDetailsClosed">
-    <TodoEntryDetails Item="Item" />
-</ModalContainer>
-
 @code
 {
     [Parameter] public TodoItem Item { get; set; }
 
-    ModalContainer todoEntryDialog;
-
-    public void OnDetailsClick()
+    public async Task OnDetailsClick()
     {
-        todoEntryDialog.ShowDialog();
+        await Navigation.PushModalAsync(@<TodoEntryDetails Item="Item" />);
     }
 
     // This intermediate property allows change notifications to be raised when the IsDone value is toggled
     bool ItemIsDone
     {
         get => Item.IsDone;
-        set {
+        set
+        {
             if (value != Item.IsDone)
             {
                 Item.IsDone = value;
                 _ = AppState.TodoDatabase.SaveItemAsync(Item);
             }
         }
-    }
-
-    // NOTE: This method shouldn't be needed and is a temporary workaround
-    public void OnDetailsClosed()
-    {
-        todoEntryDialog.FinishClosingDialog();
     }
 }

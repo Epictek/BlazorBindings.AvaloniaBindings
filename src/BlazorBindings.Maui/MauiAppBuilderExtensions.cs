@@ -15,6 +15,7 @@ namespace BlazorBindings.Maui
                 throw new ArgumentNullException(nameof(builder));
 
             builder.Services
+                .AddSingleton<NavigationService>()
                 .AddSingleton<ShellNavigationManager>()
                 .AddScoped<MauiBlazorBindingsRenderer>();
 

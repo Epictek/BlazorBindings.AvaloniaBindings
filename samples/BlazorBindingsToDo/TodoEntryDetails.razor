@@ -1,7 +1,8 @@
 ﻿@inject AppState AppState
+@inject NavigationService Navigation
 
-<ContentPage @ref="contentPage">
-	<StackLayout Margin="20" VerticalOptions="LayoutOptions.StartAndExpand">
+<ContentPage>
+	<StackLayout Margin="20">
 		<Label Text="Edit todo item details"
 			   FontAttributes="FontAttributes.Bold"
 			   FontSize="30" />
@@ -25,8 +26,6 @@
 
 @code
 {
-	BlazorBindings.Maui.Elements.ContentPage contentPage;
-
 	[Parameter] public TodoItem Item { get; set; }
 
 	private TodoItem ItemCopy { get; set; }
@@ -55,19 +54,19 @@
 
 		await AppState.TodoDatabase.SaveItemAsync(Item);
 
-		await contentPage.NativeControl.Navigation.PopModalAsync();
+		await Navigation.PopModalAsync();
 	}
 
 	public async Task OnDeleteClick()
 	{
 		await AppState.TodoDatabase.DeleteItemAsync(Item);
 
-		await contentPage.NativeControl.Navigation.PopModalAsync();
+		await Navigation.PopModalAsync();
 	}
 
 	public async Task OnCancelClick()
 	{
-		await contentPage.NativeControl.Navigation.PopModalAsync();
+		await Navigation.PopModalAsync();
 	}
 
 	public async Task OnSpeakClick()

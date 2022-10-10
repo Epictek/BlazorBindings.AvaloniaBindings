@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
+using Microsoft.Maui.Controls;
 using System;
 using System.Threading.Tasks;
 using MC = Microsoft.Maui.Controls;
@@ -11,13 +12,13 @@ namespace BlazorBindings.Maui.ShellNavigation
     internal class MBBRouteFactory : MC.RouteFactory
     {
         private readonly Type _componentType;
-        private readonly ShellNavigationManager _navigationManager;
-        private MC.Element _element;
+        private readonly Func<Type, Task<Page>> _pageFactory;
+        private MC.Page _element;
 
-        public MBBRouteFactory(Type componentType, ShellNavigationManager navigationManager)
+        public MBBRouteFactory(Type componentType, Func<Type, Task<MC.Page>> pageFactory)
         {
             _componentType = componentType ?? throw new ArgumentNullException(nameof(componentType));
-            _navigationManager = navigationManager ?? throw new ArgumentNullException(nameof(navigationManager));
+            _pageFactory = pageFactory ?? throw new ArgumentNullException(nameof(pageFactory));
         }
 
         public override MC.Element GetOrCreate()
@@ -30,7 +31,7 @@ namespace BlazorBindings.Maui.ShellNavigation
 
         public async Task CreateAsync()
         {
-            _element = await _navigationManager.BuildPage(_componentType).ConfigureAwait(false);
+            _element = await _pageFactory(_componentType).ConfigureAwait(false);
         }
 
         public override bool Equals(object obj)

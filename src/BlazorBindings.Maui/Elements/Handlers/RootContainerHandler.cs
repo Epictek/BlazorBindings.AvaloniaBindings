@@ -13,7 +13,7 @@ namespace BlazorBindings.Maui.Elements.Handlers
     /// Fake element handler, which is used as a root for a renderer to get native Xamarin.Forms elements
     /// from a Blazor component.
     /// </summary>
-    public class RootContainerHandler : IMauiContainerElementHandler
+    internal class RootContainerHandler : IMauiContainerElementHandler
     {
         public List<MC.Element> Elements { get; } = new List<MC.Element>();
 
