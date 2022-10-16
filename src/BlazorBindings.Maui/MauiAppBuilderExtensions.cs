@@ -15,7 +15,7 @@ namespace BlazorBindings.Maui
 
             builder.Services
                 .AddSingleton<NavigationService>()
-                .AddSingleton<INavigationService>(services => services.GetService<NavigationService>())
+                .AddSingleton<INavigationService>(services => services.GetRequiredService<NavigationService>())
                 .AddSingleton<ShellNavigationManager>()
                 .AddScoped<MauiBlazorBindingsRenderer>();
 

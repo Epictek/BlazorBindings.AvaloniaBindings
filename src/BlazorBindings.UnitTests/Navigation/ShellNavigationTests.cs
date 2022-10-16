@@ -51,16 +51,16 @@ namespace BlazorBindings.UnitTests.Navigation
         {
             get
             {
-                yield return new TestCaseData("s", typeof(string), "s", true).SetName("Parse valid string");
-                yield return new TestCaseData("5", typeof(int), 5, true).SetName("Parse valid int");
-                yield return new TestCaseData("5", typeof(int?), 5, true).SetName("Parse valid int?");
-                yield return new TestCaseData("invalid text", typeof(int), 0, false).SetName("Parse invalid int");
-                yield return new TestCaseData("2020-05-20", typeof(DateTime), new DateTime(2020, 05, 20), true).SetName("Parse valid date");
-                yield return new TestCaseData("invalid text", typeof(DateTime), new DateTime(), false).SetName("Parse invalid date");
-                yield return new TestCaseData(_testGuid.ToString(), typeof(Guid), _testGuid, true).SetName("Parse valid GUID");
-                yield return new TestCaseData(_testGuid.ToString(), typeof(Guid?), _testGuid, true).SetName("Parse valid GUID?");
-                yield return new TestCaseData("invalid text", typeof(Guid), new Guid(), false).SetName("Parse invalid GUID");
-                yield return new TestCaseData("{'value': '5'}", typeof(object), null, false).SetName("Parse POCO should find null operation");
+                yield return new TestCaseData("s", typeof(string), "s", true).SetArgDisplayNames("Parse valid string");
+                yield return new TestCaseData("5", typeof(int), 5, true).SetArgDisplayNames("Parse valid int");
+                yield return new TestCaseData("5", typeof(int?), 5, true).SetArgDisplayNames("Parse valid int?");
+                yield return new TestCaseData("invalid text", typeof(int), 0, false).SetArgDisplayNames("Parse invalid int");
+                yield return new TestCaseData("2020-05-20", typeof(DateTime), new DateTime(2020, 05, 20), true).SetArgDisplayNames("Parse valid date");
+                yield return new TestCaseData("invalid text", typeof(DateTime), new DateTime(), false).SetArgDisplayNames("Parse invalid date");
+                yield return new TestCaseData(_testGuid.ToString(), typeof(Guid), _testGuid, true).SetArgDisplayNames("Parse valid GUID");
+                yield return new TestCaseData(_testGuid.ToString(), typeof(Guid?), _testGuid, true).SetArgDisplayNames("Parse valid GUID?");
+                yield return new TestCaseData("invalid text", typeof(Guid), new Guid(), false).SetArgDisplayNames("Parse invalid GUID");
+                yield return new TestCaseData("{'value': '5'}", typeof(object), null, false).SetArgDisplayNames("Parse POCO should find null operation");
             }
         }
 

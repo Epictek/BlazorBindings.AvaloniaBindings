@@ -16,12 +16,17 @@ namespace BlazorBindings.Maui
         private readonly Dictionary<Type, StructuredRouteResult> NavigationParameters = new();
         private List<StructuredRoute> Routes;
 
+        /// <summary>
+        /// Performs URI-based Shell navigation. This method is only available for Shell-based applications.
+        /// </summary>
+        /// <param name="uri">URI to navigate to.</param>
+        /// <param name="parameters">Additional parameters to set for component.</param>
         public async Task NavigateToAsync(string uri, Dictionary<string, object> parameters = null)
         {
-            if (uri is null)
-            {
-                throw new ArgumentNullException(nameof(uri));
-            }
+            ArgumentNullException.ThrowIfNull(uri);
+
+            var shell = MC.Shell.Current
+                ?? throw new InvalidOperationException("URI-based navigation requires Shell-based application.");
 
             Routes ??= FindRoutes();
 
@@ -35,7 +40,7 @@ namespace BlazorBindings.Maui
                     throw new InvalidOperationException($"A route factory for URI '{uri}' could not be found.");
                 }
                 await routeFactory.CreateAsync().ConfigureAwait(true);
-                await MC.Shell.Current.GoToAsync(route.Route.BaseUri);
+                await shell.GoToAsync(route.Route.BaseUri);
             }
             else
             {
