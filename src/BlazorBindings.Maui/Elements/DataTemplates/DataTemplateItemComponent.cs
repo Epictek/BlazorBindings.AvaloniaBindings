@@ -4,6 +4,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using System;
+using System.Threading.Tasks;
 using MC = Microsoft.Maui.Controls;
 
 namespace BlazorBindings.Maui.Elements.DataTemplates
@@ -12,34 +13,39 @@ namespace BlazorBindings.Maui.Elements.DataTemplates
     internal class DataTemplateItemComponent<T> : ComponentBase
 #pragma warning restore CA1812 // Avoid uninstantiated internal classes
     {
-        private MC.BindableObject _contentView;
         private object _item;
         private bool _shouldRender = true;
 
         [Parameter] public RenderFragment<T> Template { get; set; }
 
-        [Parameter]
-        public MC.BindableObject ContentView
+        [Parameter] public MC.BindableObject ContentView { get; set; }
+
+        public override Task SetParametersAsync(ParameterView parameters)
         {
-            get
+            foreach (var parValue in parameters)
             {
-                return _contentView;
-            }
-            set
-            {
-                if (_contentView == null)
+                switch (parValue.Name)
                 {
-                    _contentView = value;
-                    OnContentViewSet();
-                }
-                else
-                {
-                    if (_contentView != value)
-                    {
-                        throw new NotSupportedException("Cannot re-assign ContentView after being originally set.");
-                    }
+                    case nameof(Template):
+                        Template = (RenderFragment<T>)parValue.Value;
+                        break;
+
+                    case nameof(ContentView):
+                        if (ContentView == null)
+                        {
+                            ContentView = (MC.BindableObject)parValue.Value;
+                            OnContentViewSet();
+                        }
+                        else
+                        {
+                            if (ContentView != parValue.Value)
+                                throw new NotSupportedException("Cannot re-assign ContentView after being originally set.");
+                        }
+                        break;
                 }
             }
+
+            return base.SetParametersAsync(ParameterView.Empty);
         }
 
         protected override bool ShouldRender()
