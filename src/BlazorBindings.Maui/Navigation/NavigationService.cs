@@ -1,17 +1,16 @@
-﻿using BlazorBindings.Maui.Elements.Handlers;
-
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Maui.Controls;
 using System;
 using System.Collections.Generic;
-using System.Runtime.ExceptionServices;
+using System.ComponentModel;
 using System.Threading.Tasks;
+using IComponent = Microsoft.AspNetCore.Components.IComponent;
 
 namespace BlazorBindings.Maui
 {
-    public partial class NavigationService
+    public partial class NavigationService : INavigationService
     {
         protected readonly IServiceProvider _services;
 
@@ -68,6 +67,39 @@ namespace BlazorBindings.Maui
             await NavigationAction(() => Navigation.PopAsync(animated));
         }
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public Task<T> BuildElement<T>(RenderFragment renderFragment) where T : Element
+        {
+            return BuildElement<T>(typeof(RenderFragmentComponent), new()
+            {
+                [nameof(RenderFragmentComponent.RenderFragment)] = renderFragment
+            });
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public async Task<T> BuildElement<T>(Type componentType, Dictionary<string, object> arguments) where T : Element
+        {
+            var scope = _services.CreateScope();
+            var serviceProvider = scope.ServiceProvider;
+            var renderer = serviceProvider.GetRequiredService<MauiBlazorBindingsRenderer>();
+
+            var (element, _) = await renderer.GetElementFromRenderedComponent(componentType, arguments);
+
+            element.ParentChanged += DisposeScopeWhenParentRemoved;
+
+            return element as T
+                ?? throw new InvalidOperationException($"The target component of a navigation must derive from the {typeof(T).Name} component.");
+
+            void DisposeScopeWhenParentRemoved(object _, EventArgs __)
+            {
+                if (element.Parent is null)
+                {
+                    scope.Dispose();
+                    element.ParentChanged -= DisposeScopeWhenParentRemoved;
+                }
+            }
+        }
+
         static bool _navigationInProgress;
         static async Task NavigationAction(Func<Task> action)
         {
@@ -85,54 +117,6 @@ namespace BlazorBindings.Maui
                 // Small delay for animation.
                 await Task.Delay(200);
                 _navigationInProgress = false;
-            }
-        }
-
-        protected Task<T> BuildElement<T>(RenderFragment renderFragment) where T : Element
-        {
-            return BuildElement<T>(typeof(RenderFragmentComponent), new()
-            {
-                [nameof(RenderFragmentComponent.RenderFragment)] = renderFragment
-            });
-        }
-
-        protected async Task<T> BuildElement<T>(Type componentType, Dictionary<string, object> arguments) where T : Element
-        {
-            var scope = _services.CreateScope();
-            var serviceProvider = scope.ServiceProvider;
-            var renderer = serviceProvider.GetRequiredService<MauiBlazorBindingsRenderer>();
-            var container = new RootContainerHandler();
-
-            var addComponentTask = renderer.AddComponent(componentType, container, arguments);
-            var elementAddedTask = container.WaitForElementAsync();
-
-            await Task.WhenAny(addComponentTask, elementAddedTask).ConfigureAwait(false);
-
-            if (addComponentTask.Exception != null)
-            {
-                var exception = addComponentTask.Exception.InnerException;
-                ExceptionDispatchInfo.Throw(exception);
-            }
-
-            if (container.Elements.Count != 1)
-            {
-                throw new InvalidOperationException("The target component of a navigation must have exactly one root element.");
-            }
-
-            var element = container.Elements[0] as T
-                ?? throw new InvalidOperationException($"The target component of a navigation must derive from the {typeof(T).Name} component.");
-
-            element.ParentChanged += DisposeScopeWhenParentRemoved;
-
-            return element;
-
-            void DisposeScopeWhenParentRemoved(object _, EventArgs __)
-            {
-                if (element.Parent is null)
-                {
-                    scope.Dispose();
-                    element.ParentChanged -= DisposeScopeWhenParentRemoved;
-                }
             }
         }
 

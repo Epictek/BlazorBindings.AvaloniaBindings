@@ -11,11 +11,11 @@ namespace BlazorBindings.Maui
     {
         public static MauiAppBuilder UseMauiBlazorBindings(this MauiAppBuilder builder)
         {
-            if (builder is null)
-                throw new ArgumentNullException(nameof(builder));
+            ArgumentNullException.ThrowIfNull(builder);
 
             builder.Services
                 .AddSingleton<NavigationService>()
+                .AddSingleton<INavigationService>(services => services.GetService<NavigationService>())
                 .AddSingleton<ShellNavigationManager>()
                 .AddScoped<MauiBlazorBindingsRenderer>();
 

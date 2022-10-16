@@ -21,6 +21,7 @@ using XCalendar.Maui.Views;
 // CommunityToolkit
 [assembly: GenerateComponent(typeof(CommunityToolkit.Maui.Views.AvatarView))]
 [assembly: GenerateComponent(typeof(CommunityToolkit.Maui.Views.DrawingView))]
+[assembly: GenerateComponent(typeof(CommunityToolkit.Maui.Views.Popup), Exclude = new[] { nameof(CommunityToolkit.Maui.Views.Popup.Anchor) })]
 
 // XCalendar
 [assembly: GenerateComponent(typeof(CalendarView),
