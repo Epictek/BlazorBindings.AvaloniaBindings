@@ -2,7 +2,6 @@
 // Licensed under the MIT license.
 
 using BlazorBindings.Core;
-using Microsoft.Maui.Controls;
 using System;
 
 namespace BlazorBindings.Maui
@@ -26,16 +25,6 @@ namespace BlazorBindings.Maui
                 // markup and is not represented in the Xamarin.Forms control hierarchy.
 
                 nonPhysicalChild.SetParent(parentHandler.ElementControl);
-                return;
-            }
-
-            if (parentHandler.ElementControl is Application parentAsApp)
-            {
-                var childControlAsPage = childHandler.ElementControl as Page
-                    ?? throw new InvalidOperationException($"Application MainPage must be a Page; cannot set {parentAsApp.GetType().FullName}'s MainPage to {childHandler.ElementControl.GetType().FullName}");
-
-                //MainPage may already be set, but it is safe to replace it.
-                parentAsApp.MainPage = childControlAsPage;
                 return;
             }
 

@@ -17,11 +17,7 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public string ClassId { get; set; }
         [Parameter] public string StyleId { get; set; }
 
-        public MC.Element NativeControl
-        {
-            get => _nativeControl ??= CreateNativeElement();
-            internal set => _nativeControl = value;
-        }
+        public MC.Element NativeControl => _nativeControl ??= CreateNativeElement();
 
         public override Task SetParametersAsync(ParameterView parameters)
         {

@@ -15,8 +15,8 @@ namespace BlazorBindings.Maui.Elements.Shapes
             {
                 if (!Equals(value, Points))
                 {
-                    NativeControl.Points = AttributeHelper.StringToPointCollection((string)value);
                     Points = (string)value;
+                    NativeControl.Points = AttributeHelper.StringToPointCollection(Points);
                 }
                 return true;
             }
