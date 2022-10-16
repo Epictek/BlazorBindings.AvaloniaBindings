@@ -133,5 +133,17 @@ namespace BlazorBindings.UnitTests.Navigation
 
             Assert.That(_mauiNavigation.ModalStack, Has.Count.EqualTo(0));
         }
+
+        [Test]
+        public async Task ComponentShouldBeDisposedOnPopAsync()
+        {
+            var isDisposed = false;
+            PageContentWithDispose.OnDispose += () => isDisposed = true;
+
+            await _navigationService.PushAsync<PageContentWithDispose>();
+            await _navigationService.PopAsync();
+
+            Assert.That(isDisposed);
+        }
     }
 }

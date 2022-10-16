@@ -42,7 +42,7 @@ namespace BlazorBindings.UnitTests
         public static IServiceProvider Create()
         {
             var builder = MauiApp.CreateBuilder();
-            builder.Services.AddSingleton<MauiBlazorBindingsRenderer, TestBlazorBindingsRenderer>();
+            builder.Services.AddScoped<MauiBlazorBindingsRenderer, TestBlazorBindingsRenderer>();
             builder.Services.AddSingleton<MauiDispatching.IDispatcher, TestDispatcher>();
             return builder.Build().Services;
         }
