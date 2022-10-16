@@ -67,6 +67,11 @@ namespace BlazorBindings.Maui
             await NavigationAction(() => Navigation.PopAsync(animated));
         }
 
+        public async Task PopToRootAsync(bool animated = true)
+        {
+            await NavigationAction(() => Navigation.PopToRootAsync(animated));
+        }
+
         [EditorBrowsable(EditorBrowsableState.Never)]
         public Task<T> BuildElement<T>(RenderFragment renderFragment) where T : Element
         {
@@ -115,7 +120,7 @@ namespace BlazorBindings.Maui
             finally
             {
                 // Small delay for animation.
-                await Task.Delay(200);
+                await Task.Yield();
                 _navigationInProgress = false;
             }
         }

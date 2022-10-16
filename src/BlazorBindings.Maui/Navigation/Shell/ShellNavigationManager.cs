@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BlazorBindings.Maui
 {
-    [Obsolete]
+    [Obsolete("Use BlazorBindings.Maui.INavigationService instead.")]
     public class ShellNavigationManager //: NavigationManager I would have liked to inherit from NavigationManager but I can't work out what URIs to initialize it with
     {
         private readonly NavigationService _navigationService;

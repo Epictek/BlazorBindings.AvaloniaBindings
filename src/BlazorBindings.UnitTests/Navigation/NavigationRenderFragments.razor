@@ -1,0 +1,6 @@
+﻿@using BlazorBindings.UnitTests.Components
+
+@code {
+    public static RenderFragment PageWithParameters(string par1, int par2)
+        => @<PageContentWithParameters Par1="@par1" Par2="@par2" />;
+}
