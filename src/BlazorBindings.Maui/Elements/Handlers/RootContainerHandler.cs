@@ -13,8 +13,10 @@ namespace BlazorBindings.Maui.Elements.Handlers
     /// Fake element handler, which is used as a root for a renderer to get native Xamarin.Forms elements
     /// from a Blazor component.
     /// </summary>
-    internal class RootContainerHandler : IMauiContainerElementHandler
+    internal class RootContainerHandler : IMauiContainerElementHandler, INonChildContainerElement
     {
+        private TaskCompletionSource<MC.Element> _taskCompletionSource;
+
         public List<MC.Element> Elements { get; } = new List<MC.Element>();
 
         public Task WaitForElementAsync()
@@ -24,24 +26,15 @@ namespace BlazorBindings.Maui.Elements.Handlers
                 return Task.CompletedTask;
             }
 
-            var taskCompletionSource = new TaskCompletionSource<MC.Element>();
-            ChildAdded += SetTaskResult;
-            return taskCompletionSource.Task;
-
-            void SetTaskResult(MC.Element element)
-            {
-                ChildAdded -= SetTaskResult;
-                taskCompletionSource.TrySetResult(element);
-            }
+            _taskCompletionSource ??= new TaskCompletionSource<MC.Element>();
+            return _taskCompletionSource.Task;
         }
-
-        private event Action<MC.Element> ChildAdded;
 
         void IMauiContainerElementHandler.AddChild(MC.Element child, int physicalSiblingIndex)
         {
             var index = Math.Min(physicalSiblingIndex, Elements.Count);
             Elements.Insert(index, child);
-            ChildAdded?.Invoke(child);
+            _taskCompletionSource?.TrySetResult(child);
         }
 
         void IMauiContainerElementHandler.RemoveChild(MC.Element child)
@@ -61,5 +54,7 @@ namespace BlazorBindings.Maui.Elements.Handlers
         void IElementHandler.ApplyAttribute(ulong attributeEventHandlerId, string attributeName, object attributeValue, string attributeEventUpdatesAttributeName) { }
         bool IMauiElementHandler.IsParented() => false;
         void IMauiElementHandler.SetParent(MC.Element parent) { }
+        void INonPhysicalChild.SetParent(object parentElement) { }
+        void INonPhysicalChild.Remove() { }
     }
 }
