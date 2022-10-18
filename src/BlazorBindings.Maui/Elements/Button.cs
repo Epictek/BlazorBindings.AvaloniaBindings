@@ -1,28 +1,41 @@
-﻿// Copyright (c) Microsoft Corporation.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-using Microsoft.AspNetCore.Components;
 using BlazorBindings.Core;
+using BlazorBindings.Maui.Elements.Handlers;
+using MC = Microsoft.Maui.Controls;
+using Microsoft.AspNetCore.Components;
+using Microsoft.Maui;
+using Microsoft.Maui.Graphics;
+using System;
+using System.Threading.Tasks;
 
 namespace BlazorBindings.Maui.Elements
 {
-    public partial class Button : View
+    public partial class Button : IHandleChildContentText
     {
-        [Parameter] public EventCallback OnClick { get; set; }
-        [Parameter] public EventCallback OnPress { get; set; }
-        [Parameter] public EventCallback OnRelease { get; set; }
+        private TextSpanContainer _textSpanContainer;
 
-#pragma warning disable CA1721 // Property names should not match get methods
         [Parameter] public RenderFragment ChildContent { get; set; }
-#pragma warning restore CA1721 // Property names should not match get methods
+
+        protected override bool HandleAdditionalParameter(string name, object value)
+        {
+            if (name == nameof(ChildContent))
+            {
+                ChildContent = (RenderFragment)value;
+                return true;
+            }
+            else
+            {
+                return base.HandleAdditionalParameter(name, value);
+            }
+        }
 
         protected override RenderFragment GetChildContent() => ChildContent;
 
-        partial void RenderAdditionalAttributes(AttributesBuilder builder)
+        public void HandleText(int index, string text)
         {
-            builder.AddAttribute("onclick", OnClick);
-            builder.AddAttribute("onpress", OnPress);
-            builder.AddAttribute("onrelease", OnRelease);
+            NativeControl.Text = (_textSpanContainer ??= new()).GetUpdatedText(index, text);
         }
     }
 }

@@ -55,19 +55,19 @@
 
 		await AppState.TodoDatabase.SaveItemAsync(Item);
 
-		await contentPage.PopModalAsync();
+		await contentPage.NativeControl.Navigation.PopModalAsync();
 	}
 
 	public async Task OnDeleteClick()
 	{
 		await AppState.TodoDatabase.DeleteItemAsync(Item);
 
-		await contentPage.PopModalAsync();
+		await contentPage.NativeControl.Navigation.PopModalAsync();
 	}
 
 	public async Task OnCancelClick()
 	{
-		await contentPage.PopModalAsync();
+		await contentPage.NativeControl.Navigation.PopModalAsync();
 	}
 
 	public async Task OnSpeakClick()

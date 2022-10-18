@@ -10,7 +10,6 @@ namespace BlazorBindings.Maui
         Microsoft.Maui.Controls.Element ElementControl { get; }
 
         bool IsParented();
-        bool IsParentedTo(Microsoft.Maui.Controls.Element parent);
         void SetParent(Microsoft.Maui.Controls.Element parent);
     }
 }

@@ -1,25 +1,60 @@
-// Copyright (c) Microsoft Corporation.
-// Licensed under the MIT license.
-
 using Microsoft.AspNetCore.Components;
-using BlazorBindings.Core;
 using System;
-using System.Threading.Tasks;
+using MC = Microsoft.Maui.Controls;
 
 namespace BlazorBindings.Maui.Elements
 {
-    public partial class DatePicker : View
+    public partial class DatePicker
     {
-        [Parameter] public EventCallback<DateTime> DateChanged { get; set; }
+        [Parameter] public DateOnly? Date { get; set; }
+        [Parameter] public EventCallback<DateOnly> DateChanged { get; set; }
+        [Parameter] public DateOnly? MaximumDate { get; set; }
+        [Parameter] public DateOnly? MinimumDate { get; set; }
 
-        partial void RenderAdditionalAttributes(AttributesBuilder builder)
+        protected override bool HandleAdditionalParameter(string name, object value)
         {
-            builder.AddAttribute("ondatechanged", EventCallback.Factory.Create<ChangeEventArgs>(this, HandleDateChanged));
-        }
+            switch (name)
+            {
+                case nameof(Date):
+                    if (!Equals(Date, value))
+                    {
+                        Date = (DateOnly?)value;
+                        NativeControl.Date = Date?.ToDateTime(TimeOnly.MinValue) ?? (DateTime)MC.DatePicker.DateProperty.DefaultValue;
+                    }
+                    return true;
+                case nameof(MaximumDate):
+                    if (!Equals(MaximumDate, value))
+                    {
+                        MaximumDate = (DateOnly?)value;
+                        NativeControl.MaximumDate = MaximumDate?.ToDateTime(TimeOnly.MinValue) ?? (DateTime)MC.DatePicker.MaximumDateProperty.DefaultValue;
+                    }
+                    return true;
+                case nameof(MinimumDate):
+                    if (!Equals(MinimumDate, value))
+                    {
+                        MinimumDate = (DateOnly?)value;
+                        NativeControl.MinimumDate = MinimumDate?.ToDateTime(TimeOnly.MinValue) ?? (DateTime)MC.DatePicker.MinimumDateProperty.DefaultValue;
+                    }
+                    return true;
+                case nameof(DateChanged):
+                    if (!Equals(DateChanged, value))
+                    {
+                        void NativeControlDateSelected(object sender, MC.DateChangedEventArgs e)
+                        {
+                            var value = DateOnly.FromDateTime(NativeControl.Date);
+                            Date = value;
+                            DateChanged.InvokeAsync(value);
+                        }
 
-        private Task HandleDateChanged(ChangeEventArgs evt)
-        {
-            return DateChanged.InvokeAsync((DateTime)evt.Value);
+                        DateChanged = (EventCallback<DateOnly>)value;
+                        NativeControl.DateSelected -= NativeControlDateSelected;
+                        NativeControl.DateSelected += NativeControlDateSelected;
+                    }
+                    return true;
+
+                default:
+                    return base.HandleAdditionalParameter(name, value);
+            }
         }
     }
 }

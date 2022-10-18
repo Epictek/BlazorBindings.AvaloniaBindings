@@ -1,17 +1,19 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Rendering;
 using BlazorBindings.Maui.Elements;
 using BlazorBindings.Maui.Elements.DataTemplates;
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Rendering;
 using System;
+using System.Runtime.CompilerServices;
 
 namespace BlazorBindings.Maui
 {
     public static class RenderTreeBuilderHelper
     {
-        public static void AddContentProperty(RenderTreeBuilder builder, int sequence, Type containingType, string propertyName, RenderFragment content)
+        public static void AddContentProperty(RenderTreeBuilder builder, int sequence, Type containingType, RenderFragment content,
+            [CallerArgumentExpression("content")] string propertyName = null)
         {
             if (builder is null)
             {
@@ -38,7 +40,8 @@ namespace BlazorBindings.Maui
             }
         }
 
-        public static void AddDataTemplateProperty<T>(RenderTreeBuilder builder, int sequence, Type containingType, string propertyName, RenderFragment<T> template)
+        public static void AddDataTemplateProperty<T>(RenderTreeBuilder builder, int sequence, Type containingType, RenderFragment<T> template,
+            [CallerArgumentExpression("template")] string propertyName = null)
         {
             if (builder is null)
             {
@@ -49,14 +52,49 @@ namespace BlazorBindings.Maui
                 throw new ArgumentNullException(nameof(containingType));
             }
 
-            builder.OpenRegion(sequence);
+            if (template != null)
+            {
+                builder.OpenRegion(sequence);
 
-            builder.OpenComponent<DataTemplateItemsComponent<T>>(0);
-            builder.AddAttribute(1, nameof(DataTemplateItemsComponent<T>.ElementName), GetElementName(containingType, propertyName));
-            builder.AddAttribute(2, nameof(DataTemplateItemsComponent<T>.Template), template);
-            builder.CloseComponent();
+                builder.OpenComponent<DataTemplateItemsComponent<T>>(0);
+                builder.AddAttribute(1, nameof(DataTemplateItemsComponent<T>.ElementName), GetElementName(containingType, propertyName));
+                builder.AddAttribute(2, nameof(DataTemplateItemsComponent<T>.Template), template);
+                builder.CloseComponent();
 
-            builder.CloseRegion();
+                builder.CloseRegion();
+            }
+        }
+
+        public static void AddDataTemplateProperty(RenderTreeBuilder builder, int sequence, Type containingType, RenderFragment template,
+            [CallerArgumentExpression("template")] string propertyName = null)
+        {
+            // There's not much of a difference between non-generic DataTemplate and ControlTemplate.
+            AddControlTemplateProperty(builder, sequence, containingType, template, propertyName);
+        }
+
+        public static void AddControlTemplateProperty(RenderTreeBuilder builder, int sequence, Type containingType, RenderFragment template,
+            [CallerArgumentExpression("template")] string propertyName = null)
+        {
+            if (builder is null)
+            {
+                throw new ArgumentNullException(nameof(builder));
+            }
+            if (containingType is null)
+            {
+                throw new ArgumentNullException(nameof(containingType));
+            }
+
+            if (template != null)
+            {
+                builder.OpenRegion(sequence);
+
+                builder.OpenComponent<ControlTemplateItemsComponent>(0);
+                builder.AddAttribute(1, nameof(ControlTemplateItemsComponent.ElementName), GetElementName(containingType, propertyName));
+                builder.AddAttribute(2, nameof(ControlTemplateItemsComponent.Template), template);
+                builder.CloseComponent();
+
+                builder.CloseRegion();
+            }
         }
 
         private static string GetElementName(Type containingType, string propertyName)

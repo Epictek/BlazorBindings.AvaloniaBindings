@@ -1,45 +1,88 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-using Microsoft.AspNetCore.Components;
 using BlazorBindings.Core;
-using BlazorBindings.Maui.Elements.Handlers;
+using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using MC = Microsoft.Maui.Controls;
 using WVM = Microsoft.AspNetCore.Components.WebView.Maui;
 
 namespace BlazorBindings.Maui.Elements
 {
-    public class RootComponent : NativeControlComponentBase
+    public class RootComponent : NativeControlComponentBase, IMauiElementHandler, INonPhysicalChild
     {
-        static RootComponent()
-        {
-            ElementHandlerRegistry.RegisterElementHandler<RootComponent>(
-                _ => new RootComponentHandler(new WVM.RootComponent()));
-        }
+        private WVM.BlazorWebView _parentWebView;
 
         [Parameter] public string Selector { get; set; }
-
         [Parameter] public Type ComponentType { get; set; }
-
-#pragma warning disable CA2227 // Collection properties should be read only
         [Parameter] public IDictionary<string, object> Parameters { get; set; }
-#pragma warning restore CA2227 // Collection properties should be read only
+
+        public WVM.RootComponent NativeControl { get; } = new WVM.RootComponent();
+
+        void INonPhysicalChild.SetParent(object parentElement)
+        {
+            _parentWebView = (WVM.BlazorWebView)parentElement;
+            _parentWebView.RootComponents.Add(NativeControl);
+        }
+
+        void INonPhysicalChild.Remove()
+        {
+            _parentWebView.RootComponents.Remove(NativeControl);
+        }
+
+        public override Task SetParametersAsync(ParameterView parameters)
+        {
+            foreach (var parameterValue in parameters)
+            {
+                switch (parameterValue.Name)
+                {
+                    case nameof(Selector):
+                        if (!Equals(Selector, parameterValue.Value))
+                        {
+                            Selector = (string)parameterValue.Value;
+                            NativeControl.Selector = Selector;
+                        }
+                        break;
+                    case nameof(ComponentType):
+                        if (!Equals(ComponentType, parameterValue.Value))
+                        {
+                            ComponentType = (Type)parameterValue.Value;
+                            NativeControl.ComponentType = ComponentType;
+                        }
+                        break;
+                    case nameof(Parameters):
+                        if (!Equals(Parameters, parameterValue.Value))
+                        {
+                            Parameters = (IDictionary<string, object>)parameterValue.Value;
+                            NativeControl.Parameters = Parameters;
+                        }
+                        break;
+                }
+            }
+
+            return base.SetParametersAsync(ParameterView.Empty);
+        }
+
 
         protected override void RenderAttributes(AttributesBuilder builder)
         {
-            if (Selector != null)
-            {
-                builder.AddAttribute(nameof(Selector), Selector);
-            }
-            if (ComponentType != null)
-            {
-                builder.AddAttribute(nameof(ComponentType), AttributeHelper.ObjectToDelegate(ComponentType));
-            }
-            if (Parameters != null)
-            {
-                builder.AddAttribute(nameof(Parameters), AttributeHelper.ObjectToDelegate(Parameters));
-            }
         }
+
+        void IElementHandler.ApplyAttribute(ulong attributeEventHandlerId, string attributeName, object attributeValue, string attributeEventUpdatesAttributeName)
+        {
+        }
+
+        bool IMauiElementHandler.IsParented() => _parentWebView is not null;
+
+        void IMauiElementHandler.SetParent(MC.Element parent)
+        {
+            // This should never get called. Instead, INonChildContainerElement.SetParent() implemented
+            // in this class should get called.
+            throw new NotSupportedException();
+        }
+        MC.Element IMauiElementHandler.ElementControl => null;
+        object IElementHandler.TargetElement => NativeControl;
     }
 }

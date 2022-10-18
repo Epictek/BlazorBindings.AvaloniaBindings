@@ -40,11 +40,29 @@ namespace BlazorBindings.Maui.Elements.DataTemplates
         [Parameter] public RenderFragment<T> Template { get; set; }
 
         private readonly List<MC.VerticalStackLayout> _itemRoots = new();
+        private bool _shouldRender;
 
-        public void Add(MC.VerticalStackLayout templateRoot)
+        public MC.View AddTemplateRoot()
         {
+            var templateRoot = new MC.VerticalStackLayout();
             _itemRoots.Add(templateRoot);
+
+            _shouldRender = true;
             StateHasChanged();
+
+            return templateRoot;
+        }
+
+        protected override bool ShouldRender()
+        {
+            // It makes sense to re-render this component only if new template root was added, makes no sense otherwise.
+            if (_shouldRender)
+            {
+                _shouldRender = false;
+                return true;
+            }
+
+            return false;
         }
     }
 }

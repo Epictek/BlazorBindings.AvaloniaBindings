@@ -1,7 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-using BlazorBindings.Core;
 using Microsoft.AspNetCore.Components;
 
 namespace BlazorBindings.Maui.Elements
@@ -11,15 +10,26 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public string Text { get; set; }
         [Parameter] public object Value { get; set; }
 
-        partial void RenderAdditionalAttributes(AttributesBuilder builder)
+        protected override bool HandleAdditionalParameter(string name, object value)
         {
-            if (Text != null || Value != null)
+            switch (name)
             {
-                builder.AddAttribute(nameof(Text), Text ?? Value.ToString());
-            }
-            if (Value != null)
-            {
-                builder.AddAttribute(nameof(Value), AttributeHelper.ObjectToDelegate(Value));
+                case nameof(Text):
+                    Text = (string)value;
+                    NativeControl.Content = Text;
+                    return true;
+                case nameof(Value):
+                    Value = value;
+                    NativeControl.Value = Value;
+
+                    if (Text is null && Value is not null)
+                    {
+                        NativeControl.Content = Value.ToString();
+                    }
+
+                    return true;
+                default:
+                    return base.HandleAdditionalParameter(name, value);
             }
         }
     }

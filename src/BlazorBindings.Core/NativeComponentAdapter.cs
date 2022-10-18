@@ -258,8 +258,20 @@ namespace BlazorBindings.Core
             // Elements represent native elements
             ref var frame = ref frames[frameIndex];
             var elementName = frame.ElementName;
-            var elementHandlerFactory = ElementHandlerRegistry.ElementHandlers[elementName];
-            var elementHandler = elementHandlerFactory(Renderer, _closestPhysicalParent, _targetComponent);
+
+            IElementHandler elementHandler;
+            if (_targetComponent is IElementHandler targetHandler)
+            {
+                elementHandler = targetHandler;
+            }
+            else if (ElementHandlerRegistry.ElementHandlers.TryGetValue(elementName, out var elementHandlerFactory))
+            {
+                elementHandler = elementHandlerFactory(Renderer, _closestPhysicalParent, _targetComponent);
+            }
+            else
+            {
+                throw new InvalidOperationException($"Failed to find ElementHandler for '{elementName}'");
+            }
 
             if (_targetComponent is NativeControlComponentBase componentInstance)
             {

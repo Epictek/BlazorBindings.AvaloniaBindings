@@ -3,6 +3,7 @@
 
 using Microsoft.Maui.Converters;
 using Microsoft.Maui.Layouts;
+using System;
 
 namespace BlazorBindings.Maui.Elements
 {
@@ -10,14 +11,15 @@ namespace BlazorBindings.Maui.Elements
     {
         private static readonly FlexBasisTypeConverter _flexBasisConverter = new();
 
-        public static string FlexBasisToString(FlexBasis flexBasis)
+        public static FlexBasis StringToFlexBasis(object value)
         {
-            return _flexBasisConverter.ConvertToInvariantString(flexBasis);
-        }
-
-        public static FlexBasis StringToFlexBasis(object flexBasisString)
-        {
-            return (FlexBasis)_flexBasisConverter.ConvertFromInvariantString((string)flexBasisString);
+            return value switch
+            {
+                FlexBasis flexBasis => flexBasis,
+                float f => (FlexBasis)f,
+                string str => (FlexBasis)_flexBasisConverter.ConvertFromInvariantString(str),
+                _ => throw new ArgumentException("Cannot convert value to FlexBasis.", nameof(value))
+            };
         }
     }
 }

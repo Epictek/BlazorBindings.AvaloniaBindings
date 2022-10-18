@@ -1,45 +1,101 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-using Microsoft.AspNetCore.Components;
 using BlazorBindings.Core;
+using Microsoft.AspNetCore.Components;
+using System;
+using System.Threading.Tasks;
 using MC = Microsoft.Maui.Controls;
-using System.Collections.Generic;
 
 namespace BlazorBindings.Maui.Elements
 {
-    public abstract class Element : NativeControlComponentBase
+    public abstract class Element : NativeControlComponentBase, IMauiElementHandler
     {
+        private MC.Element _nativeControl;
+
         [Parameter] public string AutomationId { get; set; }
         [Parameter] public string ClassId { get; set; }
         [Parameter] public string StyleId { get; set; }
-        [Parameter(CaptureUnmatchedValues = true)] public IReadOnlyDictionary<string, object> AdditionalProperties { get; set; }
 
-        public MC.Element NativeControl => (ElementHandler as Handlers.ElementHandler)?.ElementControl;
+        public MC.Element NativeControl => _nativeControl ??= CreateNativeElement();
 
-        protected override void RenderAttributes(AttributesBuilder builder)
+        public override Task SetParametersAsync(ParameterView parameters)
         {
-            base.RenderAttributes(builder);
+            foreach (var parameterValue in parameters)
+            {
+                HandleParameter(parameterValue.Name, parameterValue.Value);
+            }
 
-            if (AutomationId != null)
+            return base.SetParametersAsync(ParameterView.Empty);
+        }
+
+        protected sealed override void RenderAttributes(AttributesBuilder builder)
+        {
+            // Since we set attributes directly in SetParametersAsync, this method is empty and sealed.
+        }
+
+        protected virtual void HandleParameter(string name, object value)
+        {
+            switch (name)
             {
-                builder.AddAttribute(nameof(AutomationId), AutomationId);
+                case nameof(AutomationId):
+                    if (!Equals(AutomationId, value))
+                    {
+                        AutomationId = (string)value;
+                        NativeControl.AutomationId = AutomationId;
+                    }
+                    break;
+                case nameof(ClassId):
+                    if (!Equals(ClassId, value))
+                    {
+                        ClassId = (string)value;
+                        NativeControl.ClassId = ClassId;
+                    }
+                    break;
+                case nameof(StyleId):
+                    if (!Equals(StyleId, value))
+                    {
+                        StyleId = (string)value;
+                        NativeControl.StyleId = StyleId;
+                    }
+                    break;
+
+                default:
+                    if (HandleAdditionalParameter(name, value))
+                        break;
+
+                    if (AttachedPropertyRegistry.AttachedPropertyHandlers.TryGetValue(name, out var handler))
+                    {
+                        handler(NativeControl, value);
+                        break;
+                    }
+
+                    throw new NotImplementedException($"{GetType().FullName} doesn't recognize parameter '{name}'");
+
             }
-            if (ClassId != null)
-            {
-                builder.AddAttribute(nameof(ClassId), ClassId);
-            }
-            if (StyleId != null)
-            {
-                builder.AddAttribute(nameof(StyleId), StyleId);
-            }
-            if (AdditionalProperties != null)
-            {
-                foreach (var keyValue in AdditionalProperties)
-                {
-                    builder.AddAttribute(keyValue.Key, AttributeHelper.ObjectToAttribute(keyValue.Value));
-                }
-            }
+        }
+
+        protected virtual bool HandleAdditionalParameter(string name, object value) => false;
+
+        protected abstract MC.Element CreateNativeElement();
+
+        void IElementHandler.ApplyAttribute(ulong attributeEventHandlerId, string attributeName, object attributeValue, string attributeEventUpdatesAttributeName)
+        {
+        }
+
+        MC.Element IMauiElementHandler.ElementControl => NativeControl;
+
+        object IElementHandler.TargetElement => NativeControl;
+
+
+        bool IMauiElementHandler.IsParented()
+        {
+            return NativeControl.Parent != null;
+        }
+
+        void IMauiElementHandler.SetParent(MC.Element parent)
+        {
+            NativeControl.Parent = parent;
         }
     }
 }

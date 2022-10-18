@@ -2,8 +2,6 @@
 // Licensed under the MIT license.
 
 using Microsoft.AspNetCore.Components;
-using BlazorBindings.Core;
-using BlazorBindings.Maui.Elements.Handlers;
 using MC = Microsoft.Maui.Controls;
 
 namespace BlazorBindings.Maui.Elements.DataTemplates
@@ -17,10 +15,18 @@ namespace BlazorBindings.Maui.Elements.DataTemplates
         // https://github.com/dotnet/maui/issues/5248.
         [Parameter] public new MC.VerticalStackLayout NativeControl { get; set; }
 
-        static InitializedVerticalStackLayout()
+        protected override MC.Element CreateNativeElement() => NativeControl;
+
+        protected override void HandleParameter(string name, object value)
         {
-            ElementHandlerRegistry.RegisterElementHandler<InitializedVerticalStackLayout>(
-                (renderer, _, component) => new VerticalStackLayoutHandler(renderer, component.NativeControl));
+            if (name == nameof(NativeControl))
+            {
+                NativeControl = (MC.VerticalStackLayout)value;
+            }
+            else
+            {
+                base.HandleParameter(name, value);
+            }
         }
     }
 }

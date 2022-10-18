@@ -1,66 +1,59 @@
 ﻿@using ControlGallery.Views
+@using ControlGallery.Views.Collections
+@using ControlGallery.Views.Collections.CollectionView
+@using ControlGallery.Views.EditText
+@using ControlGallery.Views.Gestures
+@using ControlGallery.Views.InitiateCommands
+@using ControlGallery.Views.Layouts
+@using ControlGallery.Views.PresentData
+@using ControlGallery.Views.SetValues
+@using ControlGallery.Views.Shell
 
 <Shell>
-    <FlyoutItem Title="Main">
-        <Tab Title="Gallery">
-            <ShellContent>
-                <PlaygroundList />
-            </ShellContent>
-        </Tab>
-        <Tab Title="Shell Properties">
-            <ShellPropertiesPlayground />
-        </Tab>
-        <Tab Title="Add/Remove">
-            <ContentPage Title="Adder">
-                <StackLayout Spacing="12">
-                    <Button OnClick="AddTab">Add Tab</Button>
-                    <Button IsEnabled="(tabCount > 1)" OnClick="RemoveTab">Remove tab</Button>
-                    <Button OnClick="AddMenuItem">Add MenuItem</Button>
-                    <Button IsEnabled="(menuItemCount > 0)" OnClick="RemoveMenuItem">Remove MenuItem</Button>
-                </StackLayout>
-            </ContentPage>
-        </Tab>
+    @*Present data*@
+    <BoxViewPage />
+    <LabelPage />
+    <Shapes />
 
-        @for (int i = 0; i < tabCount; i++)
-        {
-            var currentIndex = i;
-            <ShellTab Title="@($"Tab #{currentIndex + 1}")" />
-        }
-    </FlyoutItem>
+    @*Initiate commands*@
+    <ButtonPage />
+    <RefreshViewPage />
 
-    @for (int i = 0; i < menuItemCount; i++)
-    {
-        <MenuItem Text="@($"MenuItem #{i + 1}")" />
-    }
+    @*Set values*@
+    <SliderPage />
+    <CheckboxPage />
+    <SwitchPage />
+    <RadioButtonPage />
+    <DatePickerPage />
+    <TimePickerPage />
+
+    @*Edit text*@
+    <EntryPage />
+    <EditorPage />
+
+    @*Display collections*@
+    <CarouselViewPage />
+    <ShellSection Title="CollectionView">
+        <AddRemovePage />
+        <GridLayoutPage />
+        <SelectionPage />
+        <InfiniteScrollPage />
+    </ShellSection>
+    <PickerPage />
+
+    @*Layouts*@
+    <AbsoluteLayoutPage />
+    <GridPage />
+    <FlexLayoutPage />
+
+    @*Shell*@
+    <ShellNavigationPage />
+    <ShellPropertiesPage />
+    <ShellItemsPage />
+
+    @*Other*@
+    <ShadowsPage />
+    <SkiaCanvasPage />
+    <GestureEvents />
+    <GestureRecognizersPage />
 </Shell>
-
-@code {
-    int tabCount = 1;
-    int menuItemCount = 2;
-
-    void AddTab()
-    {
-        tabCount++;
-    }
-
-    void RemoveTab()
-    {
-        if (tabCount > 1)
-        {
-            tabCount--;
-        }
-    }
-
-    void AddMenuItem()
-    {
-        menuItemCount++;
-    }
-
-    void RemoveMenuItem()
-    {
-        if (menuItemCount > 0)
-        {
-            menuItemCount--;
-        }
-    }
-}

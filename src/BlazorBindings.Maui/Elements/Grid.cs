@@ -2,7 +2,6 @@
 // Licensed under the MIT license.
 
 using Microsoft.AspNetCore.Components;
-using BlazorBindings.Core;
 using MC = Microsoft.Maui.Controls;
 
 namespace BlazorBindings.Maui.Elements
@@ -24,6 +23,9 @@ namespace BlazorBindings.Maui.Elements
                 (element, value) => MC.Grid.SetRowSpan(element, AttributeHelper.GetInt(value)));
         }
 
+        private static readonly MC.ColumnDefinitionCollectionTypeConverter ColumnDefinitionConverter = new();
+        private static readonly MC.RowDefinitionCollectionTypeConverter RowDefinitionConverter = new();
+
         /// <summary>
         /// A comma-separated list of column definitions. A column definition can be:
         /// Auto-sized with the <c>Auto</c> keyword; A numeric size, such as <c>80.5</c>; Or a relative size, such as <c>*</c>, <c>2*</c>, or <c>3.5*</c>.
@@ -35,15 +37,28 @@ namespace BlazorBindings.Maui.Elements
         /// </summary>
         [Parameter] public string RowDefinitions { get; set; }
 
-        partial void RenderAdditionalAttributes(AttributesBuilder builder)
+        protected override bool HandleAdditionalParameter(string name, object value)
         {
-            if (ColumnDefinitions != null)
+            switch (name)
             {
-                builder.AddAttribute(nameof(ColumnDefinitions), ColumnDefinitions);
-            }
-            if (RowDefinitions != null)
-            {
-                builder.AddAttribute(nameof(RowDefinitions), RowDefinitions);
+                case nameof(ColumnDefinitions):
+                    if (!Equals(ColumnDefinitions, value))
+                    {
+                        var columnDefinitions = (MC.ColumnDefinitionCollection)ColumnDefinitionConverter.ConvertFromInvariantString((string)value);
+                        NativeControl.ColumnDefinitions = columnDefinitions;
+                        ColumnDefinitions = (string)value;
+                    }
+                    return true;
+                case nameof(RowDefinitions):
+                    if (!Equals(RowDefinitions, value))
+                    {
+                        var rowDefinitions = (MC.RowDefinitionCollection)RowDefinitionConverter.ConvertFromInvariantString((string)value);
+                        NativeControl.RowDefinitions = rowDefinitions;
+                        RowDefinitions = (string)value;
+                    }
+                    return true;
+                default:
+                    return base.HandleAdditionalParameter(name, value);
             }
         }
     }

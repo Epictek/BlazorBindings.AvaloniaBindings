@@ -12,6 +12,7 @@ namespace BlazorBindings.Maui.Elements.Handlers
     {
         private readonly Func<TElementType, IList<TItemType>> _listPropertyAccessor;
         private IList<TItemType> _propertyItems;
+        private object _parent;
 
         public ListContentPropertyHandler(Func<TElementType, IList<TItemType>> listPropertyAccessor)
         {
@@ -20,6 +21,7 @@ namespace BlazorBindings.Maui.Elements.Handlers
 
         public void SetParent(object parentElement)
         {
+            _parent = parentElement;
             _propertyItems = _listPropertyAccessor((TElementType)parentElement);
         }
 
@@ -27,6 +29,9 @@ namespace BlazorBindings.Maui.Elements.Handlers
         {
             // Because this Handler is used internally only, this method is no-op.
         }
+
+        MC.Element IMauiElementHandler.ElementControl => _parent as MC.Element;
+        object IElementHandler.TargetElement => _parent;
 
         void IMauiContainerElementHandler.AddChild(MC.Element child, int physicalSiblingIndex)
         {
@@ -51,12 +56,9 @@ namespace BlazorBindings.Maui.Elements.Handlers
         // Because this is a 'fake' element, all matters related to physical trees
         // should be no-ops.
 
-        object IElementHandler.TargetElement => null;
         void IElementHandler.ApplyAttribute(ulong attributeEventHandlerId, string attributeName, object attributeValue, string attributeEventUpdatesAttributeName) { }
 
-        MC.Element IMauiElementHandler.ElementControl => null;
         bool IMauiElementHandler.IsParented() => false;
-        bool IMauiElementHandler.IsParentedTo(MC.Element parent) => false;
 
         void IMauiElementHandler.SetParent(MC.Element parent)
         {

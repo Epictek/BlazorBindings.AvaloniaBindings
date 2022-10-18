@@ -42,15 +42,15 @@ namespace BlazorBindings.Maui.Elements.Handlers
             _setPropertyAction(_parent, null);
         }
 
+        MC.Element IMauiElementHandler.ElementControl => _parent as MC.Element;
+
         // Because this is a 'fake' element, all matters related to physical trees
         // should be no-ops.
 
         object IElementHandler.TargetElement => null;
         void IElementHandler.ApplyAttribute(ulong attributeEventHandlerId, string attributeName, object attributeValue, string attributeEventUpdatesAttributeName) { }
 
-        MC.Element IMauiElementHandler.ElementControl => null;
         bool IMauiElementHandler.IsParented() => false;
-        bool IMauiElementHandler.IsParentedTo(MC.Element parent) => false;
 
         void IMauiElementHandler.SetParent(MC.Element parent)
         {

@@ -1,30 +1,30 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-using Microsoft.AspNetCore.Components;
-using Microsoft.Maui.Controls;
 using BlazorBindings.Core;
 using BlazorBindings.Maui.Elements.DataTemplates;
+using Microsoft.AspNetCore.Components;
+using Microsoft.Maui.Controls;
 using System;
 using MC = Microsoft.Maui.Controls;
 
 namespace BlazorBindings.Maui.Elements.Handlers
 {
-    public class DataTemplatePropertyHandler<TElementType, TItemType> : IMauiContainerElementHandler, INonChildContainerElement
+    public class DataTemplatePropertyHandler<TElementType> : IMauiContainerElementHandler, INonChildContainerElement
     {
-        private readonly DataTemplateItemsComponent<TItemType> _dataTemplateItemsComponent;
+        private readonly ControlTemplateItemsComponent _controlTemplateItemsComponent;
         private readonly Action<TElementType, DataTemplate> _setPropertyAction;
 
-        public DataTemplatePropertyHandler(IComponent dataTemplateItemsComponent, Action<TElementType, DataTemplate> setPropertyAction)
+        public DataTemplatePropertyHandler(IComponent controlTemplateItemsComponent, Action<TElementType, DataTemplate> setPropertyAction)
         {
-            _dataTemplateItemsComponent = (DataTemplateItemsComponent<TItemType>)dataTemplateItemsComponent;
+            _controlTemplateItemsComponent = (ControlTemplateItemsComponent)controlTemplateItemsComponent;
             _setPropertyAction = setPropertyAction;
         }
 
         public void SetParent(object parentElement)
         {
             var parent = (TElementType)parentElement;
-            var dataTemplate = new MbbDataTemplate<TItemType>(_dataTemplateItemsComponent);
+            var dataTemplate = new MbbDataTemplate(_controlTemplateItemsComponent);
             _setPropertyAction(parent, dataTemplate);
         }
 
@@ -47,7 +47,6 @@ namespace BlazorBindings.Maui.Elements.Handlers
 
         MC.Element IMauiElementHandler.ElementControl => null;
         bool IMauiElementHandler.IsParented() => false;
-        bool IMauiElementHandler.IsParentedTo(MC.Element parent) => false;
 
         void IMauiElementHandler.SetParent(MC.Element parent)
         {

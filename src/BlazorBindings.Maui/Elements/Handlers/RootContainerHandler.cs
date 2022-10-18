@@ -54,11 +54,6 @@ namespace BlazorBindings.Maui.Elements.Handlers
             return Elements.IndexOf(child);
         }
 
-        bool IMauiElementHandler.IsParentedTo(MC.Element parent)
-        {
-            return Elements.Contains(parent);
-        }
-
         // Because this is a 'fake' container element, all matters related to physical trees
         // should be no-ops.
         MC.Element IMauiElementHandler.ElementControl => null;

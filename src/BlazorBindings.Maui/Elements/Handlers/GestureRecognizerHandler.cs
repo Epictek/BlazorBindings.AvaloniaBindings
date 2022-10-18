@@ -48,13 +48,6 @@ namespace BlazorBindings.Maui.Elements.Handlers
             return false;
         }
 
-        public bool IsParentedTo(MC.Element parent)
-        {
-            // Because this is a 'fake' element, all matters related to physical trees
-            // should be no-ops.
-            return false;
-        }
-
         public void SetParent(MC.Element parent)
         {
             // This should never get called. Instead, INonChildContainerElement.SetParent() implemented

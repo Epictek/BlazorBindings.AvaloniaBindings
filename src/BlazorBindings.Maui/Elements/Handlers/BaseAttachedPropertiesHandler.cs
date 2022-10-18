@@ -27,7 +27,6 @@ namespace BlazorBindings.Maui.Elements.Handlers
         public MC.Element ElementControl => null;
         public object TargetElement => null;
         public bool IsParented() => false;
-        public bool IsParentedTo(MC.Element parent) => false;
 
         public void SetParent(MC.Element parent)
         {

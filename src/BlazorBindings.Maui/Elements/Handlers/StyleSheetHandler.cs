@@ -53,11 +53,6 @@ namespace BlazorBindings.Maui.Elements.Handlers
             return _parentVisualElement != null;
         }
 
-        public bool IsParentedTo(MC.Element elementControl)
-        {
-            return _parentVisualElement == elementControl;
-        }
-
         public void SetParent(MC.Element parent)
         {
             throw new NotImplementedException();

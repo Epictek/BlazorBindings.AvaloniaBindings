@@ -16,6 +16,7 @@ namespace BlazorBindings.Maui.Elements
             return value switch
             {
                 null => defaultValueIfNull,
+                bool b => b,
                 string str when str == "1" => true,
                 string str when str == "0" => false,
                 string str when bool.TryParse(str, out var bln) => bln,
@@ -28,6 +29,7 @@ namespace BlazorBindings.Maui.Elements
             return value switch
             {
                 null => defaultValueIfNull,
+                int i => i,
                 string str => int.Parse(str, CultureInfo.InvariantCulture),
                 _ => throw new NotSupportedException($"Cannot get int value from {value.GetType().Name} attribute.")
             };
@@ -38,6 +40,7 @@ namespace BlazorBindings.Maui.Elements
             return value switch
             {
                 null => defaultValueIfNull,
+                T t => t,
                 string str when int.TryParse(str, out var i) => Unsafe.As<int, T>(ref i),
                 string str when Enum.TryParse<T>(str, out var e) => e,
                 _ => throw new NotSupportedException($"Cannot get {typeof(T).Name} value from {value.GetType().Name} attribute.")
@@ -45,43 +48,18 @@ namespace BlazorBindings.Maui.Elements
         }
 
         /// <summary>
-        /// Helper method to serialize <see cref="double" /> objects.
-        /// </summary>
-        public static string DoubleToString(double value)
-        {
-            return value.ToString("R", CultureInfo.InvariantCulture); // "R" --> Round-trip format specifier guarantees fidelity when parsing
-        }
-
-        /// <summary>
-        /// Helper method to deserialize <see cref="double" /> objects.
-        /// </summary>
-        public static double StringToDouble(string doubleString, double defaultValueIfNull = default)
-        {
-            if (doubleString is null)
-            {
-                return defaultValueIfNull;
-            }
-            return double.Parse(doubleString, CultureInfo.InvariantCulture);
-        }
-
-        /// <summary>
-        /// Helper method to serialize <see cref="float" /> objects.
-        /// </summary>
-        public static string SingleToString(float value)
-        {
-            return value.ToString("R", CultureInfo.InvariantCulture); // "R" --> Round-trip format specifier guarantees fidelity when parsing
-        }
-
-        /// <summary>
         /// Helper method to deserialize <see cref="float" /> objects.
         /// </summary>
-        public static float StringToSingle(string singleString, float defaultValueIfNull = default)
+        public static float GetSingle(object value, float defaultValueIfNull = default)
         {
-            if (singleString is null)
+            return value switch
             {
-                return defaultValueIfNull;
-            }
-            return float.Parse(singleString, CultureInfo.InvariantCulture);
+                null => defaultValueIfNull,
+                float f => f,
+                int i => i,
+                string str => float.Parse(str, CultureInfo.InvariantCulture),
+                _ => throw new ArgumentException("Cannot convert value to Single.", nameof(value))
+            };
         }
 
         /// <summary>

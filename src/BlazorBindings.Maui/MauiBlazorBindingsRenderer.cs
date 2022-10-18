@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
 using MC = Microsoft.Maui.Controls;
 
@@ -21,20 +22,17 @@ namespace BlazorBindings.Maui
 
         public override Dispatcher Dispatcher { get; } = new MauiDeviceDispatcher();
 
-        public Task<TComponent> AddComponent<TComponent>(MC.Element parent, Dictionary<string, object> parameters = null) where TComponent : IComponent
+        public async Task<TComponent> AddComponent<TComponent>(MC.Element parent, Dictionary<string, object> parameters = null) where TComponent : IComponent
         {
             if (parent is MC.Application app)
             {
+                // MAUI requires the Application to have the MainPage. Renderer, however, populates this property asynchroniously.
                 app.MainPage ??= new MC.ContentPage();
             }
 
-            var handler = CreateHandler(parent, this);
-            return AddComponent<TComponent>(handler, parameters);
-        }
-
-        protected override void HandleException(Exception exception)
-        {
-            ErrorPageHelper.ShowExceptionPage(exception);
+            var (element, componentTask) = await GetElementFromRenderedComponent(typeof(TComponent), parameters);
+            SetChildContent(parent, element);
+            return (TComponent)await componentTask;
         }
 
         protected override ElementManager CreateNativeControlManager()
@@ -42,22 +40,74 @@ namespace BlazorBindings.Maui
             return new MauiBlazorBindingsElementManager();
         }
 
-        private static ElementHandler CreateHandler(MC.Element parent, MauiBlazorBindingsRenderer renderer)
+        // It tries to return the Element as soon as it is available, therefore Component task might still be in progress.
+        internal async Task<(MC.Element Element, Task<IComponent> Component)> GetElementFromRenderedComponent(Type componentType, Dictionary<string, object> parameters = null)
         {
-            return parent switch
+            var container = new RootContainerHandler();
+
+            var addComponentTask = AddComponent(componentType, container, parameters);
+            var elementAddedTask = container.WaitForElementAsync();
+
+            await Task.WhenAny(addComponentTask, elementAddedTask);
+
+            if (addComponentTask.Exception != null)
             {
-                MC.ContentPage contentPage => new ContentPageHandler(renderer, contentPage),
-                MC.ContentView contentView => new ContentViewHandler(renderer, contentView),
-                MC.Label label => new LabelHandler(renderer, label),
-                MC.FlyoutPage flyoutPage => new FlyoutPageHandler(renderer, flyoutPage),
-                MC.ScrollView scrollView => new ScrollViewHandler(renderer, scrollView),
-                MC.ShellContent shellContent => new ShellContentHandler(renderer, shellContent),
-                MC.Shell shell => new ShellHandler(renderer, shell),
-                MC.ShellItem shellItem => new ShellItemHandler(renderer, shellItem),
-                MC.ShellSection shellSection => new ShellSectionHandler(renderer, shellSection),
-                MC.TabbedPage tabbedPage => new TabbedPageHandler(renderer, tabbedPage),
-                _ => new ElementHandler(renderer, parent),
+                var exception = addComponentTask.Exception.InnerException;
+                ExceptionDispatchInfo.Throw(exception);
+            }
+
+            if (container.Elements.Count != 1)
+            {
+                throw new InvalidOperationException("The target component must have exactly one root element.");
+            }
+
+            return (container.Elements[0], addComponentTask);
+        }
+
+        private static void SetChildContent(MC.Element parent, MC.Element child)
+        {
+            switch (parent)
+            {
+                case MC.Application application:
+                    application.MainPage = Cast<MC.Page>(child);
+                    break;
+                case MC.ContentPage contentPage:
+                    contentPage.Content = Cast<MC.View>(child);
+                    break;
+                case MC.ContentView contentView:
+                    contentView.Content = Cast<MC.View>(child);
+                    break;
+                case MC.FlyoutPage flyoutPage:
+                    flyoutPage.Detail = Cast<MC.Page>(child);
+                    break;
+                case MC.ScrollView scrollView:
+                    scrollView.Content = Cast<MC.View>(child);
+                    break;
+                case MC.StackBase stackBase:
+                    stackBase.Children.Add(Cast<MC.View>(child));
+                    break;
+                case MC.ShellContent shellContent:
+                    shellContent.Content = Cast<MC.Page>(child);
+                    break;
+                case MC.Shell shell:
+                    shell.Items.Add(Cast<MC.TemplatedPage>(child));
+                    break;
+                case MC.ShellItem shellItem:
+                    shellItem.Items.Add(Cast<MC.TemplatedPage>(child));
+                    break;
+                case MC.ShellSection shellSection:
+                    shellSection.Items.Add(Cast<MC.TemplatedPage>(child));
+                    break;
+                case MC.TabbedPage tabbedPage:
+                    tabbedPage.Children.Add(Cast<MC.TemplatedPage>(child));
+                    break;
+
+                default:
+                    throw new InvalidOperationException($"Renderer doesn't support {parent?.GetType()?.Name} as a parent element.");
             };
+
+            static T Cast<T>(MC.Element e) where T : MC.Element => e as T
+                ?? throw new InvalidOperationException($"{typeof(T).Name} element expected, but {e?.GetType()?.Name} found.");
         }
     }
 }
