@@ -4,6 +4,10 @@
       "commandName": "Project",
       "commandLineArgs": "..\\..\\..\\..\\..\\samples\\ThirdPartyControlsSample\\ThirdPartyControlsSample.csproj"
     },
+    "GenerateBarcodeScanner": {
+      "commandName": "Project",
+      "commandLineArgs": "..\\..\\..\\..\\..\\samples\\HybridAppBarcodeScanner\\HybridAppBarcodeScanner.csproj"
+    },
     "GenerateBlazorBindings.Maui": {
       "commandName": "Project",
       "commandLineArgs": "..\\..\\..\\..\\BlazorBindings.Maui\\BlazorBindings.Maui.csproj"

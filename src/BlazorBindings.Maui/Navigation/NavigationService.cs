@@ -99,7 +99,7 @@ namespace BlazorBindings.Maui
             {
                 if (element.Parent is null)
                 {
-                    scope.Dispose();
+                    //scope.Dispose();
                     element.ParentChanged -= DisposeScopeWhenParentRemoved;
                 }
             }

@@ -1,0 +1,52 @@
+﻿@using BlazorBindings.Maui.Elements
+@using BlazorBindings.Maui.Elements.ZXing.Net
+@using ZXing.Net.Maui;
+
+<ContentPage Title="Scanner" BackgroundColor="Colors.Black">
+    <Grid ColumnDefinitions="*,*" RowDefinitions="*,Auto">
+
+        <GridCell Row="0" Column="0" ColumnSpan="2">
+            <CameraBarcodeReaderView HorizontalOptions="LayoutOptions.Fill"
+                                     IsTorchOn="_isTorchEnabled"
+                                     CameraLocation="_cameraLocation"
+                                     Options="_options"
+                                     OnBarcodesDetected="BarcodeDetected" />
+        </GridCell>
+
+        <GridCell Row="1" Column="0">
+            <Button Text="Toggle Torch" OnClick="ToggleTorch" />
+        </GridCell>
+
+        <GridCell Row="1" Column="1">
+            <Button Text="Flip" OnClick="FlipCamera" />
+        </GridCell>
+    </Grid>
+</ContentPage>
+
+@code {
+    CameraLocation _cameraLocation;
+    bool _isTorchEnabled = false;
+
+    BarcodeReaderOptions _options = new()
+        {
+            AutoRotate = true,
+            Multiple = false
+        };
+
+    void FlipCamera()
+    {
+        _cameraLocation = _cameraLocation == CameraLocation.Rear ? CameraLocation.Front : CameraLocation.Rear;
+    }
+
+    void ToggleTorch()
+    {
+        _isTorchEnabled = !_isTorchEnabled;
+    }
+
+    void BarcodeDetected(BarcodeDetectionEventArgs args)
+    {
+        var result = args.Results[0];
+        var format = result.Format;
+        var value = result.Value;
+    }
+}

@@ -292,7 +292,11 @@ namespace {componentNamespace}
             }
             else
             {
-                return assemblyName.Replace(".Maui", "").Replace(".Views", "").Replace(".UI", "").Replace(".Controls", "");
+                return assemblyName
+                    .Replace(".Maui", "", StringComparison.OrdinalIgnoreCase)
+                    .Replace(".Views", "", StringComparison.OrdinalIgnoreCase)
+                    .Replace(".UI", "", StringComparison.OrdinalIgnoreCase)
+                    .Replace(".Controls", "", StringComparison.OrdinalIgnoreCase);
             }
         }
 
