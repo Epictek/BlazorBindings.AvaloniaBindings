@@ -21,13 +21,7 @@ jobs:
         dotnet-version: '7.0.x'
         include-prerelease: true
     - name: Install MAUI
-      run: |
-        dotnet workload install maui `
-          --from-rollback-file https://maui.blob.core.windows.net/metadata/rollbacks/7.0.0-rc.2.22472.3.json `
-          --source https://pkgs.dev.azure.com/dnceng/public/_packaging/darc-pub-dotnet-runtime-a21b9a2d/nuget/v3/index.json `
-          --source https://pkgs.dev.azure.com/dnceng/public/_packaging/darc-pub-dotnet-emsdk-52e9452f-3/nuget/v3/index.json `
-          --source https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet6/nuget/v3/index.json `
-          --source https://api.nuget.org/v3/index.json
+      run: dotnet workload install maui --include-previews
     - name: Restore dependencies
       run: dotnet restore BlazorBindings.Maui.sln
     - name: Build templates
