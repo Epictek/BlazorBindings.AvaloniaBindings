@@ -21,6 +21,9 @@ namespace BlazorBindings.Maui
 
         protected INavigation Navigation => Application.Current.MainPage.Navigation;
 
+        /// <summary>
+        /// Push page component <typeparamref name="T"/> to the Navigation Stack.
+        /// </summary>
         public async Task PushAsync<T>(Dictionary<string, object> arguments = null, bool animated = true) where T : IComponent
         {
             await NavigationAction(async () =>
@@ -30,6 +33,9 @@ namespace BlazorBindings.Maui
             });
         }
 
+        /// <summary>
+        /// Push page component <typeparamref name="T"/> to the Modal Stack.
+        /// </summary>
         public async Task PushModalAsync<T>(Dictionary<string, object> arguments = null, bool animated = true) where T : IComponent
         {
             await NavigationAction(async () =>
@@ -39,6 +45,10 @@ namespace BlazorBindings.Maui
             });
         }
 
+        /// <summary>
+        /// Push page component from the <paramref name="renderFragment"/> to the Modal Stack.
+        /// </summary>
+        /// <remarks>Experimental API, subject to change.</remarks>
         public async Task PushModalAsync(RenderFragment renderFragment, bool animated = true)
         {
             await NavigationAction(async () =>
@@ -48,6 +58,10 @@ namespace BlazorBindings.Maui
             });
         }
 
+        /// <summary>
+        /// Push page component from the <paramref name="renderFragment"/> to the Navigation Stack.
+        /// </summary>
+        /// <remarks>Experimental API, subject to change.</remarks>
         public async Task PushAsync(RenderFragment renderFragment, bool animated = true)
         {
             await NavigationAction(async () =>
@@ -72,6 +86,11 @@ namespace BlazorBindings.Maui
             await NavigationAction(() => Navigation.PopToRootAsync(animated));
         }
 
+        /// <summary>
+        /// Returns rendered MAUI element from <paramref name="renderFragment"/>.
+        /// This method is exposed for extensibility purposes, and shouldn't be used directly.
+        /// </summary>
+        /// <remarks>Experimental API, subject to change.</remarks>
         [EditorBrowsable(EditorBrowsableState.Never)]
         public Task<T> BuildElement<T>(RenderFragment renderFragment) where T : Element
         {
@@ -81,6 +100,11 @@ namespace BlazorBindings.Maui
             });
         }
 
+        /// <summary>
+        /// Returns rendered MAUI element from <paramref name="renderFragment"/>.
+        /// This method is exposed for extensibility purposes, and shouldn't be used directly.
+        /// </summary>
+        /// <remarks>Experimental API, subject to change.</remarks>
         [EditorBrowsable(EditorBrowsableState.Never)]
         public async Task<T> BuildElement<T>(Type componentType, Dictionary<string, object> arguments) where T : Element
         {
