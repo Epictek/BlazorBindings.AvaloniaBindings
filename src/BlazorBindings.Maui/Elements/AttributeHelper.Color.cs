@@ -24,7 +24,7 @@ namespace BlazorBindings.Maui.Elements
         /// <summary>
         /// Helper method to deserialize <see cref="Color" /> objects.
         /// </summary>
-        public static Color GetString(object obj)
+        public static Color GetColor(object obj)
         {
             return obj switch
             {

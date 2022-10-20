@@ -24,14 +24,17 @@ namespace BlazorBindings.Maui
 
         public async Task<TComponent> AddComponent<TComponent>(MC.Element parent, Dictionary<string, object> parameters = null) where TComponent : IComponent
         {
-            if (parent is MC.Application app)
+            var elementComponentTask = GetElementFromRenderedComponent(typeof(TComponent), parameters);
+
+            if (!elementComponentTask.IsCompleted && parent is MC.Application app)
             {
-                // MAUI requires the Application to have the MainPage. Renderer, however, populates this property asynchroniously.
+                // MAUI requires the Application to have the MainPage. If rendering task is not completed synchroniously,
+                // we need to set MainPage to something.
                 app.MainPage ??= new MC.ContentPage();
             }
 
-            var (element, componentTask) = await GetElementFromRenderedComponent(typeof(TComponent), parameters);
-            SetChildContent(parent, element);
+            var (element, componentTask) = await elementComponentTask;
+            await SetChildContent(parent, element);
             return (TComponent)await componentTask;
         }
 
@@ -64,10 +67,13 @@ namespace BlazorBindings.Maui
             return (container.Elements[0], addComponentTask);
         }
 
-        private static void SetChildContent(MC.Element parent, MC.Element child)
+        private static Task SetChildContent(MC.Element parent, MC.Element child)
         {
             switch (parent)
             {
+                case MC.NavigationPage page:
+                    return page.PushAsync(Cast<MC.Page>(child));
+
                 case MC.Application application:
                     application.MainPage = Cast<MC.Page>(child);
                     break;
@@ -105,6 +111,8 @@ namespace BlazorBindings.Maui
                 default:
                     throw new InvalidOperationException($"Renderer doesn't support {parent?.GetType()?.Name} as a parent element.");
             };
+
+            return Task.CompletedTask;
 
             static T Cast<T>(MC.Element e) where T : MC.Element => e as T
                 ?? throw new InvalidOperationException($"{typeof(T).Name} element expected, but {e?.GetType()?.Name} found.");
