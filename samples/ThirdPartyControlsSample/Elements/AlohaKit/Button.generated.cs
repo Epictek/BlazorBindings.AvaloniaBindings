@@ -132,7 +132,7 @@ namespace BlazorBindings.Maui.Elements.AlohaKit
                 case nameof(OnPress):
                     if (!Equals(OnPress, value))
                     {
-                        void NativeControlPressed(object sender, EventArgs e) => OnPress.InvokeAsync();
+                        void NativeControlPressed(object sender, EventArgs e) => InvokeAsync(() => OnPress.InvokeAsync());
 
                         OnPress = (EventCallback)value;
                         NativeControl.Pressed -= NativeControlPressed;
@@ -142,7 +142,7 @@ namespace BlazorBindings.Maui.Elements.AlohaKit
                 case nameof(OnRelease):
                     if (!Equals(OnRelease, value))
                     {
-                        void NativeControlReleased(object sender, EventArgs e) => OnRelease.InvokeAsync();
+                        void NativeControlReleased(object sender, EventArgs e) => InvokeAsync(() => OnRelease.InvokeAsync());
 
                         OnRelease = (EventCallback)value;
                         NativeControl.Released -= NativeControlReleased;
@@ -152,7 +152,7 @@ namespace BlazorBindings.Maui.Elements.AlohaKit
                 case nameof(OnClick):
                     if (!Equals(OnClick, value))
                     {
-                        void NativeControlClicked(object sender, EventArgs e) => OnClick.InvokeAsync();
+                        void NativeControlClicked(object sender, EventArgs e) => InvokeAsync(() => OnClick.InvokeAsync());
 
                         OnClick = (EventCallback)value;
                         NativeControl.Clicked -= NativeControlClicked;

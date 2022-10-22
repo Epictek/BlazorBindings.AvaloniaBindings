@@ -86,7 +86,7 @@ namespace BlazorBindings.Maui.Elements.CommunityToolkit
                 case nameof(OnClosed):
                     if (!Equals(OnClosed, value))
                     {
-                        void NativeControlClosed(object sender, PopupClosedEventArgs e) => OnClosed.InvokeAsync(e);
+                        void NativeControlClosed(object sender, PopupClosedEventArgs e) => InvokeAsync(() => OnClosed.InvokeAsync(e));
 
                         OnClosed = (EventCallback<PopupClosedEventArgs>)value;
                         NativeControl.Closed -= NativeControlClosed;
@@ -96,7 +96,7 @@ namespace BlazorBindings.Maui.Elements.CommunityToolkit
                 case nameof(OnOpened):
                     if (!Equals(OnOpened, value))
                     {
-                        void NativeControlOpened(object sender, PopupOpenedEventArgs e) => OnOpened.InvokeAsync(e);
+                        void NativeControlOpened(object sender, PopupOpenedEventArgs e) => InvokeAsync(() => OnOpened.InvokeAsync(e));
 
                         OnOpened = (EventCallback<PopupOpenedEventArgs>)value;
                         NativeControl.Opened -= NativeControlOpened;

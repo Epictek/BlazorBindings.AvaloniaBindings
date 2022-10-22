@@ -111,7 +111,7 @@ namespace BlazorBindings.Maui.Elements.AlohaKit
                         {
                             var value = NativeControl.Value;
                             Value = value;
-                            ValueChanged.InvokeAsync(value);
+                            InvokeAsync(() => ValueChanged.InvokeAsync(value));
                         }
 
                         ValueChanged = (EventCallback<int>)value;

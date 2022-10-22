@@ -59,7 +59,7 @@ namespace BlazorBindings.Maui.Elements.Compatibility
                 case nameof(OnLayoutChanged):
                     if (!Equals(OnLayoutChanged, value))
                     {
-                        void NativeControlLayoutChanged(object sender, EventArgs e) => OnLayoutChanged.InvokeAsync();
+                        void NativeControlLayoutChanged(object sender, EventArgs e) => InvokeAsync(() => OnLayoutChanged.InvokeAsync());
 
                         OnLayoutChanged = (EventCallback)value;
                         NativeControl.LayoutChanged -= NativeControlLayoutChanged;

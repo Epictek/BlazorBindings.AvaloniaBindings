@@ -96,7 +96,7 @@ namespace BlazorBindings.Maui.Elements
                         {
                             var value = NativeControl.Value;
                             Value = value;
-                            ValueChanged.InvokeAsync(value);
+                            InvokeAsync(() => ValueChanged.InvokeAsync(value));
                         }
 
                         ValueChanged = (EventCallback<double>)value;
@@ -107,7 +107,7 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(OnDragStarted):
                     if (!Equals(OnDragStarted, value))
                     {
-                        void NativeControlDragStarted(object sender, EventArgs e) => OnDragStarted.InvokeAsync();
+                        void NativeControlDragStarted(object sender, EventArgs e) => InvokeAsync(() => OnDragStarted.InvokeAsync());
 
                         OnDragStarted = (EventCallback)value;
                         NativeControl.DragStarted -= NativeControlDragStarted;
@@ -117,7 +117,7 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(OnDragCompleted):
                     if (!Equals(OnDragCompleted, value))
                     {
-                        void NativeControlDragCompleted(object sender, EventArgs e) => OnDragCompleted.InvokeAsync();
+                        void NativeControlDragCompleted(object sender, EventArgs e) => InvokeAsync(() => OnDragCompleted.InvokeAsync());
 
                         OnDragCompleted = (EventCallback)value;
                         NativeControl.DragCompleted -= NativeControlDragCompleted;

@@ -101,7 +101,7 @@ namespace BlazorBindings.Maui
         }
 
         /// <summary>
-        /// Returns rendered MAUI element from <paramref name="renderFragment"/>.
+        /// Returns rendered MAUI element from component <typeparamref name="T"/>.
         /// This method is exposed for extensibility purposes, and shouldn't be used directly.
         /// </summary>
         /// <remarks>Experimental API, subject to change.</remarks>

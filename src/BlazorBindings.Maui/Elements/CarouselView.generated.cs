@@ -102,7 +102,7 @@ namespace BlazorBindings.Maui.Elements
                         {
                             var value = (T)NativeControl.CurrentItem;
                             CurrentItem = value;
-                            CurrentItemChanged.InvokeAsync(value);
+                            InvokeAsync(() => CurrentItemChanged.InvokeAsync(value));
                         }
 
                         CurrentItemChanged = (EventCallback<T>)value;
@@ -117,7 +117,7 @@ namespace BlazorBindings.Maui.Elements
                         {
                             var value = NativeControl.Position;
                             Position = value;
-                            PositionChanged.InvokeAsync(value);
+                            InvokeAsync(() => PositionChanged.InvokeAsync(value));
                         }
 
                         PositionChanged = (EventCallback<int>)value;

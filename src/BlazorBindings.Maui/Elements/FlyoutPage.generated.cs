@@ -75,7 +75,7 @@ namespace BlazorBindings.Maui.Elements
                         {
                             var value = NativeControl.IsPresented;
                             IsPresented = value;
-                            IsPresentedChanged.InvokeAsync(value);
+                            InvokeAsync(() => IsPresentedChanged.InvokeAsync(value));
                         }
 
                         IsPresentedChanged = (EventCallback<bool>)value;
