@@ -28,7 +28,7 @@ namespace BlazorBindings.Maui.Elements.Handlers
             _setPropertyAction(parent, dataTemplate);
         }
 
-        public void Remove()
+        public void RemoveFromParent(object parentElement)
         {
             // Because this Handler is used internally only, this method is no-op.
         }

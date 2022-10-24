@@ -103,6 +103,14 @@ using System.Runtime.CompilerServices;
 [assembly: GenerateComponent(typeof(VisualElement))]
 [assembly: GenerateComponent(typeof(WebView))]
 
+// GestureRecognizers
+[assembly: GenerateComponent(typeof(GestureRecognizer))]
+[assembly: GenerateComponent(typeof(PanGestureRecognizer))]
+[assembly: GenerateComponent(typeof(PinchGestureRecognizer))]
+[assembly: GenerateComponent(typeof(SwipeGestureRecognizer))]
+[assembly: GenerateComponent(typeof(TapGestureRecognizer))]
+
+
 // Compatibility
 [assembly: GenerateComponent(typeof(Microsoft.Maui.Controls.Compatibility.Layout))]
 

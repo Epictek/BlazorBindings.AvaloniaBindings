@@ -53,6 +53,6 @@ namespace BlazorBindings.Maui.Elements.Handlers
         object IElementHandler.TargetElement => null;
         void IElementHandler.ApplyAttribute(ulong attributeEventHandlerId, string attributeName, object attributeValue, string attributeEventUpdatesAttributeName) { }
         void INonPhysicalChild.SetParent(object parentElement) { }
-        void INonPhysicalChild.Remove() { }
+        void INonPhysicalChild.RemoveFromParent(object parentElement) { }
     }
 }

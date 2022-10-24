@@ -87,16 +87,16 @@ namespace BlazorBindings.Maui.Elements.Handlers
             {
                 throw new ArgumentNullException(nameof(parentElement));
             }
-            if (!(parentElement is MC.VisualElement parentVisualElement))
+            if (parentElement is not MC.VisualElement parentVisualElement)
             {
-                throw new ArgumentNullException(nameof(parentElement), $"Expected parent to be of type '{typeof(MC.VisualElement).FullName}' but it is of type '{parentElement.GetType().FullName}'.");
+                throw new ArgumentException(nameof(parentElement), $"Expected parent to be of type '{typeof(MC.VisualElement).FullName}' but it is of type '{parentElement.GetType().FullName}'.");
             }
             _parentVisualElement = parentVisualElement;
 
             UpdateParentStyleSheetIfPossible();
         }
 
-        public void Remove()
+        public void RemoveFromParent(object parentElement)
         {
             throw new InvalidOperationException("Removing StyleSheet element is not supported.");
         }

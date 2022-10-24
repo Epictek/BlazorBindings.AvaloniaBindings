@@ -2,7 +2,6 @@
 // Licensed under the MIT license.
 
 using BlazorBindings.Core;
-using System;
 using MC = Microsoft.Maui.Controls;
 
 namespace BlazorBindings.Maui.Elements.Handlers
@@ -15,24 +14,21 @@ namespace BlazorBindings.Maui.Elements.Handlers
         protected MC.BindableObject Target { get; private set; }
 
         public abstract void ApplyAttribute(ulong attributeEventHandlerId, string attributeName, object attributeValue, string attributeEventUpdatesAttributeName);
-        public abstract void Remove();
+        public abstract void RemoveFromParent();
 
-        public void SetParent(object parentElement)
+        void INonPhysicalChild.SetParent(object parentElement)
         {
             Target = (MC.BindableObject)parentElement;
+        }
+
+        void INonPhysicalChild.RemoveFromParent(object parentElement)
+        {
+            RemoveFromParent();
         }
 
         // Because this is a 'fake' element, all matters related to physical trees
         // should be no-ops.
         public MC.Element ElementControl => null;
         public object TargetElement => null;
-        public bool IsParented() => false;
-
-        public void SetParent(MC.Element parent)
-        {
-            // This should never get called. Instead, INonPhysicalChild.SetParent() implemented
-            // in this class should get called.
-            throw new NotSupportedException();
-        }
     }
 }

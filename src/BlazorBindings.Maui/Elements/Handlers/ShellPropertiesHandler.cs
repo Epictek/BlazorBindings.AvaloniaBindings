@@ -54,7 +54,7 @@ namespace BlazorBindings.Maui.Elements.Handlers
             }
         }
 
-        public override void Remove()
+        public override void RemoveFromParent()
         {
             MC.Shell.SetNavBarIsVisible(Target, (bool)MC.Shell.NavBarIsVisibleProperty.DefaultValue);
             MC.Shell.SetNavBarHasShadow(Target, (bool)MC.Shell.NavBarHasShadowProperty.DefaultValue);

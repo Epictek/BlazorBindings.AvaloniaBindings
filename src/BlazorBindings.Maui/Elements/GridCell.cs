@@ -117,15 +117,11 @@ namespace BlazorBindings.Maui.Elements
 
         void INonPhysicalChild.SetParent(object parentElement)
         {
-            if (parentElement is not MC.Grid parentGrid)
-            {
-                throw new ArgumentException($"Expected parent to be of type {typeof(MC.Grid).FullName} but it is of type {parentElement?.GetType().FullName}.", nameof(parentElement));
-            }
-
-            _parentGrid = parentGrid;
+            _parentGrid = parentElement as MC.Grid
+                ?? throw new ArgumentException($"Expected parent to be of type {typeof(MC.Grid).FullName} but it is of type {parentElement?.GetType().FullName}.", nameof(parentElement));
         }
 
-        void INonPhysicalChild.Remove()
+        void INonPhysicalChild.RemoveFromParent(object parentElement)
         {
             if (_parentGrid != null)
             {

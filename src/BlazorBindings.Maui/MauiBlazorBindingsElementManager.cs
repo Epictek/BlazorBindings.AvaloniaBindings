@@ -44,7 +44,7 @@ namespace BlazorBindings.Maui
         {
             if (childHandler is INonPhysicalChild nonPhysicalChild)
             {
-                nonPhysicalChild.Remove();
+                nonPhysicalChild.RemoveFromParent(parentHandler.ElementControl);
             }
             else if (parentHandler is IMauiContainerElementHandler parent)
             {

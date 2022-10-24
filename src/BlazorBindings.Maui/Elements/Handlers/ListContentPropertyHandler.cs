@@ -25,7 +25,7 @@ namespace BlazorBindings.Maui.Elements.Handlers
             _propertyItems = _listPropertyAccessor((TElementType)parentElement);
         }
 
-        public void Remove()
+        public void RemoveFromParent(object parentElement)
         {
             // Because this Handler is used internally only, this method is no-op.
         }
