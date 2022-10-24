@@ -1,0 +1,45 @@
+﻿@using ControlGallery.Models
+
+<ContentPage Title="Navigation target">
+    <ScrollView>
+        <VerticalStackLayout Padding="6" Spacing="6">
+            <Label Text="Target page" />
+
+            <Label Text="Name:" />
+            <Entry @bind-Text="name" />
+
+            <Label Text="Value:" />
+            <Entry @bind-Text="value" />
+
+            <Button Text="Save" OnClick="Save" />
+
+            <Button Text="Notify about event" OnClick="Notify" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
+
+@code {
+    [Parameter] public NavigationParameterModel Item { get; set; }
+    [Parameter] public EventCallback<NavigationParameterModel> ItemChanged { get; set; }
+    [Parameter] public EventCallback EventHappened { get; set; }
+
+    string name;
+    string value;
+
+    protected override void OnInitialized()
+    {
+        name = Item?.Name;
+        value = Item?.Value;
+    }
+
+    async Task Save()
+    {
+        await ItemChanged.InvokeAsync(new NavigationParameterModel(name, value));
+    }
+
+    async Task Notify()
+    {
+        await EventHappened.InvokeAsync();
+    }
+
+}

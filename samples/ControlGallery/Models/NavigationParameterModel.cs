@@ -3,9 +3,5 @@
 
 namespace ControlGallery.Models
 {
-    public class NavigationParameterModel
-    {
-        public string Name { get; set; }
-        public string Value { get; set; }
-    }
+    public record NavigationParameterModel(string Name, string Value);
 }

@@ -1,8 +1,8 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-using Microsoft.AspNetCore.Components;
 using BlazorBindings.Maui.ShellNavigation;
+using Microsoft.AspNetCore.Components;
 using NUnit.Framework;
 using System.Linq;
 
@@ -10,9 +10,7 @@ namespace BlazorBindings.UnitTests
 {
     public class StructuredRouteTests
     {
-#pragma warning disable CA1034 // Nested types should not be visible; this is test-only code
         public class TestComponent : ComponentBase
-#pragma warning restore CA1034 // Nested types should not be visible
         {
             [Parameter] public string StringParameter { get; set; }
             [Parameter] public int IntParameter { get; set; }

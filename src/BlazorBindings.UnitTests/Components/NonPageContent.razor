@@ -1,3 +1,15 @@
 ﻿<VerticalStackLayout>
     <Label>Text</Label>
 </VerticalStackLayout>
+
+@code {
+    public static void ValidateContent(Microsoft.Maui.IElement content)
+    {
+        var stackLayout = content as MC.VerticalStackLayout;
+        Assert.IsNotNull(stackLayout);
+
+        var label = stackLayout.Children.FirstOrDefault() as MC.Label;
+        Assert.IsNotNull(label);
+        Assert.That(label.Text, Is.EqualTo("Text"));
+    }
+}

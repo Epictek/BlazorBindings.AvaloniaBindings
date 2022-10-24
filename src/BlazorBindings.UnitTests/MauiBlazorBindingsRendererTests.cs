@@ -2,7 +2,6 @@
 using BlazorBindings.UnitTests.Components;
 using NUnit.Framework;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 using MC = Microsoft.Maui.Controls;
 
@@ -11,6 +10,11 @@ namespace BlazorBindings.UnitTests
     public class MauiBlazorBindingsRendererTests
     {
         private readonly MauiBlazorBindingsRenderer _renderer = TestBlazorBindingsRenderer.Create();
+
+        public MauiBlazorBindingsRendererTests()
+        {
+            MC.Application.Current = new TestApplication();
+        }
 
         [TestCase(typeof(MC.ContentView))]
         [TestCase(typeof(MC.ContentPage))]
@@ -25,12 +29,12 @@ namespace BlazorBindings.UnitTests
             await _renderer.AddComponent<NonPageContent>(control);
 
             var content = GetChildContent(control);
-            ValidateNonPageChildContent(content);
+            NonPageContent.ValidateContent(content);
         }
 
         [TestCase(typeof(MC.Application))]
         [TestCase(typeof(MC.FlyoutPage))]
-        // [TestCase(typeof(MC.TabbedPage))]  fails due to dispatcher
+        [TestCase(typeof(MC.TabbedPage))]
         [TestCase(typeof(MC.Shell))]
         [TestCase(typeof(MC.ShellContent))]
         public async Task RenderToExistingControl_PageContent(Type containerType)
@@ -40,25 +44,7 @@ namespace BlazorBindings.UnitTests
             await _renderer.AddComponent<PageContent>(control);
 
             var content = GetChildContent(control);
-            ValidatePageChildContent(content);
-        }
-
-        private static void ValidatePageChildContent(MC.Element content)
-        {
-            var contentPage = content as MC.ContentPage;
-            Assert.IsNotNull(contentPage);
-            Assert.That(contentPage.Title, Is.EqualTo("Test"));
-            ValidateNonPageChildContent(contentPage.Content);
-        }
-
-        private static void ValidateNonPageChildContent(MC.Element content)
-        {
-            var stackLayout = content as MC.VerticalStackLayout;
-            Assert.IsNotNull(stackLayout);
-
-            var label = stackLayout.Children.FirstOrDefault() as MC.Label;
-            Assert.IsNotNull(label);
-            Assert.That(label.Text, Is.EqualTo("Text"));
+            PageContent.ValidateContent(content);
         }
 
         private static MC.Element GetChildContent(MC.Element container)

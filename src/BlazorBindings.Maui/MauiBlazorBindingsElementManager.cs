@@ -8,11 +8,6 @@ namespace BlazorBindings.Maui
 {
     internal class MauiBlazorBindingsElementManager : ElementManager<IMauiElementHandler>
     {
-        protected override bool IsParented(IMauiElementHandler handler)
-        {
-            return handler.IsParented();
-        }
-
         protected override void AddChildElement(
             IMauiElementHandler parentHandler,
             IMauiElementHandler childHandler,
@@ -36,14 +31,6 @@ namespace BlazorBindings.Maui
             }
 
             parent.AddChild(childHandler.ElementControl, physicalSiblingIndex);
-
-            if (parentHandler is not INonChildContainerElement)
-            {
-                // Notify the child handler that its parent was set. This is needed for cases
-                // where the parent/child are a conceptual relationship and not represented
-                // by the Xamarin.Forms control hierarchy.
-                childHandler.SetParent(parentHandler.ElementControl);
-            }
         }
 
         protected override int GetChildElementIndex(IMauiElementHandler parentHandler, IMauiElementHandler childHandler)

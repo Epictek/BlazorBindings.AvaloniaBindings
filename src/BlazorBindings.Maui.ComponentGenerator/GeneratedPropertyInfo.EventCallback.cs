@@ -73,7 +73,7 @@ namespace BlazorBindings.Maui.ComponentGenerator
                             {{
                                 var value = {argument};
                                 {_bindedProperty.Name} = value;
-                                {ComponentPropertyName}.InvokeAsync(value);
+                                InvokeAsync(() => {ComponentPropertyName}.InvokeAsync(value));
                             }}
                         }}";
             }
@@ -84,11 +84,11 @@ namespace BlazorBindings.Maui.ComponentGenerator
                         {{
                             var value = {argument};
                             {_bindedProperty.Name} = value;
-                            {ComponentPropertyName}.InvokeAsync(value);
+                            InvokeAsync(() => {ComponentPropertyName}.InvokeAsync(value));
                         }}";
             }
 
-            return $" => {ComponentPropertyName}.InvokeAsync({argument});";
+            return $" => InvokeAsync(() => {ComponentPropertyName}.InvokeAsync({argument}));";
         }
 
         internal static GeneratedPropertyInfo[] GetEventCallbackProperties(GeneratedTypeInfo containingType)

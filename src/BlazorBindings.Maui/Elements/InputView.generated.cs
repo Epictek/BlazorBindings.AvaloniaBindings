@@ -117,7 +117,7 @@ namespace BlazorBindings.Maui.Elements
                         {
                             var value = NativeControl.Text;
                             Text = value;
-                            TextChanged.InvokeAsync(value);
+                            InvokeAsync(() => TextChanged.InvokeAsync(value));
                         }
 
                         TextChanged = (EventCallback<string>)value;

@@ -138,19 +138,5 @@ namespace BlazorBindings.Maui.Elements
                 _parentGrid = null;
             }
         }
-
-        bool IMauiElementHandler.IsParented()
-        {
-            // Because this is a 'fake' element, all matters related to physical trees
-            // should be no-ops.
-            return false;
-        }
-
-        void IMauiElementHandler.SetParent(MC.Element parent)
-        {
-            // This should never get called. Instead, INonChildContainerElement.SetParent() implemented
-            // in this class should get called.
-            throw new NotSupportedException();
-        }
     }
 }

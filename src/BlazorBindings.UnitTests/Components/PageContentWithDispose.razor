@@ -1,0 +1,15 @@
+﻿@implements IDisposable
+
+<ContentPage Title="Test">
+    <NonPageContent />
+</ContentPage>
+
+@code {
+    public static event Action OnDispose;
+
+    public void Dispose()
+    {
+        OnDispose?.Invoke();
+        OnDispose = null;
+    }
+}

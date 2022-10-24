@@ -1,6 +1,7 @@
 ﻿@using BlazorBindings.Maui.Elements.CommunityToolkit
 @using System.Collections.ObjectModel
 @using CommunityToolkit.Maui.Core
+@using ThirdPartyControlsSample.Extensions;
 
 <ContentPage Title="CommunityToolkit">
     <ScrollView>
@@ -17,11 +18,23 @@
                          LineColor="Colors.Black"
                          HeightRequest="100"
                          WidthRequest="200" />
+
+            <Label>Popup</Label>
+            <Button OnClick="ShowPopup">Show popup</Button>
+            <Label>Result: @popupResult</Label>
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
 
 @code {
+    @inject NavigationService Navigation;
+
     ImageSource urlSource = "https://static.wikia.nocookie.net/firefly/images/f/fa/Wash.jpg";
 
+    string popupResult;
+
+    async Task ShowPopup()
+    {
+        popupResult = (string)await Navigation.ShowPopupAsync<CommunityToolkitPopup>();
+    }
 }

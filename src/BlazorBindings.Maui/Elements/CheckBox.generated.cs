@@ -53,7 +53,7 @@ namespace BlazorBindings.Maui.Elements
                         {
                             var value = NativeControl.IsChecked;
                             IsChecked = value;
-                            IsCheckedChanged.InvokeAsync(value);
+                            InvokeAsync(() => IsCheckedChanged.InvokeAsync(value));
                         }
 
                         IsCheckedChanged = (EventCallback<bool>)value;

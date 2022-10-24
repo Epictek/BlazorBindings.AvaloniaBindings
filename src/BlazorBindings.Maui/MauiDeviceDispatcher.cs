@@ -22,22 +22,30 @@ namespace BlazorBindings.Maui
 
         public override Task InvokeAsync(Action workItem)
         {
-            return Dispatcher.DispatchAsync(workItem);
+            if (Dispatcher.IsDispatchRequired)
+            {
+                return Dispatcher.DispatchAsync(workItem);
+            }
+            else
+            {
+                workItem();
+                return Task.CompletedTask;
+            };
         }
 
         public override Task InvokeAsync(Func<Task> workItem)
         {
-            return Dispatcher.DispatchAsync(workItem);
+            return Dispatcher.IsDispatchRequired ? Dispatcher.DispatchAsync(workItem) : workItem();
         }
 
         public override Task<TResult> InvokeAsync<TResult>(Func<TResult> workItem)
         {
-            return Dispatcher.DispatchAsync(workItem);
+            return Dispatcher.IsDispatchRequired ? Dispatcher.DispatchAsync(workItem) : Task.FromResult(workItem());
         }
 
         public override Task<TResult> InvokeAsync<TResult>(Func<Task<TResult>> workItem)
         {
-            return Dispatcher.DispatchAsync(workItem);
+            return Dispatcher.IsDispatchRequired ? Dispatcher.DispatchAsync(workItem) : workItem();
         }
     }
 }

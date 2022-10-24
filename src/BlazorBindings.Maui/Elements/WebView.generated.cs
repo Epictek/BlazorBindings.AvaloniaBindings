@@ -50,7 +50,7 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(OnNavigated):
                     if (!Equals(OnNavigated, value))
                     {
-                        void NativeControlNavigated(object sender, MC.WebNavigatedEventArgs e) => OnNavigated.InvokeAsync(e);
+                        void NativeControlNavigated(object sender, MC.WebNavigatedEventArgs e) => InvokeAsync(() => OnNavigated.InvokeAsync(e));
 
                         OnNavigated = (EventCallback<MC.WebNavigatedEventArgs>)value;
                         NativeControl.Navigated -= NativeControlNavigated;
@@ -60,7 +60,7 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(OnNavigating):
                     if (!Equals(OnNavigating, value))
                     {
-                        void NativeControlNavigating(object sender, MC.WebNavigatingEventArgs e) => OnNavigating.InvokeAsync(e);
+                        void NativeControlNavigating(object sender, MC.WebNavigatingEventArgs e) => InvokeAsync(() => OnNavigating.InvokeAsync(e));
 
                         OnNavigating = (EventCallback<MC.WebNavigatingEventArgs>)value;
                         NativeControl.Navigating -= NativeControlNavigating;

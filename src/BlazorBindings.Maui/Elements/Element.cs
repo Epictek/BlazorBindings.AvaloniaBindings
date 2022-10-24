@@ -86,16 +86,5 @@ namespace BlazorBindings.Maui.Elements
         MC.Element IMauiElementHandler.ElementControl => NativeControl;
 
         object IElementHandler.TargetElement => NativeControl;
-
-
-        bool IMauiElementHandler.IsParented()
-        {
-            return NativeControl.Parent != null;
-        }
-
-        void IMauiElementHandler.SetParent(MC.Element parent)
-        {
-            NativeControl.Parent = parent;
-        }
     }
 }

@@ -70,6 +70,9 @@ namespace BlazorBindings.Maui.ShellNavigation
                 parameterCount++;
             }
 
+            if (match is null)
+                return null;
+
             parameters.Reverse();
             return new StructuredRouteResult(match, parameters, additionalParameters);
         }

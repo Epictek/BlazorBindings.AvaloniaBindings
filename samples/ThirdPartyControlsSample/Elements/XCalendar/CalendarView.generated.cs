@@ -35,9 +35,9 @@ namespace BlazorBindings.Maui.Elements.XCalendar
             ElementHandlerRegistry.RegisterPropertyContentHandler<CalendarView>(nameof(DayTemplate),
                 (renderer, parent, component) => new DataTemplatePropertyHandler<XMV.CalendarView, ICalendarDay>(component,
                     (x, dataTemplate) => x.DayTemplate = dataTemplate));
-            ElementHandlerRegistry.RegisterPropertyContentHandler<CalendarView>(nameof(NavigationTemplate),
+            ElementHandlerRegistry.RegisterPropertyContentHandler<CalendarView>(nameof(NavigationViewTemplate),
                 (renderer, parent, component) => new ControlTemplatePropertyHandler<XMV.CalendarView>(component,
-                    (x, controlTemplate) => x.NavigationTemplate = controlTemplate));
+                    (x, controlTemplate) => x.NavigationViewTemplate = controlTemplate));
             RegisterAdditionalHandlers();
         }
 
@@ -52,7 +52,7 @@ namespace BlazorBindings.Maui.Elements.XCalendar
         [Parameter] public RenderFragment<ICalendarDay> DayNameTemplate { get; set; }
         [Parameter] public RenderFragment DaysViewTemplate { get; set; }
         [Parameter] public RenderFragment<ICalendarDay> DayTemplate { get; set; }
-        [Parameter] public RenderFragment NavigationTemplate { get; set; }
+        [Parameter] public RenderFragment NavigationViewTemplate { get; set; }
 
         public new XMV.CalendarView NativeControl => (XMV.CalendarView)((Element)this).NativeControl;
 
@@ -123,8 +123,8 @@ namespace BlazorBindings.Maui.Elements.XCalendar
                 case nameof(DayTemplate):
                     DayTemplate = (RenderFragment<ICalendarDay>)value;
                     break;
-                case nameof(NavigationTemplate):
-                    NavigationTemplate = (RenderFragment)value;
+                case nameof(NavigationViewTemplate):
+                    NavigationViewTemplate = (RenderFragment)value;
                     break;
 
                 default:
@@ -140,7 +140,7 @@ namespace BlazorBindings.Maui.Elements.XCalendar
             RenderTreeBuilderHelper.AddDataTemplateProperty(builder, sequence++, typeof(CalendarView), DayNameTemplate);
             RenderTreeBuilderHelper.AddControlTemplateProperty(builder, sequence++, typeof(CalendarView), DaysViewTemplate);
             RenderTreeBuilderHelper.AddDataTemplateProperty(builder, sequence++, typeof(CalendarView), DayTemplate);
-            RenderTreeBuilderHelper.AddControlTemplateProperty(builder, sequence++, typeof(CalendarView), NavigationTemplate);
+            RenderTreeBuilderHelper.AddControlTemplateProperty(builder, sequence++, typeof(CalendarView), NavigationViewTemplate);
         }
 
         static partial void RegisterAdditionalHandlers();

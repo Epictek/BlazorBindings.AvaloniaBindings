@@ -1,6 +1,6 @@
-﻿@page "/navigation"
+﻿@page "/shell-navigation"
 @using ControlGallery.Models
-@inject ShellNavigationManager NavigationManager
+@inject NavigationService NavigationManager
 
 <ContentPage Title="Shell navigation">
     <ScrollView>
@@ -37,7 +37,7 @@
 
     async Task NavigateWithAdditionalParameters() => await NavigationManager.NavigateToAsync("/target", new Dictionary<string, object>
         {
-            ["Query1"] = new NavigationParameterModel { Name = "Q1", Value = "V1" },
-            ["Query2"] = new NavigationParameterModel { Name = "Q2", Value = null }
+            ["Query1"] = new NavigationParameterModel("Q1", "V1"),
+            ["Query2"] = new NavigationParameterModel("Q2", null)
         });
 }

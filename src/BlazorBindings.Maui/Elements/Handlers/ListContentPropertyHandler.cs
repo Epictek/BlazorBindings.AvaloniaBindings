@@ -57,14 +57,5 @@ namespace BlazorBindings.Maui.Elements.Handlers
         // should be no-ops.
 
         void IElementHandler.ApplyAttribute(ulong attributeEventHandlerId, string attributeName, object attributeValue, string attributeEventUpdatesAttributeName) { }
-
-        bool IMauiElementHandler.IsParented() => false;
-
-        void IMauiElementHandler.SetParent(MC.Element parent)
-        {
-            // This should never get called. Instead, INonChildContainerElement.SetParent() implemented
-            // in this class should get called.
-            throw new NotSupportedException();
-        }
     }
 }

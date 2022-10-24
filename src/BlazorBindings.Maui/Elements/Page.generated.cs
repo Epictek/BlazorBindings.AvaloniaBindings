@@ -93,7 +93,7 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(OnNavigatedTo):
                     if (!Equals(OnNavigatedTo, value))
                     {
-                        void NativeControlNavigatedTo(object sender, MC.NavigatedToEventArgs e) => OnNavigatedTo.InvokeAsync(e);
+                        void NativeControlNavigatedTo(object sender, MC.NavigatedToEventArgs e) => InvokeAsync(() => OnNavigatedTo.InvokeAsync(e));
 
                         OnNavigatedTo = (EventCallback<MC.NavigatedToEventArgs>)value;
                         NativeControl.NavigatedTo -= NativeControlNavigatedTo;
@@ -103,7 +103,7 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(OnNavigatingFrom):
                     if (!Equals(OnNavigatingFrom, value))
                     {
-                        void NativeControlNavigatingFrom(object sender, MC.NavigatingFromEventArgs e) => OnNavigatingFrom.InvokeAsync(e);
+                        void NativeControlNavigatingFrom(object sender, MC.NavigatingFromEventArgs e) => InvokeAsync(() => OnNavigatingFrom.InvokeAsync(e));
 
                         OnNavigatingFrom = (EventCallback<MC.NavigatingFromEventArgs>)value;
                         NativeControl.NavigatingFrom -= NativeControlNavigatingFrom;
@@ -113,7 +113,7 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(OnNavigatedFrom):
                     if (!Equals(OnNavigatedFrom, value))
                     {
-                        void NativeControlNavigatedFrom(object sender, MC.NavigatedFromEventArgs e) => OnNavigatedFrom.InvokeAsync(e);
+                        void NativeControlNavigatedFrom(object sender, MC.NavigatedFromEventArgs e) => InvokeAsync(() => OnNavigatedFrom.InvokeAsync(e));
 
                         OnNavigatedFrom = (EventCallback<MC.NavigatedFromEventArgs>)value;
                         NativeControl.NavigatedFrom -= NativeControlNavigatedFrom;
@@ -123,7 +123,7 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(OnLayoutChanged):
                     if (!Equals(OnLayoutChanged, value))
                     {
-                        void NativeControlLayoutChanged(object sender, EventArgs e) => OnLayoutChanged.InvokeAsync();
+                        void NativeControlLayoutChanged(object sender, EventArgs e) => InvokeAsync(() => OnLayoutChanged.InvokeAsync());
 
                         OnLayoutChanged = (EventCallback)value;
                         NativeControl.LayoutChanged -= NativeControlLayoutChanged;
@@ -133,7 +133,7 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(OnAppearing):
                     if (!Equals(OnAppearing, value))
                     {
-                        void NativeControlAppearing(object sender, EventArgs e) => OnAppearing.InvokeAsync();
+                        void NativeControlAppearing(object sender, EventArgs e) => InvokeAsync(() => OnAppearing.InvokeAsync());
 
                         OnAppearing = (EventCallback)value;
                         NativeControl.Appearing -= NativeControlAppearing;
@@ -143,7 +143,7 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(OnDisappearing):
                     if (!Equals(OnDisappearing, value))
                     {
-                        void NativeControlDisappearing(object sender, EventArgs e) => OnDisappearing.InvokeAsync();
+                        void NativeControlDisappearing(object sender, EventArgs e) => InvokeAsync(() => OnDisappearing.InvokeAsync());
 
                         OnDisappearing = (EventCallback)value;
                         NativeControl.Disappearing -= NativeControlDisappearing;

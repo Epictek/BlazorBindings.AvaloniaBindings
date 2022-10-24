@@ -91,7 +91,7 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(OnScrollToRequested):
                     if (!Equals(OnScrollToRequested, value))
                     {
-                        void NativeControlScrollToRequested(object sender, MC.ScrollToRequestEventArgs e) => OnScrollToRequested.InvokeAsync(e);
+                        void NativeControlScrollToRequested(object sender, MC.ScrollToRequestEventArgs e) => InvokeAsync(() => OnScrollToRequested.InvokeAsync(e));
 
                         OnScrollToRequested = (EventCallback<MC.ScrollToRequestEventArgs>)value;
                         NativeControl.ScrollToRequested -= NativeControlScrollToRequested;
@@ -101,7 +101,7 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(OnScrolled):
                     if (!Equals(OnScrolled, value))
                     {
-                        void NativeControlScrolled(object sender, MC.ItemsViewScrolledEventArgs e) => OnScrolled.InvokeAsync(e);
+                        void NativeControlScrolled(object sender, MC.ItemsViewScrolledEventArgs e) => InvokeAsync(() => OnScrolled.InvokeAsync(e));
 
                         OnScrolled = (EventCallback<MC.ItemsViewScrolledEventArgs>)value;
                         NativeControl.Scrolled -= NativeControlScrolled;
@@ -111,7 +111,7 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(OnRemainingItemsThresholdReached):
                     if (!Equals(OnRemainingItemsThresholdReached, value))
                     {
-                        void NativeControlRemainingItemsThresholdReached(object sender, EventArgs e) => OnRemainingItemsThresholdReached.InvokeAsync();
+                        void NativeControlRemainingItemsThresholdReached(object sender, EventArgs e) => InvokeAsync(() => OnRemainingItemsThresholdReached.InvokeAsync());
 
                         OnRemainingItemsThresholdReached = (EventCallback)value;
                         NativeControl.RemainingItemsThresholdReached -= NativeControlRemainingItemsThresholdReached;

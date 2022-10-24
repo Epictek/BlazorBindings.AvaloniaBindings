@@ -73,15 +73,6 @@ namespace BlazorBindings.Maui.Elements
         void IElementHandler.ApplyAttribute(ulong attributeEventHandlerId, string attributeName, object attributeValue, string attributeEventUpdatesAttributeName)
         {
         }
-
-        bool IMauiElementHandler.IsParented() => _parentWebView is not null;
-
-        void IMauiElementHandler.SetParent(MC.Element parent)
-        {
-            // This should never get called. Instead, INonChildContainerElement.SetParent() implemented
-            // in this class should get called.
-            throw new NotSupportedException();
-        }
         MC.Element IMauiElementHandler.ElementControl => null;
         object IElementHandler.TargetElement => NativeControl;
     }
