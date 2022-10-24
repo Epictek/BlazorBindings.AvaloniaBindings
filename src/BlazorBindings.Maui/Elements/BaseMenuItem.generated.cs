@@ -19,7 +19,7 @@ namespace BlazorBindings.Maui.Elements
             RegisterAdditionalHandlers();
         }
 
-        public new MC.BaseMenuItem NativeControl => (MC.BaseMenuItem)((Element)this).NativeControl;
+        public new MC.BaseMenuItem NativeControl => (MC.BaseMenuItem)((BindableObject)this).NativeControl;
 
 
 

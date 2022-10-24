@@ -28,9 +28,9 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public EventCallback<IList<object>> SelectedItemsChanged { get; set; }
         [Parameter] public EventCallback<MC.SelectionChangedEventArgs> OnSelectionChanged { get; set; }
 
-        public new MC.SelectableItemsView NativeControl => (MC.SelectableItemsView)((Element)this).NativeControl;
+        public new MC.SelectableItemsView NativeControl => (MC.SelectableItemsView)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MC.SelectableItemsView();
+        protected override MC.SelectableItemsView CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {

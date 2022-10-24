@@ -30,9 +30,9 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public EventCallback OnAppearing { get; set; }
         [Parameter] public EventCallback OnDisappearing { get; set; }
 
-        public new MC.BaseShellItem NativeControl => (MC.BaseShellItem)((Element)this).NativeControl;
+        public new MC.BaseShellItem NativeControl => (MC.BaseShellItem)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MC.BaseShellItem();
+        protected override MC.BaseShellItem CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {

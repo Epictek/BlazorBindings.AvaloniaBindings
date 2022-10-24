@@ -26,6 +26,6 @@ namespace BlazorBindings.UnitTests.Elements
 
         [Test]
         public void NativeControlShouldReturnNullWhenHandlerNotInitialized_TapGestureRecognizer()
-            => Assert.That(new TapGestureRecognizer().NativeControl, Is.Null);
+            => Assert.That(new TapGestureRecognizer().NativeControl, Is.Not.Null);
     }
 }

@@ -24,9 +24,9 @@ namespace BlazorBindings.Maui.Elements.Shapes
         [Parameter] public double? RadiusX { get; set; }
         [Parameter] public double? RadiusY { get; set; }
 
-        public new MCS.Rectangle NativeControl => (MCS.Rectangle)((Element)this).NativeControl;
+        public new MCS.Rectangle NativeControl => (MCS.Rectangle)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MCS.Rectangle();
+        protected override MCS.Rectangle CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {

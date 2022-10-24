@@ -85,7 +85,7 @@ namespace BlazorBindings.Maui.ComponentGenerator
             staticConstructorBody += "\r\n            RegisterAdditionalHandlers();";
 
             var createNativeElement = isComponentAbstract ? "" : $@"
-        protected override MC.Element CreateNativeElement() => new {generatedType.GetTypeNameAndAddNamespace(typeToGenerate)}();";
+        protected override {generatedType.GetTypeNameAndAddNamespace(typeToGenerate)} CreateNativeElement() => new();";
 
             var handleParameter = !allProperties.Any() ? "" : $@"
         protected override void HandleParameter(string name, object value)
@@ -133,7 +133,7 @@ namespace {componentNamespace}
             {staticConstructorBody.Trim()}
         }}
 {propertyDeclarations}
-        public new {componentNamespacePrefix}{componentName} NativeControl => ({componentNamespacePrefix}{componentName})((Element)this).NativeControl;
+        public new {componentNamespacePrefix}{componentName} NativeControl => ({componentNamespacePrefix}{componentName})((BindableObject)this).NativeControl;
 {createNativeElement}
 {handleParameter}{renderAdditionalElementContent}
 

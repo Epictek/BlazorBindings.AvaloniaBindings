@@ -40,9 +40,9 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public EventCallback OnPress { get; set; }
         [Parameter] public EventCallback OnRelease { get; set; }
 
-        public new MC.Button NativeControl => (MC.Button)((Element)this).NativeControl;
+        public new MC.Button NativeControl => (MC.Button)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MC.Button();
+        protected override MC.Button CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {

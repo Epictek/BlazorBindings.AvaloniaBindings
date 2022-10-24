@@ -22,9 +22,9 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public int? TouchPoints { get; set; }
         [Parameter] public EventCallback<MC.PanUpdatedEventArgs> OnPanUpdated { get; set; }
 
-        public new MC.PanGestureRecognizer NativeControl => (MC.PanGestureRecognizer)((Element)this).NativeControl;
+        public new MC.PanGestureRecognizer NativeControl => (MC.PanGestureRecognizer)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MC.PanGestureRecognizer();
+        protected override MC.PanGestureRecognizer CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {

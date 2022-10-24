@@ -27,9 +27,9 @@ namespace BlazorBindings.Maui.Elements.AlohaKit
         [Parameter] public bool? HasShadow { get; set; }
         [Parameter] public Color ShadowColor { get; set; }
 
-        public new AC.BusyIndicator NativeControl => (AC.BusyIndicator)((Element)this).NativeControl;
+        public new AC.BusyIndicator NativeControl => (AC.BusyIndicator)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new AC.BusyIndicator();
+        protected override AC.BusyIndicator CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {

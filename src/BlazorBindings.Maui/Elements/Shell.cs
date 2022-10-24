@@ -71,7 +71,7 @@ namespace BlazorBindings.Maui.Elements
 
         protected override RenderFragment GetChildContent() => ChildContent;
 
-        void IMauiContainerElementHandler.AddChild(MC.Element child, int physicalSiblingIndex)
+        void IMauiContainerElementHandler.AddChild(MC.BindableObject child, int physicalSiblingIndex)
         {
             ArgumentNullException.ThrowIfNull(child);
 
@@ -96,7 +96,7 @@ namespace BlazorBindings.Maui.Elements
             }
         }
 
-        void IMauiContainerElementHandler.RemoveChild(MC.Element child)
+        void IMauiContainerElementHandler.RemoveChild(MC.BindableObject child)
         {
             ArgumentNullException.ThrowIfNull(child);
 
@@ -106,14 +106,14 @@ namespace BlazorBindings.Maui.Elements
             NativeControl.Items.Remove(itemToRemove);
         }
 
-        int IMauiContainerElementHandler.GetChildIndex(MC.Element child)
+        int IMauiContainerElementHandler.GetChildIndex(MC.BindableObject child)
         {
             var shellItem = GetItemForElement(child);
             return NativeControl.Items.IndexOf(shellItem);
         }
 
 
-        private MC.ShellItem GetItemForElement(MC.Element child)
+        private MC.ShellItem GetItemForElement(MC.BindableObject child)
         {
             return child switch
             {

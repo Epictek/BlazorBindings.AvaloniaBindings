@@ -44,7 +44,7 @@ namespace BlazorBindings.Maui
         }
 
         // It tries to return the Element as soon as it is available, therefore Component task might still be in progress.
-        internal async Task<(MC.Element Element, Task<IComponent> Component)> GetElementFromRenderedComponent(Type componentType, Dictionary<string, object> parameters = null)
+        internal async Task<(MC.BindableObject Element, Task<IComponent> Component)> GetElementFromRenderedComponent(Type componentType, Dictionary<string, object> parameters = null)
         {
             var container = new RootContainerHandler();
 
@@ -67,7 +67,7 @@ namespace BlazorBindings.Maui
             return (container.Elements[0], addComponentTask);
         }
 
-        private static Task SetChildContent(MC.Element parent, MC.Element child)
+        private static Task SetChildContent(MC.BindableObject parent, MC.BindableObject child)
         {
             switch (parent)
             {
@@ -114,7 +114,7 @@ namespace BlazorBindings.Maui
 
             return Task.CompletedTask;
 
-            static T Cast<T>(MC.Element e) where T : MC.Element => e as T
+            static T Cast<T>(MC.BindableObject e) where T : MC.BindableObject => e as T
                 ?? throw new InvalidOperationException($"{typeof(T).Name} element expected, but {e?.GetType()?.Name} found.");
         }
     }

@@ -23,7 +23,7 @@ namespace BlazorBindings.Maui.Elements
         private readonly List<MC.View> _children = new();
         private MC.Grid _parentGrid;
 
-        MC.Element IMauiElementHandler.ElementControl => null;
+        MC.BindableObject IMauiElementHandler.ElementControl => null;
         object IElementHandler.TargetElement => null;
 
         public override Task SetParametersAsync(ParameterView parameters)
@@ -81,7 +81,7 @@ namespace BlazorBindings.Maui.Elements
 
         protected override RenderFragment GetChildContent() => ChildContent;
 
-        public void AddChild(MC.Element child, int physicalSiblingIndex)
+        public void AddChild(MC.BindableObject child, int physicalSiblingIndex)
         {
             if (child is not MC.View childView)
             {
@@ -97,7 +97,7 @@ namespace BlazorBindings.Maui.Elements
             _parentGrid.Children.Add(childView);
         }
 
-        public void RemoveChild(MC.Element child)
+        public void RemoveChild(MC.BindableObject child)
         {
             if (child is not MC.View childView)
             {
@@ -108,7 +108,7 @@ namespace BlazorBindings.Maui.Elements
             _parentGrid.Children.Remove(childView);
         }
 
-        public int GetChildIndex(MC.Element child)
+        public int GetChildIndex(MC.BindableObject child)
         {
             return child is MC.View childView
                 ? _children.IndexOf(childView)

@@ -54,9 +54,9 @@ namespace BlazorBindings.Maui.Elements.XCalendar
         [Parameter] public RenderFragment<ICalendarDay> DayTemplate { get; set; }
         [Parameter] public RenderFragment NavigationViewTemplate { get; set; }
 
-        public new XMV.CalendarView NativeControl => (XMV.CalendarView)((Element)this).NativeControl;
+        public new XMV.CalendarView NativeControl => (XMV.CalendarView)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new XMV.CalendarView();
+        protected override XMV.CalendarView CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {

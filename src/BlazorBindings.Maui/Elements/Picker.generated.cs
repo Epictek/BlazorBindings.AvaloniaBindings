@@ -40,9 +40,9 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public EventCallback<T> SelectedItemChanged { get; set; }
         [Parameter] public EventCallback<int> SelectedIndexChanged { get; set; }
 
-        public new MC.Picker NativeControl => (MC.Picker)((Element)this).NativeControl;
+        public new MC.Picker NativeControl => (MC.Picker)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MC.Picker();
+        protected override MC.Picker CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {

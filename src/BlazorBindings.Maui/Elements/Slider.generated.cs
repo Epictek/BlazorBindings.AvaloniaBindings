@@ -32,9 +32,9 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public EventCallback OnDragStarted { get; set; }
         [Parameter] public EventCallback OnDragCompleted { get; set; }
 
-        public new MC.Slider NativeControl => (MC.Slider)((Element)this).NativeControl;
+        public new MC.Slider NativeControl => (MC.Slider)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MC.Slider();
+        protected override MC.Slider CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {

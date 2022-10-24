@@ -2,10 +2,13 @@
 // Licensed under the MIT license.
 
 using BlazorBindings.Core;
+using System.ComponentModel;
 using MC = Microsoft.Maui.Controls;
 
 namespace BlazorBindings.Maui.Elements.Handlers
 {
+    /// <remarks>Experimental API, subject to change.</remarks>
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public abstract class BaseAttachedPropertiesHandler : IMauiElementHandler, INonPhysicalChild
     {
         /// <summary>
@@ -28,7 +31,7 @@ namespace BlazorBindings.Maui.Elements.Handlers
 
         // Because this is a 'fake' element, all matters related to physical trees
         // should be no-ops.
-        public MC.Element ElementControl => null;
+        public MC.BindableObject ElementControl => null;
         public object TargetElement => null;
     }
 }

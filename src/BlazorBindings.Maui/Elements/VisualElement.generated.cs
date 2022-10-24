@@ -62,7 +62,7 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public EventCallback OnSizeChanged { get; set; }
         [Parameter] public EventCallback<MC.FocusEventArgs> OnUnfocused { get; set; }
 
-        public new MC.VisualElement NativeControl => (MC.VisualElement)((Element)this).NativeControl;
+        public new MC.VisualElement NativeControl => (MC.VisualElement)((BindableObject)this).NativeControl;
 
 
         protected override void HandleParameter(string name, object value)

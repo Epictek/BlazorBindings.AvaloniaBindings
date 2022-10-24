@@ -35,9 +35,9 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public TextTransform? TextTransform { get; set; }
         [Parameter] public EventCallback<bool> IsCheckedChanged { get; set; }
 
-        public new MC.RadioButton NativeControl => (MC.RadioButton)((Element)this).NativeControl;
+        public new MC.RadioButton NativeControl => (MC.RadioButton)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MC.RadioButton();
+        protected override MC.RadioButton CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {

@@ -23,9 +23,9 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public Color Color { get; set; }
         [Parameter] public bool? IsRunning { get; set; }
 
-        public new MC.ActivityIndicator NativeControl => (MC.ActivityIndicator)((Element)this).NativeControl;
+        public new MC.ActivityIndicator NativeControl => (MC.ActivityIndicator)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MC.ActivityIndicator();
+        protected override MC.ActivityIndicator CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {

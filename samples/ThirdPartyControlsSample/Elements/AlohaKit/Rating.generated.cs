@@ -38,9 +38,9 @@ namespace BlazorBindings.Maui.Elements.AlohaKit
         [Parameter] public int? Value { get; set; }
         [Parameter] public EventCallback<int> ValueChanged { get; set; }
 
-        public new AC.Rating NativeControl => (AC.Rating)((Element)this).NativeControl;
+        public new AC.Rating NativeControl => (AC.Rating)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new AC.Rating();
+        protected override AC.Rating CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {

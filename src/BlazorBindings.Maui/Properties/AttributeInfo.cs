@@ -24,6 +24,10 @@ using System.Runtime.CompilerServices;
 [assembly: GenerateComponent(typeof(DatePicker),
     Exclude = new[] { nameof(DatePicker.Date), nameof(DatePicker.DateSelected), nameof(DatePicker.MaximumDate), nameof(DatePicker.MinimumDate) })]
 [assembly: GenerateComponent(typeof(Editor))]
+[assembly: GenerateComponent(typeof(Element),
+    Exclude = new[] { nameof(Element.Handler), nameof(Element.ChildAdded), nameof(Element.ChildRemoved),
+        nameof(Element.DescendantAdded), nameof(Element.DescendantRemoved), nameof(Element.ParentChanged),
+        nameof(Element.ParentChanging), nameof(Element.HandlerChanged), nameof(Element.HandlerChanging) })]
 [assembly: GenerateComponent(typeof(Entry))]
 [assembly: GenerateComponent(typeof(FlexLayout))]
 [assembly: GenerateComponent(typeof(FlyoutItem))]

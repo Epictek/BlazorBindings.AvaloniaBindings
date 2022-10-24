@@ -63,26 +63,6 @@ namespace BlazorBindings.Maui.Elements
         }
 
         /// <summary>
-        /// Helper method to serialize <see cref="uint" /> objects.
-        /// </summary>
-        public static string UInt32ToString(uint value)
-        {
-            return value.ToString(CultureInfo.InvariantCulture);
-        }
-
-        /// <summary>
-        /// Helper method to deserialize <see cref="uint" /> objects.
-        /// </summary>
-        public static uint StringToUInt32(string uintString, uint defaultValueIfNull = default)
-        {
-            if (uintString is null)
-            {
-                return defaultValueIfNull;
-            }
-            return uint.Parse(uintString, CultureInfo.InvariantCulture);
-        }
-
-        /// <summary>
         /// Parses the attribute value as a space-separated string. Entries are trimmed and empty entries are removed.
         /// </summary>
         /// <param name="attributeValue"></param>

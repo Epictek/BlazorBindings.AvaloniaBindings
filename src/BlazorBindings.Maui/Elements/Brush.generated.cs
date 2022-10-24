@@ -19,7 +19,7 @@ namespace BlazorBindings.Maui.Elements
             RegisterAdditionalHandlers();
         }
 
-        public new MC.Brush NativeControl => (MC.Brush)((Element)this).NativeControl;
+        public new MC.Brush NativeControl => (MC.Brush)((BindableObject)this).NativeControl;
 
 
 

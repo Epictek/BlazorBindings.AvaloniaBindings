@@ -19,9 +19,9 @@ namespace BlazorBindings.Maui.Elements
             RegisterAdditionalHandlers();
         }
 
-        public new MC.CollectionView NativeControl => (MC.CollectionView)((Element)this).NativeControl;
+        public new MC.CollectionView NativeControl => (MC.CollectionView)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MC.CollectionView();
+        protected override MC.CollectionView CreateNativeElement() => new();
 
 
         static partial void RegisterAdditionalHandlers();

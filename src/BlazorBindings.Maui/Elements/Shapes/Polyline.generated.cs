@@ -23,9 +23,9 @@ namespace BlazorBindings.Maui.Elements.Shapes
 
         [Parameter] public MCS.FillRule? FillRule { get; set; }
 
-        public new MCS.Polyline NativeControl => (MCS.Polyline)((Element)this).NativeControl;
+        public new MCS.Polyline NativeControl => (MCS.Polyline)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MCS.Polyline();
+        protected override MCS.Polyline CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {

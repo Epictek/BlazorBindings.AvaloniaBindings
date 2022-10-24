@@ -25,9 +25,9 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public double? Value { get; set; }
         [Parameter] public EventCallback<double> ValueChanged { get; set; }
 
-        public new MC.Stepper NativeControl => (MC.Stepper)((Element)this).NativeControl;
+        public new MC.Stepper NativeControl => (MC.Stepper)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MC.Stepper();
+        protected override MC.Stepper CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {

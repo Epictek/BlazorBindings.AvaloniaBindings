@@ -30,9 +30,9 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public Color UnselectedTabColor { get; set; }
         [Parameter] public RenderFragment BarBackground { get; set; }
 
-        public new MC.TabbedPage NativeControl => (MC.TabbedPage)((Element)this).NativeControl;
+        public new MC.TabbedPage NativeControl => (MC.TabbedPage)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MC.TabbedPage();
+        protected override MC.TabbedPage CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {

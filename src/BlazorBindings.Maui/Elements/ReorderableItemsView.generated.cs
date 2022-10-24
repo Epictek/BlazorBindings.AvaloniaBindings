@@ -23,9 +23,9 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public bool? CanReorderItems { get; set; }
         [Parameter] public EventCallback OnReorderCompleted { get; set; }
 
-        public new MC.ReorderableItemsView NativeControl => (MC.ReorderableItemsView)((Element)this).NativeControl;
+        public new MC.ReorderableItemsView NativeControl => (MC.ReorderableItemsView)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MC.ReorderableItemsView();
+        protected override MC.ReorderableItemsView CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {

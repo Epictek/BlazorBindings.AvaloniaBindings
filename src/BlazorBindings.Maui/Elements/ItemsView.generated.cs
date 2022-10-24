@@ -40,7 +40,7 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public EventCallback<MC.ItemsViewScrolledEventArgs> OnScrolled { get; set; }
         [Parameter] public EventCallback OnRemainingItemsThresholdReached { get; set; }
 
-        public new MC.ItemsView NativeControl => (MC.ItemsView)((Element)this).NativeControl;
+        public new MC.ItemsView NativeControl => (MC.ItemsView)((BindableObject)this).NativeControl;
 
 
         protected override void HandleParameter(string name, object value)

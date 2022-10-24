@@ -39,9 +39,9 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public RenderFragment ChildContent { get; set; }
         [Parameter] public RenderFragment Stroke { get; set; }
 
-        public new MC.Border NativeControl => (MC.Border)((Element)this).NativeControl;
+        public new MC.Border NativeControl => (MC.Border)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MC.Border();
+        protected override MC.Border CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {

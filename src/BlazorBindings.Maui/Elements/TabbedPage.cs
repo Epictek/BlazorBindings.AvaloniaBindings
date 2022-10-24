@@ -26,7 +26,7 @@ namespace BlazorBindings.Maui.Elements
             }
         }
 
-        void IMauiContainerElementHandler.AddChild(MC.Element child, int physicalSiblingIndex)
+        void IMauiContainerElementHandler.AddChild(MC.BindableObject child, int physicalSiblingIndex)
         {
             var childAsPage = child as MC.Page;
 
@@ -41,12 +41,12 @@ namespace BlazorBindings.Maui.Elements
             }
         }
 
-        int IMauiContainerElementHandler.GetChildIndex(MC.Element child)
+        int IMauiContainerElementHandler.GetChildIndex(MC.BindableObject child)
         {
             return NativeControl.Children.IndexOf(child as MC.Page);
         }
 
-        void IMauiContainerElementHandler.RemoveChild(MC.Element child)
+        void IMauiContainerElementHandler.RemoveChild(MC.BindableObject child)
         {
             NativeControl.Children.Remove(child as MC.Page);
         }

@@ -39,7 +39,7 @@ namespace BlazorBindings.Maui.Elements.Shapes
         [Parameter] public RenderFragment Fill { get; set; }
         [Parameter] public RenderFragment Stroke { get; set; }
 
-        public new MCS.Shape NativeControl => (MCS.Shape)((Element)this).NativeControl;
+        public new MCS.Shape NativeControl => (MCS.Shape)((BindableObject)this).NativeControl;
 
 
         protected override void HandleParameter(string name, object value)

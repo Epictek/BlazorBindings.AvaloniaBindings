@@ -72,7 +72,7 @@ namespace BlazorBindings.Maui.Elements
         void IElementHandler.ApplyAttribute(ulong attributeEventHandlerId, string attributeName, object attributeValue, string attributeEventUpdatesAttributeName)
         {
         }
-        MC.Element IMauiElementHandler.ElementControl => null;
+        MC.BindableObject IMauiElementHandler.ElementControl => null;
         object IElementHandler.TargetElement => NativeControl;
     }
 }

@@ -37,9 +37,9 @@ namespace BlazorBindings.Maui.Elements.CommunityToolkit
         [Parameter] public EventCallback<PopupClosedEventArgs> OnClosed { get; set; }
         [Parameter] public EventCallback<PopupOpenedEventArgs> OnOpened { get; set; }
 
-        public new CMV.Popup NativeControl => (CMV.Popup)((Element)this).NativeControl;
+        public new CMV.Popup NativeControl => (CMV.Popup)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new CMV.Popup();
+        protected override CMV.Popup CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {

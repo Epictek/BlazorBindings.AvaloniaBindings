@@ -44,9 +44,9 @@ namespace BlazorBindings.Maui.Elements.AlohaKit
         [Parameter] public RenderFragment ThumbBrush { get; set; }
         [Parameter] public EventCallback<double> ValueChanged { get; set; }
 
-        public new AC.Slider NativeControl => (AC.Slider)((Element)this).NativeControl;
+        public new AC.Slider NativeControl => (AC.Slider)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new AC.Slider();
+        protected override AC.Slider CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {

@@ -21,9 +21,9 @@ namespace BlazorBindings.Maui.Elements
 
         [Parameter] public EventCallback<MC.PinchGestureUpdatedEventArgs> OnPinchUpdated { get; set; }
 
-        public new MC.PinchGestureRecognizer NativeControl => (MC.PinchGestureRecognizer)((Element)this).NativeControl;
+        public new MC.PinchGestureRecognizer NativeControl => (MC.PinchGestureRecognizer)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MC.PinchGestureRecognizer();
+        protected override MC.PinchGestureRecognizer CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {

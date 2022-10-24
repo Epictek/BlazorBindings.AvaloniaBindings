@@ -41,9 +41,9 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public EventCallback OnAppearing { get; set; }
         [Parameter] public EventCallback OnDisappearing { get; set; }
 
-        public new MC.Page NativeControl => (MC.Page)((Element)this).NativeControl;
+        public new MC.Page NativeControl => (MC.Page)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MC.Page();
+        protected override MC.Page CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {

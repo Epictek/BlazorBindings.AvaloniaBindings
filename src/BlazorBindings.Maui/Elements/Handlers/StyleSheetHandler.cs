@@ -20,7 +20,7 @@ namespace BlazorBindings.Maui.Elements.Handlers
         }
 
         public NativeComponentRenderer Renderer { get; }
-        public MC.Element ElementControl => null;
+        public MC.BindableObject ElementControl => null;
         public object TargetElement => ElementControl;
 
         public Assembly Assembly { get; private set; }
@@ -53,7 +53,7 @@ namespace BlazorBindings.Maui.Elements.Handlers
             return _parentVisualElement != null;
         }
 
-        public void SetParent(MC.Element parent)
+        public void SetParent(MC.BindableObject parent)
         {
             throw new NotImplementedException();
         }

@@ -112,7 +112,7 @@ namespace BlazorBindings.Maui
             var serviceProvider = scope.ServiceProvider;
             var renderer = serviceProvider.GetRequiredService<MauiBlazorBindingsRenderer>();
 
-            var (element, _) = await renderer.GetElementFromRenderedComponent(componentType, arguments);
+            var element = (Element)(await renderer.GetElementFromRenderedComponent(componentType, arguments)).Element;
 
             element.ParentChanged += DisposeScopeWhenParentRemoved;
 

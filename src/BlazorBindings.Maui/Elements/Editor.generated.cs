@@ -33,9 +33,9 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public TextAlignment? VerticalTextAlignment { get; set; }
         [Parameter] public EventCallback OnCompleted { get; set; }
 
-        public new MC.Editor NativeControl => (MC.Editor)((Element)this).NativeControl;
+        public new MC.Editor NativeControl => (MC.Editor)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MC.Editor();
+        protected override MC.Editor CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {

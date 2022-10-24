@@ -22,7 +22,7 @@ namespace BlazorBindings.Maui.Elements
 
         [Parameter] public EventCallback OnInvalidateGradientBrushRequested { get; set; }
 
-        public new MC.GradientBrush NativeControl => (MC.GradientBrush)((Element)this).NativeControl;
+        public new MC.GradientBrush NativeControl => (MC.GradientBrush)((BindableObject)this).NativeControl;
 
 
         protected override void HandleParameter(string name, object value)

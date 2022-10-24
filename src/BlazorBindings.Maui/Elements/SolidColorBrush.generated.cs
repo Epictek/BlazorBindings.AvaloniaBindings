@@ -22,9 +22,9 @@ namespace BlazorBindings.Maui.Elements
 
         [Parameter] public Color Color { get; set; }
 
-        public new MC.SolidColorBrush NativeControl => (MC.SolidColorBrush)((Element)this).NativeControl;
+        public new MC.SolidColorBrush NativeControl => (MC.SolidColorBrush)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MC.SolidColorBrush();
+        protected override MC.SolidColorBrush CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {

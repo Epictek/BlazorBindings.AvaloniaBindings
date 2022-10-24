@@ -26,9 +26,9 @@ namespace BlazorBindings.Maui.Elements
 
         [Parameter] public RenderFragment ControlTemplate { get; set; }
 
-        public new MC.TemplatedView NativeControl => (MC.TemplatedView)((Element)this).NativeControl;
+        public new MC.TemplatedView NativeControl => (MC.TemplatedView)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MC.TemplatedView();
+        protected override MC.TemplatedView CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {

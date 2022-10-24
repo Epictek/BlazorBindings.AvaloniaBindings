@@ -25,9 +25,9 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public EventCallback<MC.WebNavigatedEventArgs> OnNavigated { get; set; }
         [Parameter] public EventCallback<MC.WebNavigatingEventArgs> OnNavigating { get; set; }
 
-        public new MC.WebView NativeControl => (MC.WebView)((Element)this).NativeControl;
+        public new MC.WebView NativeControl => (MC.WebView)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MC.WebView();
+        protected override MC.WebView CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {

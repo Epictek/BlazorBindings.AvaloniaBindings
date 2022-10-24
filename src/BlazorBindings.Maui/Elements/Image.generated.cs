@@ -25,9 +25,9 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public bool? IsOpaque { get; set; }
         [Parameter] public MC.ImageSource Source { get; set; }
 
-        public new MC.Image NativeControl => (MC.Image)((Element)this).NativeControl;
+        public new MC.Image NativeControl => (MC.Image)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MC.Image();
+        protected override MC.Image CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {

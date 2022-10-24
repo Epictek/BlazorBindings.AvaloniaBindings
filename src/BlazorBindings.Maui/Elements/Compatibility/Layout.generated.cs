@@ -28,7 +28,7 @@ namespace BlazorBindings.Maui.Elements.Compatibility
         [Parameter] public Thickness? Padding { get; set; }
         [Parameter] public EventCallback OnLayoutChanged { get; set; }
 
-        public new MCC.Layout NativeControl => (MCC.Layout)((Element)this).NativeControl;
+        public new MCC.Layout NativeControl => (MCC.Layout)((BindableObject)this).NativeControl;
 
 
         protected override void HandleParameter(string name, object value)

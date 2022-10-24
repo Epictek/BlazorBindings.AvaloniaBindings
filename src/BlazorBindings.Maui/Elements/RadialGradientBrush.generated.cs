@@ -23,9 +23,9 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public Point? Center { get; set; }
         [Parameter] public double? Radius { get; set; }
 
-        public new MC.RadialGradientBrush NativeControl => (MC.RadialGradientBrush)((Element)this).NativeControl;
+        public new MC.RadialGradientBrush NativeControl => (MC.RadialGradientBrush)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MC.RadialGradientBrush();
+        protected override MC.RadialGradientBrush CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {

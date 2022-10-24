@@ -30,9 +30,9 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public EventCallback<MC.TouchEventArgs> OnEndInteraction { get; set; }
         [Parameter] public EventCallback OnCancelInteraction { get; set; }
 
-        public new MC.GraphicsView NativeControl => (MC.GraphicsView)((Element)this).NativeControl;
+        public new MC.GraphicsView NativeControl => (MC.GraphicsView)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MC.GraphicsView();
+        protected override MC.GraphicsView CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {

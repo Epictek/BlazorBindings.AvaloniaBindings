@@ -24,9 +24,9 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public uint? Threshold { get; set; }
         [Parameter] public EventCallback<MC.SwipedEventArgs> OnSwiped { get; set; }
 
-        public new MC.SwipeGestureRecognizer NativeControl => (MC.SwipeGestureRecognizer)((Element)this).NativeControl;
+        public new MC.SwipeGestureRecognizer NativeControl => (MC.SwipeGestureRecognizer)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MC.SwipeGestureRecognizer();
+        protected override MC.SwipeGestureRecognizer CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {

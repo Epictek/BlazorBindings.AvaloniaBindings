@@ -26,9 +26,9 @@ namespace BlazorBindings.Maui.Elements.Shapes
         [Parameter] public double? Y1 { get; set; }
         [Parameter] public double? Y2 { get; set; }
 
-        public new MCS.Line NativeControl => (MCS.Line)((Element)this).NativeControl;
+        public new MCS.Line NativeControl => (MCS.Line)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MCS.Line();
+        protected override MCS.Line CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {

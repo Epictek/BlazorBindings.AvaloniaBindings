@@ -19,9 +19,9 @@ namespace BlazorBindings.Maui.Elements
             RegisterAdditionalHandlers();
         }
 
-        public new MC.FlyoutItem NativeControl => (MC.FlyoutItem)((Element)this).NativeControl;
+        public new MC.FlyoutItem NativeControl => (MC.FlyoutItem)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MC.FlyoutItem();
+        protected override MC.FlyoutItem CreateNativeElement() => new();
 
 
         static partial void RegisterAdditionalHandlers();

@@ -23,9 +23,9 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public int? NumberOfTapsRequired { get; set; }
         [Parameter] public EventCallback OnTapped { get; set; }
 
-        public new MC.TapGestureRecognizer NativeControl => (MC.TapGestureRecognizer)((Element)this).NativeControl;
+        public new MC.TapGestureRecognizer NativeControl => (MC.TapGestureRecognizer)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MC.TapGestureRecognizer();
+        protected override MC.TapGestureRecognizer CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {

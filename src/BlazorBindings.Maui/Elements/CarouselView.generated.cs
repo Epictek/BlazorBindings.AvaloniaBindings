@@ -31,9 +31,9 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public EventCallback<T> CurrentItemChanged { get; set; }
         [Parameter] public EventCallback<int> PositionChanged { get; set; }
 
-        public new MC.CarouselView NativeControl => (MC.CarouselView)((Element)this).NativeControl;
+        public new MC.CarouselView NativeControl => (MC.CarouselView)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MC.CarouselView();
+        protected override MC.CarouselView CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {

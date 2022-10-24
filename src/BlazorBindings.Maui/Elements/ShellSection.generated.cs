@@ -19,9 +19,9 @@ namespace BlazorBindings.Maui.Elements
             RegisterAdditionalHandlers();
         }
 
-        public new MC.ShellSection NativeControl => (MC.ShellSection)((Element)this).NativeControl;
+        public new MC.ShellSection NativeControl => (MC.ShellSection)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MC.ShellSection();
+        protected override MC.ShellSection CreateNativeElement() => new();
 
 
         static partial void RegisterAdditionalHandlers();

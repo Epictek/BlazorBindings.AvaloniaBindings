@@ -21,9 +21,9 @@ namespace BlazorBindings.Maui.Elements
 
         [Parameter] public MC.FlyoutDisplayOptions? FlyoutDisplayOptions { get; set; }
 
-        public new MC.ShellGroupItem NativeControl => (MC.ShellGroupItem)((Element)this).NativeControl;
+        public new MC.ShellGroupItem NativeControl => (MC.ShellGroupItem)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MC.ShellGroupItem();
+        protected override MC.ShellGroupItem CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {
