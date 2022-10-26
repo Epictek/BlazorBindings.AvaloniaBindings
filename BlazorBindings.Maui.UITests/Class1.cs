@@ -8,7 +8,7 @@ namespace BlazorBindings.Maui.UITests
         [Test]
         public async Task Test()
         {
-            var driver = new AppDriverBuilder()
+            await using var driver = new AppDriverBuilder()
                 .AppFilename("C:\\Users\\master\\source\\repos\\MobileBlazorBindings\\samples\\ControlGallery\\bin\\Debug\\net6.0-android\\com.companyname.controlgallery-Signed.apk")
                 .Device("pixel_3a_-_api_31")
                 .Build();
