@@ -12,7 +12,7 @@ namespace BlazorBindings.Maui.Elements
 
         private readonly string _groupId = Guid.NewGuid().ToString();
 
-        protected override MC.Element CreateNativeElement()
+        protected override MC.StackLayout CreateNativeElement()
         {
             var stackLayout = new MC.StackLayout();
             MC.RadioButtonGroup.SetGroupName(stackLayout, _groupId);

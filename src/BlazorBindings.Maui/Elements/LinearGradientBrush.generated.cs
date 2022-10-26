@@ -23,9 +23,9 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public Point? EndPoint { get; set; }
         [Parameter] public Point? StartPoint { get; set; }
 
-        public new MC.LinearGradientBrush NativeControl => (MC.LinearGradientBrush)((Element)this).NativeControl;
+        public new MC.LinearGradientBrush NativeControl => (MC.LinearGradientBrush)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MC.LinearGradientBrush();
+        protected override MC.LinearGradientBrush CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {

@@ -28,9 +28,9 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public string Format { get; set; }
         [Parameter] public Color TextColor { get; set; }
 
-        public new MC.TimePicker NativeControl => (MC.TimePicker)((Element)this).NativeControl;
+        public new MC.TimePicker NativeControl => (MC.TimePicker)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MC.TimePicker();
+        protected override MC.TimePicker CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {

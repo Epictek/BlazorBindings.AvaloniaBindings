@@ -22,9 +22,9 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public MC.ToolbarItemOrder? Order { get; set; }
         [Parameter] public int? Priority { get; set; }
 
-        public new MC.ToolbarItem NativeControl => (MC.ToolbarItem)((Element)this).NativeControl;
+        public new MC.ToolbarItem NativeControl => (MC.ToolbarItem)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MC.ToolbarItem();
+        protected override MC.ToolbarItem CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {

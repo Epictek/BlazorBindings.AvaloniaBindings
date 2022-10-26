@@ -20,9 +20,9 @@ namespace BlazorBindings.Maui.Elements
         static FlyoutPage()
         {
             ElementHandlerRegistry.RegisterPropertyContentHandler<FlyoutPage>(nameof(Detail),
-                _ => new ContentPropertyHandler<MC.FlyoutPage>((x, value) => x.Detail = (MC.Page)value));
+                (renderer, parent, component) => new ContentPropertyHandler<MC.FlyoutPage>((x, value) => x.Detail = (MC.Page)value));
             ElementHandlerRegistry.RegisterPropertyContentHandler<FlyoutPage>(nameof(Flyout),
-                _ => new ContentPropertyHandler<MC.FlyoutPage>((x, value) => x.Flyout = (MC.Page)value));
+                (renderer, parent, component) => new ContentPropertyHandler<MC.FlyoutPage>((x, value) => x.Flyout = (MC.Page)value));
             RegisterAdditionalHandlers();
         }
 
@@ -33,9 +33,9 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public RenderFragment Flyout { get; set; }
         [Parameter] public EventCallback<bool> IsPresentedChanged { get; set; }
 
-        public new MC.FlyoutPage NativeControl => (MC.FlyoutPage)((Element)this).NativeControl;
+        public new MC.FlyoutPage NativeControl => (MC.FlyoutPage)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MC.FlyoutPage();
+        protected override MC.FlyoutPage CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {
@@ -71,7 +71,12 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(IsPresentedChanged):
                     if (!Equals(IsPresentedChanged, value))
                     {
-                        void NativeControlIsPresentedChanged(object sender, EventArgs e) => IsPresentedChanged.InvokeAsync(NativeControl.IsPresented);
+                        void NativeControlIsPresentedChanged(object sender, EventArgs e)
+                        {
+                            var value = NativeControl.IsPresented;
+                            IsPresented = value;
+                            InvokeAsync(() => IsPresentedChanged.InvokeAsync(value));
+                        }
 
                         IsPresentedChanged = (EventCallback<bool>)value;
                         NativeControl.IsPresentedChanged -= NativeControlIsPresentedChanged;
@@ -89,7 +94,7 @@ namespace BlazorBindings.Maui.Elements
         {
             base.RenderAdditionalElementContent(builder, ref sequence);
             RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(FlyoutPage), Detail);
-            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(FlyoutPage), Flyout);;
+            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(FlyoutPage), Flyout);
         }
 
         static partial void RegisterAdditionalHandlers();

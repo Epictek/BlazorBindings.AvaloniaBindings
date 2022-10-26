@@ -30,11 +30,6 @@ namespace BlazorBindings.Core
             return GetChildElementIndex(ConvertToType(parentHandler, nameof(parentHandler)), ConvertToType(childHandler, nameof(childHandler)));
         }
 
-        public sealed override bool IsParented(IElementHandler handler)
-        {
-            return IsParented(ConvertToType(handler, nameof(handler)));
-        }
-
         public sealed override void RemoveChildElement(IElementHandler parentHandler, IElementHandler childHandler)
         {
             RemoveChildElement(ConvertToType(parentHandler, nameof(parentHandler)), ConvertToType(childHandler, nameof(childHandler)));
@@ -42,7 +37,6 @@ namespace BlazorBindings.Core
 
         protected abstract void AddChildElement(TElementType parentHandler, TElementType childHandler, int physicalSiblingIndex);
         protected abstract int GetChildElementIndex(TElementType parentHandler, TElementType childHandler);
-        protected abstract bool IsParented(TElementType handler);
         protected abstract void RemoveChildElement(TElementType parentHandler, TElementType childHandler);
     }
 }

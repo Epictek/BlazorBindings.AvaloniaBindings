@@ -25,9 +25,9 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public EventCallback<MC.WebNavigatedEventArgs> OnNavigated { get; set; }
         [Parameter] public EventCallback<MC.WebNavigatingEventArgs> OnNavigating { get; set; }
 
-        public new MC.WebView NativeControl => (MC.WebView)((Element)this).NativeControl;
+        public new MC.WebView NativeControl => (MC.WebView)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MC.WebView();
+        protected override MC.WebView CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {
@@ -50,7 +50,7 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(OnNavigated):
                     if (!Equals(OnNavigated, value))
                     {
-                        void NativeControlNavigated(object sender, MC.WebNavigatedEventArgs e) => OnNavigated.InvokeAsync(e);
+                        void NativeControlNavigated(object sender, MC.WebNavigatedEventArgs e) => InvokeAsync(() => OnNavigated.InvokeAsync(e));
 
                         OnNavigated = (EventCallback<MC.WebNavigatedEventArgs>)value;
                         NativeControl.Navigated -= NativeControlNavigated;
@@ -60,7 +60,7 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(OnNavigating):
                     if (!Equals(OnNavigating, value))
                     {
-                        void NativeControlNavigating(object sender, MC.WebNavigatingEventArgs e) => OnNavigating.InvokeAsync(e);
+                        void NativeControlNavigating(object sender, MC.WebNavigatingEventArgs e) => InvokeAsync(() => OnNavigating.InvokeAsync(e));
 
                         OnNavigating = (EventCallback<MC.WebNavigatingEventArgs>)value;
                         NativeControl.Navigating -= NativeControlNavigating;

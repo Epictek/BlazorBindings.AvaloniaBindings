@@ -20,7 +20,7 @@ namespace BlazorBindings.Maui.Elements
         static ScrollView()
         {
             ElementHandlerRegistry.RegisterPropertyContentHandler<ScrollView>(nameof(ChildContent),
-                _ => new ContentPropertyHandler<MC.ScrollView>((x, value) => x.Content = (MC.View)value));
+                (renderer, parent, component) => new ContentPropertyHandler<MC.ScrollView>((x, value) => x.Content = (MC.View)value));
             RegisterAdditionalHandlers();
         }
 
@@ -30,9 +30,9 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public RenderFragment ChildContent { get; set; }
         [Parameter] public EventCallback<MC.ScrolledEventArgs> OnScrolled { get; set; }
 
-        public new MC.ScrollView NativeControl => (MC.ScrollView)((Element)this).NativeControl;
+        public new MC.ScrollView NativeControl => (MC.ScrollView)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MC.ScrollView();
+        protected override MC.ScrollView CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {
@@ -65,7 +65,7 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(OnScrolled):
                     if (!Equals(OnScrolled, value))
                     {
-                        void NativeControlScrolled(object sender, MC.ScrolledEventArgs e) => OnScrolled.InvokeAsync(e);
+                        void NativeControlScrolled(object sender, MC.ScrolledEventArgs e) => InvokeAsync(() => OnScrolled.InvokeAsync(e));
 
                         OnScrolled = (EventCallback<MC.ScrolledEventArgs>)value;
                         NativeControl.Scrolled -= NativeControlScrolled;
@@ -82,7 +82,7 @@ namespace BlazorBindings.Maui.Elements
         protected override void RenderAdditionalElementContent(RenderTreeBuilder builder, ref int sequence)
         {
             base.RenderAdditionalElementContent(builder, ref sequence);
-            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(ScrollView), ChildContent);;
+            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(ScrollView), ChildContent);
         }
 
         static partial void RegisterAdditionalHandlers();

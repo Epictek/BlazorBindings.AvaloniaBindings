@@ -2,18 +2,12 @@
 // Licensed under the MIT license.
 
 using BlazorBindings.Core;
-using Microsoft.Maui.Controls;
 using System;
 
 namespace BlazorBindings.Maui
 {
     internal class MauiBlazorBindingsElementManager : ElementManager<IMauiElementHandler>
     {
-        protected override bool IsParented(IMauiElementHandler handler)
-        {
-            return handler.IsParented();
-        }
-
         protected override void AddChildElement(
             IMauiElementHandler parentHandler,
             IMauiElementHandler childHandler,
@@ -29,16 +23,6 @@ namespace BlazorBindings.Maui
                 return;
             }
 
-            if (parentHandler.ElementControl is Application parentAsApp)
-            {
-                var childControlAsPage = childHandler.ElementControl as Page
-                    ?? throw new InvalidOperationException($"Application MainPage must be a Page; cannot set {parentAsApp.GetType().FullName}'s MainPage to {childHandler.ElementControl.GetType().FullName}");
-
-                //MainPage may already be set, but it is safe to replace it.
-                parentAsApp.MainPage = childControlAsPage;
-                return;
-            }
-
             if (parentHandler is not IMauiContainerElementHandler parent)
             {
                 throw new NotSupportedException($"Handler of type '{parentHandler.GetType().FullName}' representing element type " +
@@ -47,14 +31,6 @@ namespace BlazorBindings.Maui
             }
 
             parent.AddChild(childHandler.ElementControl, physicalSiblingIndex);
-
-            if (parentHandler is not INonChildContainerElement)
-            {
-                // Notify the child handler that its parent was set. This is needed for cases
-                // where the parent/child are a conceptual relationship and not represented
-                // by the Xamarin.Forms control hierarchy.
-                childHandler.SetParent(parentHandler.ElementControl);
-            }
         }
 
         protected override int GetChildElementIndex(IMauiElementHandler parentHandler, IMauiElementHandler childHandler)
@@ -68,7 +44,7 @@ namespace BlazorBindings.Maui
         {
             if (childHandler is INonPhysicalChild nonPhysicalChild)
             {
-                nonPhysicalChild.Remove();
+                nonPhysicalChild.RemoveFromParent(parentHandler.ElementControl);
             }
             else if (parentHandler is IMauiContainerElementHandler parent)
             {

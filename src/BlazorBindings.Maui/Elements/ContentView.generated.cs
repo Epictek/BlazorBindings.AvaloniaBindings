@@ -19,15 +19,15 @@ namespace BlazorBindings.Maui.Elements
         static ContentView()
         {
             ElementHandlerRegistry.RegisterPropertyContentHandler<ContentView>(nameof(ChildContent),
-                _ => new ContentPropertyHandler<MC.ContentView>((x, value) => x.Content = (MC.View)value));
+                (renderer, parent, component) => new ContentPropertyHandler<MC.ContentView>((x, value) => x.Content = (MC.View)value));
             RegisterAdditionalHandlers();
         }
 
         [Parameter] public RenderFragment ChildContent { get; set; }
 
-        public new MC.ContentView NativeControl => (MC.ContentView)((Element)this).NativeControl;
+        public new MC.ContentView NativeControl => (MC.ContentView)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MC.ContentView();
+        protected override MC.ContentView CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {
@@ -46,7 +46,7 @@ namespace BlazorBindings.Maui.Elements
         protected override void RenderAdditionalElementContent(RenderTreeBuilder builder, ref int sequence)
         {
             base.RenderAdditionalElementContent(builder, ref sequence);
-            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(ContentView), ChildContent);;
+            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(ContentView), ChildContent);
         }
 
         static partial void RegisterAdditionalHandlers();

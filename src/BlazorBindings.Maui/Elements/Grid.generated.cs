@@ -22,9 +22,9 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public double? ColumnSpacing { get; set; }
         [Parameter] public double? RowSpacing { get; set; }
 
-        public new MC.Grid NativeControl => (MC.Grid)((Element)this).NativeControl;
+        public new MC.Grid NativeControl => (MC.Grid)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MC.Grid();
+        protected override MC.Grid CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {

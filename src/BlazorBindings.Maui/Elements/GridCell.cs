@@ -23,7 +23,7 @@ namespace BlazorBindings.Maui.Elements
         private readonly List<MC.View> _children = new();
         private MC.Grid _parentGrid;
 
-        MC.Element IMauiElementHandler.ElementControl => null;
+        MC.BindableObject IMauiElementHandler.ElementControl => null;
         object IElementHandler.TargetElement => null;
 
         public override Task SetParametersAsync(ParameterView parameters)
@@ -81,7 +81,7 @@ namespace BlazorBindings.Maui.Elements
 
         protected override RenderFragment GetChildContent() => ChildContent;
 
-        public void AddChild(MC.Element child, int physicalSiblingIndex)
+        public void AddChild(MC.BindableObject child, int physicalSiblingIndex)
         {
             if (child is not MC.View childView)
             {
@@ -97,7 +97,7 @@ namespace BlazorBindings.Maui.Elements
             _parentGrid.Children.Add(childView);
         }
 
-        public void RemoveChild(MC.Element child)
+        public void RemoveChild(MC.BindableObject child)
         {
             if (child is not MC.View childView)
             {
@@ -108,7 +108,7 @@ namespace BlazorBindings.Maui.Elements
             _parentGrid.Children.Remove(childView);
         }
 
-        public int GetChildIndex(MC.Element child)
+        public int GetChildIndex(MC.BindableObject child)
         {
             return child is MC.View childView
                 ? _children.IndexOf(childView)
@@ -117,15 +117,11 @@ namespace BlazorBindings.Maui.Elements
 
         void INonPhysicalChild.SetParent(object parentElement)
         {
-            if (parentElement is not MC.Grid parentGrid)
-            {
-                throw new ArgumentException($"Expected parent to be of type {typeof(MC.Grid).FullName} but it is of type {parentElement?.GetType().FullName}.", nameof(parentElement));
-            }
-
-            _parentGrid = parentGrid;
+            _parentGrid = parentElement as MC.Grid
+                ?? throw new ArgumentException($"Expected parent to be of type {typeof(MC.Grid).FullName} but it is of type {parentElement?.GetType().FullName}.", nameof(parentElement));
         }
 
-        void INonPhysicalChild.Remove()
+        void INonPhysicalChild.RemoveFromParent(object parentElement)
         {
             if (_parentGrid != null)
             {
@@ -137,20 +133,6 @@ namespace BlazorBindings.Maui.Elements
                 _children.Clear();
                 _parentGrid = null;
             }
-        }
-
-        bool IMauiElementHandler.IsParented()
-        {
-            // Because this is a 'fake' element, all matters related to physical trees
-            // should be no-ops.
-            return false;
-        }
-
-        void IMauiElementHandler.SetParent(MC.Element parent)
-        {
-            // This should never get called. Instead, INonChildContainerElement.SetParent() implemented
-            // in this class should get called.
-            throw new NotSupportedException();
         }
     }
 }

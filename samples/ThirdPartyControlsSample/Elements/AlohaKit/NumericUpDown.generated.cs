@@ -8,8 +8,10 @@
 using AC = AlohaKit.Controls;
 using BlazorBindings.Core;
 using BlazorBindings.Maui.Elements;
+using BlazorBindings.Maui.Elements.Handlers;
 using MC = Microsoft.Maui.Controls;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.Maui.Graphics;
 using System.Threading.Tasks;
 
@@ -19,6 +21,8 @@ namespace BlazorBindings.Maui.Elements.AlohaKit
     {
         static NumericUpDown()
         {
+            ElementHandlerRegistry.RegisterPropertyContentHandler<NumericUpDown>(nameof(Background),
+                (renderer, parent, component) => new ContentPropertyHandler<AC.NumericUpDown>((x, value) => x.Background = (MC.Brush)value));
             RegisterAdditionalHandlers();
         }
 
@@ -32,9 +36,9 @@ namespace BlazorBindings.Maui.Elements.AlohaKit
         [Parameter] public double? Value { get; set; }
         [Parameter] public EventCallback<double> ValueChanged { get; set; }
 
-        public new AC.NumericUpDown NativeControl => (AC.NumericUpDown)((Element)this).NativeControl;
+        public new AC.NumericUpDown NativeControl => (AC.NumericUpDown)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new AC.NumericUpDown();
+        protected override AC.NumericUpDown CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {
@@ -96,10 +100,18 @@ namespace BlazorBindings.Maui.Elements.AlohaKit
                         NativeControl.Value = Value ?? (double)AC.NumericUpDown.ValueProperty.DefaultValue;
                     }
                     break;
+                case nameof(Background):
+                    Background = (RenderFragment)value;
+                    break;
                 case nameof(ValueChanged):
                     if (!Equals(ValueChanged, value))
                     {
-                        void NativeControlValueChanged(object sender, MC.ValueChangedEventArgs e) => ValueChanged.InvokeAsync(NativeControl.Value);
+                        void NativeControlValueChanged(object sender, MC.ValueChangedEventArgs e)
+                        {
+                            var value = NativeControl.Value;
+                            Value = value;
+                            InvokeAsync(() => ValueChanged.InvokeAsync(value));
+                        }
 
                         ValueChanged = (EventCallback<double>)value;
                         NativeControl.ValueChanged -= NativeControlValueChanged;
@@ -111,6 +123,12 @@ namespace BlazorBindings.Maui.Elements.AlohaKit
                     base.HandleParameter(name, value);
                     break;
             }
+        }
+
+        protected override void RenderAdditionalElementContent(RenderTreeBuilder builder, ref int sequence)
+        {
+            base.RenderAdditionalElementContent(builder, ref sequence);
+            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(NumericUpDown), Background);
         }
 
         static partial void RegisterAdditionalHandlers();

@@ -21,9 +21,9 @@ namespace BlazorBindings.Maui.Elements.Shapes
             RegisterAdditionalHandlers();
         }
 
-        public new MCS.Ellipse NativeControl => (MCS.Ellipse)((Element)this).NativeControl;
+        public new MCS.Ellipse NativeControl => (MCS.Ellipse)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MCS.Ellipse();
+        protected override MCS.Ellipse CreateNativeElement() => new();
 
 
         static partial void RegisterAdditionalHandlers();

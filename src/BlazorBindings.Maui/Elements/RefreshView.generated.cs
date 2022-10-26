@@ -25,9 +25,9 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public Color RefreshColor { get; set; }
         [Parameter] public EventCallback<bool> IsRefreshingChanged { get; set; }
 
-        public new MC.RefreshView NativeControl => (MC.RefreshView)((Element)this).NativeControl;
+        public new MC.RefreshView NativeControl => (MC.RefreshView)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MC.RefreshView();
+        protected override MC.RefreshView CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {
@@ -54,7 +54,9 @@ namespace BlazorBindings.Maui.Elements
                         {
                             if (e.PropertyName == nameof(NativeControl.IsRefreshing))
                             {
-                                IsRefreshingChanged.InvokeAsync(NativeControl.IsRefreshing);
+                                var value = NativeControl.IsRefreshing;
+                                IsRefreshing = value;
+                                InvokeAsync(() => IsRefreshingChanged.InvokeAsync(value));
                             }
                         }
 

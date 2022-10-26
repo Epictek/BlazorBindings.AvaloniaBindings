@@ -13,9 +13,11 @@ namespace BlazorBindings.Maui.Elements.Handlers
     /// Fake element handler, which is used as a root for a renderer to get native Xamarin.Forms elements
     /// from a Blazor component.
     /// </summary>
-    public class RootContainerHandler : IMauiContainerElementHandler
+    internal class RootContainerHandler : IMauiContainerElementHandler, INonChildContainerElement
     {
-        public List<MC.Element> Elements { get; } = new List<MC.Element>();
+        private TaskCompletionSource<MC.BindableObject> _taskCompletionSource;
+
+        public List<MC.BindableObject> Elements { get; } = new List<MC.BindableObject>();
 
         public Task WaitForElementAsync()
         {
@@ -24,42 +26,33 @@ namespace BlazorBindings.Maui.Elements.Handlers
                 return Task.CompletedTask;
             }
 
-            var taskCompletionSource = new TaskCompletionSource<MC.Element>();
-            ChildAdded += SetTaskResult;
-            return taskCompletionSource.Task;
-
-            void SetTaskResult(MC.Element element)
-            {
-                ChildAdded -= SetTaskResult;
-                taskCompletionSource.TrySetResult(element);
-            }
+            _taskCompletionSource ??= new TaskCompletionSource<MC.BindableObject>();
+            return _taskCompletionSource.Task;
         }
 
-        private event Action<MC.Element> ChildAdded;
-
-        void IMauiContainerElementHandler.AddChild(MC.Element child, int physicalSiblingIndex)
+        void IMauiContainerElementHandler.AddChild(MC.BindableObject child, int physicalSiblingIndex)
         {
             var index = Math.Min(physicalSiblingIndex, Elements.Count);
             Elements.Insert(index, child);
-            ChildAdded?.Invoke(child);
+            _taskCompletionSource?.TrySetResult(child);
         }
 
-        void IMauiContainerElementHandler.RemoveChild(MC.Element child)
+        void IMauiContainerElementHandler.RemoveChild(MC.BindableObject child)
         {
             Elements.Remove(child);
         }
 
-        int IMauiContainerElementHandler.GetChildIndex(MC.Element child)
+        int IMauiContainerElementHandler.GetChildIndex(MC.BindableObject child)
         {
             return Elements.IndexOf(child);
         }
 
         // Because this is a 'fake' container element, all matters related to physical trees
         // should be no-ops.
-        MC.Element IMauiElementHandler.ElementControl => null;
+        MC.BindableObject IMauiElementHandler.ElementControl => null;
         object IElementHandler.TargetElement => null;
         void IElementHandler.ApplyAttribute(ulong attributeEventHandlerId, string attributeName, object attributeValue, string attributeEventUpdatesAttributeName) { }
-        bool IMauiElementHandler.IsParented() => false;
-        void IMauiElementHandler.SetParent(MC.Element parent) { }
+        void INonPhysicalChild.SetParent(object parentElement) { }
+        void INonPhysicalChild.RemoveFromParent(object parentElement) { }
     }
 }

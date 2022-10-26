@@ -24,9 +24,9 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public float? CornerRadius { get; set; }
         [Parameter] public bool? HasShadow { get; set; }
 
-        public new MC.Frame NativeControl => (MC.Frame)((Element)this).NativeControl;
+        public new MC.Frame NativeControl => (MC.Frame)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MC.Frame();
+        protected override MC.Frame CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {

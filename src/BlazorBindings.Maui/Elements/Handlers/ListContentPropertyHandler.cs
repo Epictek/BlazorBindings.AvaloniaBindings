@@ -4,10 +4,13 @@
 using BlazorBindings.Core;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using MC = Microsoft.Maui.Controls;
 
 namespace BlazorBindings.Maui.Elements.Handlers
 {
+    /// <remarks>Experimental API, subject to change.</remarks>
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public class ListContentPropertyHandler<TElementType, TItemType> : IMauiContainerElementHandler, INonChildContainerElement where TItemType : class
     {
         private readonly Func<TElementType, IList<TItemType>> _listPropertyAccessor;
@@ -25,15 +28,15 @@ namespace BlazorBindings.Maui.Elements.Handlers
             _propertyItems = _listPropertyAccessor((TElementType)parentElement);
         }
 
-        public void Remove()
+        public void RemoveFromParent(object parentElement)
         {
             // Because this Handler is used internally only, this method is no-op.
         }
 
-        MC.Element IMauiElementHandler.ElementControl => _parent as MC.Element;
+        MC.BindableObject IMauiElementHandler.ElementControl => _parent as MC.BindableObject;
         object IElementHandler.TargetElement => _parent;
 
-        void IMauiContainerElementHandler.AddChild(MC.Element child, int physicalSiblingIndex)
+        void IMauiContainerElementHandler.AddChild(MC.BindableObject child, int physicalSiblingIndex)
         {
             if (!(child is TItemType typedChild))
             {
@@ -43,12 +46,12 @@ namespace BlazorBindings.Maui.Elements.Handlers
             _propertyItems.Insert(physicalSiblingIndex, typedChild);
         }
 
-        int IMauiContainerElementHandler.GetChildIndex(MC.Element child)
+        int IMauiContainerElementHandler.GetChildIndex(MC.BindableObject child)
         {
             return _propertyItems.IndexOf(child as TItemType);
         }
 
-        void IMauiContainerElementHandler.RemoveChild(MC.Element child)
+        void IMauiContainerElementHandler.RemoveChild(MC.BindableObject child)
         {
             _propertyItems.Remove(child as TItemType);
         }
@@ -57,14 +60,5 @@ namespace BlazorBindings.Maui.Elements.Handlers
         // should be no-ops.
 
         void IElementHandler.ApplyAttribute(ulong attributeEventHandlerId, string attributeName, object attributeValue, string attributeEventUpdatesAttributeName) { }
-
-        bool IMauiElementHandler.IsParented() => false;
-
-        void IMauiElementHandler.SetParent(MC.Element parent)
-        {
-            // This should never get called. Instead, INonChildContainerElement.SetParent() implemented
-            // in this class should get called.
-            throw new NotSupportedException();
-        }
     }
 }

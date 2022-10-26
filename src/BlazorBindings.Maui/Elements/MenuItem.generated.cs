@@ -28,9 +28,9 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public string Text { get; set; }
         [Parameter] public EventCallback OnClick { get; set; }
 
-        public new MC.MenuItem NativeControl => (MC.MenuItem)((Element)this).NativeControl;
+        public new MC.MenuItem NativeControl => (MC.MenuItem)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MC.MenuItem();
+        protected override MC.MenuItem CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {
@@ -81,7 +81,7 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(OnClick):
                     if (!Equals(OnClick, value))
                     {
-                        void NativeControlClicked(object sender, EventArgs e) => OnClick.InvokeAsync();
+                        void NativeControlClicked(object sender, EventArgs e) => InvokeAsync(() => OnClick.InvokeAsync());
 
                         OnClick = (EventCallback)value;
                         NativeControl.Clicked -= NativeControlClicked;

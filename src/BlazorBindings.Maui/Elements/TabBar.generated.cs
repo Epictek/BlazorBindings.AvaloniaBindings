@@ -19,9 +19,9 @@ namespace BlazorBindings.Maui.Elements
             RegisterAdditionalHandlers();
         }
 
-        public new MC.TabBar NativeControl => (MC.TabBar)((Element)this).NativeControl;
+        public new MC.TabBar NativeControl => (MC.TabBar)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MC.TabBar();
+        protected override MC.TabBar CreateNativeElement() => new();
 
 
         static partial void RegisterAdditionalHandlers();

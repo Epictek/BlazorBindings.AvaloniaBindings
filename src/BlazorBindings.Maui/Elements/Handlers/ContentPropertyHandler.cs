@@ -3,16 +3,19 @@
 
 using BlazorBindings.Core;
 using System;
+using System.ComponentModel;
 using MC = Microsoft.Maui.Controls;
 
 namespace BlazorBindings.Maui.Elements.Handlers
 {
+    /// <remarks>Experimental API, subject to change.</remarks>
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public class ContentPropertyHandler<TElementType> : IMauiContainerElementHandler, INonChildContainerElement
     {
-        private readonly Action<TElementType, MC.Element> _setPropertyAction;
+        private readonly Action<TElementType, MC.BindableObject> _setPropertyAction;
         private TElementType _parent;
 
-        public ContentPropertyHandler(Action<TElementType, MC.Element> setPropertyAction)
+        public ContentPropertyHandler(Action<TElementType, MC.BindableObject> setPropertyAction)
         {
             _setPropertyAction = setPropertyAction;
         }
@@ -22,41 +25,32 @@ namespace BlazorBindings.Maui.Elements.Handlers
             _parent = (TElementType)parentElement;
         }
 
-        public void Remove()
+        public void RemoveFromParent(object parentElement)
         {
             // Because this Handler is used internally only, this method is no-op.
         }
 
-        void IMauiContainerElementHandler.AddChild(MC.Element child, int physicalSiblingIndex)
+        void IMauiContainerElementHandler.AddChild(MC.BindableObject child, int physicalSiblingIndex)
         {
             _setPropertyAction(_parent, child);
         }
 
-        int IMauiContainerElementHandler.GetChildIndex(MC.Element child)
+        int IMauiContainerElementHandler.GetChildIndex(MC.BindableObject child)
         {
             return -1;
         }
 
-        void IMauiContainerElementHandler.RemoveChild(MC.Element child)
+        void IMauiContainerElementHandler.RemoveChild(MC.BindableObject child)
         {
             _setPropertyAction(_parent, null);
         }
 
-        MC.Element IMauiElementHandler.ElementControl => _parent as MC.Element;
+        MC.BindableObject IMauiElementHandler.ElementControl => _parent as MC.BindableObject;
 
         // Because this is a 'fake' element, all matters related to physical trees
         // should be no-ops.
 
         object IElementHandler.TargetElement => null;
         void IElementHandler.ApplyAttribute(ulong attributeEventHandlerId, string attributeName, object attributeValue, string attributeEventUpdatesAttributeName) { }
-
-        bool IMauiElementHandler.IsParented() => false;
-
-        void IMauiElementHandler.SetParent(MC.Element parent)
-        {
-            // This should never get called. Instead, INonChildContainerElement.SetParent() implemented
-            // in this class should get called.
-            throw new NotSupportedException();
-        }
     }
 }

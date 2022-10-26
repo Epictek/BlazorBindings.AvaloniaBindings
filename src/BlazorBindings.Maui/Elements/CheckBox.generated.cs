@@ -24,9 +24,9 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public bool? IsChecked { get; set; }
         [Parameter] public EventCallback<bool> IsCheckedChanged { get; set; }
 
-        public new MC.CheckBox NativeControl => (MC.CheckBox)((Element)this).NativeControl;
+        public new MC.CheckBox NativeControl => (MC.CheckBox)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MC.CheckBox();
+        protected override MC.CheckBox CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {
@@ -49,7 +49,12 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(IsCheckedChanged):
                     if (!Equals(IsCheckedChanged, value))
                     {
-                        void NativeControlCheckedChanged(object sender, MC.CheckedChangedEventArgs e) => IsCheckedChanged.InvokeAsync(NativeControl.IsChecked);
+                        void NativeControlCheckedChanged(object sender, MC.CheckedChangedEventArgs e)
+                        {
+                            var value = NativeControl.IsChecked;
+                            IsChecked = value;
+                            InvokeAsync(() => IsCheckedChanged.InvokeAsync(value));
+                        }
 
                         IsCheckedChanged = (EventCallback<bool>)value;
                         NativeControl.CheckedChanged -= NativeControlCheckedChanged;

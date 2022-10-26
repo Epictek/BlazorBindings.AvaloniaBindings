@@ -24,9 +24,9 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public float? Opacity { get; set; }
         [Parameter] public float? Radius { get; set; }
 
-        public new MC.Shadow NativeControl => (MC.Shadow)((Element)this).NativeControl;
+        public new MC.Shadow NativeControl => (MC.Shadow)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MC.Shadow();
+        protected override MC.Shadow CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {

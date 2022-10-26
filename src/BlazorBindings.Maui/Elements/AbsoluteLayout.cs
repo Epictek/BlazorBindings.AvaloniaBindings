@@ -17,6 +17,6 @@ namespace BlazorBindings.Maui.Elements
                 (element, value) => MC.AbsoluteLayout.SetLayoutFlags(element, AttributeHelper.GetEnum<AbsoluteLayoutFlags>(value)));
         }
 
-        protected override MC.Element CreateNativeElement() => new MC.AbsoluteLayout();
+        protected override MC.BindableObject CreateNativeElement() => new MC.AbsoluteLayout();
     }
 }

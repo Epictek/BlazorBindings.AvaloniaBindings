@@ -20,7 +20,7 @@ namespace BlazorBindings.Maui.Elements.Handlers
         }
 
         public NativeComponentRenderer Renderer { get; }
-        public MC.Element ElementControl => null;
+        public MC.BindableObject ElementControl => null;
         public object TargetElement => ElementControl;
 
         public Assembly Assembly { get; private set; }
@@ -53,7 +53,7 @@ namespace BlazorBindings.Maui.Elements.Handlers
             return _parentVisualElement != null;
         }
 
-        public void SetParent(MC.Element parent)
+        public void SetParent(MC.BindableObject parent)
         {
             throw new NotImplementedException();
         }
@@ -87,16 +87,16 @@ namespace BlazorBindings.Maui.Elements.Handlers
             {
                 throw new ArgumentNullException(nameof(parentElement));
             }
-            if (!(parentElement is MC.VisualElement parentVisualElement))
+            if (parentElement is not MC.VisualElement parentVisualElement)
             {
-                throw new ArgumentNullException(nameof(parentElement), $"Expected parent to be of type '{typeof(MC.VisualElement).FullName}' but it is of type '{parentElement.GetType().FullName}'.");
+                throw new ArgumentException(nameof(parentElement), $"Expected parent to be of type '{typeof(MC.VisualElement).FullName}' but it is of type '{parentElement.GetType().FullName}'.");
             }
             _parentVisualElement = parentVisualElement;
 
             UpdateParentStyleSheetIfPossible();
         }
 
-        public void Remove()
+        public void RemoveFromParent(object parentElement)
         {
             throw new InvalidOperationException("Removing StyleSheet element is not supported.");
         }

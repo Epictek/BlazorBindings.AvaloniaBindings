@@ -8,8 +8,10 @@
 using AC = AlohaKit.Controls;
 using BlazorBindings.Core;
 using BlazorBindings.Maui.Elements;
+using BlazorBindings.Maui.Elements.Handlers;
 using MC = Microsoft.Maui.Controls;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.Maui;
 using Microsoft.Maui.Graphics;
 using System;
@@ -21,6 +23,10 @@ namespace BlazorBindings.Maui.Elements.AlohaKit
     {
         static Button()
         {
+            ElementHandlerRegistry.RegisterPropertyContentHandler<Button>(nameof(Background),
+                (renderer, parent, component) => new ContentPropertyHandler<AC.Button>((x, value) => x.Background = (MC.Brush)value));
+            ElementHandlerRegistry.RegisterPropertyContentHandler<Button>(nameof(Stroke),
+                (renderer, parent, component) => new ContentPropertyHandler<AC.Button>((x, value) => x.Stroke = (MC.Brush)value));
             RegisterAdditionalHandlers();
         }
 
@@ -29,17 +35,19 @@ namespace BlazorBindings.Maui.Elements.AlohaKit
         [Parameter] public bool? HasShadow { get; set; }
         [Parameter] public TextAlignment? HorizontalTextAlignment { get; set; }
         [Parameter] public Color ShadowColor { get; set; }
+        [Parameter] public Color StrokeColor { get; set; }
         [Parameter] public double? StrokeThickness { get; set; }
         [Parameter] public string Text { get; set; }
         [Parameter] public Color TextColor { get; set; }
         [Parameter] public TextAlignment? VerticalTextAlignment { get; set; }
+        [Parameter] public RenderFragment Stroke { get; set; }
         [Parameter] public EventCallback OnPress { get; set; }
         [Parameter] public EventCallback OnRelease { get; set; }
         [Parameter] public EventCallback OnClick { get; set; }
 
-        public new AC.Button NativeControl => (AC.Button)((Element)this).NativeControl;
+        public new AC.Button NativeControl => (AC.Button)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new AC.Button();
+        protected override AC.Button CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {
@@ -80,6 +88,13 @@ namespace BlazorBindings.Maui.Elements.AlohaKit
                         NativeControl.ShadowColor = ShadowColor;
                     }
                     break;
+                case nameof(StrokeColor):
+                    if (!Equals(StrokeColor, value))
+                    {
+                        StrokeColor = (Color)value;
+                        NativeControl.Stroke = StrokeColor;
+                    }
+                    break;
                 case nameof(StrokeThickness):
                     if (!Equals(StrokeThickness, value))
                     {
@@ -108,10 +123,16 @@ namespace BlazorBindings.Maui.Elements.AlohaKit
                         NativeControl.VerticalTextAlignment = VerticalTextAlignment ?? (TextAlignment)AC.Button.VerticalTextAlignmentProperty.DefaultValue;
                     }
                     break;
+                case nameof(Background):
+                    Background = (RenderFragment)value;
+                    break;
+                case nameof(Stroke):
+                    Stroke = (RenderFragment)value;
+                    break;
                 case nameof(OnPress):
                     if (!Equals(OnPress, value))
                     {
-                        void NativeControlPressed(object sender, EventArgs e) => OnPress.InvokeAsync();
+                        void NativeControlPressed(object sender, EventArgs e) => InvokeAsync(() => OnPress.InvokeAsync());
 
                         OnPress = (EventCallback)value;
                         NativeControl.Pressed -= NativeControlPressed;
@@ -121,7 +142,7 @@ namespace BlazorBindings.Maui.Elements.AlohaKit
                 case nameof(OnRelease):
                     if (!Equals(OnRelease, value))
                     {
-                        void NativeControlReleased(object sender, EventArgs e) => OnRelease.InvokeAsync();
+                        void NativeControlReleased(object sender, EventArgs e) => InvokeAsync(() => OnRelease.InvokeAsync());
 
                         OnRelease = (EventCallback)value;
                         NativeControl.Released -= NativeControlReleased;
@@ -131,7 +152,7 @@ namespace BlazorBindings.Maui.Elements.AlohaKit
                 case nameof(OnClick):
                     if (!Equals(OnClick, value))
                     {
-                        void NativeControlClicked(object sender, EventArgs e) => OnClick.InvokeAsync();
+                        void NativeControlClicked(object sender, EventArgs e) => InvokeAsync(() => OnClick.InvokeAsync());
 
                         OnClick = (EventCallback)value;
                         NativeControl.Clicked -= NativeControlClicked;
@@ -143,6 +164,13 @@ namespace BlazorBindings.Maui.Elements.AlohaKit
                     base.HandleParameter(name, value);
                     break;
             }
+        }
+
+        protected override void RenderAdditionalElementContent(RenderTreeBuilder builder, ref int sequence)
+        {
+            base.RenderAdditionalElementContent(builder, ref sequence);
+            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(Button), Background);
+            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(Button), Stroke);
         }
 
         static partial void RegisterAdditionalHandlers();

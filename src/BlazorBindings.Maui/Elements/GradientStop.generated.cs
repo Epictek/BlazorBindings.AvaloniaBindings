@@ -23,9 +23,9 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public Color Color { get; set; }
         [Parameter] public float? Offset { get; set; }
 
-        public new MC.GradientStop NativeControl => (MC.GradientStop)((Element)this).NativeControl;
+        public new MC.GradientStop NativeControl => (MC.GradientStop)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MC.GradientStop();
+        protected override MC.GradientStop CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {

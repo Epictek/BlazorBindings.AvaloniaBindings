@@ -5,6 +5,7 @@
 @using ControlGallery.Views.Gestures
 @using ControlGallery.Views.InitiateCommands
 @using ControlGallery.Views.Layouts
+@using ControlGallery.Views.Navigation
 @using ControlGallery.Views.PresentData
 @using ControlGallery.Views.SetValues
 @using ControlGallery.Views.Shell
@@ -47,9 +48,14 @@
     <FlexLayoutPage />
 
     @*Shell*@
-    <ShellNavigationPage />
     <ShellPropertiesPage />
     <ShellItemsPage />
+
+    @*Navigation*@
+    <ShellSection Title="Navigation">
+        <NavigationPage />
+        <ShellNavigationPage />
+    </ShellSection>
 
     @*Other*@
     <ShadowsPage />

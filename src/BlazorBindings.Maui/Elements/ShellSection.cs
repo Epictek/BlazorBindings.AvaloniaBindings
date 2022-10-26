@@ -28,7 +28,7 @@ namespace BlazorBindings.Maui.Elements
             }
         }
 
-        void IMauiContainerElementHandler.AddChild(MC.Element child, int physicalSiblingIndex)
+        void IMauiContainerElementHandler.AddChild(MC.BindableObject child, int physicalSiblingIndex)
         {
             ArgumentNullException.ThrowIfNull(child);
 
@@ -53,13 +53,13 @@ namespace BlazorBindings.Maui.Elements
             }
         }
 
-        int IMauiContainerElementHandler.GetChildIndex(MC.Element child)
+        int IMauiContainerElementHandler.GetChildIndex(MC.BindableObject child)
         {
             var shellContent = GetContentForChild(child);
             return NativeControl.Items.IndexOf(shellContent);
         }
 
-        void IMauiContainerElementHandler.RemoveChild(MC.Element child)
+        void IMauiContainerElementHandler.RemoveChild(MC.BindableObject child)
         {
             ArgumentNullException.ThrowIfNull(child);
 
@@ -70,7 +70,7 @@ namespace BlazorBindings.Maui.Elements
         }
 
 
-        private MC.ShellContent GetContentForChild(MC.Element child)
+        private MC.ShellContent GetContentForChild(MC.BindableObject child)
         {
             return child switch
             {

@@ -15,7 +15,7 @@ namespace BlazorBindings.Maui.Elements.DataTemplates
         // https://github.com/dotnet/maui/issues/5248.
         [Parameter] public new MC.VerticalStackLayout NativeControl { get; set; }
 
-        protected override MC.Element CreateNativeElement() => NativeControl;
+        protected override MC.VerticalStackLayout CreateNativeElement() => NativeControl;
 
         protected override void HandleParameter(string name, object value)
         {

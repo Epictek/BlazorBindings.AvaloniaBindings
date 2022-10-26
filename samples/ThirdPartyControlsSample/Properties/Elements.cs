@@ -1,5 +1,6 @@
 ﻿using AlohaKit.Controls;
 using BlazorBindings.Maui.ComponentGenerator;
+using XCalendar.Maui.Views;
 
 // AlohaKit
 [assembly: GenerateComponent(typeof(Rating))]
@@ -20,6 +21,11 @@ using BlazorBindings.Maui.ComponentGenerator;
 // CommunityToolkit
 [assembly: GenerateComponent(typeof(CommunityToolkit.Maui.Views.AvatarView))]
 [assembly: GenerateComponent(typeof(CommunityToolkit.Maui.Views.DrawingView))]
+[assembly: GenerateComponent(typeof(CommunityToolkit.Maui.Views.Popup), Exclude = new[] { nameof(CommunityToolkit.Maui.Views.Popup.Anchor) })]
 
 // XCalendar
-[assembly: GenerateComponent(typeof(XCalendar.Maui.Views.CalendarView))]
+[assembly: GenerateComponent(typeof(CalendarView),
+    GenericProperties = new[] {
+        $"{nameof(CalendarView.DayNameTemplate)}:XCalendar.Core.Interfaces.ICalendarDay",
+        $"{nameof(CalendarView.DayTemplate)}:XCalendar.Core.Interfaces.ICalendarDay",
+    })]

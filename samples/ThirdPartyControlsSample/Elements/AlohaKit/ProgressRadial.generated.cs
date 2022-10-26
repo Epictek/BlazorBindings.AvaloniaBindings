@@ -33,9 +33,9 @@ namespace BlazorBindings.Maui.Elements.AlohaKit
         [Parameter] public int? Value { get; set; }
         [Parameter] public EventCallback<int> ValueChanged { get; set; }
 
-        public new AC.ProgressRadial NativeControl => (AC.ProgressRadial)((Element)this).NativeControl;
+        public new AC.ProgressRadial NativeControl => (AC.ProgressRadial)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new AC.ProgressRadial();
+        protected override AC.ProgressRadial CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {
@@ -107,7 +107,12 @@ namespace BlazorBindings.Maui.Elements.AlohaKit
                 case nameof(ValueChanged):
                     if (!Equals(ValueChanged, value))
                     {
-                        void NativeControlValueChanged(object sender, MC.ValueChangedEventArgs e) => ValueChanged.InvokeAsync(NativeControl.Value);
+                        void NativeControlValueChanged(object sender, MC.ValueChangedEventArgs e)
+                        {
+                            var value = NativeControl.Value;
+                            Value = value;
+                            InvokeAsync(() => ValueChanged.InvokeAsync(value));
+                        }
 
                         ValueChanged = (EventCallback<int>)value;
                         NativeControl.ValueChanged -= NativeControlValueChanged;

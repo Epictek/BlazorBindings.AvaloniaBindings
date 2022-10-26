@@ -19,9 +19,9 @@ namespace BlazorBindings.Maui.Elements
             RegisterAdditionalHandlers();
         }
 
-        public new MC.GestureElement NativeControl => (MC.GestureElement)((Element)this).NativeControl;
+        public new MC.GestureElement NativeControl => (MC.GestureElement)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MC.GestureElement();
+        protected override MC.GestureElement CreateNativeElement() => new();
 
 
         static partial void RegisterAdditionalHandlers();

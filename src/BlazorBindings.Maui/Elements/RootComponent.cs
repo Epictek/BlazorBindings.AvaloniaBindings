@@ -13,8 +13,6 @@ namespace BlazorBindings.Maui.Elements
 {
     public class RootComponent : NativeControlComponentBase, IMauiElementHandler, INonPhysicalChild
     {
-        private WVM.BlazorWebView _parentWebView;
-
         [Parameter] public string Selector { get; set; }
         [Parameter] public Type ComponentType { get; set; }
         [Parameter] public IDictionary<string, object> Parameters { get; set; }
@@ -23,13 +21,14 @@ namespace BlazorBindings.Maui.Elements
 
         void INonPhysicalChild.SetParent(object parentElement)
         {
-            _parentWebView = (WVM.BlazorWebView)parentElement;
-            _parentWebView.RootComponents.Add(NativeControl);
+            var parentWebView = parentElement as WVM.BlazorWebView
+                ?? throw new InvalidOperationException($"RootComponent can't be added to parent of type {parentElement.GetType().FullName}."); ;
+            parentWebView.RootComponents.Add(NativeControl);
         }
 
-        void INonPhysicalChild.Remove()
+        void INonPhysicalChild.RemoveFromParent(object parentElement)
         {
-            _parentWebView.RootComponents.Remove(NativeControl);
+            (parentElement as WVM.BlazorWebView)?.RootComponents.Remove(NativeControl);
         }
 
         public override Task SetParametersAsync(ParameterView parameters)
@@ -73,16 +72,7 @@ namespace BlazorBindings.Maui.Elements
         void IElementHandler.ApplyAttribute(ulong attributeEventHandlerId, string attributeName, object attributeValue, string attributeEventUpdatesAttributeName)
         {
         }
-
-        bool IMauiElementHandler.IsParented() => _parentWebView is not null;
-
-        void IMauiElementHandler.SetParent(MC.Element parent)
-        {
-            // This should never get called. Instead, INonChildContainerElement.SetParent() implemented
-            // in this class should get called.
-            throw new NotSupportedException();
-        }
-        MC.Element IMauiElementHandler.ElementControl => null;
+        MC.BindableObject IMauiElementHandler.ElementControl => null;
         object IElementHandler.TargetElement => NativeControl;
     }
 }

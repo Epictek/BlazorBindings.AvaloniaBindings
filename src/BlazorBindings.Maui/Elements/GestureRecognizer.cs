@@ -2,13 +2,41 @@
 // Licensed under the MIT license.
 
 using BlazorBindings.Core;
-using BlazorBindings.Maui.Elements.Handlers;
+using System;
 using MC = Microsoft.Maui.Controls;
 
 namespace BlazorBindings.Maui.Elements
 {
-    public class GestureRecognizer : NativeControlComponentBase
+    public partial class GestureRecognizer : INonPhysicalChild
     {
-        public MC.GestureRecognizer NativeControl => (ElementHandler as GestureRecognizerHandler)?.GestureRecognizerControl;
+        void INonPhysicalChild.RemoveFromParent(object parentElement)
+        {
+            switch (parentElement)
+            {
+                case MC.View view:
+                    view.GestureRecognizers.Remove(NativeControl);
+                    break;
+                case MC.GestureElement gestureElement:
+                    gestureElement.GestureRecognizers.Remove(NativeControl);
+                    break;
+                default:
+                    throw new InvalidOperationException($"Gesture of type {NativeControl.GetType().Name} can't be removed from parent of type {parentElement.GetType().FullName}.");
+            }
+        }
+
+        void INonPhysicalChild.SetParent(object parentElement)
+        {
+            switch (parentElement)
+            {
+                case MC.View view:
+                    view.GestureRecognizers.Add(NativeControl);
+                    break;
+                case MC.GestureElement gestureElement:
+                    gestureElement.GestureRecognizers.Add(NativeControl);
+                    break;
+                default:
+                    throw new InvalidOperationException($"Gesture of type {NativeControl.GetType().Name} can't be added to parent of type {parentElement.GetType().FullName}.");
+            }
+        }
     }
 }

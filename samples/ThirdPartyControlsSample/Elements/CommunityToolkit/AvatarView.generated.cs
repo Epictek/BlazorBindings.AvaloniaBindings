@@ -36,9 +36,9 @@ namespace BlazorBindings.Maui.Elements.CommunityToolkit
         [Parameter] public Color TextColor { get; set; }
         [Parameter] public TextTransform? TextTransform { get; set; }
 
-        public new CMV.AvatarView NativeControl => (CMV.AvatarView)((Element)this).NativeControl;
+        public new CMV.AvatarView NativeControl => (CMV.AvatarView)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new CMV.AvatarView();
+        protected override CMV.AvatarView CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {

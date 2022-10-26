@@ -1,10 +1,7 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-using BlazorBindings.Core;
-using BlazorBindings.Maui.Elements.Handlers;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Rendering;
 using System;
 using System.Diagnostics;
 using System.Linq;
@@ -27,52 +24,37 @@ namespace BlazorBindings.Maui.Elements
                 (element, value) => MC.Shell.SetTabBarIsVisible(element, AttributeHelper.GetBool(value)));
 
             AttachedPropertyRegistry.RegisterAttachedPropertyHandler("Shell.BackgroundColor",
-                (element, value) => MC.Shell.SetBackgroundColor(element, AttributeHelper.GetString(value)));
+                (element, value) => MC.Shell.SetBackgroundColor(element, AttributeHelper.GetColor(value)));
 
             AttachedPropertyRegistry.RegisterAttachedPropertyHandler("Shell.DisabledColor",
-                (element, value) => MC.Shell.SetDisabledColor(element, AttributeHelper.GetString(value)));
+                (element, value) => MC.Shell.SetDisabledColor(element, AttributeHelper.GetColor(value)));
 
             AttachedPropertyRegistry.RegisterAttachedPropertyHandler("Shell.ForegroundColor",
-                (element, value) => MC.Shell.SetForegroundColor(element, AttributeHelper.GetString(value)));
+                (element, value) => MC.Shell.SetForegroundColor(element, AttributeHelper.GetColor(value)));
 
             AttachedPropertyRegistry.RegisterAttachedPropertyHandler("Shell.TabBarBackgroundColor",
-                (element, value) => MC.Shell.SetTabBarBackgroundColor(element, AttributeHelper.GetString(value)));
+                (element, value) => MC.Shell.SetTabBarBackgroundColor(element, AttributeHelper.GetColor(value)));
 
             AttachedPropertyRegistry.RegisterAttachedPropertyHandler("Shell.TabBarDisabledColor",
-                (element, value) => MC.Shell.SetTabBarDisabledColor(element, AttributeHelper.GetString(value)));
+                (element, value) => MC.Shell.SetTabBarDisabledColor(element, AttributeHelper.GetColor(value)));
 
             AttachedPropertyRegistry.RegisterAttachedPropertyHandler("Shell.TabBarForegroundColor",
-                (element, value) => MC.Shell.SetTabBarForegroundColor(element, AttributeHelper.GetString(value)));
+                (element, value) => MC.Shell.SetTabBarForegroundColor(element, AttributeHelper.GetColor(value)));
 
             AttachedPropertyRegistry.RegisterAttachedPropertyHandler("Shell.TabBarTitleColor",
-                (element, value) => MC.Shell.SetTabBarTitleColor(element, AttributeHelper.GetString(value)));
+                (element, value) => MC.Shell.SetTabBarTitleColor(element, AttributeHelper.GetColor(value)));
 
             AttachedPropertyRegistry.RegisterAttachedPropertyHandler("Shell.TabBarUnselectedColor",
-                (element, value) => MC.Shell.SetTabBarUnselectedColor(element, AttributeHelper.GetString(value)));
+                (element, value) => MC.Shell.SetTabBarUnselectedColor(element, AttributeHelper.GetColor(value)));
 
             AttachedPropertyRegistry.RegisterAttachedPropertyHandler("Shell.TitleColor",
-                (element, value) => MC.Shell.SetTitleColor(element, AttributeHelper.GetString(value)));
+                (element, value) => MC.Shell.SetTitleColor(element, AttributeHelper.GetColor(value)));
 
             AttachedPropertyRegistry.RegisterAttachedPropertyHandler("Shell.UnselectedColor",
-                (element, value) => MC.Shell.SetUnselectedColor(element, AttributeHelper.GetString(value)));
-
-            ElementHandlerRegistry.RegisterPropertyContentHandler<Shell>(nameof(FlyoutHeader),
-                renderer => new ContentPropertyHandler<MC.Shell>(
-                    (shell, valueElement) => shell.FlyoutHeader = valueElement));
-
-            ElementHandlerRegistry.RegisterPropertyContentHandler<Shell>(nameof(ItemTemplate),
-                (renderer, _, component) => new DataTemplatePropertyHandler<MC.Shell, MC.BaseShellItem>(component,
-                    (shell, dataTemplate) => MC.Shell.SetItemTemplate(shell, dataTemplate)));
-
-            ElementHandlerRegistry.RegisterPropertyContentHandler<Shell>(nameof(MenuItemTemplate),
-                (renderer, _, component) => new DataTemplatePropertyHandler<MC.Shell, MC.BaseShellItem>(component,
-                    (shell, dataTemplate) => MC.Shell.SetMenuItemTemplate(shell, dataTemplate)));
+                (element, value) => MC.Shell.SetUnselectedColor(element, AttributeHelper.GetColor(value)));
         }
 
         [Parameter] public RenderFragment ChildContent { get; set; }
-        [Parameter] public RenderFragment FlyoutHeader { get; set; }
-        [Parameter] public RenderFragment<MC.BaseShellItem> ItemTemplate { get; set; }
-        [Parameter] public RenderFragment<MC.BaseShellItem> MenuItemTemplate { get; set; }
 
         protected override bool HandleAdditionalParameter(string name, object value)
         {
@@ -80,15 +62,6 @@ namespace BlazorBindings.Maui.Elements
             {
                 case nameof(ChildContent):
                     ChildContent = (RenderFragment)value;
-                    return true;
-                case nameof(FlyoutHeader):
-                    FlyoutHeader = (RenderFragment)value;
-                    return true;
-                case nameof(ItemTemplate):
-                    ItemTemplate = (RenderFragment<MC.BaseShellItem>)value;
-                    return true;
-                case nameof(MenuItemTemplate):
-                    MenuItemTemplate = (RenderFragment<MC.BaseShellItem>)value;
                     return true;
 
                 default:
@@ -98,15 +71,7 @@ namespace BlazorBindings.Maui.Elements
 
         protected override RenderFragment GetChildContent() => ChildContent;
 
-        protected override void RenderAdditionalElementContent(RenderTreeBuilder builder, ref int sequence)
-        {
-            base.RenderAdditionalElementContent(builder, ref sequence);
-            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(Shell), FlyoutHeader);
-            RenderTreeBuilderHelper.AddDataTemplateProperty(builder, sequence++, typeof(Shell), ItemTemplate);
-            RenderTreeBuilderHelper.AddDataTemplateProperty(builder, sequence++, typeof(Shell), MenuItemTemplate);
-        }
-
-        void IMauiContainerElementHandler.AddChild(MC.Element child, int physicalSiblingIndex)
+        void IMauiContainerElementHandler.AddChild(MC.BindableObject child, int physicalSiblingIndex)
         {
             ArgumentNullException.ThrowIfNull(child);
 
@@ -131,7 +96,7 @@ namespace BlazorBindings.Maui.Elements
             }
         }
 
-        void IMauiContainerElementHandler.RemoveChild(MC.Element child)
+        void IMauiContainerElementHandler.RemoveChild(MC.BindableObject child)
         {
             ArgumentNullException.ThrowIfNull(child);
 
@@ -141,14 +106,14 @@ namespace BlazorBindings.Maui.Elements
             NativeControl.Items.Remove(itemToRemove);
         }
 
-        int IMauiContainerElementHandler.GetChildIndex(MC.Element child)
+        int IMauiContainerElementHandler.GetChildIndex(MC.BindableObject child)
         {
             var shellItem = GetItemForElement(child);
             return NativeControl.Items.IndexOf(shellItem);
         }
 
 
-        private MC.ShellItem GetItemForElement(MC.Element child)
+        private MC.ShellItem GetItemForElement(MC.BindableObject child)
         {
             return child switch
             {

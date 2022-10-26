@@ -20,7 +20,7 @@ namespace BlazorBindings.Maui.Elements
         static Layout()
         {
             ElementHandlerRegistry.RegisterPropertyContentHandler<Layout>(nameof(ChildContent),
-                _ => new ListContentPropertyHandler<MC.Layout, IView>(x => x.Children));
+                (renderer, parent, component) => new ListContentPropertyHandler<MC.Layout, IView>(x => x.Children));
             RegisterAdditionalHandlers();
         }
 
@@ -30,7 +30,7 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public Thickness? Padding { get; set; }
         [Parameter] public RenderFragment ChildContent { get; set; }
 
-        public new MC.Layout NativeControl => (MC.Layout)((Element)this).NativeControl;
+        public new MC.Layout NativeControl => (MC.Layout)((BindableObject)this).NativeControl;
 
 
         protected override void HandleParameter(string name, object value)
@@ -78,7 +78,7 @@ namespace BlazorBindings.Maui.Elements
         protected override void RenderAdditionalElementContent(RenderTreeBuilder builder, ref int sequence)
         {
             base.RenderAdditionalElementContent(builder, ref sequence);
-            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(Layout), ChildContent);;
+            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(Layout), ChildContent);
         }
 
         static partial void RegisterAdditionalHandlers();

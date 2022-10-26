@@ -6,8 +6,10 @@
 // </auto-generated>
 
 using BlazorBindings.Core;
+using BlazorBindings.Maui.Elements.Handlers;
 using MC = Microsoft.Maui.Controls;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.Maui;
 using Microsoft.Maui.Graphics;
 using System.Threading.Tasks;
@@ -18,9 +20,29 @@ namespace BlazorBindings.Maui.Elements
     {
         static Shell()
         {
+            ElementHandlerRegistry.RegisterPropertyContentHandler<Shell>(nameof(FlyoutBackdrop),
+                (renderer, parent, component) => new ContentPropertyHandler<MC.Shell>((x, value) => x.FlyoutBackdrop = (MC.Brush)value));
+            ElementHandlerRegistry.RegisterPropertyContentHandler<Shell>(nameof(FlyoutBackground),
+                (renderer, parent, component) => new ContentPropertyHandler<MC.Shell>((x, value) => x.FlyoutBackground = (MC.Brush)value));
+            ElementHandlerRegistry.RegisterPropertyContentHandler<Shell>(nameof(FlyoutContent),
+                (renderer, parent, component) => new DataTemplatePropertyHandler<MC.Shell>(component,
+                    (x, dataTemplate) => x.FlyoutContentTemplate = dataTemplate));
+            ElementHandlerRegistry.RegisterPropertyContentHandler<Shell>(nameof(FlyoutFooter),
+                (renderer, parent, component) => new DataTemplatePropertyHandler<MC.Shell>(component,
+                    (x, dataTemplate) => x.FlyoutFooterTemplate = dataTemplate));
+            ElementHandlerRegistry.RegisterPropertyContentHandler<Shell>(nameof(FlyoutHeader),
+                (renderer, parent, component) => new DataTemplatePropertyHandler<MC.Shell>(component,
+                    (x, dataTemplate) => x.FlyoutHeaderTemplate = dataTemplate));
+            ElementHandlerRegistry.RegisterPropertyContentHandler<Shell>(nameof(ItemTemplate),
+                (renderer, parent, component) => new DataTemplatePropertyHandler<MC.Shell, MC.BaseShellItem>(component,
+                    (x, dataTemplate) => x.ItemTemplate = dataTemplate));
+            ElementHandlerRegistry.RegisterPropertyContentHandler<Shell>(nameof(MenuItemTemplate),
+                (renderer, parent, component) => new DataTemplatePropertyHandler<MC.Shell, MC.BaseShellItem>(component,
+                    (x, dataTemplate) => x.MenuItemTemplate = dataTemplate));
             RegisterAdditionalHandlers();
         }
 
+        [Parameter] public Color FlyoutBackdropColor { get; set; }
         [Parameter] public Color FlyoutBackgroundColor { get; set; }
         [Parameter] public MC.ImageSource FlyoutBackgroundImage { get; set; }
         [Parameter] public Aspect? FlyoutBackgroundImageAspect { get; set; }
@@ -31,17 +53,31 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public bool? FlyoutIsPresented { get; set; }
         [Parameter] public MC.ScrollMode? FlyoutVerticalScrollMode { get; set; }
         [Parameter] public double? FlyoutWidth { get; set; }
+        [Parameter] public RenderFragment FlyoutBackdrop { get; set; }
+        [Parameter] public RenderFragment FlyoutBackground { get; set; }
+        [Parameter] public RenderFragment FlyoutContent { get; set; }
+        [Parameter] public RenderFragment FlyoutFooter { get; set; }
+        [Parameter] public RenderFragment FlyoutHeader { get; set; }
+        [Parameter] public RenderFragment<MC.BaseShellItem> ItemTemplate { get; set; }
+        [Parameter] public RenderFragment<MC.BaseShellItem> MenuItemTemplate { get; set; }
         [Parameter] public EventCallback<MC.ShellNavigatedEventArgs> OnNavigated { get; set; }
         [Parameter] public EventCallback<MC.ShellNavigatingEventArgs> OnNavigating { get; set; }
 
-        public new MC.Shell NativeControl => (MC.Shell)((Element)this).NativeControl;
+        public new MC.Shell NativeControl => (MC.Shell)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MC.Shell();
+        protected override MC.Shell CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {
             switch (name)
             {
+                case nameof(FlyoutBackdropColor):
+                    if (!Equals(FlyoutBackdropColor, value))
+                    {
+                        FlyoutBackdropColor = (Color)value;
+                        NativeControl.FlyoutBackdrop = FlyoutBackdropColor;
+                    }
+                    break;
                 case nameof(FlyoutBackgroundColor):
                     if (!Equals(FlyoutBackgroundColor, value))
                     {
@@ -112,10 +148,31 @@ namespace BlazorBindings.Maui.Elements
                         NativeControl.FlyoutWidth = FlyoutWidth ?? (double)MC.Shell.FlyoutWidthProperty.DefaultValue;
                     }
                     break;
+                case nameof(FlyoutBackdrop):
+                    FlyoutBackdrop = (RenderFragment)value;
+                    break;
+                case nameof(FlyoutBackground):
+                    FlyoutBackground = (RenderFragment)value;
+                    break;
+                case nameof(FlyoutContent):
+                    FlyoutContent = (RenderFragment)value;
+                    break;
+                case nameof(FlyoutFooter):
+                    FlyoutFooter = (RenderFragment)value;
+                    break;
+                case nameof(FlyoutHeader):
+                    FlyoutHeader = (RenderFragment)value;
+                    break;
+                case nameof(ItemTemplate):
+                    ItemTemplate = (RenderFragment<MC.BaseShellItem>)value;
+                    break;
+                case nameof(MenuItemTemplate):
+                    MenuItemTemplate = (RenderFragment<MC.BaseShellItem>)value;
+                    break;
                 case nameof(OnNavigated):
                     if (!Equals(OnNavigated, value))
                     {
-                        void NativeControlNavigated(object sender, MC.ShellNavigatedEventArgs e) => OnNavigated.InvokeAsync(e);
+                        void NativeControlNavigated(object sender, MC.ShellNavigatedEventArgs e) => InvokeAsync(() => OnNavigated.InvokeAsync(e));
 
                         OnNavigated = (EventCallback<MC.ShellNavigatedEventArgs>)value;
                         NativeControl.Navigated -= NativeControlNavigated;
@@ -125,7 +182,7 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(OnNavigating):
                     if (!Equals(OnNavigating, value))
                     {
-                        void NativeControlNavigating(object sender, MC.ShellNavigatingEventArgs e) => OnNavigating.InvokeAsync(e);
+                        void NativeControlNavigating(object sender, MC.ShellNavigatingEventArgs e) => InvokeAsync(() => OnNavigating.InvokeAsync(e));
 
                         OnNavigating = (EventCallback<MC.ShellNavigatingEventArgs>)value;
                         NativeControl.Navigating -= NativeControlNavigating;
@@ -137,6 +194,18 @@ namespace BlazorBindings.Maui.Elements
                     base.HandleParameter(name, value);
                     break;
             }
+        }
+
+        protected override void RenderAdditionalElementContent(RenderTreeBuilder builder, ref int sequence)
+        {
+            base.RenderAdditionalElementContent(builder, ref sequence);
+            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(Shell), FlyoutBackdrop);
+            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(Shell), FlyoutBackground);
+            RenderTreeBuilderHelper.AddDataTemplateProperty(builder, sequence++, typeof(Shell), FlyoutContent);
+            RenderTreeBuilderHelper.AddDataTemplateProperty(builder, sequence++, typeof(Shell), FlyoutFooter);
+            RenderTreeBuilderHelper.AddDataTemplateProperty(builder, sequence++, typeof(Shell), FlyoutHeader);
+            RenderTreeBuilderHelper.AddDataTemplateProperty(builder, sequence++, typeof(Shell), ItemTemplate);
+            RenderTreeBuilderHelper.AddDataTemplateProperty(builder, sequence++, typeof(Shell), MenuItemTemplate);
         }
 
         static partial void RegisterAdditionalHandlers();

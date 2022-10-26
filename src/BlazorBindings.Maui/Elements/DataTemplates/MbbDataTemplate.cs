@@ -12,4 +12,13 @@ namespace BlazorBindings.Maui.Elements.DataTemplates
         {
         }
     }
+
+    internal class MbbDataTemplate : MC.DataTemplate
+    {
+        // There's not much of a difference between non-generic DataTemplate and ControlTemplate.
+        public MbbDataTemplate(ControlTemplateItemsComponent dataTemplateItemsContainer)
+            : base(dataTemplateItemsContainer.AddTemplateRoot)
+        {
+        }
+    }
 }

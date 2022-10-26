@@ -6,8 +6,10 @@
 // </auto-generated>
 
 using BlazorBindings.Core;
+using BlazorBindings.Maui.Elements.Handlers;
 using MC = Microsoft.Maui.Controls;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Rendering;
 using System.Threading.Tasks;
 
 namespace BlazorBindings.Maui.Elements
@@ -16,13 +18,37 @@ namespace BlazorBindings.Maui.Elements
     {
         static TemplatedView()
         {
+            ElementHandlerRegistry.RegisterPropertyContentHandler<TemplatedView>(nameof(ControlTemplate),
+                (renderer, parent, component) => new ControlTemplatePropertyHandler<MC.TemplatedView>(component,
+                    (x, controlTemplate) => x.ControlTemplate = controlTemplate));
             RegisterAdditionalHandlers();
         }
 
-        public new MC.TemplatedView NativeControl => (MC.TemplatedView)((Element)this).NativeControl;
+        [Parameter] public RenderFragment ControlTemplate { get; set; }
 
-        protected override MC.Element CreateNativeElement() => new MC.TemplatedView();
+        public new MC.TemplatedView NativeControl => (MC.TemplatedView)((BindableObject)this).NativeControl;
 
+        protected override MC.TemplatedView CreateNativeElement() => new();
+
+        protected override void HandleParameter(string name, object value)
+        {
+            switch (name)
+            {
+                case nameof(ControlTemplate):
+                    ControlTemplate = (RenderFragment)value;
+                    break;
+
+                default:
+                    base.HandleParameter(name, value);
+                    break;
+            }
+        }
+
+        protected override void RenderAdditionalElementContent(RenderTreeBuilder builder, ref int sequence)
+        {
+            base.RenderAdditionalElementContent(builder, ref sequence);
+            RenderTreeBuilderHelper.AddControlTemplateProperty(builder, sequence++, typeof(TemplatedView), ControlTemplate);
+        }
 
         static partial void RegisterAdditionalHandlers();
     }

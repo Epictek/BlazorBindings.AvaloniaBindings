@@ -33,9 +33,9 @@ namespace BlazorBindings.Maui.Elements.CommunityToolkit
         [Parameter] public bool? ShouldClearOnFinish { get; set; }
         [Parameter] public EventCallback<DrawingLineCompletedEventArgs> OnDrawingLineCompleted { get; set; }
 
-        public new CMV.DrawingView NativeControl => (CMV.DrawingView)((Element)this).NativeControl;
+        public new CMV.DrawingView NativeControl => (CMV.DrawingView)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new CMV.DrawingView();
+        protected override CMV.DrawingView CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {
@@ -86,7 +86,7 @@ namespace BlazorBindings.Maui.Elements.CommunityToolkit
                 case nameof(OnDrawingLineCompleted):
                     if (!Equals(OnDrawingLineCompleted, value))
                     {
-                        void NativeControlDrawingLineCompleted(object sender, DrawingLineCompletedEventArgs e) => OnDrawingLineCompleted.InvokeAsync(e);
+                        void NativeControlDrawingLineCompleted(object sender, DrawingLineCompletedEventArgs e) => InvokeAsync(() => OnDrawingLineCompleted.InvokeAsync(e));
 
                         OnDrawingLineCompleted = (EventCallback<DrawingLineCompletedEventArgs>)value;
                         NativeControl.DrawingLineCompleted -= NativeControlDrawingLineCompleted;

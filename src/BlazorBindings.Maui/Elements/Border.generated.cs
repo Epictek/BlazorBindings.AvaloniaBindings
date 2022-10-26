@@ -22,11 +22,14 @@ namespace BlazorBindings.Maui.Elements
         static Border()
         {
             ElementHandlerRegistry.RegisterPropertyContentHandler<Border>(nameof(ChildContent),
-                _ => new ContentPropertyHandler<MC.Border>((x, value) => x.Content = (MC.View)value));
+                (renderer, parent, component) => new ContentPropertyHandler<MC.Border>((x, value) => x.Content = (MC.View)value));
+            ElementHandlerRegistry.RegisterPropertyContentHandler<Border>(nameof(Stroke),
+                (renderer, parent, component) => new ContentPropertyHandler<MC.Border>((x, value) => x.Stroke = (MC.Brush)value));
             RegisterAdditionalHandlers();
         }
 
         [Parameter] public Thickness? Padding { get; set; }
+        [Parameter] public Color StrokeColor { get; set; }
         [Parameter] public double? StrokeDashOffset { get; set; }
         [Parameter] public PenLineCap? StrokeLineCap { get; set; }
         [Parameter] public PenLineJoin? StrokeLineJoin { get; set; }
@@ -34,10 +37,11 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public IShape StrokeShape { get; set; }
         [Parameter] public double? StrokeThickness { get; set; }
         [Parameter] public RenderFragment ChildContent { get; set; }
+        [Parameter] public RenderFragment Stroke { get; set; }
 
-        public new MC.Border NativeControl => (MC.Border)((Element)this).NativeControl;
+        public new MC.Border NativeControl => (MC.Border)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MC.Border();
+        protected override MC.Border CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {
@@ -48,6 +52,13 @@ namespace BlazorBindings.Maui.Elements
                     {
                         Padding = (Thickness?)value;
                         NativeControl.Padding = Padding ?? (Thickness)MC.Border.PaddingProperty.DefaultValue;
+                    }
+                    break;
+                case nameof(StrokeColor):
+                    if (!Equals(StrokeColor, value))
+                    {
+                        StrokeColor = (Color)value;
+                        NativeControl.Stroke = StrokeColor;
                     }
                     break;
                 case nameof(StrokeDashOffset):
@@ -95,6 +106,9 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(ChildContent):
                     ChildContent = (RenderFragment)value;
                     break;
+                case nameof(Stroke):
+                    Stroke = (RenderFragment)value;
+                    break;
 
                 default:
                     base.HandleParameter(name, value);
@@ -105,7 +119,8 @@ namespace BlazorBindings.Maui.Elements
         protected override void RenderAdditionalElementContent(RenderTreeBuilder builder, ref int sequence)
         {
             base.RenderAdditionalElementContent(builder, ref sequence);
-            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(Border), ChildContent);;
+            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(Border), ChildContent);
+            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(Border), Stroke);
         }
 
         static partial void RegisterAdditionalHandlers();
