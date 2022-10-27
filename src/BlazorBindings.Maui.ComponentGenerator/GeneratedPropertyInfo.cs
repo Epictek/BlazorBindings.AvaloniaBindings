@@ -275,6 +275,7 @@ namespace BlazorBindings.Maui.ComponentGenerator
             "Microsoft.Maui.Controls.Style", // TODO: This is temporary; should be possible to add support later
             "Microsoft.Maui.Controls.IVisual",
             "Microsoft.Maui.Controls.View",
+            "Microsoft.Maui.Graphics.IShape",
             "Microsoft.Maui.IView",
             "Microsoft.Maui.IViewHandler"
         };
