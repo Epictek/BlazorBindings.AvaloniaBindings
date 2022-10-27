@@ -3,7 +3,9 @@
 
 using BlazorBindings.Core;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Rendering;
 using System;
+using System.ComponentModel;
 using System.Threading.Tasks;
 using MC = Microsoft.Maui.Controls;
 
@@ -43,6 +45,14 @@ namespace BlazorBindings.Maui.Elements
 
             throw new NotImplementedException($"{GetType().FullName} doesn't recognize parameter '{name}'");
         }
+
+        protected override void RenderAdditionalElementContent(RenderTreeBuilder builder, ref int sequence)
+        {
+            RenderAdditionalPartialElementContent(builder, ref sequence);
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        protected virtual void RenderAdditionalPartialElementContent(RenderTreeBuilder builder, ref int sequence) { }
 
         protected virtual bool HandleAdditionalParameter(string name, object value) => false;
 

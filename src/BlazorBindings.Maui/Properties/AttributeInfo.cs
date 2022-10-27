@@ -66,6 +66,9 @@ using System.Runtime.CompilerServices;
     PropertyChangedEvents = new[] { nameof(RefreshView.IsRefreshing) })]
 [assembly: GenerateComponent(typeof(ReorderableItemsView), Exclude = new[] { nameof(ReorderableItemsView.CanMixGroups) })]
 [assembly: GenerateComponent(typeof(ScrollView))]
+[assembly: GenerateComponent(typeof(SearchHandler),
+    GenericProperties = new[] { nameof(SearchHandler.ItemsSource), nameof(SearchHandler.SelectedItem), nameof(SearchHandler.ItemTemplate) },
+    PropertyChangedEvents = new[] { nameof(SearchHandler.Query) })]
 [assembly: GenerateComponent(typeof(SelectableItemsView),
     GenericProperties = new[] { nameof(SelectableItemsView.SelectedItem) },
     PropertyChangedEvents = new[] { nameof(SelectableItemsView.SelectedItem), nameof(SelectableItemsView.SelectedItems) })]

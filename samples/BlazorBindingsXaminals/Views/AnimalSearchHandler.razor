@@ -1,0 +1,22 @@
+﻿<SearchHandler ItemsSource="_suggestedItems"
+               QueryChanged="QueryChanged">
+
+</SearchHandler>
+
+@code {
+    Animal[] _suggestedItems;
+
+    async Task QueryChanged(string query)
+    {
+        if (string.IsNullOrWhiteSpace(query))
+        {
+            _suggestedItems = null;
+        }
+        else
+        {
+            _suggestedItems = Animals.Items
+                .Where(animal => animal.Name.ToLower().Contains(query.ToLower()))
+                .ToArray();
+        }
+    }
+}

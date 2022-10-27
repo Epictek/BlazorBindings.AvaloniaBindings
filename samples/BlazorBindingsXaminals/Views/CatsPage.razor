@@ -1,15 +1,24 @@
-﻿@inject ShellNavigationManager NavigationManager
+﻿@inject INavigationService NavigationManager
+
 <ContentPage>
-    <CollectionView ItemsSource="CatData.Cats">
-        <ItemTemplate>
-            <AnimalTemplate Animal="context" OnClick="AnimalClicked" />
-        </ItemTemplate>
-    </CollectionView>
+    <SearchHandler>
+        <AnimalSearchHandler />
+    </SearchHandler>
+
+    <ChildContent>
+        <CollectionView ItemsSource="CatData.Cats">
+            <ItemTemplate>
+                <AnimalTemplate Animal="context" OnClick="AnimalClicked" />
+            </ItemTemplate>
+        </CollectionView>
+    </ChildContent>
 </ContentPage>
 
 
 
 @code {
+
+
     async Task AnimalClicked(Animal animal)
     {
         await NavigationManager.NavigateToAsync($"/catdetails/{animal.Name}");
