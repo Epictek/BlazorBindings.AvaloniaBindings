@@ -9,7 +9,7 @@
     </ToolbarItems>
 
     <ChildContent>
-        <StackLayout>
+        <StackLayout Spacing="6">
             <StackLayout Orientation="StackOrientation.Horizontal">
                 <Label Text="Enable NavBar: " />
                 <CheckBox @bind-IsChecked="navBarVisible" />
@@ -19,11 +19,13 @@
                 <CheckBox @bind-IsChecked="tabBarVisible" />
             </StackLayout>
             <Button Text="Change Title Color" OnClick="ChangeTitleColor" />
+            <Button Text="Show page with BackButtonBehavior" OnClick="NavigateToBackButtonBehavior" />
         </StackLayout>
     </ChildContent>
 </ContentPage>
 
 @code {
+    [Inject] INavigationService Navigation { get; set; }
     BlazorBindings.Maui.Elements.Page page;
 
     bool navBarVisible = true;
@@ -45,5 +47,10 @@
     async Task ShowHelp()
     {
         await page.NativeControl.DisplayAlert("Help", "Some help message", "OK");
+    }
+
+    async Task NavigateToBackButtonBehavior()
+    {
+        await Navigation.PushAsync<BackButtonBehaviorPage>();
     }
 }

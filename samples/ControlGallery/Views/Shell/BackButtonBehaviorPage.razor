@@ -1,0 +1,50 @@
+﻿<ContentPage @ref="_page">
+    <BackButtonBehavior>
+        <BackButtonBehavior Command="OnBackPressed" IsEnabled="_isEnabled" IsVisible="_isVisible" />
+    </BackButtonBehavior>
+
+    <ChildContent>
+        <VerticalStackLayout Spacing="6">
+            <Label>Press the back button.</Label>
+
+            @if (_backPressed)
+            {
+                <Label>Back button was pressed.</Label>
+            }
+
+            <HorizontalStackLayout>
+                <Label Text="Is Enabled: " />
+                <CheckBox @bind-IsChecked="_isEnabled" />
+            </HorizontalStackLayout>
+
+            <HorizontalStackLayout>
+                <Label Text="Is Visible: " />
+                <CheckBox @bind-IsChecked="_isVisible" />
+            </HorizontalStackLayout>
+
+        </VerticalStackLayout>
+
+
+    </ChildContent>
+</ContentPage>
+
+@code {
+    [Inject] INavigationService Navigation { get; set; }
+
+    ContentPage _page;
+
+    bool _backPressed;
+    bool _isEnabled = true;
+    bool _isVisible = true;
+
+    async Task OnBackPressed()
+    {
+        _backPressed = true;
+
+        var promptAccepted = await _page.NativeControl.DisplayAlert("Go Back", "Are you sure you want to go back?", "Yes", "No");
+        if (promptAccepted)
+        {
+            await Navigation.PopAsync();
+        }
+    }
+}

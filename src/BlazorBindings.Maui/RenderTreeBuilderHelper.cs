@@ -15,10 +15,8 @@ namespace BlazorBindings.Maui
         public static void AddContentProperty(RenderTreeBuilder builder, int sequence, Type containingType, RenderFragment content,
             [CallerArgumentExpression("content")] string propertyName = null)
         {
-            if (builder is null)
-            {
-                throw new ArgumentNullException(nameof(builder));
-            }
+            ArgumentNullException.ThrowIfNull(builder);
+            ArgumentNullException.ThrowIfNull(containingType);
 
             if (content != null)
             {
@@ -43,14 +41,8 @@ namespace BlazorBindings.Maui
         public static void AddDataTemplateProperty<T>(RenderTreeBuilder builder, int sequence, Type containingType, RenderFragment<T> template,
             [CallerArgumentExpression("template")] string propertyName = null)
         {
-            if (builder is null)
-            {
-                throw new ArgumentNullException(nameof(builder));
-            }
-            if (containingType is null)
-            {
-                throw new ArgumentNullException(nameof(containingType));
-            }
+            ArgumentNullException.ThrowIfNull(builder);
+            ArgumentNullException.ThrowIfNull(containingType);
 
             if (template != null)
             {
@@ -75,14 +67,8 @@ namespace BlazorBindings.Maui
         public static void AddControlTemplateProperty(RenderTreeBuilder builder, int sequence, Type containingType, RenderFragment template,
             [CallerArgumentExpression("template")] string propertyName = null)
         {
-            if (builder is null)
-            {
-                throw new ArgumentNullException(nameof(builder));
-            }
-            if (containingType is null)
-            {
-                throw new ArgumentNullException(nameof(containingType));
-            }
+            ArgumentNullException.ThrowIfNull(builder);
+            ArgumentNullException.ThrowIfNull(containingType);
 
             if (template != null)
             {
