@@ -7,15 +7,17 @@ namespace BlazorBindings.Maui.ComponentGenerator
 {
     public partial class GeneratedPropertyInfo
     {
-        private static readonly string[] ContentTypes = new[]
+        private static readonly (string TypeName, bool AllowDescendantTypes)[] ContentTypes = new[]
         {
-            "Microsoft.Maui.IView",
-            "Microsoft.Maui.Controls.View",
-            "Microsoft.Maui.Controls.BaseMenuItem",
-            "Microsoft.Maui.Controls.Brush",
-            "Microsoft.Maui.Controls.Shadow",
-            "Microsoft.Maui.Controls.ControlTemplate",
-            "Microsoft.Maui.Controls.DataTemplate",
+            ("Microsoft.Maui.IView", false),
+            ("Microsoft.Maui.Controls.VisualElement", true),
+            ("Microsoft.Maui.Controls.BaseMenuItem", true),
+            ("Microsoft.Maui.Controls.Brush", true),
+            ("Microsoft.Maui.Controls.Shadow", false),
+            ("Microsoft.Maui.Controls.ControlTemplate", false),
+            ("Microsoft.Maui.Controls.DataTemplate",false),
+            ("Microsoft.Maui.Controls.Shapes.Shape", true),
+            ("Microsoft.Maui.Graphics.IShape",false)
         };
 
         public bool IsRenderFragmentProperty => Kind == GeneratedPropertyKind.RenderFragment;
@@ -138,8 +140,10 @@ namespace BlazorBindings.Maui.ComponentGenerator
             bool IsContent(ITypeSymbol type) => ContentTypes.Any(t =>
             {
                 var compilation = containingType.Compilation;
-                var contentTypeSymbol = compilation.GetTypeByMetadataName(t);
-                return compilation.ClassifyConversion(type, contentTypeSymbol) is { IsIdentity: true } or { IsReference: true, IsImplicit: true };
+                var contentTypeSymbol = compilation.GetTypeByMetadataName(t.TypeName);
+                var conversion = compilation.ClassifyConversion(type, contentTypeSymbol);
+                return conversion is { IsIdentity: true }
+                    || t.AllowDescendantTypes && conversion is { IsReference: true, IsImplicit: true };
             });
         }
     }

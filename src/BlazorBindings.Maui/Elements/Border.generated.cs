@@ -25,6 +25,8 @@ namespace BlazorBindings.Maui.Elements
                 (renderer, parent, component) => new ContentPropertyHandler<MC.Border>((x, value) => x.Content = (MC.View)value));
             ElementHandlerRegistry.RegisterPropertyContentHandler<Border>(nameof(Stroke),
                 (renderer, parent, component) => new ContentPropertyHandler<MC.Border>((x, value) => x.Stroke = (MC.Brush)value));
+            ElementHandlerRegistry.RegisterPropertyContentHandler<Border>(nameof(StrokeShape),
+                (renderer, parent, component) => new ContentPropertyHandler<MC.Border>((x, value) => x.StrokeShape = (IShape)value));
             RegisterAdditionalHandlers();
         }
 
@@ -34,10 +36,10 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public PenLineCap? StrokeLineCap { get; set; }
         [Parameter] public PenLineJoin? StrokeLineJoin { get; set; }
         [Parameter] public double? StrokeMiterLimit { get; set; }
-        [Parameter] public IShape StrokeShape { get; set; }
         [Parameter] public double? StrokeThickness { get; set; }
         [Parameter] public RenderFragment ChildContent { get; set; }
         [Parameter] public RenderFragment Stroke { get; set; }
+        [Parameter] public RenderFragment StrokeShape { get; set; }
 
         public new MC.Border NativeControl => (MC.Border)((BindableObject)this).NativeControl;
 
@@ -89,13 +91,6 @@ namespace BlazorBindings.Maui.Elements
                         NativeControl.StrokeMiterLimit = StrokeMiterLimit ?? (double)MC.Border.StrokeMiterLimitProperty.DefaultValue;
                     }
                     break;
-                case nameof(StrokeShape):
-                    if (!Equals(StrokeShape, value))
-                    {
-                        StrokeShape = (IShape)value;
-                        NativeControl.StrokeShape = StrokeShape;
-                    }
-                    break;
                 case nameof(StrokeThickness):
                     if (!Equals(StrokeThickness, value))
                     {
@@ -109,6 +104,9 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(Stroke):
                     Stroke = (RenderFragment)value;
                     break;
+                case nameof(StrokeShape):
+                    StrokeShape = (RenderFragment)value;
+                    break;
 
                 default:
                     base.HandleParameter(name, value);
@@ -121,6 +119,7 @@ namespace BlazorBindings.Maui.Elements
             base.RenderAdditionalElementContent(builder, ref sequence);
             RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(Border), ChildContent);
             RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(Border), Stroke);
+            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(Border), StrokeShape);
         }
 
         static partial void RegisterAdditionalHandlers();

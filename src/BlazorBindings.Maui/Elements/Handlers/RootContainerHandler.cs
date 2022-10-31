@@ -4,6 +4,7 @@
 using BlazorBindings.Core;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Threading.Tasks;
 using MC = Microsoft.Maui.Controls;
 
@@ -13,7 +14,9 @@ namespace BlazorBindings.Maui.Elements.Handlers
     /// Fake element handler, which is used as a root for a renderer to get native Xamarin.Forms elements
     /// from a Blazor component.
     /// </summary>
-    internal class RootContainerHandler : IMauiContainerElementHandler, INonChildContainerElement
+    /// <remarks>Experimental API, subject to change.</remarks>
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public class RootContainerHandler : IMauiContainerElementHandler, INonChildContainerElement
     {
         private TaskCompletionSource<MC.BindableObject> _taskCompletionSource;
 

@@ -129,3 +129,4 @@ using System.Runtime.CompilerServices;
 [assembly: GenerateComponent(typeof(Polyline))]
 [assembly: GenerateComponent(typeof(Rectangle))]
 [assembly: GenerateComponent(typeof(Shape))]
+[assembly: GenerateComponent(typeof(RoundRectangle))]
