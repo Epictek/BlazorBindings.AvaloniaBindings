@@ -1,0 +1,21 @@
+﻿@inherits ElementTestBase
+@code {
+
+    [Test]
+    public async Task ShellAttachedProperties()
+    {
+        var shell = await Render<MC.Shell>(
+    @<Shell ShellBackgroundColor="Colors.AliceBlue"
+            DisabledColor="Colors.Beige"
+            ForegroundColor="Colors.CadetBlue"
+            TitleColor="Colors.DarkBlue"
+            UnselectedColor="Colors.Firebrick">
+    </Shell>);
+
+        Assert.That(MC.Shell.GetBackgroundColor(shell), Is.EqualTo(Colors.AliceBlue));
+        Assert.That(MC.Shell.GetDisabledColor(shell), Is.EqualTo(Colors.Beige));
+        Assert.That(MC.Shell.GetForegroundColor(shell), Is.EqualTo(Colors.CadetBlue));
+        Assert.That(MC.Shell.GetTitleColor(shell), Is.EqualTo(Colors.DarkBlue));
+        Assert.That(MC.Shell.GetUnselectedColor(shell), Is.EqualTo(Colors.Firebrick));
+    }
+}

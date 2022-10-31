@@ -1,16 +1,27 @@
 ﻿@using BlazorBindings.Maui.Elements.Handlers;
 @using Microsoft.AspNetCore.Components.Rendering;
+@using System.Reflection;
 
 @code {
     private MauiBlazorBindingsRenderer _renderer = TestBlazorBindingsRenderer.Create();
 
-    protected async Task<T> Render<T>(RenderFragment renderFragment) where T: MC.BindableObject
+    protected override bool ShouldRender() => false;
+
+    public ElementTestBase()
+    {
+        // We need to prevent this component from rendering.
+        var field = typeof(ComponentBase).GetField("_hasNeverRendered", BindingFlags.NonPublic | BindingFlags.Instance);
+        field.SetValue(this, false);
+    }
+
+    protected async Task<T> Render<T>(RenderFragment renderFragment) where T : MC.BindableObject
     {
         var container = new RootContainerHandler();
-        await _renderer.AddComponent<RenderFragmentComponent>(container, new Dictionary<string, object>
+        var component = await _renderer.AddComponent<RenderFragmentComponent>(container, new Dictionary<string, object>
             {
                 ["RenderFragment"] = renderFragment
             });
+
         return (T)container.Elements[0];
     }
 

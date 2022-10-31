@@ -2,6 +2,7 @@
 // Licensed under the MIT license.
 
 using Microsoft.AspNetCore.Components;
+using Microsoft.Maui.Graphics;
 using System;
 using System.Diagnostics;
 using System.Linq;
@@ -56,12 +57,78 @@ namespace BlazorBindings.Maui.Elements
 
         [Parameter] public RenderFragment ChildContent { get; set; }
 
+        /// <summary>
+        /// Defines the background color in the Shell chrome. The color will not fill in behind the Shell content.
+        /// </summary>
+        // Cannot add 'new' properties, therefore renaming it to ShellBackgroundColor.
+        [Parameter] public Color ShellBackgroundColor { get; set; }
+
+        /// <summary>
+        /// Defines the color to shade text and icons that are disabled.
+        /// </summary>
+        [Parameter] public Color DisabledColor { get; set; }
+
+        /// <summary>
+        /// That defines the color to shade text and icons.
+        /// </summary>
+        [Parameter] public Color ForegroundColor { get; set; }
+
+        /// <summary>
+        /// Defines the color used for the title of the page.
+        /// </summary>
+        [Parameter] public Color TitleColor { get; set; }
+
+        /// <summary>
+        /// Defines the color used for unselected text and icons in the Shell chrome.
+        /// </summary>
+        [Parameter] public Color UnselectedColor { get; set; }
+
         protected override bool HandleAdditionalParameter(string name, object value)
         {
             switch (name)
             {
                 case nameof(ChildContent):
                     ChildContent = (RenderFragment)value;
+                    return true;
+
+                case nameof(ShellBackgroundColor):
+                    if (!Equals(ShellBackgroundColor, value))
+                    {
+                        ShellBackgroundColor = (Color)value;
+                        MC.Shell.SetBackgroundColor(NativeControl, ShellBackgroundColor);
+                    }
+                    return true;
+
+                case nameof(DisabledColor):
+                    if (!Equals(DisabledColor, value))
+                    {
+                        DisabledColor = (Color)value;
+                        MC.Shell.SetDisabledColor(NativeControl, DisabledColor);
+                    }
+                    return true;
+
+                case nameof(ForegroundColor):
+                    if (!Equals(ForegroundColor, value))
+                    {
+                        ForegroundColor = (Color)value;
+                        MC.Shell.SetForegroundColor(NativeControl, ForegroundColor);
+                    }
+                    return true;
+
+                case nameof(TitleColor):
+                    if (!Equals(TitleColor, value))
+                    {
+                        TitleColor = (Color)value;
+                        MC.Shell.SetTitleColor(NativeControl, TitleColor);
+                    }
+                    return true;
+
+                case nameof(UnselectedColor):
+                    if (!Equals(UnselectedColor, value))
+                    {
+                        UnselectedColor = (Color)value;
+                        MC.Shell.SetUnselectedColor(NativeControl, UnselectedColor);
+                    }
                     return true;
 
                 default:

@@ -5,16 +5,16 @@ namespace BlazorBindings.Maui.Elements
 {
     public partial class BackButtonBehavior
     {
-        [Parameter] public EventCallback Command { get; set; }
+        [Parameter] public EventCallback OnBackButtonPressed { get; set; }
 
         protected override bool HandleAdditionalParameter(string name, object value)
         {
-            if (name == nameof(Command))
+            if (name == nameof(OnBackButtonPressed))
             {
-                if (!Equals(Command, value))
+                if (!Equals(OnBackButtonPressed, value))
                 {
-                    Command = (EventCallback)value;
-                    NativeControl.Command = new EventCallbackCommand(Command);
+                    OnBackButtonPressed = (EventCallback)value;
+                    NativeControl.Command = new EventCallbackCommand(OnBackButtonPressed);
                 }
                 return true;
             }

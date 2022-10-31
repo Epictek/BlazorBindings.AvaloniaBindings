@@ -1,6 +1,6 @@
 ﻿<ContentPage @ref="_page">
     <BackButtonBehavior>
-        <BackButtonBehavior Command="OnBackPressed" IsEnabled="_isEnabled" IsVisible="_isVisible" />
+        <BackButtonBehavior OnBackButtonPressed="OnBackPressed" IsEnabled="_isEnabled" IsVisible="_isVisible" />
     </BackButtonBehavior>
 
     <ChildContent>
@@ -39,6 +39,7 @@
 
     async Task OnBackPressed()
     {
+        _page.NativeControl.Bac
         _backPressed = true;
 
         var promptAccepted = await _page.NativeControl.DisplayAlert("Go Back", "Are you sure you want to go back?", "Yes", "No");
