@@ -1,0 +1,27 @@
+﻿@using BlazorBindings.Maui.Elements.Handlers;
+@using Microsoft.AspNetCore.Components.Rendering;
+
+@code {
+    private MauiBlazorBindingsRenderer _renderer = TestBlazorBindingsRenderer.Create();
+
+    protected async Task<T> Render<T>(RenderFragment renderFragment) where T: MC.BindableObject
+    {
+        var container = new RootContainerHandler();
+        await _renderer.AddComponent<RenderFragmentComponent>(container, new Dictionary<string, object>
+            {
+                ["RenderFragment"] = renderFragment
+            });
+        return (T)container.Elements[0];
+    }
+
+
+    private class RenderFragmentComponent : ComponentBase
+    {
+        [Parameter] public RenderFragment RenderFragment { get; set; }
+
+        protected override void BuildRenderTree(RenderTreeBuilder builder)
+        {
+            RenderFragment(builder);
+        }
+    }
+}
