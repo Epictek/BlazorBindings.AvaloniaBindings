@@ -25,6 +25,7 @@
                 <Button Text="Change Shell BackgroundColor" OnClick="ChangeShellBackgroundColor" />
                 <Button Text="Change Shell ForegroundColor" OnClick="ChangeShellForegroundColor" />
                 <Button Text="Change Shell UnselectedColor" OnClick="ChangeShellUnselectedColor" />
+                <Button Text="Change Shell ShellTabBarTitleColor" OnClick="ChangeShellTabBarTitleColor" />
                 <Button Text="Show page with BackButtonBehavior" OnClick="NavigateToBackButtonBehavior" />
             </StackLayout>
         </ScrollView>
@@ -40,6 +41,8 @@
     [Parameter] public EventCallback<Color> ShellForegroundColorChanged { get; set; }
     [Parameter] public Color ShellUnselectedColor { get; set; }
     [Parameter] public EventCallback<Color> ShellUnselectedColorChanged { get; set; }
+    [Parameter] public Color ShellTabBarTitleColor { get; set; }
+    [Parameter] public EventCallback<Color> ShellTabBarTitleColorChanged { get; set; }
 
     BlazorBindings.Maui.Elements.Page page;
 
@@ -79,6 +82,13 @@
         var index = (colors.IndexOf(ShellUnselectedColor) + 1) % colors.Count;
         ShellUnselectedColor = colors[index];
         ShellUnselectedColorChanged.InvokeAsync(ShellUnselectedColor);
+    }
+
+    void ChangeShellTabBarTitleColor()
+    {
+        var index = (colors.IndexOf(ShellTabBarTitleColor) + 1) % colors.Count;
+        ShellTabBarTitleColor = colors[index];
+        ShellTabBarTitleColorChanged.InvokeAsync(ShellTabBarTitleColor);
     }
 
     async Task ShowHelp()

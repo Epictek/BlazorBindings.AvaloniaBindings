@@ -11,7 +11,6 @@ using System.Runtime.CompilerServices;
 [assembly: GenerateComponent(typeof(ActivityIndicator))]
 [assembly: GenerateComponent(typeof(BaseMenuItem))]
 [assembly: GenerateComponent(typeof(BaseShellItem))]
-[assembly: GenerateComponent(typeof(BackButtonBehavior))]
 [assembly: GenerateComponent(typeof(Border))]
 [assembly: GenerateComponent(typeof(BoxView))]
 [assembly: GenerateComponent(typeof(Brush))]
@@ -108,7 +107,7 @@ using System.Runtime.CompilerServices;
 [assembly: GenerateComponent(typeof(ToolbarItem))]
 [assembly: GenerateComponent(typeof(VerticalStackLayout))]
 [assembly: GenerateComponent(typeof(View))]
-[assembly: GenerateComponent(typeof(VisualElement))]
+[assembly: GenerateComponent(typeof(VisualElement), Exclude = new[] { nameof(VisualElement.BackgroundColor) })]
 [assembly: GenerateComponent(typeof(WebView))]
 
 // GestureRecognizers

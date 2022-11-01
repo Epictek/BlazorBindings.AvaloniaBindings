@@ -30,7 +30,6 @@ namespace BlazorBindings.Maui.Elements
 
         [Parameter] public double? AnchorX { get; set; }
         [Parameter] public double? AnchorY { get; set; }
-        [Parameter] public Color BackgroundColor { get; set; }
         [Parameter] public FlowDirection? FlowDirection { get; set; }
         [Parameter] public Rect? Frame { get; set; }
         [Parameter] public double? HeightRequest { get; set; }
@@ -81,13 +80,6 @@ namespace BlazorBindings.Maui.Elements
                     {
                         AnchorY = (double?)value;
                         NativeControl.AnchorY = AnchorY ?? (double)MC.VisualElement.AnchorYProperty.DefaultValue;
-                    }
-                    break;
-                case nameof(BackgroundColor):
-                    if (!Equals(BackgroundColor, value))
-                    {
-                        BackgroundColor = (Color)value;
-                        NativeControl.BackgroundColor = BackgroundColor;
                     }
                     break;
                 case nameof(FlowDirection):

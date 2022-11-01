@@ -1,5 +1,6 @@
 using BlazorBindings.Core;
 using BlazorBindings.Maui.Elements.Handlers;
+using BlazorBindings.Maui.Elements.Input;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.Maui.Controls;
@@ -51,9 +52,9 @@ namespace BlazorBindings.Maui.Elements
         /// </summary>
         [Parameter] public PresentationMode? PresentationMode { get; set; }
 
-
         /// <summary>
         /// Defines the color used for the title of the page.
+        /// This property is ignored if the application does not use Shell.
         /// </summary>
         [Parameter] public Color TitleColor { get; set; }
 
@@ -68,10 +69,20 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public RenderFragment SearchHandler { get; set; }
 
         /// <summary>
-        /// Defines the behavior of the back button. This property is ignored if the application does not use Shell.
-        /// It accepts <see cref="Elements.BackButtonBehavior"/> child only.
+        /// Sets the title that appears on the back button for page.
         /// </summary>
-        [Parameter] public RenderFragment BackButtonBehavior { get; set; }
+        [Parameter] public string BackButtonText { get; set; }
+
+        /// <summary>
+        /// Adds or removes a back button to page.
+        /// </summary>
+        [Parameter] public bool? BackButtonVisible { get; set; }
+
+        /// <summary>
+        /// Overrides default back button action.
+        /// This property is ignored if the application does not use Shell.
+        /// </summary>
+        [Parameter] public EventCallback OnBackButtonPressed { get; set; }
 
         protected override bool HandleAdditionalParameter(string name, object value)
         {
@@ -113,18 +124,49 @@ namespace BlazorBindings.Maui.Elements
                         MC.Shell.SetTitleColor(NativeControl, TitleColor);
                     }
                     return true;
+                case nameof(BackButtonText):
+                    if (!Equals(BackButtonText, value))
+                    {
+                        BackButtonText = (string)value;
+                        MC.NavigationPage.SetBackButtonTitle(NativeControl, BackButtonText);
+                        GetBackButtonBehavior().TextOverride = BackButtonText;
+                    }
+                    return true;
+                case nameof(BackButtonVisible):
+                    if (!Equals(BackButtonVisible, value))
+                    {
+                        BackButtonVisible = (bool?)value;
+                        MC.NavigationPage.SetHasBackButton(NativeControl, BackButtonVisible ?? true);
+                        GetBackButtonBehavior().IsVisible = BackButtonVisible ?? true;
+                    }
+                    return true;
+                case nameof(OnBackButtonPressed):
+                    if (!Equals(OnBackButtonPressed, value))
+                    {
+                        OnBackButtonPressed = (EventCallback)value;
+                        GetBackButtonBehavior().Command = OnBackButtonPressed.HasDelegate ? new EventCallbackCommand(OnBackButtonPressed) : null;
+                    }
+                    return true;
                 case nameof(TitleView):
                     TitleView = (RenderFragment)value;
                     return true;
                 case nameof(SearchHandler):
                     SearchHandler = (RenderFragment)value;
                     return true;
-                case nameof(BackButtonBehavior):
-                    BackButtonBehavior = (RenderFragment)value;
-                    return true;
             }
 
             return base.HandleAdditionalParameter(name, value);
+        }
+
+        private MC.BackButtonBehavior GetBackButtonBehavior()
+        {
+            var backBehavior = MC.Shell.GetBackButtonBehavior(NativeControl);
+            if (backBehavior is null)
+            {
+                backBehavior = new MC.BackButtonBehavior();
+                MC.Shell.SetBackButtonBehavior(NativeControl, backBehavior);
+            }
+            return backBehavior;
         }
 
         protected override void RenderAdditionalPartialElementContent(RenderTreeBuilder builder, ref int sequence)
@@ -132,7 +174,6 @@ namespace BlazorBindings.Maui.Elements
             base.RenderAdditionalPartialElementContent(builder, ref sequence);
             RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(ContentPage), TitleView);
             RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(ContentPage), SearchHandler);
-            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(ContentPage), BackButtonBehavior);
         }
     }
 }
