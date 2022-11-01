@@ -1,31 +1,46 @@
 ﻿<ContentPage @ref="page"
              Title="Shell Properties"
-             Shell.NavBarIsVisible="@navBarVisible"
-             Shell.TabBarIsVisible="@tabBarVisible"
-             Shell.TitleColor="@titleColor">
+             NavBarIsVisible="@navBarVisible"
+             TabBarIsVisible="@tabBarVisible"
+             TitleColor="@titleColor">
 
     <ToolbarItems>
         <ToolbarItem Text="Help" OnClick="ShowHelp" />
     </ToolbarItems>
 
     <ChildContent>
-        <StackLayout Spacing="6">
-            <StackLayout Orientation="StackOrientation.Horizontal">
-                <Label Text="Enable NavBar: " />
-                <CheckBox @bind-IsChecked="navBarVisible" />
+        <ScrollView>
+            <StackLayout Spacing="6">
+                <HorizontalStackLayout>
+                    <Label Text="Enable NavBar: " />
+                    <CheckBox @bind-IsChecked="navBarVisible" />
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout>
+                    <Label Text="Enable TabBar: " />
+                    <CheckBox @bind-IsChecked="tabBarVisible" />
+                </HorizontalStackLayout>
+
+                <Button Text="Change Title Color" OnClick="ChangeTitleColor" />
+                <Button Text="Change Shell BackgroundColor" OnClick="ChangeShellBackgroundColor" />
+                <Button Text="Change Shell ForegroundColor" OnClick="ChangeShellForegroundColor" />
+                <Button Text="Change Shell UnselectedColor" OnClick="ChangeShellUnselectedColor" />
+                <Button Text="Show page with BackButtonBehavior" OnClick="NavigateToBackButtonBehavior" />
             </StackLayout>
-            <StackLayout Orientation="StackOrientation.Horizontal">
-                <Label Text="Enable TabBar: " />
-                <CheckBox @bind-IsChecked="tabBarVisible" />
-            </StackLayout>
-            <Button Text="Change Title Color" OnClick="ChangeTitleColor" />
-            <Button Text="Show page with BackButtonBehavior" OnClick="NavigateToBackButtonBehavior" />
-        </StackLayout>
+        </ScrollView>
     </ChildContent>
 </ContentPage>
 
 @code {
     [Inject] INavigationService Navigation { get; set; }
+
+    [Parameter] public Color ShellBackgroundColor { get; set; }
+    [Parameter] public EventCallback<Color> ShellBackgroundColorChanged { get; set; }
+    [Parameter] public Color ShellForegroundColor { get; set; }
+    [Parameter] public EventCallback<Color> ShellForegroundColorChanged { get; set; }
+    [Parameter] public Color ShellUnselectedColor { get; set; }
+    [Parameter] public EventCallback<Color> ShellUnselectedColorChanged { get; set; }
+
     BlazorBindings.Maui.Elements.Page page;
 
     bool navBarVisible = true;
@@ -35,13 +50,35 @@
     List<Color> colors = new List<Color> {
     Colors.Red,
     Colors.Green,
-    Colors.Blue
+    Colors.Blue,
+    null
     };
 
     void ChangeTitleColor()
     {
-        var index = (titleColor is not null ? colors.IndexOf(titleColor) + 1 : 0) % colors.Count;
+        var index = (colors.IndexOf(titleColor) + 1) % colors.Count;
         titleColor = colors[index];
+    }
+
+    void ChangeShellBackgroundColor()
+    {
+        var index = (colors.IndexOf(ShellBackgroundColor) + 1) % colors.Count;
+        ShellBackgroundColor = colors[index];
+        ShellBackgroundColorChanged.InvokeAsync(ShellBackgroundColor);
+    }
+
+    void ChangeShellForegroundColor()
+    {
+        var index = (colors.IndexOf(ShellForegroundColor) + 1) % colors.Count;
+        ShellForegroundColor = colors[index];
+        ShellForegroundColorChanged.InvokeAsync(ShellForegroundColor);
+    }
+
+    void ChangeShellUnselectedColor()
+    {
+        var index = (colors.IndexOf(ShellUnselectedColor) + 1) % colors.Count;
+        ShellUnselectedColor = colors[index];
+        ShellUnselectedColorChanged.InvokeAsync(ShellUnselectedColor);
     }
 
     async Task ShowHelp()

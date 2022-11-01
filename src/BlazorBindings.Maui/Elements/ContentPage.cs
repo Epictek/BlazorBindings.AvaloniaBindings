@@ -3,6 +3,7 @@ using BlazorBindings.Maui.Elements.Handlers;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.Maui.Controls;
+using Microsoft.Maui.Graphics;
 using MC = Microsoft.Maui.Controls;
 
 namespace BlazorBindings.Maui.Elements
@@ -49,6 +50,12 @@ namespace BlazorBindings.Maui.Elements
         /// This property is ignored if the application does not use Shell.
         /// </summary>
         [Parameter] public PresentationMode? PresentationMode { get; set; }
+
+
+        /// <summary>
+        /// Defines the color used for the title of the page.
+        /// </summary>
+        [Parameter] public Color TitleColor { get; set; }
 
         /// <summary>
         /// Defines the view that can be displayed in the navigation bar.
@@ -97,6 +104,13 @@ namespace BlazorBindings.Maui.Elements
                     {
                         PresentationMode = (PresentationMode?)value;
                         MC.Shell.SetPresentationMode(NativeControl, PresentationMode ?? (PresentationMode)MC.Shell.PresentationModeProperty.DefaultValue);
+                    }
+                    return true;
+                case nameof(TitleColor):
+                    if (!Equals(TitleColor, value))
+                    {
+                        TitleColor = (Color)value;
+                        MC.Shell.SetTitleColor(NativeControl, TitleColor);
                     }
                     return true;
                 case nameof(TitleView):
