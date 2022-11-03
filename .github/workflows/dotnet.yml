@@ -30,13 +30,15 @@ jobs:
           --source https://api.nuget.org/v3/index.json
     - name: Restore dependencies
       run: dotnet restore BlazorBindings.Maui.sln
+    - name: Run tests
+      run: dotnet test src/BlazorBindings.UnitTests --no-restore --verbosity normal
     - name: Build templates
       run: |
         cd templates
-        dotnet build -c Release
+        dotnet build -c Release --no-restore
         cd ..
     - name: Pack nugets
-      run: dotnet pack -o ./packages -c Release
+      run: dotnet pack -o ./packages -c Release --no-restore
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3.0.0
       with:
