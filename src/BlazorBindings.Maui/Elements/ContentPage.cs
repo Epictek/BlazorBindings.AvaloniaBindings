@@ -20,7 +20,7 @@ namespace BlazorBindings.Maui.Elements
                     MC.NavigationPage.SetTitleView(x, (MC.View)value);
                 }));
 
-            ElementHandlerRegistry.RegisterPropertyContentHandler<ContentPage>(nameof(SearchHandler),
+            ElementHandlerRegistry.RegisterPropertyContentHandler<ContentPage>(nameof(ShellSearchHandler),
                 (renderer, parent, component) => new ContentPropertyHandler<MC.Page>((x, value) =>
                     MC.Shell.SetSearchHandler(x, (MC.SearchHandler)value)));
 
@@ -50,7 +50,7 @@ namespace BlazorBindings.Maui.Elements
         /// Change Shell navigation behavior.
         /// This property is ignored if the application does not use Shell.
         /// </summary>
-        [Parameter] public PresentationMode? PresentationMode { get; set; }
+        [Parameter] public PresentationMode? ShellPresentationMode { get; set; }
 
         /// <summary>
         /// Defines the color used for the title of the page.
@@ -66,7 +66,7 @@ namespace BlazorBindings.Maui.Elements
         /// <summary>
         /// Configures Shell integrated search capabilities. It accepts <see cref="Elements.SearchHandler{T}"/> child only.
         /// </summary>
-        [Parameter] public RenderFragment SearchHandler { get; set; }
+        [Parameter] public RenderFragment ShellSearchHandler { get; set; }
 
         /// <summary>
         /// Sets the title that appears on the back button for page.
@@ -110,11 +110,11 @@ namespace BlazorBindings.Maui.Elements
                         MC.Shell.SetTabBarIsVisible(NativeControl, TabBarIsVisible ?? true);
                     }
                     return true;
-                case nameof(PresentationMode):
-                    if (!Equals(PresentationMode, value))
+                case nameof(ShellPresentationMode):
+                    if (!Equals(ShellPresentationMode, value))
                     {
-                        PresentationMode = (PresentationMode?)value;
-                        MC.Shell.SetPresentationMode(NativeControl, PresentationMode ?? (PresentationMode)MC.Shell.PresentationModeProperty.DefaultValue);
+                        ShellPresentationMode = (PresentationMode?)value;
+                        MC.Shell.SetPresentationMode(NativeControl, ShellPresentationMode ?? (PresentationMode)MC.Shell.PresentationModeProperty.DefaultValue);
                     }
                     return true;
                 case nameof(TitleColor):
@@ -150,8 +150,8 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(TitleView):
                     TitleView = (RenderFragment)value;
                     return true;
-                case nameof(SearchHandler):
-                    SearchHandler = (RenderFragment)value;
+                case nameof(ShellSearchHandler):
+                    ShellSearchHandler = (RenderFragment)value;
                     return true;
             }
 
@@ -173,7 +173,7 @@ namespace BlazorBindings.Maui.Elements
         {
             base.RenderAdditionalPartialElementContent(builder, ref sequence);
             RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(ContentPage), TitleView);
-            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(ContentPage), SearchHandler);
+            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(ContentPage), ShellSearchHandler);
         }
     }
 }

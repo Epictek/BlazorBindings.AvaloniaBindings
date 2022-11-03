@@ -68,7 +68,7 @@ using System.Runtime.CompilerServices;
 [assembly: GenerateComponent(typeof(ScrollView))]
 [assembly: GenerateComponent(typeof(SearchHandler),
     GenericProperties = new[] { nameof(SearchHandler.ItemsSource), nameof(SearchHandler.SelectedItem), nameof(SearchHandler.ItemTemplate) },
-    PropertyChangedEvents = new[] { nameof(SearchHandler.Query) })]
+    PropertyChangedEvents = new[] { nameof(SearchHandler.Query), nameof(SearchHandler.SelectedItem) })]
 [assembly: GenerateComponent(typeof(SelectableItemsView),
     GenericProperties = new[] { nameof(SelectableItemsView.SelectedItem) },
     PropertyChangedEvents = new[] { nameof(SelectableItemsView.SelectedItem), nameof(SelectableItemsView.SelectedItems) })]

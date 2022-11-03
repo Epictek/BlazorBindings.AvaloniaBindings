@@ -25,8 +25,9 @@
                 <Button Text="Change Shell BackgroundColor" OnClick="ChangeShellBackgroundColor" />
                 <Button Text="Change Shell ForegroundColor" OnClick="ChangeShellForegroundColor" />
                 <Button Text="Change Shell UnselectedColor" OnClick="ChangeShellUnselectedColor" />
-                <Button Text="Change Shell ShellTabBarTitleColor" OnClick="ChangeShellTabBarTitleColor" />
+                <Button Text="Change Shell TabBarTitleColor" OnClick="ChangeShellTabBarTitleColor" />
                 <Button Text="Show page with BackButtonBehavior" OnClick="NavigateToBackButtonBehavior" />
+                <Button Text="Show page with SearchHandler" OnClick="NavigateToSearchHandler" />
             </StackLayout>
         </ScrollView>
     </ChildContent>
@@ -99,5 +100,10 @@
     async Task NavigateToBackButtonBehavior()
     {
         await Navigation.PushAsync<BackButtonBehaviorPage>();
+    }
+
+    async Task NavigateToSearchHandler()
+    {
+        await Navigation.PushAsync<SearchHandlerPage>();
     }
 }

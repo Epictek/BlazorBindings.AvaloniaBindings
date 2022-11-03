@@ -62,6 +62,7 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public TextAlignment? VerticalTextAlignment { get; set; }
         [Parameter] public RenderFragment<T> ItemTemplate { get; set; }
         [Parameter] public EventCallback<string> QueryChanged { get; set; }
+        [Parameter] public EventCallback<T> SelectedItemChanged { get; set; }
         [Parameter] public EventCallback OnFocused { get; set; }
         [Parameter] public EventCallback OnUnfocused { get; set; }
 
@@ -307,6 +308,24 @@ namespace BlazorBindings.Maui.Elements
                         }
 
                         QueryChanged = (EventCallback<string>)value;
+                        NativeControl.PropertyChanged -= NativeControlPropertyChanged;
+                        NativeControl.PropertyChanged += NativeControlPropertyChanged;
+                    }
+                    break;
+                case nameof(SelectedItemChanged):
+                    if (!Equals(SelectedItemChanged, value))
+                    {
+                        void NativeControlPropertyChanged(object sender, PropertyChangedEventArgs e)
+                        {
+                            if (e.PropertyName == nameof(NativeControl.SelectedItem))
+                            {
+                                var value = (T)NativeControl.SelectedItem;
+                                SelectedItem = value;
+                                InvokeAsync(() => SelectedItemChanged.InvokeAsync(value));
+                            }
+                        }
+
+                        SelectedItemChanged = (EventCallback<T>)value;
                         NativeControl.PropertyChanged -= NativeControlPropertyChanged;
                         NativeControl.PropertyChanged += NativeControlPropertyChanged;
                     }

@@ -1,0 +1,58 @@
+﻿<ContentPage Title="Shell Search Handler">
+    <ShellSearchHandler>
+        <SearchHandler ItemsSource="_matchingItems" QueryChanged="SearchItems" @bind-SelectedItem="_selectedItem">
+
+            <ItemTemplate>
+                <Border CornerRadius="8" BackgroundColor="Colors.LightGray" Padding="6">
+                    <HorizontalStackLayout Spacing="6">
+                        <Border CornerRadius="20" BackgroundColor="Colors.LightBlue" Padding="4">
+                            <Label Text="@PreviewText(context)" FontSize="18" />
+                        </Border>
+
+                        <Label Text="@context" FontSize="12" VerticalOptions="LayoutOptions.Center" />
+                    </HorizontalStackLayout>
+                </Border>
+            </ItemTemplate>
+
+        </SearchHandler>
+    </ShellSearchHandler>
+
+    <ChildContent>
+        <VerticalStackLayout>
+            <Label>Enter the text in the seach field above. Try 'ips'.</Label>
+
+            @if (_selectedItem != null)
+            {
+                <Label>Selected item: @_selectedItem</Label>
+            }
+        </VerticalStackLayout>
+    </ChildContent>
+</ContentPage>
+@code {
+    string[] _allItems = Enumerable
+            .Repeat(new[] { "lorem", "ipsum", "dolor", "sit", "amet", "consectetur", "adipiscing", "elit", "sed", "do" }, 30)
+            .Select(words => $"{words[Random.Shared.Next(words.Length)]} {words[Random.Shared.Next(words.Length)]} {words[Random.Shared.Next(words.Length)]}")
+            .ToArray();
+
+    IEnumerable<string> _matchingItems;
+
+    string _selectedItem;
+
+    string PreviewText(string item)
+    {
+        var words = item.Split(" ");
+        return $"{words[0][0]}{words[^1][0]}".ToUpper();
+    }
+
+    async Task SearchItems(string query)
+    {
+        if (query?.Length > 1)
+        {
+            _matchingItems = _allItems.Where(i => i.Contains(query, StringComparison.OrdinalIgnoreCase));
+        }
+        else
+        {
+            _matchingItems = null;
+        }
+    }
+}
