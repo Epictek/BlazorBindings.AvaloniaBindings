@@ -303,7 +303,7 @@ namespace BlazorBindings.Maui.Elements
                             {
                                 var value = NativeControl.Query;
                                 Query = value;
-                                InvokeAsync(() => QueryChanged.InvokeAsync(value));
+                                InvokeEventCallback(QueryChanged, value);
                             }
                         }
 
@@ -321,7 +321,7 @@ namespace BlazorBindings.Maui.Elements
                             {
                                 var value = (T)NativeControl.SelectedItem;
                                 SelectedItem = value;
-                                InvokeAsync(() => SelectedItemChanged.InvokeAsync(value));
+                                InvokeEventCallback(SelectedItemChanged, value);
                             }
                         }
 
@@ -333,7 +333,7 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(OnFocused):
                     if (!Equals(OnFocused, value))
                     {
-                        void NativeControlFocused(object sender, EventArgs e) => InvokeAsync(() => OnFocused.InvokeAsync(e));
+                        void NativeControlFocused(object sender, EventArgs e) => InvokeEventCallback(OnFocused);
 
                         OnFocused = (EventCallback)value;
                         NativeControl.Focused -= NativeControlFocused;
@@ -343,7 +343,7 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(OnUnfocused):
                     if (!Equals(OnUnfocused, value))
                     {
-                        void NativeControlUnfocused(object sender, EventArgs e) => InvokeAsync(() => OnUnfocused.InvokeAsync(e));
+                        void NativeControlUnfocused(object sender, EventArgs e) => InvokeEventCallback(OnUnfocused);
 
                         OnUnfocused = (EventCallback)value;
                         NativeControl.Unfocused -= NativeControlUnfocused;

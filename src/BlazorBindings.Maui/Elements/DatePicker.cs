@@ -43,7 +43,7 @@ namespace BlazorBindings.Maui.Elements
                         {
                             var value = DateOnly.FromDateTime(NativeControl.Date);
                             Date = value;
-                            DateChanged.InvokeAsync(value);
+                            InvokeEventCallback(DateChanged, value);
                         }
 
                         DateChanged = (EventCallback<DateOnly>)value;

@@ -4,11 +4,15 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using System;
+using System.Runtime.ExceptionServices;
+using System.Threading.Tasks;
 
 namespace BlazorBindings.Core
 {
     public abstract class NativeControlComponentBase : ComponentBase
     {
+        private Exception _eventCallbackException;
+
         public IElementHandler ElementHandler { get; private set; }
 
         public void SetElementReference(IElementHandler elementHandler)
@@ -18,9 +22,13 @@ namespace BlazorBindings.Core
 
         protected override void BuildRenderTree(RenderTreeBuilder builder)
         {
-            if (builder is null)
+            ArgumentNullException.ThrowIfNull(builder);
+
+            if (_eventCallbackException != null)
             {
-                throw new ArgumentNullException(nameof(builder));
+                var oldException = _eventCallbackException;
+                _eventCallbackException = null;
+                ExceptionDispatchInfo.Throw(oldException);
             }
 
             builder.OpenElement(0, GetType().FullName);
@@ -44,6 +52,42 @@ namespace BlazorBindings.Core
 
         protected virtual void RenderAdditionalElementContent(RenderTreeBuilder builder, ref int sequence)
         {
+        }
+
+        protected Task InvokeEventCallback<T>(EventCallback<T> eventCallback, T value)
+        {
+            return InvokeAsync(async () =>
+            {
+                try
+                {
+                    await eventCallback.InvokeAsync(value);
+                }
+                catch (Exception ex)
+                {
+                    // Take a look here for the reasoning
+                    // https://github.com/dotnet/aspnetcore/issues/44920
+                    _eventCallbackException = ex;
+                    StateHasChanged();
+                }
+            });
+        }
+
+        protected Task InvokeEventCallback(EventCallback eventCallback)
+        {
+            return InvokeAsync(async () =>
+            {
+                try
+                {
+                    await eventCallback.InvokeAsync();
+                }
+                catch (Exception ex)
+                {
+                    // Take a look here for the reasoning
+                    // https://github.com/dotnet/aspnetcore/issues/44920
+                    _eventCallbackException = ex;
+                    StateHasChanged();
+                }
+            });
         }
 
         protected virtual RenderFragment GetChildContent() => null;

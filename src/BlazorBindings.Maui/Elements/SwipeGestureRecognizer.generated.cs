@@ -49,7 +49,7 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(OnSwiped):
                     if (!Equals(OnSwiped, value))
                     {
-                        void NativeControlSwiped(object sender, MC.SwipedEventArgs e) => InvokeAsync(() => OnSwiped.InvokeAsync(e));
+                        void NativeControlSwiped(object sender, MC.SwipedEventArgs e) => InvokeEventCallback(OnSwiped, e);
 
                         OnSwiped = (EventCallback<MC.SwipedEventArgs>)value;
                         NativeControl.Swiped -= NativeControlSwiped;

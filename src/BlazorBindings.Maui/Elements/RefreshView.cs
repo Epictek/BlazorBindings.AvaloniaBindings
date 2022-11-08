@@ -20,7 +20,7 @@ namespace BlazorBindings.Maui.Elements
                     {
                         try
                         {
-                            await OnRefreshing.InvokeAsync();
+                            await InvokeEventCallback(OnRefreshing);
                         }
                         finally
                         {

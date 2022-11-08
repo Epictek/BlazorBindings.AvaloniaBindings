@@ -48,7 +48,7 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(OnStartHoverInteraction):
                     if (!Equals(OnStartHoverInteraction, value))
                     {
-                        void NativeControlStartHoverInteraction(object sender, MC.TouchEventArgs e) => InvokeAsync(() => OnStartHoverInteraction.InvokeAsync(e));
+                        void NativeControlStartHoverInteraction(object sender, MC.TouchEventArgs e) => InvokeEventCallback(OnStartHoverInteraction, e);
 
                         OnStartHoverInteraction = (EventCallback<MC.TouchEventArgs>)value;
                         NativeControl.StartHoverInteraction -= NativeControlStartHoverInteraction;
@@ -58,7 +58,7 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(OnMoveHoverInteraction):
                     if (!Equals(OnMoveHoverInteraction, value))
                     {
-                        void NativeControlMoveHoverInteraction(object sender, MC.TouchEventArgs e) => InvokeAsync(() => OnMoveHoverInteraction.InvokeAsync(e));
+                        void NativeControlMoveHoverInteraction(object sender, MC.TouchEventArgs e) => InvokeEventCallback(OnMoveHoverInteraction, e);
 
                         OnMoveHoverInteraction = (EventCallback<MC.TouchEventArgs>)value;
                         NativeControl.MoveHoverInteraction -= NativeControlMoveHoverInteraction;
@@ -68,7 +68,7 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(OnEndHoverInteraction):
                     if (!Equals(OnEndHoverInteraction, value))
                     {
-                        void NativeControlEndHoverInteraction(object sender, EventArgs e) => InvokeAsync(() => OnEndHoverInteraction.InvokeAsync());
+                        void NativeControlEndHoverInteraction(object sender, EventArgs e) => InvokeEventCallback(OnEndHoverInteraction);
 
                         OnEndHoverInteraction = (EventCallback)value;
                         NativeControl.EndHoverInteraction -= NativeControlEndHoverInteraction;
@@ -78,7 +78,7 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(OnStartInteraction):
                     if (!Equals(OnStartInteraction, value))
                     {
-                        void NativeControlStartInteraction(object sender, MC.TouchEventArgs e) => InvokeAsync(() => OnStartInteraction.InvokeAsync(e));
+                        void NativeControlStartInteraction(object sender, MC.TouchEventArgs e) => InvokeEventCallback(OnStartInteraction, e);
 
                         OnStartInteraction = (EventCallback<MC.TouchEventArgs>)value;
                         NativeControl.StartInteraction -= NativeControlStartInteraction;
@@ -88,7 +88,7 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(OnDragInteraction):
                     if (!Equals(OnDragInteraction, value))
                     {
-                        void NativeControlDragInteraction(object sender, MC.TouchEventArgs e) => InvokeAsync(() => OnDragInteraction.InvokeAsync(e));
+                        void NativeControlDragInteraction(object sender, MC.TouchEventArgs e) => InvokeEventCallback(OnDragInteraction, e);
 
                         OnDragInteraction = (EventCallback<MC.TouchEventArgs>)value;
                         NativeControl.DragInteraction -= NativeControlDragInteraction;
@@ -98,7 +98,7 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(OnEndInteraction):
                     if (!Equals(OnEndInteraction, value))
                     {
-                        void NativeControlEndInteraction(object sender, MC.TouchEventArgs e) => InvokeAsync(() => OnEndInteraction.InvokeAsync(e));
+                        void NativeControlEndInteraction(object sender, MC.TouchEventArgs e) => InvokeEventCallback(OnEndInteraction, e);
 
                         OnEndInteraction = (EventCallback<MC.TouchEventArgs>)value;
                         NativeControl.EndInteraction -= NativeControlEndInteraction;
@@ -108,7 +108,7 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(OnCancelInteraction):
                     if (!Equals(OnCancelInteraction, value))
                     {
-                        void NativeControlCancelInteraction(object sender, EventArgs e) => InvokeAsync(() => OnCancelInteraction.InvokeAsync());
+                        void NativeControlCancelInteraction(object sender, EventArgs e) => InvokeEventCallback(OnCancelInteraction);
 
                         OnCancelInteraction = (EventCallback)value;
                         NativeControl.CancelInteraction -= NativeControlCancelInteraction;

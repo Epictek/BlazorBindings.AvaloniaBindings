@@ -56,7 +56,7 @@ namespace BlazorBindings.Maui.Elements
                             {
                                 var value = NativeControl.IsRefreshing;
                                 IsRefreshing = value;
-                                InvokeAsync(() => IsRefreshingChanged.InvokeAsync(value));
+                                InvokeEventCallback(IsRefreshingChanged, value);
                             }
                         }
 

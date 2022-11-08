@@ -38,7 +38,8 @@ namespace BlazorBindings.Maui.Elements
                         {
                             if (e.PropertyName == "SelectedValue")
                             {
-                                SelectedValueChanged.InvokeAsync((T)MC.RadioButtonGroup.GetSelectedValue(NativeControl));
+                                var value = (T)MC.RadioButtonGroup.GetSelectedValue(NativeControl);
+                                InvokeEventCallback(SelectedValueChanged, value);
                             }
                         }
 

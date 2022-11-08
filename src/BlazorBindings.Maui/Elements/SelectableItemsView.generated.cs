@@ -66,7 +66,7 @@ namespace BlazorBindings.Maui.Elements
                             {
                                 var value = (T)NativeControl.SelectedItem;
                                 SelectedItem = value;
-                                InvokeAsync(() => SelectedItemChanged.InvokeAsync(value));
+                                InvokeEventCallback(SelectedItemChanged, value);
                             }
                         }
 
@@ -84,7 +84,7 @@ namespace BlazorBindings.Maui.Elements
                             {
                                 var value = NativeControl.SelectedItems;
                                 SelectedItems = value;
-                                InvokeAsync(() => SelectedItemsChanged.InvokeAsync(value));
+                                InvokeEventCallback(SelectedItemsChanged, value);
                             }
                         }
 
@@ -96,7 +96,7 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(OnSelectionChanged):
                     if (!Equals(OnSelectionChanged, value))
                     {
-                        void NativeControlSelectionChanged(object sender, MC.SelectionChangedEventArgs e) => InvokeAsync(() => OnSelectionChanged.InvokeAsync(e));
+                        void NativeControlSelectionChanged(object sender, MC.SelectionChangedEventArgs e) => InvokeEventCallback(OnSelectionChanged, e);
 
                         OnSelectionChanged = (EventCallback<MC.SelectionChangedEventArgs>)value;
                         NativeControl.SelectionChanged -= NativeControlSelectionChanged;

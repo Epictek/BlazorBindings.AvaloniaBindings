@@ -144,7 +144,9 @@ namespace BlazorBindings.Maui.Elements
                     if (!Equals(OnBackButtonPressed, value))
                     {
                         OnBackButtonPressed = (EventCallback)value;
-                        GetBackButtonBehavior().Command = OnBackButtonPressed.HasDelegate ? new EventCallbackCommand(OnBackButtonPressed) : null;
+                        GetBackButtonBehavior().Command = OnBackButtonPressed.HasDelegate
+                            ? new EventCallbackCommand(() => InvokeEventCallback(OnBackButtonPressed))
+                            : null;
                     }
                     return true;
                 case nameof(TitleView):
