@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Components.RenderTree;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Runtime.ExceptionServices;
 using System.Threading.Tasks;
 
 namespace BlazorBindings.Core
@@ -119,11 +118,6 @@ namespace BlazorBindings.Core
             }
 
             return Task.CompletedTask;
-        }
-
-        protected override void HandleException(Exception exception)
-        {
-            ExceptionDispatchInfo.Throw(exception);
         }
 
         public void RegisterEvent(ulong eventHandlerId, Action<ulong> unregisterCallback)
