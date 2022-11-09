@@ -40,7 +40,7 @@ namespace BlazorBindings.Maui.Elements
                             {
                                 var value = TimeOnly.FromTimeSpan(NativeControl.Time);
                                 Time = value;
-                                TimeChanged.InvokeAsync(value);
+                                InvokeEventCallback(TimeChanged, value);
                             }
                         }
 

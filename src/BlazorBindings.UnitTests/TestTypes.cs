@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Maui;
 using Microsoft.Maui.Hosting;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using MauiDispatching = Microsoft.Maui.Dispatching;
@@ -72,6 +73,14 @@ namespace BlazorBindings.UnitTests
         {
         }
 
+        public List<Exception> Exceptions { get; } = new();
+
+        protected override void HandleException(Exception exception)
+        {
+            Exceptions.Add(exception);
+            base.HandleException(exception);
+        }
+
         public override Dispatcher Dispatcher => NullDispatcher.Instance;
 
         public static MauiBlazorBindingsRenderer Create()
@@ -91,42 +100,22 @@ namespace BlazorBindings.UnitTests
 
             public override Task InvokeAsync(Action workItem)
             {
-                if (workItem is null)
-                {
-                    throw new ArgumentNullException(nameof(workItem));
-                }
-
                 workItem();
                 return Task.CompletedTask;
             }
 
             public override Task InvokeAsync(Func<Task> workItem)
             {
-                if (workItem is null)
-                {
-                    throw new ArgumentNullException(nameof(workItem));
-                }
-
                 return workItem();
             }
 
             public override Task<TResult> InvokeAsync<TResult>(Func<TResult> workItem)
             {
-                if (workItem is null)
-                {
-                    throw new ArgumentNullException(nameof(workItem));
-                }
-
                 return Task.FromResult(workItem());
             }
 
             public override Task<TResult> InvokeAsync<TResult>(Func<Task<TResult>> workItem)
             {
-                if (workItem is null)
-                {
-                    throw new ArgumentNullException(nameof(workItem));
-                }
-
                 return workItem();
             }
         }

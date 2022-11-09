@@ -148,7 +148,7 @@ namespace BlazorBindings.Maui.Elements
                             {
                                 var value = (T)NativeControl.SelectedItem;
                                 SelectedItem = value;
-                                InvokeAsync(() => SelectedItemChanged.InvokeAsync(value));
+                                InvokeEventCallback(SelectedItemChanged, value);
                             }
                         }
 
@@ -164,7 +164,7 @@ namespace BlazorBindings.Maui.Elements
                         {
                             var value = NativeControl.SelectedIndex;
                             SelectedIndex = value;
-                            InvokeAsync(() => SelectedIndexChanged.InvokeAsync(value));
+                            InvokeEventCallback(SelectedIndexChanged, value);
                         }
 
                         SelectedIndexChanged = (EventCallback<int>)value;

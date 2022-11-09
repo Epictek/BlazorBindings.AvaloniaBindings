@@ -32,7 +32,7 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(OnPinchUpdated):
                     if (!Equals(OnPinchUpdated, value))
                     {
-                        void NativeControlPinchUpdated(object sender, MC.PinchGestureUpdatedEventArgs e) => InvokeAsync(() => OnPinchUpdated.InvokeAsync(e));
+                        void NativeControlPinchUpdated(object sender, MC.PinchGestureUpdatedEventArgs e) => InvokeEventCallback(OnPinchUpdated, e);
 
                         OnPinchUpdated = (EventCallback<MC.PinchGestureUpdatedEventArgs>)value;
                         NativeControl.PinchUpdated -= NativeControlPinchUpdated;

@@ -90,7 +90,7 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(OnAppearing):
                     if (!Equals(OnAppearing, value))
                     {
-                        void NativeControlAppearing(object sender, EventArgs e) => InvokeAsync(() => OnAppearing.InvokeAsync());
+                        void NativeControlAppearing(object sender, EventArgs e) => InvokeEventCallback(OnAppearing);
 
                         OnAppearing = (EventCallback)value;
                         NativeControl.Appearing -= NativeControlAppearing;
@@ -100,7 +100,7 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(OnDisappearing):
                     if (!Equals(OnDisappearing, value))
                     {
-                        void NativeControlDisappearing(object sender, EventArgs e) => InvokeAsync(() => OnDisappearing.InvokeAsync());
+                        void NativeControlDisappearing(object sender, EventArgs e) => InvokeEventCallback(OnDisappearing);
 
                         OnDisappearing = (EventCallback)value;
                         NativeControl.Disappearing -= NativeControlDisappearing;

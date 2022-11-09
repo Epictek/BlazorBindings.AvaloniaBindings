@@ -1,23 +1,22 @@
-﻿using Microsoft.AspNetCore.Components;
-using System;
+﻿using System;
 using System.Windows.Input;
 
 namespace BlazorBindings.Maui.Elements.Input
 {
     internal class EventCallbackCommand : ICommand
     {
-        private readonly EventCallback _eventCallback;
+        private readonly Action _eventCallbackAction;
 
-        public EventCallbackCommand(EventCallback eventCallback)
+        public EventCallbackCommand(Action eventCallbackAction)
         {
-            _eventCallback = eventCallback;
+            _eventCallbackAction = eventCallbackAction;
         }
 
-        public bool CanExecute(object parameter) => _eventCallback.HasDelegate;
+        public bool CanExecute(object parameter) => true;
 
         public void Execute(object parameter)
         {
-            _ = _eventCallback.InvokeAsync();
+            _eventCallbackAction();
         }
 
         event EventHandler ICommand.CanExecuteChanged

@@ -81,7 +81,7 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(OnClick):
                     if (!Equals(OnClick, value))
                     {
-                        void NativeControlClicked(object sender, EventArgs e) => InvokeAsync(() => OnClick.InvokeAsync());
+                        void NativeControlClicked(object sender, EventArgs e) => InvokeEventCallback(OnClick);
 
                         OnClick = (EventCallback)value;
                         NativeControl.Clicked -= NativeControlClicked;

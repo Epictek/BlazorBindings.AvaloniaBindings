@@ -46,6 +46,8 @@
 
     async Task SearchItems(string query)
     {
+        await Task.Delay(100);
+
         if (query?.Length > 1)
         {
             _matchingItems = _allItems.Where(i => i.Contains(query, StringComparison.OrdinalIgnoreCase));

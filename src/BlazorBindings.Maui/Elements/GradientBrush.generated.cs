@@ -32,7 +32,7 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(OnInvalidateGradientBrushRequested):
                     if (!Equals(OnInvalidateGradientBrushRequested, value))
                     {
-                        void NativeControlInvalidateGradientBrushRequested(object sender, EventArgs e) => InvokeAsync(() => OnInvalidateGradientBrushRequested.InvokeAsync());
+                        void NativeControlInvalidateGradientBrushRequested(object sender, EventArgs e) => InvokeEventCallback(OnInvalidateGradientBrushRequested);
 
                         OnInvalidateGradientBrushRequested = (EventCallback)value;
                         NativeControl.InvalidateGradientBrushRequested -= NativeControlInvalidateGradientBrushRequested;

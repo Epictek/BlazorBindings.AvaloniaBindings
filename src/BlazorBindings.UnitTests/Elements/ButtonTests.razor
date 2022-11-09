@@ -1,0 +1,15 @@
+﻿@inherits ElementTestBase
+
+@code {
+    [Test]
+    public async Task ButtonOnClickEventCallback()
+    {
+        bool clicked = false;
+        void HandleButtonClick() => clicked = true;
+        var button = await Render<MC.Button>(@<Button OnClick="HandleButtonClick" />);
+
+        button.SendClicked();
+
+        Assert.That(clicked, Is.True);
+    }
+}

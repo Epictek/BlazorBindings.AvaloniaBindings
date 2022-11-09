@@ -65,7 +65,7 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(OnScrolled):
                     if (!Equals(OnScrolled, value))
                     {
-                        void NativeControlScrolled(object sender, MC.ScrolledEventArgs e) => InvokeAsync(() => OnScrolled.InvokeAsync(e));
+                        void NativeControlScrolled(object sender, MC.ScrolledEventArgs e) => InvokeEventCallback(OnScrolled, e);
 
                         OnScrolled = (EventCallback<MC.ScrolledEventArgs>)value;
                         NativeControl.Scrolled -= NativeControlScrolled;
