@@ -8,7 +8,6 @@
 using BlazorBindings.Core;
 using MC = Microsoft.Maui.Controls;
 using Microsoft.AspNetCore.Components;
-using System;
 using System.Threading.Tasks;
 
 namespace BlazorBindings.Maui.Elements
@@ -20,8 +19,9 @@ namespace BlazorBindings.Maui.Elements
             RegisterAdditionalHandlers();
         }
 
+        [Parameter] public MC.ButtonsMask? Buttons { get; set; }
         [Parameter] public int? NumberOfTapsRequired { get; set; }
-        [Parameter] public EventCallback OnTapped { get; set; }
+        [Parameter] public EventCallback<MC.TappedEventArgs> OnTapped { get; set; }
 
         public new MC.TapGestureRecognizer NativeControl => (MC.TapGestureRecognizer)((BindableObject)this).NativeControl;
 
@@ -31,6 +31,13 @@ namespace BlazorBindings.Maui.Elements
         {
             switch (name)
             {
+                case nameof(Buttons):
+                    if (!Equals(Buttons, value))
+                    {
+                        Buttons = (MC.ButtonsMask?)value;
+                        NativeControl.Buttons = Buttons ?? (MC.ButtonsMask)MC.TapGestureRecognizer.ButtonsProperty.DefaultValue;
+                    }
+                    break;
                 case nameof(NumberOfTapsRequired):
                     if (!Equals(NumberOfTapsRequired, value))
                     {
@@ -41,9 +48,9 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(OnTapped):
                     if (!Equals(OnTapped, value))
                     {
-                        void NativeControlTapped(object sender, EventArgs e) => InvokeEventCallback(OnTapped);
+                        void NativeControlTapped(object sender, MC.TappedEventArgs e) => InvokeEventCallback(OnTapped, e);
 
-                        OnTapped = (EventCallback)value;
+                        OnTapped = (EventCallback<MC.TappedEventArgs>)value;
                         NativeControl.Tapped -= NativeControlTapped;
                         NativeControl.Tapped += NativeControlTapped;
                     }

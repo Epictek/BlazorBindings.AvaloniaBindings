@@ -226,7 +226,7 @@ namespace BlazorBindings.Maui.Elements
                     if (!Equals(ZIndex, value))
                     {
                         ZIndex = (int?)value;
-                        NativeControl.ZIndex = ZIndex ?? default;
+                        NativeControl.ZIndex = ZIndex ?? (int)MC.VisualElement.ZIndexProperty.DefaultValue;
                     }
                     break;
                 case nameof(Background):

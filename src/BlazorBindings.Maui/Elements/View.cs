@@ -11,8 +11,8 @@ namespace BlazorBindings.Maui.Elements
 {
     public abstract partial class View : VisualElement
     {
-        [Parameter] public EventCallback OnTap { get; set; }
-        [Parameter] public EventCallback OnDoubleTap { get; set; }
+        [Parameter] public EventCallback<MC.TappedEventArgs> OnTap { get; set; }
+        [Parameter] public EventCallback<MC.TappedEventArgs> OnDoubleTap { get; set; }
         [Parameter] public EventCallback<SwipedEventArgs> OnSwipe { get; set; }
         [Parameter] public EventCallback<PinchGestureUpdatedEventArgs> OnPinchUpdate { get; set; }
         [Parameter] public EventCallback<PanUpdatedEventArgs> OnPanUpdate { get; set; }
@@ -25,7 +25,7 @@ namespace BlazorBindings.Maui.Elements
                     if (!Equals(value, OnTap))
                     {
                         HandleTap();
-                        OnTap = (EventCallback)value;
+                        OnTap = (EventCallback<MC.TappedEventArgs>)value;
                     }
                     return true;
 
@@ -33,7 +33,7 @@ namespace BlazorBindings.Maui.Elements
                     if (!Equals(value, OnDoubleTap))
                     {
                         HandleDoubleTap();
-                        OnDoubleTap = (EventCallback)value;
+                        OnDoubleTap = (EventCallback<MC.TappedEventArgs>)value;
                     }
                     return true;
 
@@ -69,7 +69,7 @@ namespace BlazorBindings.Maui.Elements
 
         private void HandleTap()
         {
-            void GestureRecognizerTapped(object sender, EventArgs e) => InvokeEventCallback(OnTap);
+            void GestureRecognizerTapped(object sender, MC.TappedEventArgs e) => InvokeEventCallback(OnTap, e);
 
             var tapGestureRecognizer = NativeControl.GestureRecognizers
                 .OfType<MC.TapGestureRecognizer>()
@@ -87,7 +87,7 @@ namespace BlazorBindings.Maui.Elements
 
         private void HandleDoubleTap()
         {
-            void GestureRecognizerTapped(object sender, EventArgs e) => InvokeEventCallback(OnDoubleTap);
+            void GestureRecognizerTapped(object sender, MC.TappedEventArgs e) => InvokeEventCallback(OnDoubleTap, e);
 
             var tapGestureRecognizer = NativeControl.GestureRecognizers
                 .OfType<MC.TapGestureRecognizer>()
