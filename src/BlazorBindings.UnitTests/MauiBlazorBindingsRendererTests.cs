@@ -63,6 +63,7 @@ namespace BlazorBindings.UnitTests
         }
 
         [Test]
+        [Ignore("https://github.com/Dreamescaper/BlazorBindings.Maui/issues/42")]
         public void ShouldThrowExceptionIfHappenedDuringSyncRender()
         {
             void action() => _ = _renderer.AddComponent<ComponentWithException>(new NavigationPage());
