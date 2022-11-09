@@ -38,9 +38,9 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public TextType? TextType { get; set; }
         [Parameter] public TextAlignment? VerticalTextAlignment { get; set; }
 
-        public new MC.Label NativeControl => (MC.Label)((Element)this).NativeControl;
+        public new MC.Label NativeControl => (MC.Label)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MC.Label();
+        protected override MC.Label CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {

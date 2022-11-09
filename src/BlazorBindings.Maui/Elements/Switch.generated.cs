@@ -25,9 +25,9 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public Color ThumbColor { get; set; }
         [Parameter] public EventCallback<bool> IsToggledChanged { get; set; }
 
-        public new MC.Switch NativeControl => (MC.Switch)((Element)this).NativeControl;
+        public new MC.Switch NativeControl => (MC.Switch)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MC.Switch();
+        protected override MC.Switch CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {
@@ -61,7 +61,7 @@ namespace BlazorBindings.Maui.Elements
                         {
                             var value = NativeControl.IsToggled;
                             IsToggled = value;
-                            InvokeAsync(() => IsToggledChanged.InvokeAsync(value));
+                            InvokeEventCallback(IsToggledChanged, value);
                         }
 
                         IsToggledChanged = (EventCallback<bool>)value;

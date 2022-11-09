@@ -7,6 +7,6 @@ namespace BlazorBindings.Maui
 {
     public interface IMauiElementHandler : IElementHandler
     {
-        Microsoft.Maui.Controls.Element ElementControl { get; }
+        Microsoft.Maui.Controls.BindableObject ElementControl { get; }
     }
 }

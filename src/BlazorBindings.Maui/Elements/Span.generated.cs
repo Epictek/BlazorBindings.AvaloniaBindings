@@ -33,9 +33,9 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public TextDecorations? TextDecorations { get; set; }
         [Parameter] public TextTransform? TextTransform { get; set; }
 
-        public new MC.Span NativeControl => (MC.Span)((Element)this).NativeControl;
+        public new MC.Span NativeControl => (MC.Span)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MC.Span();
+        protected override MC.Span CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {

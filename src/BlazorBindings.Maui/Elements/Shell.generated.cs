@@ -63,9 +63,9 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public EventCallback<MC.ShellNavigatedEventArgs> OnNavigated { get; set; }
         [Parameter] public EventCallback<MC.ShellNavigatingEventArgs> OnNavigating { get; set; }
 
-        public new MC.Shell NativeControl => (MC.Shell)((Element)this).NativeControl;
+        public new MC.Shell NativeControl => (MC.Shell)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MC.Shell();
+        protected override MC.Shell CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {
@@ -172,7 +172,7 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(OnNavigated):
                     if (!Equals(OnNavigated, value))
                     {
-                        void NativeControlNavigated(object sender, MC.ShellNavigatedEventArgs e) => InvokeAsync(() => OnNavigated.InvokeAsync(e));
+                        void NativeControlNavigated(object sender, MC.ShellNavigatedEventArgs e) => InvokeEventCallback(OnNavigated, e);
 
                         OnNavigated = (EventCallback<MC.ShellNavigatedEventArgs>)value;
                         NativeControl.Navigated -= NativeControlNavigated;
@@ -182,7 +182,7 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(OnNavigating):
                     if (!Equals(OnNavigating, value))
                     {
-                        void NativeControlNavigating(object sender, MC.ShellNavigatingEventArgs e) => InvokeAsync(() => OnNavigating.InvokeAsync(e));
+                        void NativeControlNavigating(object sender, MC.ShellNavigatingEventArgs e) => InvokeEventCallback(OnNavigating, e);
 
                         OnNavigating = (EventCallback<MC.ShellNavigatingEventArgs>)value;
                         NativeControl.Navigating -= NativeControlNavigating;

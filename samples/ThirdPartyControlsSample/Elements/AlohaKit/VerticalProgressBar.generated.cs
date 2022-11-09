@@ -31,9 +31,9 @@ namespace BlazorBindings.Maui.Elements.AlohaKit
         [Parameter] public Color ProgressColor { get; set; }
         [Parameter] public RenderFragment ProgressBrush { get; set; }
 
-        public new AC.VerticalProgressBar NativeControl => (AC.VerticalProgressBar)((Element)this).NativeControl;
+        public new AC.VerticalProgressBar NativeControl => (AC.VerticalProgressBar)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new AC.VerticalProgressBar();
+        protected override AC.VerticalProgressBar CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {

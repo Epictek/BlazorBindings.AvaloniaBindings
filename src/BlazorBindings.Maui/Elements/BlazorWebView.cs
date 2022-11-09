@@ -14,7 +14,7 @@ namespace BlazorBindings.Maui.Elements
 
         public new WVM.BlazorWebView NativeControl => (WVM.BlazorWebView)((Element)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new WVM.BlazorWebView();
+        protected override MC.BindableObject CreateNativeElement() => new WVM.BlazorWebView();
 
         protected override RenderFragment GetChildContent() => RootComponents;
 

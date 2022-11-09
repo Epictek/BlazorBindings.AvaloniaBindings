@@ -1,0 +1,32 @@
+﻿@inherits ElementTestBase
+@code {
+
+    [Test]
+    public async Task ShellAttachedProperties()
+    {
+        var shell = await Render<MC.Shell>(
+    @<Shell BackgroundColor="Colors.AliceBlue"
+            DisabledColor="Colors.Beige"
+            ForegroundColor="Colors.CadetBlue"
+            TitleColor="Colors.DarkBlue"
+            UnselectedColor="Colors.Firebrick"
+            TabBarBackgroundColor="Colors.Gainsboro"
+            TabBarDisabledColor="Colors.Honeydew"
+            TabBarForegroundColor="Colors.IndianRed"
+            TabBarTitleColor="Colors.NavajoWhite"
+            TabBarUnselectedColor="Colors.Khaki">
+    </Shell>);
+
+        Assert.That(MC.Shell.GetBackgroundColor(shell), Is.EqualTo(Colors.AliceBlue));
+        Assert.That(MC.Shell.GetDisabledColor(shell), Is.EqualTo(Colors.Beige));
+        Assert.That(MC.Shell.GetForegroundColor(shell), Is.EqualTo(Colors.CadetBlue));
+        Assert.That(MC.Shell.GetTitleColor(shell), Is.EqualTo(Colors.DarkBlue));
+        Assert.That(MC.Shell.GetUnselectedColor(shell), Is.EqualTo(Colors.Firebrick));
+
+        Assert.That(MC.Shell.GetTabBarBackgroundColor(shell), Is.EqualTo(Colors.Gainsboro));
+        Assert.That(MC.Shell.GetTabBarDisabledColor(shell), Is.EqualTo(Colors.Honeydew));
+        Assert.That(MC.Shell.GetTabBarForegroundColor(shell), Is.EqualTo(Colors.IndianRed));
+        Assert.That(MC.Shell.GetTabBarTitleColor(shell), Is.EqualTo(Colors.NavajoWhite));
+        Assert.That(MC.Shell.GetTabBarUnselectedColor(shell), Is.EqualTo(Colors.Khaki));
+    }
+}

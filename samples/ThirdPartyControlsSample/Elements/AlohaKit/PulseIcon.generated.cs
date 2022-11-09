@@ -33,9 +33,9 @@ namespace BlazorBindings.Maui.Elements.AlohaKit
         [Parameter] public string Source { get; set; }
         [Parameter] public EventCallback OnClick { get; set; }
 
-        public new AC.PulseIcon NativeControl => (AC.PulseIcon)((Element)this).NativeControl;
+        public new AC.PulseIcon NativeControl => (AC.PulseIcon)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new AC.PulseIcon();
+        protected override AC.PulseIcon CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {

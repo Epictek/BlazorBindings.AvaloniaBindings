@@ -27,9 +27,9 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public FlexPosition? Position { get; set; }
         [Parameter] public FlexWrap? Wrap { get; set; }
 
-        public new MC.FlexLayout NativeControl => (MC.FlexLayout)((Element)this).NativeControl;
+        public new MC.FlexLayout NativeControl => (MC.FlexLayout)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MC.FlexLayout();
+        protected override MC.FlexLayout CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {

@@ -19,9 +19,9 @@ namespace BlazorBindings.Maui.Elements
             RegisterAdditionalHandlers();
         }
 
-        public new MC.TemplatedPage NativeControl => (MC.TemplatedPage)((Element)this).NativeControl;
+        public new MC.TemplatedPage NativeControl => (MC.TemplatedPage)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MC.TemplatedPage();
+        protected override MC.TemplatedPage CreateNativeElement() => new();
 
 
         static partial void RegisterAdditionalHandlers();

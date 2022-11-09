@@ -36,9 +36,9 @@ namespace BlazorBindings.Maui.Elements.AlohaKit
         [Parameter] public double? Value { get; set; }
         [Parameter] public EventCallback<double> ValueChanged { get; set; }
 
-        public new AC.NumericUpDown NativeControl => (AC.NumericUpDown)((Element)this).NativeControl;
+        public new AC.NumericUpDown NativeControl => (AC.NumericUpDown)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new AC.NumericUpDown();
+        protected override AC.NumericUpDown CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {

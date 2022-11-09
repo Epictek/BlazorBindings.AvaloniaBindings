@@ -35,9 +35,9 @@ namespace BlazorBindings.Maui.Elements.AlohaKit
         [Parameter] public Color TextColor { get; set; }
         [Parameter] public RenderFragment Fill { get; set; }
 
-        public new AC.Avatar NativeControl => (AC.Avatar)((Element)this).NativeControl;
+        public new AC.Avatar NativeControl => (AC.Avatar)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new AC.Avatar();
+        protected override AC.Avatar CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {

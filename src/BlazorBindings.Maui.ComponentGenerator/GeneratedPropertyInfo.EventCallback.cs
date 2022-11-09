@@ -62,7 +62,7 @@ namespace BlazorBindings.Maui.ComponentGenerator
             }
             else
             {
-                argument = _eventHandlerType.IsGenericType ? "e" : "";
+                argument = GetEventArgType(_eventHandlerType).Name != nameof(EventArgs) ? "e" : "";
             }
 
             if (_bindedProperty != null && IsPropertyChangedEvent)
@@ -73,7 +73,7 @@ namespace BlazorBindings.Maui.ComponentGenerator
                             {{
                                 var value = {argument};
                                 {_bindedProperty.Name} = value;
-                                InvokeAsync(() => {ComponentPropertyName}.InvokeAsync(value));
+                                InvokeEventCallback({ComponentPropertyName}, value);
                             }}
                         }}";
             }
@@ -84,11 +84,13 @@ namespace BlazorBindings.Maui.ComponentGenerator
                         {{
                             var value = {argument};
                             {_bindedProperty.Name} = value;
-                            InvokeAsync(() => {ComponentPropertyName}.InvokeAsync(value));
+                            InvokeEventCallback({ComponentPropertyName}, value);
                         }}";
             }
 
-            return $" => InvokeAsync(() => {ComponentPropertyName}.InvokeAsync({argument}));";
+            return string.IsNullOrEmpty(argument)
+                ? $" => InvokeEventCallback({ComponentPropertyName});"
+                : $" => InvokeEventCallback({ComponentPropertyName}, {argument});";
         }
 
         internal static GeneratedPropertyInfo[] GetEventCallbackProperties(GeneratedTypeInfo containingType)
@@ -152,7 +154,7 @@ namespace BlazorBindings.Maui.ComponentGenerator
                 return $"EventCallback<{typeName}>";
             }
 
-            var eventArgType = eventInfo.Type.GetMethod("Invoke").Parameters[1].Type;
+            var eventArgType = GetEventArgType(eventInfo.Type);
             if (eventArgType.Name != nameof(EventArgs))
             {
                 return $"EventCallback<{containingType.GetTypeNameAndAddNamespace(eventArgType)}>";
@@ -187,6 +189,11 @@ namespace BlazorBindings.Maui.ComponentGenerator
                 || $"Is{eventSymbol.Name}" == $"{p.Name}");  // e.g. IsToggled - Toggled
 
             return property != null;
+        }
+
+        private static ITypeSymbol GetEventArgType(ITypeSymbol eventHandlerType)
+        {
+            return eventHandlerType.GetMethod("Invoke").Parameters[1].Type;
         }
     }
 }

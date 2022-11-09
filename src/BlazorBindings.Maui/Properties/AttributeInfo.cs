@@ -24,6 +24,10 @@ using System.Runtime.CompilerServices;
 [assembly: GenerateComponent(typeof(DatePicker),
     Exclude = new[] { nameof(DatePicker.Date), nameof(DatePicker.DateSelected), nameof(DatePicker.MaximumDate), nameof(DatePicker.MinimumDate) })]
 [assembly: GenerateComponent(typeof(Editor))]
+[assembly: GenerateComponent(typeof(Element),
+    Exclude = new[] { nameof(Element.Handler), nameof(Element.ChildAdded), nameof(Element.ChildRemoved),
+        nameof(Element.DescendantAdded), nameof(Element.DescendantRemoved), nameof(Element.ParentChanged),
+        nameof(Element.ParentChanging), nameof(Element.HandlerChanged), nameof(Element.HandlerChanging) })]
 [assembly: GenerateComponent(typeof(Entry))]
 [assembly: GenerateComponent(typeof(FlexLayout))]
 [assembly: GenerateComponent(typeof(FlyoutItem))]
@@ -62,6 +66,9 @@ using System.Runtime.CompilerServices;
     PropertyChangedEvents = new[] { nameof(RefreshView.IsRefreshing) })]
 [assembly: GenerateComponent(typeof(ReorderableItemsView), Exclude = new[] { nameof(ReorderableItemsView.CanMixGroups) })]
 [assembly: GenerateComponent(typeof(ScrollView))]
+[assembly: GenerateComponent(typeof(SearchHandler),
+    GenericProperties = new[] { nameof(SearchHandler.ItemsSource), nameof(SearchHandler.SelectedItem), nameof(SearchHandler.ItemTemplate) },
+    PropertyChangedEvents = new[] { nameof(SearchHandler.Query), nameof(SearchHandler.SelectedItem) })]
 [assembly: GenerateComponent(typeof(SelectableItemsView),
     GenericProperties = new[] { nameof(SelectableItemsView.SelectedItem) },
     PropertyChangedEvents = new[] { nameof(SelectableItemsView.SelectedItem), nameof(SelectableItemsView.SelectedItems) })]
@@ -100,8 +107,16 @@ using System.Runtime.CompilerServices;
 [assembly: GenerateComponent(typeof(ToolbarItem))]
 [assembly: GenerateComponent(typeof(VerticalStackLayout))]
 [assembly: GenerateComponent(typeof(View))]
-[assembly: GenerateComponent(typeof(VisualElement))]
+[assembly: GenerateComponent(typeof(VisualElement), Exclude = new[] { nameof(VisualElement.BackgroundColor) })]
 [assembly: GenerateComponent(typeof(WebView))]
+
+// GestureRecognizers
+[assembly: GenerateComponent(typeof(GestureRecognizer))]
+[assembly: GenerateComponent(typeof(PanGestureRecognizer))]
+[assembly: GenerateComponent(typeof(PinchGestureRecognizer))]
+[assembly: GenerateComponent(typeof(SwipeGestureRecognizer))]
+[assembly: GenerateComponent(typeof(TapGestureRecognizer))]
+
 
 // Compatibility
 [assembly: GenerateComponent(typeof(Microsoft.Maui.Controls.Compatibility.Layout))]
@@ -113,3 +128,4 @@ using System.Runtime.CompilerServices;
 [assembly: GenerateComponent(typeof(Polyline))]
 [assembly: GenerateComponent(typeof(Rectangle))]
 [assembly: GenerateComponent(typeof(Shape))]
+[assembly: GenerateComponent(typeof(RoundRectangle))]

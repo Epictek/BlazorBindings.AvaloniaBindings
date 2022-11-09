@@ -19,9 +19,9 @@ namespace BlazorBindings.Maui.Elements
             RegisterAdditionalHandlers();
         }
 
-        public new MC.GroupableItemsView NativeControl => (MC.GroupableItemsView)((Element)this).NativeControl;
+        public new MC.GroupableItemsView NativeControl => (MC.GroupableItemsView)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MC.GroupableItemsView();
+        protected override MC.GroupableItemsView CreateNativeElement() => new();
 
 
         static partial void RegisterAdditionalHandlers();

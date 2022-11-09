@@ -10,7 +10,11 @@
 @using ControlGallery.Views.SetValues
 @using ControlGallery.Views.Shell
 
-<Shell>
+<Shell BackgroundColor="_backgroundColor"
+       ForegroundColor="_foregroundColor"
+       UnselectedColor="_unselectedColor"
+       TabBarTitleColor="_tabBarTitleColor">
+
     @*Present data*@
     <BoxViewPage />
     <LabelPage />
@@ -48,7 +52,10 @@
     <FlexLayoutPage />
 
     @*Shell*@
-    <ShellPropertiesPage />
+    <ShellPropertiesPage @bind-ShellBackgroundColor="_backgroundColor"
+                         @bind-ShellForegroundColor="_foregroundColor"
+                         @bind-ShellUnselectedColor="_unselectedColor"
+                         @bind-ShellTabBarTitleColor="_tabBarTitleColor" />
     <ShellItemsPage />
 
     @*Navigation*@
@@ -63,3 +70,10 @@
     <GestureEvents />
     <GestureRecognizersPage />
 </Shell>
+
+@code {
+    Color _backgroundColor;
+    Color _foregroundColor;
+    Color _unselectedColor;
+    Color _tabBarTitleColor;
+}

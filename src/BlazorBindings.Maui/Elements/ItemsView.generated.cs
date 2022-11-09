@@ -40,7 +40,7 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public EventCallback<MC.ItemsViewScrolledEventArgs> OnScrolled { get; set; }
         [Parameter] public EventCallback OnRemainingItemsThresholdReached { get; set; }
 
-        public new MC.ItemsView NativeControl => (MC.ItemsView)((Element)this).NativeControl;
+        public new MC.ItemsView NativeControl => (MC.ItemsView)((BindableObject)this).NativeControl;
 
 
         protected override void HandleParameter(string name, object value)
@@ -91,7 +91,7 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(OnScrollToRequested):
                     if (!Equals(OnScrollToRequested, value))
                     {
-                        void NativeControlScrollToRequested(object sender, MC.ScrollToRequestEventArgs e) => InvokeAsync(() => OnScrollToRequested.InvokeAsync(e));
+                        void NativeControlScrollToRequested(object sender, MC.ScrollToRequestEventArgs e) => InvokeEventCallback(OnScrollToRequested, e);
 
                         OnScrollToRequested = (EventCallback<MC.ScrollToRequestEventArgs>)value;
                         NativeControl.ScrollToRequested -= NativeControlScrollToRequested;
@@ -101,7 +101,7 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(OnScrolled):
                     if (!Equals(OnScrolled, value))
                     {
-                        void NativeControlScrolled(object sender, MC.ItemsViewScrolledEventArgs e) => InvokeAsync(() => OnScrolled.InvokeAsync(e));
+                        void NativeControlScrolled(object sender, MC.ItemsViewScrolledEventArgs e) => InvokeEventCallback(OnScrolled, e);
 
                         OnScrolled = (EventCallback<MC.ItemsViewScrolledEventArgs>)value;
                         NativeControl.Scrolled -= NativeControlScrolled;
@@ -111,7 +111,7 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(OnRemainingItemsThresholdReached):
                     if (!Equals(OnRemainingItemsThresholdReached, value))
                     {
-                        void NativeControlRemainingItemsThresholdReached(object sender, EventArgs e) => InvokeAsync(() => OnRemainingItemsThresholdReached.InvokeAsync());
+                        void NativeControlRemainingItemsThresholdReached(object sender, EventArgs e) => InvokeEventCallback(OnRemainingItemsThresholdReached);
 
                         OnRemainingItemsThresholdReached = (EventCallback)value;
                         NativeControl.RemainingItemsThresholdReached -= NativeControlRemainingItemsThresholdReached;

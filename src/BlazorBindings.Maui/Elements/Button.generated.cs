@@ -40,9 +40,9 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public EventCallback OnPress { get; set; }
         [Parameter] public EventCallback OnRelease { get; set; }
 
-        public new MC.Button NativeControl => (MC.Button)((Element)this).NativeControl;
+        public new MC.Button NativeControl => (MC.Button)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MC.Button();
+        protected override MC.Button CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {
@@ -149,7 +149,7 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(OnClick):
                     if (!Equals(OnClick, value))
                     {
-                        void NativeControlClicked(object sender, EventArgs e) => InvokeAsync(() => OnClick.InvokeAsync());
+                        void NativeControlClicked(object sender, EventArgs e) => InvokeEventCallback(OnClick);
 
                         OnClick = (EventCallback)value;
                         NativeControl.Clicked -= NativeControlClicked;
@@ -159,7 +159,7 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(OnPress):
                     if (!Equals(OnPress, value))
                     {
-                        void NativeControlPressed(object sender, EventArgs e) => InvokeAsync(() => OnPress.InvokeAsync());
+                        void NativeControlPressed(object sender, EventArgs e) => InvokeEventCallback(OnPress);
 
                         OnPress = (EventCallback)value;
                         NativeControl.Pressed -= NativeControlPressed;
@@ -169,7 +169,7 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(OnRelease):
                     if (!Equals(OnRelease, value))
                     {
-                        void NativeControlReleased(object sender, EventArgs e) => InvokeAsync(() => OnRelease.InvokeAsync());
+                        void NativeControlReleased(object sender, EventArgs e) => InvokeEventCallback(OnRelease);
 
                         OnRelease = (EventCallback)value;
                         NativeControl.Released -= NativeControlReleased;

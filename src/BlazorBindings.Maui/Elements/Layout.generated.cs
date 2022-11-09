@@ -30,7 +30,7 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public Thickness? Padding { get; set; }
         [Parameter] public RenderFragment ChildContent { get; set; }
 
-        public new MC.Layout NativeControl => (MC.Layout)((Element)this).NativeControl;
+        public new MC.Layout NativeControl => (MC.Layout)((BindableObject)this).NativeControl;
 
 
         protected override void HandleParameter(string name, object value)

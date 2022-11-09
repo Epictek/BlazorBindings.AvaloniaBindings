@@ -2,6 +2,7 @@
 // Licensed under the MIT license.
 
 using Microsoft.AspNetCore.Components;
+using Microsoft.Maui.Graphics;
 using System;
 using System.Diagnostics;
 using System.Linq;
@@ -56,12 +57,143 @@ namespace BlazorBindings.Maui.Elements
 
         [Parameter] public RenderFragment ChildContent { get; set; }
 
+        // <summary>
+        // Defines the background color in the Shell chrome. The color will not fill in behind the Shell content.
+        // </summary>
+        // Cannot add 'new' properties.
+        //[Parameter] public Color BackgroundColor { get; set; }
+
+        /// <summary>
+        /// Defines the color to shade text and icons that are disabled.
+        /// </summary>
+        [Parameter] public Color DisabledColor { get; set; }
+
+        /// <summary>
+        /// That defines the color to shade text and icons.
+        /// </summary>
+        [Parameter] public Color ForegroundColor { get; set; }
+
+        /// <summary>
+        /// Defines the color used for the title of the page.
+        /// </summary>
+        [Parameter] public Color TitleColor { get; set; }
+
+        /// <summary>
+        /// Defines the color used for unselected text and icons in the Shell chrome.
+        /// </summary>
+        [Parameter] public Color UnselectedColor { get; set; }
+
+        /// <summary>
+        /// Defines the title color for the tab bar.
+        /// </summary>
+        [Parameter] public Color TabBarTitleColor { get; set; }
+
+        /// <summary>
+        /// Defines the background color for the tab bar.
+        /// </summary>
+        [Parameter] public Color TabBarBackgroundColor { get; set; }
+
+        /// <summary>
+        /// Defines the disabled color for the tab bar.
+        /// </summary>
+        [Parameter] public Color TabBarDisabledColor { get; set; }
+
+        /// <summary>
+        /// Defines the foreground color for the tab bar.
+        /// </summary>
+        [Parameter] public Color TabBarForegroundColor { get; set; }
+
+        /// <summary>
+        /// Defines the unselected color for the tab bar.
+        /// </summary>
+        [Parameter] public Color TabBarUnselectedColor { get; set; }
+
         protected override bool HandleAdditionalParameter(string name, object value)
         {
             switch (name)
             {
                 case nameof(ChildContent):
                     ChildContent = (RenderFragment)value;
+                    return true;
+
+                case nameof(BackgroundColor):
+                    if (!Equals(BackgroundColor, value))
+                    {
+                        BackgroundColor = (Color)value;
+                        MC.Shell.SetBackgroundColor(NativeControl, BackgroundColor);
+                    }
+                    return true;
+
+                case nameof(DisabledColor):
+                    if (!Equals(DisabledColor, value))
+                    {
+                        DisabledColor = (Color)value;
+                        MC.Shell.SetDisabledColor(NativeControl, DisabledColor);
+                    }
+                    return true;
+
+                case nameof(ForegroundColor):
+                    if (!Equals(ForegroundColor, value))
+                    {
+                        ForegroundColor = (Color)value;
+                        MC.Shell.SetForegroundColor(NativeControl, ForegroundColor);
+                    }
+                    return true;
+
+                case nameof(TitleColor):
+                    if (!Equals(TitleColor, value))
+                    {
+                        TitleColor = (Color)value;
+                        MC.Shell.SetTitleColor(NativeControl, TitleColor);
+                    }
+                    return true;
+
+                case nameof(UnselectedColor):
+                    if (!Equals(UnselectedColor, value))
+                    {
+                        UnselectedColor = (Color)value;
+                        MC.Shell.SetUnselectedColor(NativeControl, UnselectedColor);
+                    }
+                    return true;
+
+                case nameof(TabBarTitleColor):
+                    if (!Equals(TabBarTitleColor, value))
+                    {
+                        TabBarTitleColor = (Color)value;
+                        MC.Shell.SetTabBarTitleColor(NativeControl, TabBarTitleColor);
+                    }
+                    return true;
+
+                case nameof(TabBarBackgroundColor):
+                    if (!Equals(TabBarBackgroundColor, value))
+                    {
+                        TabBarBackgroundColor = (Color)value;
+                        MC.Shell.SetTabBarBackgroundColor(NativeControl, TabBarBackgroundColor);
+                    }
+                    return true;
+
+                case nameof(TabBarDisabledColor):
+                    if (!Equals(TabBarDisabledColor, value))
+                    {
+                        TabBarDisabledColor = (Color)value;
+                        MC.Shell.SetTabBarDisabledColor(NativeControl, TabBarDisabledColor);
+                    }
+                    return true;
+
+                case nameof(TabBarForegroundColor):
+                    if (!Equals(TabBarForegroundColor, value))
+                    {
+                        TabBarForegroundColor = (Color)value;
+                        MC.Shell.SetTabBarForegroundColor(NativeControl, TabBarForegroundColor);
+                    }
+                    return true;
+
+                case nameof(TabBarUnselectedColor):
+                    if (!Equals(TabBarUnselectedColor, value))
+                    {
+                        TabBarUnselectedColor = (Color)value;
+                        MC.Shell.SetTabBarUnselectedColor(NativeControl, TabBarUnselectedColor);
+                    }
                     return true;
 
                 default:
@@ -71,7 +203,7 @@ namespace BlazorBindings.Maui.Elements
 
         protected override RenderFragment GetChildContent() => ChildContent;
 
-        void IMauiContainerElementHandler.AddChild(MC.Element child, int physicalSiblingIndex)
+        void IMauiContainerElementHandler.AddChild(MC.BindableObject child, int physicalSiblingIndex)
         {
             ArgumentNullException.ThrowIfNull(child);
 
@@ -96,7 +228,7 @@ namespace BlazorBindings.Maui.Elements
             }
         }
 
-        void IMauiContainerElementHandler.RemoveChild(MC.Element child)
+        void IMauiContainerElementHandler.RemoveChild(MC.BindableObject child)
         {
             ArgumentNullException.ThrowIfNull(child);
 
@@ -106,14 +238,14 @@ namespace BlazorBindings.Maui.Elements
             NativeControl.Items.Remove(itemToRemove);
         }
 
-        int IMauiContainerElementHandler.GetChildIndex(MC.Element child)
+        int IMauiContainerElementHandler.GetChildIndex(MC.BindableObject child)
         {
             var shellItem = GetItemForElement(child);
             return NativeControl.Items.IndexOf(shellItem);
         }
 
 
-        private MC.ShellItem GetItemForElement(MC.Element child)
+        private MC.ShellItem GetItemForElement(MC.BindableObject child)
         {
             return child switch
             {

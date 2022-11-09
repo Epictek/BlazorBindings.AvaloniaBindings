@@ -22,20 +22,38 @@ namespace BlazorBindings.Maui
 
         public override Dispatcher Dispatcher { get; } = new MauiDeviceDispatcher();
 
-        public async Task<TComponent> AddComponent<TComponent>(MC.Element parent, Dictionary<string, object> parameters = null) where TComponent : IComponent
+        public Task<TComponent> AddComponent<TComponent>(MC.Element parent, Dictionary<string, object> parameters = null) where TComponent : IComponent
         {
-            var elementComponentTask = GetElementFromRenderedComponent(typeof(TComponent), parameters);
+            var componentTask = AddComponentLocal();
 
-            if (!elementComponentTask.IsCompleted && parent is MC.Application app)
+            if (componentTask.Exception != null)
             {
-                // MAUI requires the Application to have the MainPage. If rendering task is not completed synchroniously,
-                // we need to set MainPage to something.
-                app.MainPage ??= new MC.ContentPage();
+                // If exception was thrown during the sync execution - throw it straight away.
+                ExceptionDispatchInfo.Throw(componentTask.Exception.InnerException);
             }
 
-            var (element, componentTask) = await elementComponentTask;
-            await SetChildContent(parent, element);
-            return (TComponent)await componentTask;
+            return componentTask;
+
+            async Task<TComponent> AddComponentLocal()
+            {
+                var elementsComponentTask = GetElementsFromRenderedComponent(typeof(TComponent), parameters);
+
+                if (!elementsComponentTask.IsCompleted && parent is MC.Application app)
+                {
+                    // MAUI requires the Application to have the MainPage. If rendering task is not completed synchroniously,
+                    // we need to set MainPage to something.
+                    app.MainPage ??= new MC.ContentPage();
+                }
+
+                var (elements, componentTask) = await elementsComponentTask;
+                await SetChildContent(parent, elements);
+                return (TComponent)await componentTask;
+            }
+        }
+
+        protected override void HandleException(Exception exception)
+        {
+            ErrorPageHelper.ShowExceptionPage(exception);
         }
 
         protected override ElementManager CreateNativeControlManager()
@@ -44,7 +62,19 @@ namespace BlazorBindings.Maui
         }
 
         // It tries to return the Element as soon as it is available, therefore Component task might still be in progress.
-        internal async Task<(MC.Element Element, Task<IComponent> Component)> GetElementFromRenderedComponent(Type componentType, Dictionary<string, object> parameters = null)
+        internal async Task<(MC.BindableObject Element, Task<IComponent> Component)> GetElementFromRenderedComponent(Type componentType, Dictionary<string, object> parameters = null)
+        {
+            var (elements, addComponentTask) = await GetElementsFromRenderedComponent(componentType, parameters);
+
+            if (elements.Count != 1)
+            {
+                throw new InvalidOperationException("The target component must have exactly one root element.");
+            }
+
+            return (elements[0], addComponentTask);
+        }
+
+        private async Task<(List<MC.BindableObject> Elements, Task<IComponent> Component)> GetElementsFromRenderedComponent(Type componentType, Dictionary<string, object> parameters)
         {
             var container = new RootContainerHandler();
 
@@ -59,53 +89,53 @@ namespace BlazorBindings.Maui
                 ExceptionDispatchInfo.Throw(exception);
             }
 
-            if (container.Elements.Count != 1)
-            {
-                throw new InvalidOperationException("The target component must have exactly one root element.");
-            }
-
-            return (container.Elements[0], addComponentTask);
+            return (container.Elements, addComponentTask);
         }
 
-        private static Task SetChildContent(MC.Element parent, MC.Element child)
+        private static Task SetChildContent(MC.BindableObject parent, List<MC.BindableObject> children)
         {
             switch (parent)
             {
                 case MC.NavigationPage page:
-                    return page.PushAsync(Cast<MC.Page>(child));
+                    return page.PushAsync(CastSingle<MC.Page>(children));
 
                 case MC.Application application:
-                    application.MainPage = Cast<MC.Page>(child);
+                    application.MainPage = CastSingle<MC.Page>(children);
                     break;
                 case MC.ContentPage contentPage:
-                    contentPage.Content = Cast<MC.View>(child);
+                    contentPage.Content = CastSingle<MC.View>(children);
                     break;
                 case MC.ContentView contentView:
-                    contentView.Content = Cast<MC.View>(child);
+                    contentView.Content = CastSingle<MC.View>(children);
                     break;
                 case MC.FlyoutPage flyoutPage:
-                    flyoutPage.Detail = Cast<MC.Page>(child);
+                    flyoutPage.Detail = CastSingle<MC.Page>(children);
                     break;
                 case MC.ScrollView scrollView:
-                    scrollView.Content = Cast<MC.View>(child);
-                    break;
-                case MC.StackBase stackBase:
-                    stackBase.Children.Add(Cast<MC.View>(child));
+                    scrollView.Content = CastSingle<MC.View>(children);
                     break;
                 case MC.ShellContent shellContent:
-                    shellContent.Content = Cast<MC.Page>(child);
+                    shellContent.Content = CastSingle<MC.Page>(children);
                     break;
-                case MC.Shell shell:
-                    shell.Items.Add(Cast<MC.TemplatedPage>(child));
-                    break;
-                case MC.ShellItem shellItem:
-                    shellItem.Items.Add(Cast<MC.TemplatedPage>(child));
-                    break;
-                case MC.ShellSection shellSection:
-                    shellSection.Items.Add(Cast<MC.TemplatedPage>(child));
+                case MC.StackBase stackBase:
+                    foreach (var child in children)
+                        stackBase.Children.Add(Cast<MC.View>(child));
                     break;
                 case MC.TabbedPage tabbedPage:
-                    tabbedPage.Children.Add(Cast<MC.TemplatedPage>(child));
+                    foreach (var child in children)
+                        tabbedPage.Children.Add(Cast<MC.Page>(child));
+                    break;
+                case MC.Shell shell:
+                    foreach (var child in children)
+                        shell.Items.Add(Cast<MC.TemplatedPage>(child));
+                    break;
+                case MC.ShellItem shellItem:
+                    foreach (var child in children)
+                        shellItem.Items.Add(Cast<MC.TemplatedPage>(child));
+                    break;
+                case MC.ShellSection shellSection:
+                    foreach (var child in children)
+                        shellSection.Items.Add(Cast<MC.TemplatedPage>(child));
                     break;
 
                 default:
@@ -114,8 +144,16 @@ namespace BlazorBindings.Maui
 
             return Task.CompletedTask;
 
-            static T Cast<T>(MC.Element e) where T : MC.Element => e as T
-                ?? throw new InvalidOperationException($"{typeof(T).Name} element expected, but {e?.GetType()?.Name} found.");
+            static T CastSingle<T>(List<MC.BindableObject> children) where T : MC.BindableObject
+            {
+                if (children.Count != 1)
+                    throw new InvalidOperationException("The target component must have exactly one root element.");
+
+                return Cast<T>(children[0]);
+            }
+
+            static T Cast<T>(MC.BindableObject e) where T : class
+                => e as T ?? throw new InvalidOperationException($"{typeof(T).Name} element expected, but {e?.GetType()?.Name} found.");
         }
     }
 }

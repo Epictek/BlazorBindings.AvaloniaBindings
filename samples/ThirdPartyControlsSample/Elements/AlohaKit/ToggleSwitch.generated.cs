@@ -36,9 +36,9 @@ namespace BlazorBindings.Maui.Elements.AlohaKit
         [Parameter] public RenderFragment ThumbBrush { get; set; }
         [Parameter] public EventCallback<bool> IsOnChanged { get; set; }
 
-        public new AC.ToggleSwitch NativeControl => (AC.ToggleSwitch)((Element)this).NativeControl;
+        public new AC.ToggleSwitch NativeControl => (AC.ToggleSwitch)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new AC.ToggleSwitch();
+        protected override AC.ToggleSwitch CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {

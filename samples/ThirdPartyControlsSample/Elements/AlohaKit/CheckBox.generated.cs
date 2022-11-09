@@ -41,9 +41,9 @@ namespace BlazorBindings.Maui.Elements.AlohaKit
         [Parameter] public RenderFragment UncheckedBrush { get; set; }
         [Parameter] public EventCallback<bool> IsCheckedChanged { get; set; }
 
-        public new AC.CheckBox NativeControl => (AC.CheckBox)((Element)this).NativeControl;
+        public new AC.CheckBox NativeControl => (AC.CheckBox)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new AC.CheckBox();
+        protected override AC.CheckBox CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {

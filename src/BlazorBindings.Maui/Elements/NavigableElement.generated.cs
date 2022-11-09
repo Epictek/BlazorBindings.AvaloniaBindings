@@ -22,7 +22,7 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public string @class { get; set; }
         [Parameter] public string StyleClass { get; set; }
 
-        public new MC.NavigableElement NativeControl => (MC.NavigableElement)((Element)this).NativeControl;
+        public new MC.NavigableElement NativeControl => (MC.NavigableElement)((BindableObject)this).NativeControl;
 
 
         protected override void HandleParameter(string name, object value)

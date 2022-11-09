@@ -23,9 +23,9 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public double? Progress { get; set; }
         [Parameter] public Color ProgressColor { get; set; }
 
-        public new MC.ProgressBar NativeControl => (MC.ProgressBar)((Element)this).NativeControl;
+        public new MC.ProgressBar NativeControl => (MC.ProgressBar)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MC.ProgressBar();
+        protected override MC.ProgressBar CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {

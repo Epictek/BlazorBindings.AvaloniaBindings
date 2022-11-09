@@ -21,7 +21,7 @@ namespace BlazorBindings.Maui.Elements
 
         [Parameter] public double? Spacing { get; set; }
 
-        public new MC.StackBase NativeControl => (MC.StackBase)((Element)this).NativeControl;
+        public new MC.StackBase NativeControl => (MC.StackBase)((BindableObject)this).NativeControl;
 
 
         protected override void HandleParameter(string name, object value)

@@ -30,7 +30,7 @@ namespace BlazorBindings.Maui.Elements
             }
         }
 
-        void IMauiContainerElementHandler.AddChild(MC.Element child, int physicalSiblingIndex)
+        void IMauiContainerElementHandler.AddChild(MC.BindableObject child, int physicalSiblingIndex)
         {
             if (child is not MC.GradientStop gradientStopChild)
             {
@@ -48,7 +48,7 @@ namespace BlazorBindings.Maui.Elements
             }
         }
 
-        int IMauiContainerElementHandler.GetChildIndex(MC.Element child)
+        int IMauiContainerElementHandler.GetChildIndex(MC.BindableObject child)
         {
             if (child is not MC.GradientStop gradientStopChild)
             {
@@ -58,7 +58,7 @@ namespace BlazorBindings.Maui.Elements
             return NativeControl.GradientStops.IndexOf(gradientStopChild);
         }
 
-        void IMauiContainerElementHandler.RemoveChild(MC.Element child)
+        void IMauiContainerElementHandler.RemoveChild(MC.BindableObject child)
         {
             if (child is not MC.GradientStop gradientStopChild)
             {

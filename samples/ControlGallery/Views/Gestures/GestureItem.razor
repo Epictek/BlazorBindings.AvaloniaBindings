@@ -1,16 +1,26 @@
-﻿<Frame @ref="_element" BackgroundColor="Colors.LightCyan" CornerRadius="7" Padding="20" Margin="4"
-       OnTap="OnTap"
-       OnDoubleTap="OnDoubleTap"
-       OnPanUpdate="OnPanUpdate">
+﻿@using BlazorBindings.Maui.Elements.Shapes
 
-    <Label TextColor="Colors.Black">@Item - @status</Label>
-</Frame>
+<ContentView OnTap="OnTap"
+             OnDoubleTap="OnDoubleTap"
+             OnPanUpdate="OnPanUpdate">
+
+    <Border @ref="_element" BackgroundColor="Colors.LightCyan" Padding="20" Margin="4">
+        <StrokeShape>
+            <RoundRectangle CornerRadius="7" />
+        </StrokeShape>
+
+        <ChildContent>
+            <Label TextColor="Colors.Black">@Item - @status</Label>
+        </ChildContent>
+    </Border>
+
+</ContentView>
 
 @code {
     [Parameter] public int Item { get; set; }
     [Parameter] public EventCallback<int> OnRemoving { get; set; }
 
-    Frame _element;
+    Border _element;
     string status = "Pending";
     double _lastX;
 

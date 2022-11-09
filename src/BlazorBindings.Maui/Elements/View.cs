@@ -69,7 +69,7 @@ namespace BlazorBindings.Maui.Elements
 
         private void HandleTap()
         {
-            void GestureRecognizerTapped(object sender, EventArgs e) => OnTap.InvokeAsync();
+            void GestureRecognizerTapped(object sender, EventArgs e) => InvokeEventCallback(OnTap);
 
             var tapGestureRecognizer = NativeControl.GestureRecognizers
                 .OfType<MC.TapGestureRecognizer>()
@@ -87,7 +87,7 @@ namespace BlazorBindings.Maui.Elements
 
         private void HandleDoubleTap()
         {
-            void GestureRecognizerTapped(object sender, EventArgs e) => OnDoubleTap.InvokeAsync();
+            void GestureRecognizerTapped(object sender, EventArgs e) => InvokeEventCallback(OnDoubleTap);
 
             var tapGestureRecognizer = NativeControl.GestureRecognizers
                 .OfType<MC.TapGestureRecognizer>()
@@ -105,7 +105,7 @@ namespace BlazorBindings.Maui.Elements
 
         private void HandleSwipe()
         {
-            void GestureRecognizerSwiped(object sender, SwipedEventArgs e) => OnSwipe.InvokeAsync(e);
+            void GestureRecognizerSwiped(object sender, SwipedEventArgs e) => InvokeEventCallback(OnSwipe, e);
 
             var swipeGestureRecognizer = NativeControl.GestureRecognizers
                 .OfType<MC.SwipeGestureRecognizer>()
@@ -123,7 +123,7 @@ namespace BlazorBindings.Maui.Elements
 
         private void HandlePinch()
         {
-            void GestureRecognizerPinchUpdated(object sender, PinchGestureUpdatedEventArgs e) => OnPinchUpdate.InvokeAsync(e);
+            void GestureRecognizerPinchUpdated(object sender, PinchGestureUpdatedEventArgs e) => InvokeEventCallback(OnPinchUpdate, e);
 
             var pinchGestureRecognizer = NativeControl.GestureRecognizers
                 .OfType<MC.PinchGestureRecognizer>()
@@ -141,7 +141,7 @@ namespace BlazorBindings.Maui.Elements
 
         private void HandlePan()
         {
-            void GestureRecognizerPanUpdated(object sender, PanUpdatedEventArgs e) => OnPanUpdate.InvokeAsync(e);
+            void GestureRecognizerPanUpdated(object sender, PanUpdatedEventArgs e) => InvokeEventCallback(OnPanUpdate, e);
 
             var pinchGestureRecognizer = NativeControl.GestureRecognizers
                 .OfType<MC.PanGestureRecognizer>()

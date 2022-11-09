@@ -30,9 +30,9 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public RenderFragment ChildContent { get; set; }
         [Parameter] public EventCallback<MC.ScrolledEventArgs> OnScrolled { get; set; }
 
-        public new MC.ScrollView NativeControl => (MC.ScrollView)((Element)this).NativeControl;
+        public new MC.ScrollView NativeControl => (MC.ScrollView)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MC.ScrollView();
+        protected override MC.ScrollView CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {
@@ -65,7 +65,7 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(OnScrolled):
                     if (!Equals(OnScrolled, value))
                     {
-                        void NativeControlScrolled(object sender, MC.ScrolledEventArgs e) => InvokeAsync(() => OnScrolled.InvokeAsync(e));
+                        void NativeControlScrolled(object sender, MC.ScrolledEventArgs e) => InvokeEventCallback(OnScrolled, e);
 
                         OnScrolled = (EventCallback<MC.ScrolledEventArgs>)value;
                         NativeControl.Scrolled -= NativeControlScrolled;

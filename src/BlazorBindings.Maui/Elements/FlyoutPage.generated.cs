@@ -33,9 +33,9 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public RenderFragment Flyout { get; set; }
         [Parameter] public EventCallback<bool> IsPresentedChanged { get; set; }
 
-        public new MC.FlyoutPage NativeControl => (MC.FlyoutPage)((Element)this).NativeControl;
+        public new MC.FlyoutPage NativeControl => (MC.FlyoutPage)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MC.FlyoutPage();
+        protected override MC.FlyoutPage CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {
@@ -75,7 +75,7 @@ namespace BlazorBindings.Maui.Elements
                         {
                             var value = NativeControl.IsPresented;
                             IsPresented = value;
-                            InvokeAsync(() => IsPresentedChanged.InvokeAsync(value));
+                            InvokeEventCallback(IsPresentedChanged, value);
                         }
 
                         IsPresentedChanged = (EventCallback<bool>)value;

@@ -28,9 +28,9 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public EventCallback<IList<object>> SelectedItemsChanged { get; set; }
         [Parameter] public EventCallback<MC.SelectionChangedEventArgs> OnSelectionChanged { get; set; }
 
-        public new MC.SelectableItemsView NativeControl => (MC.SelectableItemsView)((Element)this).NativeControl;
+        public new MC.SelectableItemsView NativeControl => (MC.SelectableItemsView)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MC.SelectableItemsView();
+        protected override MC.SelectableItemsView CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {
@@ -66,7 +66,7 @@ namespace BlazorBindings.Maui.Elements
                             {
                                 var value = (T)NativeControl.SelectedItem;
                                 SelectedItem = value;
-                                InvokeAsync(() => SelectedItemChanged.InvokeAsync(value));
+                                InvokeEventCallback(SelectedItemChanged, value);
                             }
                         }
 
@@ -84,7 +84,7 @@ namespace BlazorBindings.Maui.Elements
                             {
                                 var value = NativeControl.SelectedItems;
                                 SelectedItems = value;
-                                InvokeAsync(() => SelectedItemsChanged.InvokeAsync(value));
+                                InvokeEventCallback(SelectedItemsChanged, value);
                             }
                         }
 
@@ -96,7 +96,7 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(OnSelectionChanged):
                     if (!Equals(OnSelectionChanged, value))
                     {
-                        void NativeControlSelectionChanged(object sender, MC.SelectionChangedEventArgs e) => InvokeAsync(() => OnSelectionChanged.InvokeAsync(e));
+                        void NativeControlSelectionChanged(object sender, MC.SelectionChangedEventArgs e) => InvokeEventCallback(OnSelectionChanged, e);
 
                         OnSelectionChanged = (EventCallback<MC.SelectionChangedEventArgs>)value;
                         NativeControl.SelectionChanged -= NativeControlSelectionChanged;

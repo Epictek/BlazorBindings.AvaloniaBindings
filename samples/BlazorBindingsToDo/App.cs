@@ -9,8 +9,7 @@ namespace BlazorBindingsToDo
     {
         public App(MauiBlazorBindingsRenderer renderer)
         {
-            MainPage = new TabbedPage();
-            renderer.AddComponent<TodoApp>(MainPage);
+            _ = renderer.AddComponent<TodoApp>(this);
         }
     }
 }

@@ -24,9 +24,9 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public Color Color { get; set; }
         [Parameter] public CornerRadius? CornerRadius { get; set; }
 
-        public new MC.BoxView NativeControl => (MC.BoxView)((Element)this).NativeControl;
+        public new MC.BoxView NativeControl => (MC.BoxView)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MC.BoxView();
+        protected override MC.BoxView CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {

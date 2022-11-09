@@ -25,9 +25,9 @@ namespace BlazorBindings.Maui.Elements
 
         [Parameter] public RenderFragment ChildContent { get; set; }
 
-        public new MC.ContentView NativeControl => (MC.ContentView)((Element)this).NativeControl;
+        public new MC.ContentView NativeControl => (MC.ContentView)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MC.ContentView();
+        protected override MC.ContentView CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {

@@ -21,9 +21,9 @@ namespace BlazorBindings.Maui.Elements
 
         [Parameter] public MC.StackOrientation? Orientation { get; set; }
 
-        public new MC.StackLayout NativeControl => (MC.StackLayout)((Element)this).NativeControl;
+        public new MC.StackLayout NativeControl => (MC.StackLayout)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MC.StackLayout();
+        protected override MC.StackLayout CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {

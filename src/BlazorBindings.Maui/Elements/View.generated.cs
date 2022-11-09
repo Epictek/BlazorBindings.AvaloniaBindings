@@ -24,7 +24,7 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public Thickness? Margin { get; set; }
         [Parameter] public MC.LayoutOptions? VerticalOptions { get; set; }
 
-        public new MC.View NativeControl => (MC.View)((Element)this).NativeControl;
+        public new MC.View NativeControl => (MC.View)((BindableObject)this).NativeControl;
 
 
         protected override void HandleParameter(string name, object value)

@@ -45,9 +45,9 @@ namespace BlazorBindings.Maui.Elements.AlohaKit
         [Parameter] public EventCallback OnRelease { get; set; }
         [Parameter] public EventCallback OnClick { get; set; }
 
-        public new AC.Button NativeControl => (AC.Button)((Element)this).NativeControl;
+        public new AC.Button NativeControl => (AC.Button)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new AC.Button();
+        protected override AC.Button CreateNativeElement() => new();
 
         protected override void HandleParameter(string name, object value)
         {

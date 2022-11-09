@@ -19,9 +19,9 @@ namespace BlazorBindings.Maui.Elements
             RegisterAdditionalHandlers();
         }
 
-        public new MC.HorizontalStackLayout NativeControl => (MC.HorizontalStackLayout)((Element)this).NativeControl;
+        public new MC.HorizontalStackLayout NativeControl => (MC.HorizontalStackLayout)((BindableObject)this).NativeControl;
 
-        protected override MC.Element CreateNativeElement() => new MC.HorizontalStackLayout();
+        protected override MC.HorizontalStackLayout CreateNativeElement() => new();
 
 
         static partial void RegisterAdditionalHandlers();
