@@ -78,10 +78,8 @@ namespace BlazorBindings.UnitTests
             var button = (MC.Button)contentView.Content;
             button.SendClicked();
 
-            await Task.Delay(50);
-
-            var exception = _renderer.Exceptions[0];
-            Assert.That(exception.Message, Is.EqualTo("HandleExceptionTest"));
+            Assert.That(() => _renderer.Exceptions, Is.Not.Empty.After(1000, 10));
+            Assert.That(_renderer.Exceptions[0].Message, Is.EqualTo("HandleExceptionTest"));
         }
 
         private static MC.Element GetChildContent(MC.Element container)
