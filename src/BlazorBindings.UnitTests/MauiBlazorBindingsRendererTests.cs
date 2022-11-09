@@ -4,6 +4,7 @@ using Microsoft.Maui.Controls;
 using NUnit.Framework;
 using System;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using MC = Microsoft.Maui.Controls;
 
@@ -11,7 +12,7 @@ namespace BlazorBindings.UnitTests
 {
     public class MauiBlazorBindingsRendererTests
     {
-        private readonly MauiBlazorBindingsRenderer _renderer = TestBlazorBindingsRenderer.Create();
+        private readonly TestBlazorBindingsRenderer _renderer = (TestBlazorBindingsRenderer)TestBlazorBindingsRenderer.Create();
 
         public MauiBlazorBindingsRendererTests()
         {
@@ -64,9 +65,23 @@ namespace BlazorBindings.UnitTests
         [Test]
         public void ShouldThrowExceptionIfHappenedDuringSyncRender()
         {
-            void action() => _renderer.AddComponent<ComponentWithException>(new NavigationPage());
+            void action() => _ = _renderer.AddComponent<ComponentWithException>(new NavigationPage());
 
             Assert.That(action, Throws.InvalidOperationException.With.Message.EqualTo("Should fail here."));
+        }
+
+        [Test]
+        public async Task RendererShouldHandleAsyncExceptions()
+        {
+            var contentView = new MC.ContentView();
+            await _renderer.AddComponent<ButtonWithAnExceptionOnClick>(contentView);
+            var button = (MC.Button)contentView.Content;
+            button.SendClicked();
+
+            await Task.Delay(50);
+
+            var exception = _renderer.Exceptions[0];
+            Assert.That(exception.Message, Is.EqualTo("HandleExceptionTest"));
         }
 
         private static MC.Element GetChildContent(MC.Element container)

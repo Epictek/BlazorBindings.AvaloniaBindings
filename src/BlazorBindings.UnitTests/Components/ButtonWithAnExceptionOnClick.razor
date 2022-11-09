@@ -1,0 +1,8 @@
+﻿<Button OnClick="Fail" />
+@code {
+    async Task Fail()
+    {
+        await Task.Delay(5);
+        throw new Exception("HandleExceptionTest");
+    }
+}
