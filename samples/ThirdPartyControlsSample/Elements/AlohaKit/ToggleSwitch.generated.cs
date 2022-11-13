@@ -87,7 +87,7 @@ namespace BlazorBindings.Maui.Elements.AlohaKit
                             {
                                 var value = NativeControl.IsOn;
                                 IsOn = value;
-                                InvokeAsync(() => IsOnChanged.InvokeAsync(value));
+                                InvokeEventCallback(IsOnChanged, value);
                             }
                         }
 

@@ -19,7 +19,7 @@ using XCalendar.Maui.Views;
 [assembly: GenerateComponent(typeof(PulseIcon))]
 
 // CommunityToolkit
-[assembly: GenerateComponent(typeof(CommunityToolkit.Maui.Views.AvatarView))]
+[assembly: GenerateComponent(typeof(CommunityToolkit.Maui.Views.AvatarView), Exclude = new[] { nameof(CommunityToolkit.Maui.Views.AvatarView.CornerRadius) })]
 [assembly: GenerateComponent(typeof(CommunityToolkit.Maui.Views.DrawingView))]
 [assembly: GenerateComponent(typeof(CommunityToolkit.Maui.Views.Popup), Exclude = new[] { nameof(CommunityToolkit.Maui.Views.Popup.Anchor) })]
 

@@ -86,7 +86,7 @@ namespace BlazorBindings.Maui.Elements.CommunityToolkit
                 case nameof(OnDrawingLineCompleted):
                     if (!Equals(OnDrawingLineCompleted, value))
                     {
-                        void NativeControlDrawingLineCompleted(object sender, DrawingLineCompletedEventArgs e) => InvokeAsync(() => OnDrawingLineCompleted.InvokeAsync(e));
+                        void NativeControlDrawingLineCompleted(object sender, DrawingLineCompletedEventArgs e) => InvokeEventCallback(OnDrawingLineCompleted, e);
 
                         OnDrawingLineCompleted = (EventCallback<DrawingLineCompletedEventArgs>)value;
                         NativeControl.DrawingLineCompleted -= NativeControlDrawingLineCompleted;

@@ -33,6 +33,7 @@ namespace BlazorBindings.Maui.Elements.CommunityToolkit
         [Parameter] public MMP.LayoutAlignment? HorizontalOptions { get; set; }
         [Parameter] public Size? Size { get; set; }
         [Parameter] public MMP.LayoutAlignment? VerticalOptions { get; set; }
+        [Parameter] public MC.Window Window { get; set; }
         [Parameter] public RenderFragment ChildContent { get; set; }
         [Parameter] public EventCallback<PopupClosedEventArgs> OnClosed { get; set; }
         [Parameter] public EventCallback<PopupOpenedEventArgs> OnOpened { get; set; }
@@ -80,13 +81,20 @@ namespace BlazorBindings.Maui.Elements.CommunityToolkit
                         NativeControl.VerticalOptions = VerticalOptions ?? (MMP.LayoutAlignment)CMV.Popup.VerticalOptionsProperty.DefaultValue;
                     }
                     break;
+                case nameof(Window):
+                    if (!Equals(Window, value))
+                    {
+                        Window = (MC.Window)value;
+                        NativeControl.Window = Window;
+                    }
+                    break;
                 case nameof(ChildContent):
                     ChildContent = (RenderFragment)value;
                     break;
                 case nameof(OnClosed):
                     if (!Equals(OnClosed, value))
                     {
-                        void NativeControlClosed(object sender, PopupClosedEventArgs e) => InvokeAsync(() => OnClosed.InvokeAsync(e));
+                        void NativeControlClosed(object sender, PopupClosedEventArgs e) => InvokeEventCallback(OnClosed, e);
 
                         OnClosed = (EventCallback<PopupClosedEventArgs>)value;
                         NativeControl.Closed -= NativeControlClosed;
@@ -96,7 +104,7 @@ namespace BlazorBindings.Maui.Elements.CommunityToolkit
                 case nameof(OnOpened):
                     if (!Equals(OnOpened, value))
                     {
-                        void NativeControlOpened(object sender, PopupOpenedEventArgs e) => InvokeAsync(() => OnOpened.InvokeAsync(e));
+                        void NativeControlOpened(object sender, PopupOpenedEventArgs e) => InvokeEventCallback(OnOpened, e);
 
                         OnOpened = (EventCallback<PopupOpenedEventArgs>)value;
                         NativeControl.Opened -= NativeControlOpened;

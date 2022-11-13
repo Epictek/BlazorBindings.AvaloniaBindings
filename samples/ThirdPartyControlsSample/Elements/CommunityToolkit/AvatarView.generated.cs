@@ -26,7 +26,6 @@ namespace BlazorBindings.Maui.Elements.CommunityToolkit
         [Parameter] public Color BorderColor { get; set; }
         [Parameter] public double? BorderWidth { get; set; }
         [Parameter] public double? CharacterSpacing { get; set; }
-        [Parameter] public CornerRadius? CornerRadius { get; set; }
         [Parameter] public MC.FontAttributes? FontAttributes { get; set; }
         [Parameter] public bool? FontAutoScalingEnabled { get; set; }
         [Parameter] public string FontFamily { get; set; }
@@ -63,13 +62,6 @@ namespace BlazorBindings.Maui.Elements.CommunityToolkit
                     {
                         CharacterSpacing = (double?)value;
                         NativeControl.CharacterSpacing = CharacterSpacing ?? default;
-                    }
-                    break;
-                case nameof(CornerRadius):
-                    if (!Equals(CornerRadius, value))
-                    {
-                        CornerRadius = (CornerRadius?)value;
-                        NativeControl.CornerRadius = CornerRadius ?? (CornerRadius)CMV.AvatarView.CornerRadiusProperty.DefaultValue;
                     }
                     break;
                 case nameof(FontAttributes):

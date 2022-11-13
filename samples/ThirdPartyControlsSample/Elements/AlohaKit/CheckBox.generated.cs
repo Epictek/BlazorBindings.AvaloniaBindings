@@ -107,7 +107,7 @@ namespace BlazorBindings.Maui.Elements.AlohaKit
                         {
                             var value = NativeControl.IsChecked;
                             IsChecked = value;
-                            InvokeAsync(() => IsCheckedChanged.InvokeAsync(value));
+                            InvokeEventCallback(IsCheckedChanged, value);
                         }
 
                         IsCheckedChanged = (EventCallback<bool>)value;
