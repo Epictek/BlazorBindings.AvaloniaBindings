@@ -61,7 +61,7 @@
 
 @code
 {
-	[Inject] ShellNavigationManager NavigationManager { get; set; }
+	[Inject] INavigation NavigationManager { get; set; }
 
 	ImageSource Photo = new FileImageSource { File = "photo.png" };
 	ImageSource Paw = new FileImageSource { File = "paw.png" };
