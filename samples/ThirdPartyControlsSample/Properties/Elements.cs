@@ -21,6 +21,7 @@ using XCalendar.Maui.Views;
 // CommunityToolkit
 [assembly: GenerateComponent(typeof(CommunityToolkit.Maui.Views.AvatarView), Exclude = new[] { nameof(CommunityToolkit.Maui.Views.AvatarView.CornerRadius) })]
 [assembly: GenerateComponent(typeof(CommunityToolkit.Maui.Views.DrawingView))]
+[assembly: GenerateComponent(typeof(CommunityToolkit.Maui.Behaviors.MaskedBehavior))]
 [assembly: GenerateComponent(typeof(CommunityToolkit.Maui.Views.Popup), Exclude = new[] { nameof(CommunityToolkit.Maui.Views.Popup.Anchor) })]
 
 // XCalendar

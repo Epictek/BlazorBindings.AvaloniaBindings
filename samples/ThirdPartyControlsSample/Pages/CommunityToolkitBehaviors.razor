@@ -1,0 +1,19 @@
+﻿@using BlazorBindings.Maui.Elements.CommunityToolkit.Behaviors
+
+<ContentPage Title="CommunityToolkit - Behaviors">
+    <VerticalStackLayout>
+        <Label>Card number:</Label>
+        
+        <Entry @bind-Text="value" Keyboard="Keyboard.Numeric">
+            <Behaviors>
+                <MaskedBehavior Mask="XXXX-XXXX-XXXX-XXXX" />
+            </Behaviors>
+        </Entry>
+
+        <Label>Entered value: @value</Label>
+    </VerticalStackLayout>
+</ContentPage>
+
+@code {
+    string value;
+}
