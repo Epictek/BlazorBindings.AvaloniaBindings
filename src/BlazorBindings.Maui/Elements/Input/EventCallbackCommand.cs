@@ -1,13 +1,21 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Windows.Input;
 
 namespace BlazorBindings.Maui.Elements.Input
 {
-    internal class EventCallbackCommand : ICommand
+    /// <remarks>Experimental API, subject to change.</remarks>
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public class EventCallbackCommand : ICommand
     {
-        private readonly Action _eventCallbackAction;
+        private readonly Action<object> _eventCallbackAction;
 
         public EventCallbackCommand(Action eventCallbackAction)
+        {
+            _eventCallbackAction = _ => eventCallbackAction();
+        }
+
+        public EventCallbackCommand(Action<object> eventCallbackAction)
         {
             _eventCallbackAction = eventCallbackAction;
         }
@@ -16,7 +24,7 @@ namespace BlazorBindings.Maui.Elements.Input
 
         public void Execute(object parameter)
         {
-            _eventCallbackAction();
+            _eventCallbackAction(parameter);
         }
 
         event EventHandler ICommand.CanExecuteChanged

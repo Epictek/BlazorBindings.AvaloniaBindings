@@ -2,7 +2,7 @@
 using BlazorBindings.Maui.ComponentGenerator;
 using XCalendar.Maui.Views;
 
-// AlohaKit
+// AlohaKit.Controls
 [assembly: GenerateComponent(typeof(Rating))]
 [assembly: GenerateComponent(typeof(BusyIndicator))]
 [assembly: GenerateComponent(typeof(Avatar))]
@@ -21,8 +21,11 @@ using XCalendar.Maui.Views;
 // CommunityToolkit
 [assembly: GenerateComponent(typeof(CommunityToolkit.Maui.Views.AvatarView), Exclude = new[] { nameof(CommunityToolkit.Maui.Views.AvatarView.CornerRadius) })]
 [assembly: GenerateComponent(typeof(CommunityToolkit.Maui.Views.DrawingView))]
-[assembly: GenerateComponent(typeof(CommunityToolkit.Maui.Behaviors.MaskedBehavior))]
 [assembly: GenerateComponent(typeof(CommunityToolkit.Maui.Views.Popup), Exclude = new[] { nameof(CommunityToolkit.Maui.Views.Popup.Anchor) })]
+
+[assembly: GenerateComponent(typeof(CommunityToolkit.Maui.Behaviors.MaskedBehavior))]
+[assembly: GenerateComponent(typeof(CommunityToolkit.Maui.Behaviors.UserStoppedTypingBehavior))]
+[assembly: GenerateComponent(typeof(CommunityToolkit.Maui.Behaviors.StatusBarBehavior))]
 
 // XCalendar
 [assembly: GenerateComponent(typeof(CalendarView),
