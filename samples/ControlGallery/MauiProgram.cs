@@ -14,6 +14,7 @@ namespace ControlGallery
             builder
                 .UseMauiApp<App>()
                 .UseSkiaSharp()
+                .UseMauiMaps()
                 .UseMauiBlazorBindings()
                 .ConfigureFonts(fonts =>
                 {

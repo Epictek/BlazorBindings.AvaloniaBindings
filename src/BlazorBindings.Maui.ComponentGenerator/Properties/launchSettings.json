@@ -7,6 +7,10 @@
     "GenerateBlazorBindings.Maui": {
       "commandName": "Project",
       "commandLineArgs": "..\\..\\..\\..\\BlazorBindings.Maui\\BlazorBindings.Maui.csproj"
+    },
+    "GenerateBlazorBindings.Maui.Maps": {
+      "commandName": "Project",
+      "commandLineArgs": "..\\..\\..\\..\\BlazorBindings.Maui.Maps\\BlazorBindings.Maui.Maps.csproj"
     }
   }
 }

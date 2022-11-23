@@ -283,17 +283,13 @@ namespace {componentNamespace}
 
         private string GetComponentGroup(INamedTypeSymbol typeToGenerate)
         {
-            var assemblyName = typeToGenerate.ContainingAssembly.Name;
+            var nsName = typeToGenerate.ContainingNamespace.GetFullName();
 
-            if (assemblyName == "Microsoft.Maui.Controls")
-            {
-                var nsName = typeToGenerate.ContainingNamespace.GetFullName();
-                return nsName == "Microsoft.Maui.Controls" ? "" : nsName.Replace("Microsoft.Maui.Controls.", "");
-            }
-            else
-            {
-                return assemblyName.Replace(".Maui", "").Replace(".Views", "").Replace(".UI", "").Replace(".Controls", "");
-            }
+
+            var nameParts = nsName.Split('.')
+                .Except(new[] { "Microsoft", "Maui", "Views", "UI", "Controls" }, StringComparer.OrdinalIgnoreCase);
+
+            return string.Join(".", nameParts);
         }
 
         private string GetComponentNamespace(INamedTypeSymbol typeToGenerate)
