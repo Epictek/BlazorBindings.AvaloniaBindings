@@ -29,10 +29,25 @@ namespace BlazorBindings.Maui.Elements
 
         [Parameter] public MC.ImageSource BackgroundImageSource { get; set; }
         [Parameter] public MC.ImageSource IconImageSource { get; set; }
+        /// <summary>
+        /// Marks the Page as busy. This will cause the platform specific global activity indicator to show a busy state.
+        /// </summary>
+        /// <value>
+        /// A bool indicating if the Page is busy or not.
+        /// </value>
         [Parameter] public bool? IsBusy { get; set; }
+        /// <summary>
+        /// The space between the content of the <see cref="T:Microsoft.Maui.Controls.Page" /> and it's border.
+        /// </summary>
         [Parameter] public Thickness? Padding { get; set; }
+        /// <summary>
+        /// The <see cref="T:Microsoft.Maui.Controls.Page" />'s title.
+        /// </summary>
         [Parameter] public string Title { get; set; }
         [Parameter] public RenderFragment MenuBarItems { get; set; }
+        /// <summary>
+        /// A set of <see cref="T:Microsoft.Maui.Controls.ToolbarItem" />s, implemented in a platform-specific manner.
+        /// </summary>
         [Parameter] public RenderFragment ToolbarItems { get; set; }
         [Parameter] public EventCallback<MC.NavigatedToEventArgs> OnNavigatedTo { get; set; }
         [Parameter] public EventCallback<MC.NavigatingFromEventArgs> OnNavigatingFrom { get; set; }

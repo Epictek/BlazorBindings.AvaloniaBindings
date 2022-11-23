@@ -21,11 +21,26 @@ namespace BlazorBindings.Maui.Elements
             RegisterAdditionalHandlers();
         }
 
+        /// <summary>
+        /// Gets or sets a value that controls whether the editor will change size to accommodate input as the user enters it.
+        /// </summary>
+        /// <value>
+        /// Whether the editor will change size to accommodate input as the user enters it.
+        /// </value>
         [Parameter] public MC.EditorAutoSizeOption? AutoSize { get; set; }
         [Parameter] public int? CursorPosition { get; set; }
+        /// <summary>
+        /// Gets a value that indicates whether the font for the editor is bold, italic, or neither.
+        /// </summary>
         [Parameter] public MC.FontAttributes? FontAttributes { get; set; }
         [Parameter] public bool? FontAutoScalingEnabled { get; set; }
+        /// <summary>
+        /// Gets the font family to which the font for the editor belongs.
+        /// </summary>
         [Parameter] public string FontFamily { get; set; }
+        /// <summary>
+        /// Gets the size of the font for the editor.
+        /// </summary>
         [Parameter] public double? FontSize { get; set; }
         [Parameter] public TextAlignment? HorizontalTextAlignment { get; set; }
         [Parameter] public bool? IsTextPredictionEnabled { get; set; }

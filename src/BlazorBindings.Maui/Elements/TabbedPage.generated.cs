@@ -24,7 +24,19 @@ namespace BlazorBindings.Maui.Elements
             RegisterAdditionalHandlers();
         }
 
+        /// <summary>
+        /// Gets or sets the background color of the bar.
+        /// </summary>
+        /// <value>
+        /// The background color of the bar.
+        /// </value>
         [Parameter] public Color BarBackgroundColor { get; set; }
+        /// <summary>
+        /// Gets or sets the color of text on the bar.
+        /// </summary>
+        /// <value>
+        /// The color of text on the bar.
+        /// </value>
         [Parameter] public Color BarTextColor { get; set; }
         [Parameter] public Color SelectedTabColor { get; set; }
         [Parameter] public Color UnselectedTabColor { get; set; }

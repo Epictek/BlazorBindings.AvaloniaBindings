@@ -20,6 +20,12 @@ namespace BlazorBindings.Maui.Elements
         }
 
         [Parameter] public MC.ButtonsMask? Buttons { get; set; }
+        /// <summary>
+        /// The number of taps required to trigger the callback.
+        /// </summary>
+        /// <value>
+        /// The number of taps to recognize. The default value is 1.
+        /// </value>
         [Parameter] public int? NumberOfTapsRequired { get; set; }
         [Parameter] public EventCallback<MC.TappedEventArgs> OnTapped { get; set; }
 

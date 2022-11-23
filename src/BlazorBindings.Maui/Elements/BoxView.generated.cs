@@ -21,7 +21,19 @@ namespace BlazorBindings.Maui.Elements
             RegisterAdditionalHandlers();
         }
 
+        /// <summary>
+        /// Gets or sets the color which will fill the rectangle.
+        /// </summary>
+        /// <value>
+        /// The color that is used to fill the rectangle.
+        /// </value>
         [Parameter] public Color Color { get; set; }
+        /// <summary>
+        /// Gets or sets the corner radius for the box view.
+        /// </summary>
+        /// <value>
+        /// The corner radius for the box view.
+        /// </value>
         [Parameter] public CornerRadius? CornerRadius { get; set; }
 
         public new MC.BoxView NativeControl => (MC.BoxView)((BindableObject)this).NativeControl;

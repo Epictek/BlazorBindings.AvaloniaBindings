@@ -20,12 +20,42 @@ namespace BlazorBindings.Maui.Elements
             RegisterAdditionalHandlers();
         }
 
+        /// <summary>
+        /// The icon to use for the item. If this property is unset, it will fallback to using the <see cref="P:Microsoft.Maui.Controls.BaseShellItem.Icon" /> property value.
+        /// </summary>
+        /// <value>
+        /// A <see cref="T:Microsoft.Maui.Controls.ImageSource" /> that represents an icon.
+        /// </value>
         [Parameter] public MC.ImageSource FlyoutIcon { get; set; }
         [Parameter] public bool? FlyoutItemIsVisible { get; set; }
+        /// <summary>
+        /// Defines the icon to display in parts of the chrome that are not the flyout.
+        /// </summary>
+        /// <value>
+        /// A <see cref="T:Microsoft.Maui.Controls.ImageSource" /> that represents an icon.
+        /// </value>
         [Parameter] public MC.ImageSource Icon { get; set; }
+        /// <summary>
+        /// Defines if the item is selectable in the chrome.
+        /// </summary>
+        /// <value>
+        /// <see langword="true" /> if the item is selectable in the chrome.
+        /// </value>
         [Parameter] public bool? IsEnabled { get; set; }
         [Parameter] public bool? IsVisible { get; set; }
+        /// <summary>
+        /// The string used to address the item.
+        /// </summary>
+        /// <value>
+        /// A unique string that identifies the item.
+        /// </value>
         [Parameter] public string Route { get; set; }
+        /// <summary>
+        /// Title to display in the UI.
+        /// </summary>
+        /// <value>
+        /// Title to display in the UI.
+        /// </value>
         [Parameter] public string Title { get; set; }
         [Parameter] public EventCallback OnAppearing { get; set; }
         [Parameter] public EventCallback OnDisappearing { get; set; }

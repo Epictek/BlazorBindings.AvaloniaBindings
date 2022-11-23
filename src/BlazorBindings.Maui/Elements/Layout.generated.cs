@@ -26,8 +26,23 @@ namespace BlazorBindings.Maui.Elements
 
         [Parameter] public bool? CascadeInputTransparent { get; set; }
         [Parameter] public bool? IgnoreSafeArea { get; set; }
+        /// <summary>
+        /// Gets or sets a value which determines if the Layout should clip its children to its bounds.
+        /// </summary>
+        /// <value>
+        /// <see langword="true" /> if the Layout is clipped; otherwise, <see langword="false" />. The default value is <see langword="false" />.
+        /// </value>
         [Parameter] public bool? IsClippedToBounds { get; set; }
+        /// <summary>
+        /// Gets or sets the inner padding of the Layout.
+        /// </summary>
+        /// <value>
+        /// The Thickness values for the layout. The default value is a Thickness with all values set to 0.
+        /// </value>
         [Parameter] public Thickness? Padding { get; set; }
+        /// <summary>
+        /// For internal use by the Microsoft.Maui.Controls platform.
+        /// </summary>
         [Parameter] public RenderFragment ChildContent { get; set; }
 
         public new MC.Layout NativeControl => (MC.Layout)((BindableObject)this).NativeControl;

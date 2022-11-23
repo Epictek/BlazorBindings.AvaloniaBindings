@@ -21,15 +21,42 @@ namespace BlazorBindings.Maui.Elements
             RegisterAdditionalHandlers();
         }
 
+        /// <summary>
+        /// Gets or sets the Color of the span background.
+        /// </summary>
         [Parameter] public Color BackgroundColor { get; set; }
         [Parameter] public double? CharacterSpacing { get; set; }
+        /// <summary>
+        /// Gets a value that indicates whether the font for the span is bold, italic, or neither.
+        /// </summary>
         [Parameter] public MC.FontAttributes? FontAttributes { get; set; }
         [Parameter] public bool? FontAutoScalingEnabled { get; set; }
+        /// <summary>
+        /// Gets the font family to which the font for the text in the span belongs.
+        /// </summary>
         [Parameter] public string FontFamily { get; set; }
+        /// <summary>
+        /// Gets the size of the font for the text in the span.
+        /// </summary>
         [Parameter] public double? FontSize { get; set; }
+        /// <summary>
+        /// Gets or sets the multiplier to apply to the default line height when displaying text.
+        /// </summary>
+        /// <value>
+        /// The multiplier to apply to the default line height when displaying text.
+        /// </value>
         [Parameter] public double? LineHeight { get; set; }
+        /// <summary>
+        /// Gets or sets the text of the span.
+        /// </summary>
         [Parameter] public string Text { get; set; }
+        /// <summary>
+        /// Gets or sets the text color.
+        /// </summary>
         [Parameter] public Color TextColor { get; set; }
+        /// <summary>
+        /// Gets or sets the <see cref="T:Microsoft.Maui.TextDecorations" /> applied to this span.
+        /// </summary>
         [Parameter] public TextDecorations? TextDecorations { get; set; }
         [Parameter] public TextTransform? TextTransform { get; set; }
 

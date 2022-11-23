@@ -24,6 +24,9 @@ namespace BlazorBindings.Maui.Elements
             RegisterAdditionalHandlers();
         }
 
+        /// <summary>
+        /// Gets or sets the control template that is used to display content.
+        /// </summary>
         [Parameter] public RenderFragment ControlTemplate { get; set; }
 
         public new MC.TemplatedView NativeControl => (MC.TemplatedView)((BindableObject)this).NativeControl;

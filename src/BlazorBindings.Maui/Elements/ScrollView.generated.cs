@@ -24,9 +24,30 @@ namespace BlazorBindings.Maui.Elements
             RegisterAdditionalHandlers();
         }
 
+        /// <summary>
+        /// Gets or sets a value that controls when the horizontal scroll bar is visible.
+        /// </summary>
+        /// <value>
+        /// A value that controls when the horizontal scroll bar is visible.
+        /// </value>
         [Parameter] public ScrollBarVisibility? HorizontalScrollBarVisibility { get; set; }
+        /// <summary>
+        /// Gets or sets the scrolling direction of the ScrollView.
+        /// </summary>
         [Parameter] public ScrollOrientation? Orientation { get; set; }
+        /// <summary>
+        /// Gets or sets a value that controls when the vertical scroll bar is visible.
+        /// </summary>
+        /// <value>
+        /// A value that controls when the vertical scroll bar is visible.
+        /// </value>
         [Parameter] public ScrollBarVisibility? VerticalScrollBarVisibility { get; set; }
+        /// <summary>
+        /// Gets or sets a <see cref="T:Microsoft.Maui.Controls.View" /> to display in the <see cref="T:Microsoft.Maui.Controls.ScrollView" />.
+        /// </summary>
+        /// <value>
+        /// The <see cref="T:Microsoft.Maui.Controls.View" /> that is displayed.
+        /// </value>
         [Parameter] public RenderFragment ChildContent { get; set; }
         [Parameter] public EventCallback<MC.ScrolledEventArgs> OnScrolled { get; set; }
 

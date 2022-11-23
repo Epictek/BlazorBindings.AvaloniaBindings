@@ -19,6 +19,9 @@ namespace BlazorBindings.Maui.Elements
             RegisterAdditionalHandlers();
         }
 
+        /// <summary>
+        /// AsSingleItem (default) will only display the title of this item in the flyout. AsMultipleItems will create a separate flyout option for each child and <see cref="T:Microsoft.Maui.Controls.MenuItem" />.
+        /// </summary>
         [Parameter] public MC.FlyoutDisplayOptions? FlyoutDisplayOptions { get; set; }
 
         public new MC.ShellGroupItem NativeControl => (MC.ShellGroupItem)((BindableObject)this).NativeControl;

@@ -19,7 +19,19 @@ namespace BlazorBindings.Maui.Elements
             RegisterAdditionalHandlers();
         }
 
+        /// <summary>
+        /// Provides the interface for the bound property that gets or sets the distance between columns in the Grid.
+        /// </summary>
+        /// <value>
+        /// The space between columns in this <see cref="T:Microsoft.Maui.Controls.Grid" /> layout. The default is 6.
+        /// </value>
         [Parameter] public double? ColumnSpacing { get; set; }
+        /// <summary>
+        /// Gets or sets the amount of space left between rows in the Grid.
+        /// </summary>
+        /// <value>
+        /// The space between rows
+        /// </value>
         [Parameter] public double? RowSpacing { get; set; }
 
         public new MC.Grid NativeControl => (MC.Grid)((BindableObject)this).NativeControl;

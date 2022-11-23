@@ -20,8 +20,23 @@ namespace BlazorBindings.Maui.Elements
             RegisterAdditionalHandlers();
         }
 
+        /// <summary>
+        /// Gets or sets the <see cref="T:Microsoft.Maui.Controls.LayoutOptions" /> that define how the element gets laid in a layout cycle.
+        /// </summary>
+        /// <value>
+        /// A <see cref="T:Microsoft.Maui.Controls.LayoutOptions" /> which defines how to lay out the element. Default value is <see cref="F:Microsoft.Maui.Controls.LayoutOptions.Fill" /> unless otherwise documented.
+        /// </value>
         [Parameter] public MC.LayoutOptions? HorizontalOptions { get; set; }
+        /// <summary>
+        /// Gets or sets the margin for the view.
+        /// </summary>
         [Parameter] public Thickness? Margin { get; set; }
+        /// <summary>
+        /// Gets or sets the <see cref="T:Microsoft.Maui.Controls.LayoutOptions" /> that define how the element gets laid in a layout cycle.
+        /// </summary>
+        /// <value>
+        /// A <see cref="T:Microsoft.Maui.Controls.LayoutOptions" /> which defines how to lay out the element. Default value is <see cref="F:Microsoft.Maui.Controls.LayoutOptions.Fill" /> unless otherwise documented.
+        /// </value>
         [Parameter] public MC.LayoutOptions? VerticalOptions { get; set; }
 
         public new MC.View NativeControl => (MC.View)((BindableObject)this).NativeControl;

@@ -23,6 +23,12 @@ namespace BlazorBindings.Maui.Elements
             RegisterAdditionalHandlers();
         }
 
+        /// <summary>
+        /// Gets or sets the content of the ContentView.
+        /// </summary>
+        /// <value>
+        /// A <see cref="T:Microsoft.Maui.Controls.View" /> that contains the content.
+        /// </value>
         [Parameter] public RenderFragment ChildContent { get; set; }
 
         public new MC.ContentView NativeControl => (MC.ContentView)((BindableObject)this).NativeControl;

@@ -20,7 +20,16 @@ namespace BlazorBindings.Maui.Elements
             RegisterAdditionalHandlers();
         }
 
+        /// <summary>
+        /// Gets or sets a Boolean value that indicates whether this <see cref="T:Microsoft.Maui.Controls.Switch" /> element is toggled.
+        /// </summary>
         [Parameter] public bool? IsToggled { get; set; }
+        /// <summary>
+        /// Gets or sets the color of the switch when it is in the "On" position.
+        /// </summary>
+        /// <value>
+        /// The color of the switch when it is in the "On" position.
+        /// </value>
         [Parameter] public Color OnColor { get; set; }
         [Parameter] public Color ThumbColor { get; set; }
         [Parameter] public EventCallback<bool> IsToggledChanged { get; set; }

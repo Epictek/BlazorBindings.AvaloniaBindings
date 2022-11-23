@@ -19,7 +19,13 @@ namespace BlazorBindings.Maui.Elements
             RegisterAdditionalHandlers();
         }
 
+        /// <summary>
+        /// Gets or sets a value that indicates on which of the primary, secondary, or default toolbar surfaces to display this <see cref="T:Microsoft.Maui.Controls.ToolbarItem" /> element.
+        /// </summary>
         [Parameter] public MC.ToolbarItemOrder? Order { get; set; }
+        /// <summary>
+        /// Gets or sets the priority of this <see cref="T:Microsoft.Maui.Controls.ToolbarItem" /> element.
+        /// </summary>
         [Parameter] public int? Priority { get; set; }
 
         public new MC.ToolbarItem NativeControl => (MC.ToolbarItem)((BindableObject)this).NativeControl;

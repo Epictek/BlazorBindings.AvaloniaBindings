@@ -20,7 +20,19 @@ namespace BlazorBindings.Maui.Elements
             RegisterAdditionalHandlers();
         }
 
+        /// <summary>
+        /// Gets or sets the direction of swipes to recognize.
+        /// </summary>
+        /// <value>
+        /// The direction of swipes to recognize.
+        /// </value>
         [Parameter] public SwipeDirection? Direction { get; set; }
+        /// <summary>
+        /// Gets or sets the minimum swipe distance that will cause the gesture to be recognized.
+        /// </summary>
+        /// <value>
+        /// The minimum swipe distance that will cause the gesture to be recognized.
+        /// </value>
         [Parameter] public uint? Threshold { get; set; }
         [Parameter] public EventCallback<MC.SwipedEventArgs> OnSwiped { get; set; }
 
