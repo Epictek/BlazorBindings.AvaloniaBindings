@@ -24,7 +24,7 @@ namespace BlazorBindings.Maui.ComponentGenerator
 
         public static async Task Main(string[] args)
         {
-            MSBuildLocator.RegisterDefaults();
+            MSBuildLocator.RegisterInstance(MSBuildLocator.QueryVisualStudioInstances().MaxBy(instance => instance.Version));
 
             await Parser.Default
                 .ParseArguments<Options>(args)
