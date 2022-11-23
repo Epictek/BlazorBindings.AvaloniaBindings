@@ -1,10 +1,10 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-using Buildalyzer;
-using Buildalyzer.Workspaces;
 using CommandLine;
+using Microsoft.Build.Locator;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.MSBuild;
 using System;
 using System.IO;
 using System.Linq;
@@ -24,6 +24,8 @@ namespace BlazorBindings.Maui.ComponentGenerator
 
         public static async Task Main(string[] args)
         {
+            MSBuildLocator.RegisterDefaults();
+
             await Parser.Default
                 .ParseArguments<Options>(args)
                 .WithParsedAsync(async o =>
@@ -117,10 +119,10 @@ namespace BlazorBindings.Maui.ComponentGenerator
         {
             Console.WriteLine("Creating project compilation.");
 
-            var manager = new AnalyzerManager();
-            var analyzer = manager.GetProject(o.ProjectPath);
-            var workspace = analyzer.GetWorkspace();
-            var compilation = await workspace.CurrentSolution.Projects.First().GetCompilationAsync();
+            var workspace = MSBuildWorkspace.Create();
+            var project = await workspace.OpenProjectAsync(o.ProjectPath);
+            var compilation = await project.GetCompilationAsync();
+
             return compilation;
         }
 

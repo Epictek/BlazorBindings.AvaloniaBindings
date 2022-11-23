@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Xml;
 
 namespace BlazorBindings.Maui.ComponentGenerator
@@ -244,8 +245,9 @@ namespace {componentNamespace}
             static string GetXmlDocText(XmlElement xmlDocElement)
             {
                 var allText = xmlDocElement?.InnerXml;
-                allText = allText.Replace("To be added.", string.Empty);
-                return string.IsNullOrWhiteSpace(allText) ? null : allText;
+                allText = allText?.Replace("To be added.", "").Replace("This is a bindable property.", "");
+                allText = allText is null ? null : Regex.Replace(allText, @"\s+", " ");
+                return string.IsNullOrWhiteSpace(allText) ? null : allText.Trim();
             }
         }
 
