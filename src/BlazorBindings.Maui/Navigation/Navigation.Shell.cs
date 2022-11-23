@@ -51,8 +51,12 @@ namespace BlazorBindings.Maui
         //TODO This route matching could be better. Can we use the ASPNEt version?
         private List<StructuredRoute> FindRoutes()
         {
+            var appType = MC.Application.Current.GetType();
+            var assembly = appType.IsGenericType && appType.GetGenericTypeDefinition() == typeof(BlazorBindingsApplication<>)
+                ? appType.GenericTypeArguments[0].Assembly
+                : appType.Assembly;
+
             var result = new List<StructuredRoute>();
-            var assembly = MC.Application.Current.GetType().Assembly;
             var pages = assembly.GetTypes().Where(x => x.IsSubclassOf(typeof(ComponentBase)));
             foreach (var page in pages)
             {

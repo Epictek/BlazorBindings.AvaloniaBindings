@@ -12,7 +12,7 @@ namespace ControlGallery
         {
             var builder = MauiApp.CreateBuilder();
             builder
-                .UseMauiApp<App>()
+                .UseMauiApp<BlazorBindingsApplication<AppShell>>()
                 .UseSkiaSharp()
                 .UseMauiBlazorBindings()
                 .ConfigureFonts(fonts =>

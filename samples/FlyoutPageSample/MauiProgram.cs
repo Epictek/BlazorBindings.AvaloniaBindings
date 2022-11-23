@@ -1,4 +1,5 @@
 ﻿using BlazorBindings.Maui;
+using FlyoutPageSample.Views;
 
 namespace FlyoutPageSample
 {
@@ -7,7 +8,7 @@ namespace FlyoutPageSample
         public static MauiApp CreateMauiApp()
         {
             return MauiApp.CreateBuilder()
-                .UseMauiApp<App>()
+                .UseMauiApp<BlazorBindingsApplication<MainPage>>()
                 .UseMauiBlazorBindings()
                 .Build();
         }

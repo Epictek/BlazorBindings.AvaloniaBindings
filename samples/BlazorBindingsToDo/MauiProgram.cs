@@ -11,7 +11,7 @@ namespace BlazorBindingsToDo
         {
             var builder = MauiApp.CreateBuilder();
             builder
-                .UseMauiApp<App>()
+                .UseMauiApp<BlazorBindingsApplication<TodoApp>>()
                 .UseMauiBlazorBindings();
 
             builder.Services.AddSingleton<AppState>();
