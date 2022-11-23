@@ -9,21 +9,33 @@ using System.Threading.Tasks;
 
 namespace BlazorBindings.Core
 {
-    public abstract class NativeControlComponentBase : ComponentBase
+    public abstract class NativeControlComponentBase : IComponent
     {
+        private readonly RenderFragment _renderFragment;
+        private bool _hasPendingQueuedRender;
+        private RenderHandle _renderHandle;
         private Exception _eventCallbackException;
 
-        public IElementHandler ElementHandler { get; private set; }
+        protected IElementHandler ElementHandler { get; private set; }
 
-        public void SetElementReference(IElementHandler elementHandler)
+        public NativeControlComponentBase()
         {
-            ElementHandler = elementHandler ?? throw new ArgumentNullException(nameof(elementHandler));
+            _renderFragment = builder =>
+            {
+                _hasPendingQueuedRender = false;
+                BuildRenderTree(builder);
+            };
         }
 
-        protected override void BuildRenderTree(RenderTreeBuilder builder)
+        public virtual Task SetParametersAsync(ParameterView parameters)
         {
-            ArgumentNullException.ThrowIfNull(builder);
+            parameters.SetParameterProperties(this);
+            StateHasChanged();
+            return Task.CompletedTask;
+        }
 
+        protected virtual void BuildRenderTree(RenderTreeBuilder builder)
+        {
             if (_eventCallbackException != null)
             {
                 var oldException = _eventCallbackException;
@@ -54,9 +66,28 @@ namespace BlazorBindings.Core
         {
         }
 
+        protected void StateHasChanged()
+        {
+            if (_hasPendingQueuedRender)
+                return;
+
+            try
+            {
+                _renderHandle.Render(_renderFragment);
+            }
+            finally
+            {
+                _hasPendingQueuedRender = false;
+            }
+        }
+
+        protected Task InvokeAsync(Action workItem) => _renderHandle.Dispatcher.InvokeAsync(workItem);
+
+        protected Task InvokeAsync(Func<Task> workItem) => _renderHandle.Dispatcher.InvokeAsync(workItem);
+
         protected Task InvokeEventCallback<T>(EventCallback<T> eventCallback, T value)
         {
-            return InvokeAsync(async () =>
+            return _renderHandle.Dispatcher.InvokeAsync(async () =>
             {
                 try
                 {
@@ -74,7 +105,7 @@ namespace BlazorBindings.Core
 
         protected Task InvokeEventCallback(EventCallback eventCallback)
         {
-            return InvokeAsync(async () =>
+            return _renderHandle.Dispatcher.InvokeAsync(async () =>
             {
                 try
                 {
@@ -91,5 +122,15 @@ namespace BlazorBindings.Core
         }
 
         protected virtual RenderFragment GetChildContent() => null;
+
+        internal void SetElementReference(IElementHandler elementHandler)
+        {
+            ElementHandler = elementHandler ?? throw new ArgumentNullException(nameof(elementHandler));
+        }
+
+        void IComponent.Attach(RenderHandle renderHandle)
+        {
+            _renderHandle = renderHandle;
+        }
     }
 }

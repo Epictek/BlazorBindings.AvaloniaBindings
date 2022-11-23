@@ -23,8 +23,8 @@ namespace BlazorBindings.Maui.Elements
             {
                 HandleParameter(parameterValue.Name, parameterValue.Value);
             }
-
-            return base.SetParametersAsync(ParameterView.Empty);
+            StateHasChanged();
+            return Task.CompletedTask;
         }
 
         protected sealed override void RenderAttributes(AttributesBuilder builder)
