@@ -98,6 +98,12 @@ using System.Runtime.CompilerServices;
     ContentProperties = new[] { nameof(StructuredItemsView.Header), nameof(StructuredItemsView.Footer) },
     Exclude = new[] { nameof(StructuredItemsView.HeaderTemplate), nameof(StructuredItemsView.FooterTemplate) })]
 [assembly: GenerateComponent(typeof(Stepper))]
+[assembly: GenerateComponent(typeof(SwipeView),
+    ContentProperties = new[] { nameof(SwipeView.LeftItems), nameof(SwipeView.RightItems), nameof(SwipeView.TopItems), nameof(SwipeView.BottomItems) })]
+[assembly: GenerateComponent(typeof(SwipeItems),
+    Exclude = new[] { nameof(SwipeItems.CollectionChanged) })]
+[assembly: GenerateComponent(typeof(SwipeItem))]
+[assembly: GenerateComponent(typeof(SwipeItemView))]
 [assembly: GenerateComponent(typeof(Switch))]
 [assembly: GenerateComponent(typeof(Tab))]
 [assembly: GenerateComponent(typeof(TabBar))]

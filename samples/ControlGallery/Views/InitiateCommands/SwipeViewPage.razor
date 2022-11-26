@@ -1,0 +1,47 @@
+﻿<ContentPage Title="SwipeView">
+    <VerticalStackLayout Spacing="8">
+        <Label>Favorite: @_favorite</Label>
+
+        @foreach (var item in _items)
+        {
+            <SwipeView>
+                <RightItems>
+                    <SwipeItems>
+                        <SwipeItem BackgroundColor="Colors.Yellow" Text="Favorite" OnInvoked="() => MakeFavorite(item)" />
+                        <SwipeItem BackgroundColor="Colors.Red" Text="Remove" IsDestructive="true" OnInvoked="() => Remove(item)" />
+                    </SwipeItems>
+                </RightItems>
+
+                <ChildContent>
+                    <Border BackgroundColor="Colors.Green" Padding="8" Margin="8" CornerRadius="4">
+                        <Label>@item</Label>
+                    </Border>
+                </ChildContent>
+            </SwipeView>
+
+        }
+    </VerticalStackLayout>
+
+</ContentPage>
+
+@code {
+    List<string> _items = new()
+    {
+        "Leonardo da Vinci",
+        "Michelangelo Buonarroti",
+        "Donato di Niccolò di Betto Bardi",
+        "Raffaello Sanzio da Urbino"
+    };
+
+    string _favorite;
+
+    void MakeFavorite(string item)
+    {
+        _favorite = item;
+    }
+
+    void Remove(string item)
+    {
+        _items.Remove(item);
+    }
+}

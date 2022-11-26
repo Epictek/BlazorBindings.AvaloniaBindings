@@ -143,6 +143,7 @@ namespace BlazorBindings.Maui.ComponentGenerator
 
             var props = componentInfo.TypeSymbol.GetMembers().OfType<IPropertySymbol>()
                 .Where(p => !componentInfo.Exclude.Contains(p.Name))
+                .Where(p => !componentInfo.ContentProperties.Contains(p.Name))
                 .Where(IsPublicProperty)
                 .Where(HasPublicSetter)
                 .Where(prop => IsExplicitlyAllowed(prop, generatedType) || !DisallowedComponentTypes.Contains(prop.Type.GetFullName()))
