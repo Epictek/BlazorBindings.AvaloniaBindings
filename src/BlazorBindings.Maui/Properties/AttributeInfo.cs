@@ -43,6 +43,9 @@ using System.Runtime.CompilerServices;
 [assembly: GenerateComponent(typeof(HorizontalStackLayout))]
 [assembly: GenerateComponent(typeof(Image))]
 [assembly: GenerateComponent(typeof(ImageButton))]
+[assembly: GenerateComponent(typeof(IndicatorView),
+    PropertyChangedEvents = new[] { nameof(IndicatorView.Position) },
+    Exclude = new[] { nameof(IndicatorView.ItemsSource), nameof(IndicatorView.IndicatorLayout) })]
 [assembly: GenerateComponent(typeof(InputView))]
 [assembly: GenerateComponent(typeof(ItemsView),
     GenericProperties = new[] { nameof(ItemsView.ItemsSource), nameof(ItemsView.ItemTemplate) },

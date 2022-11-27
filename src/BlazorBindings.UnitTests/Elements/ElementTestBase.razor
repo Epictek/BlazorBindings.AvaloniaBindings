@@ -5,15 +5,6 @@
 @code {
     private MauiBlazorBindingsRenderer _renderer = TestBlazorBindingsRenderer.Create();
 
-    protected override bool ShouldRender() => false;
-
-    public ElementTestBase()
-    {
-        // We need to prevent this component from rendering.
-        var field = typeof(ComponentBase).GetField("_hasNeverRendered", BindingFlags.NonPublic | BindingFlags.Instance);
-        field.SetValue(this, false);
-    }
-
     protected async Task<T> Render<T>(RenderFragment renderFragment) where T : MC.BindableObject
     {
         var container = new RootContainerHandler();

@@ -1,0 +1,23 @@
+﻿@inherits ElementTestBase
+
+@code {
+    [Test]
+    public async Task SetIndicatorViewToCarouselView()
+    {
+        var items = new[] { 1, 2, 3, 4, 5 };
+
+        IndicatorView indicatorViewRef = null;
+        var parent = await Render<MC.Layout>(
+    @<VerticalStackLayout>
+        <CarouselView IndicatorView="() => indicatorViewRef" ItemsSource="items" />
+        <IndicatorView @ref="indicatorViewRef" />
+    </VerticalStackLayout>
+    );
+
+        var carouselView = (MC.CarouselView)parent.Children[0];
+        var indicatorView = (MC.IndicatorView)parent.Children[1];
+
+        Assert.That(indicatorView, Is.SameAs(indicatorViewRef.NativeControl));
+        Assert.That(indicatorView.ItemsSource, Is.EqualTo(items));
+    }
+}
