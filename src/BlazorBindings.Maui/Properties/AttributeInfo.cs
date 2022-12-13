@@ -111,6 +111,11 @@ using System.Runtime.CompilerServices;
 [assembly: GenerateComponent(typeof(Tab))]
 [assembly: GenerateComponent(typeof(TabBar))]
 [assembly: GenerateComponent(typeof(TabbedPage))]
+[assembly: GenerateComponent(typeof(TableView),
+    Exclude = new[] { nameof(TableView.Root) })]
+[assembly: GenerateComponent(typeof(TableRoot))]
+[assembly: GenerateComponent(typeof(TableSection))]
+[assembly: GenerateComponent(typeof(TableSectionBase))]
 [assembly: GenerateComponent(typeof(TemplatedPage), Exclude = new[] { nameof(TemplatedPage.ControlTemplate) })]
 [assembly: GenerateComponent(typeof(TemplatedView))]
 [assembly: GenerateComponent(typeof(TimePicker), Exclude = new[] { nameof(TimePicker.Time) })]
@@ -119,6 +124,16 @@ using System.Runtime.CompilerServices;
 [assembly: GenerateComponent(typeof(View))]
 [assembly: GenerateComponent(typeof(VisualElement), Exclude = new[] { nameof(VisualElement.BackgroundColor) })]
 [assembly: GenerateComponent(typeof(WebView))]
+
+// Cells
+[assembly: GenerateComponent(typeof(TextCell))]
+[assembly: GenerateComponent(typeof(ImageCell))]
+[assembly: GenerateComponent(typeof(SwitchCell))]
+[assembly: GenerateComponent(typeof(EntryCell),
+    PropertyChangedEvents = new[] { nameof(EntryCell.Text) })]
+[assembly: GenerateComponent(typeof(ViewCell))]
+[assembly: GenerateComponent(typeof(Cell))]
+
 
 // GestureRecognizers
 [assembly: GenerateComponent(typeof(GestureRecognizer))]
