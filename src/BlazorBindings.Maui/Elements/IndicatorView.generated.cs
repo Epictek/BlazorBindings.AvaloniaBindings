@@ -6,7 +6,6 @@
 // </auto-generated>
 
 using BlazorBindings.Core;
-using BlazorBindings.Maui.Elements.Handlers;
 using MC = Microsoft.Maui.Controls;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
@@ -20,9 +19,6 @@ namespace BlazorBindings.Maui.Elements
     {
         static IndicatorView()
         {
-            ElementHandlerRegistry.RegisterPropertyContentHandler<IndicatorView>(nameof(IndicatorTemplate),
-                (renderer, parent, component) => new DataTemplatePropertyHandler<MC.IndicatorView>(component,
-                    (x, dataTemplate) => x.IndicatorTemplate = dataTemplate));
             RegisterAdditionalHandlers();
         }
 
@@ -132,7 +128,7 @@ namespace BlazorBindings.Maui.Elements
         protected override void RenderAdditionalElementContent(RenderTreeBuilder builder, ref int sequence)
         {
             base.RenderAdditionalElementContent(builder, ref sequence);
-            RenderTreeBuilderHelper.AddDataTemplateProperty(builder, sequence++, typeof(IndicatorView), IndicatorTemplate);
+            RenderTreeBuilderHelper.AddDataTemplateProperty<MC.IndicatorView>(builder, sequence++, IndicatorTemplate, (x, template) => x.IndicatorTemplate = template);
         }
 
         static partial void RegisterAdditionalHandlers();

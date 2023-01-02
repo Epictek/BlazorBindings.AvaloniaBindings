@@ -6,7 +6,6 @@
 // </auto-generated>
 
 using BlazorBindings.Core;
-using BlazorBindings.Maui.Elements.Handlers;
 using MC = Microsoft.Maui.Controls;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
@@ -23,25 +22,6 @@ namespace BlazorBindings.Maui.Elements
     {
         static Shell()
         {
-            ElementHandlerRegistry.RegisterPropertyContentHandler<Shell>(nameof(FlyoutBackdrop),
-                (renderer, parent, component) => new ContentPropertyHandler<MC.Shell>((x, value) => x.FlyoutBackdrop = (MC.Brush)value));
-            ElementHandlerRegistry.RegisterPropertyContentHandler<Shell>(nameof(FlyoutBackground),
-                (renderer, parent, component) => new ContentPropertyHandler<MC.Shell>((x, value) => x.FlyoutBackground = (MC.Brush)value));
-            ElementHandlerRegistry.RegisterPropertyContentHandler<Shell>(nameof(FlyoutContent),
-                (renderer, parent, component) => new DataTemplatePropertyHandler<MC.Shell>(component,
-                    (x, dataTemplate) => x.FlyoutContentTemplate = dataTemplate));
-            ElementHandlerRegistry.RegisterPropertyContentHandler<Shell>(nameof(FlyoutFooter),
-                (renderer, parent, component) => new DataTemplatePropertyHandler<MC.Shell>(component,
-                    (x, dataTemplate) => x.FlyoutFooterTemplate = dataTemplate));
-            ElementHandlerRegistry.RegisterPropertyContentHandler<Shell>(nameof(FlyoutHeader),
-                (renderer, parent, component) => new DataTemplatePropertyHandler<MC.Shell>(component,
-                    (x, dataTemplate) => x.FlyoutHeaderTemplate = dataTemplate));
-            ElementHandlerRegistry.RegisterPropertyContentHandler<Shell>(nameof(ItemTemplate),
-                (renderer, parent, component) => new DataTemplatePropertyHandler<MC.Shell, MC.BaseShellItem>(component,
-                    (x, dataTemplate) => x.ItemTemplate = dataTemplate));
-            ElementHandlerRegistry.RegisterPropertyContentHandler<Shell>(nameof(MenuItemTemplate),
-                (renderer, parent, component) => new DataTemplatePropertyHandler<MC.Shell, MC.BaseShellItem>(component,
-                    (x, dataTemplate) => x.MenuItemTemplate = dataTemplate));
             RegisterAdditionalHandlers();
         }
 
@@ -229,13 +209,13 @@ namespace BlazorBindings.Maui.Elements
         protected override void RenderAdditionalElementContent(RenderTreeBuilder builder, ref int sequence)
         {
             base.RenderAdditionalElementContent(builder, ref sequence);
-            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(Shell), FlyoutBackdrop);
-            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(Shell), FlyoutBackground);
-            RenderTreeBuilderHelper.AddDataTemplateProperty(builder, sequence++, typeof(Shell), FlyoutContent);
-            RenderTreeBuilderHelper.AddDataTemplateProperty(builder, sequence++, typeof(Shell), FlyoutFooter);
-            RenderTreeBuilderHelper.AddDataTemplateProperty(builder, sequence++, typeof(Shell), FlyoutHeader);
-            RenderTreeBuilderHelper.AddDataTemplateProperty(builder, sequence++, typeof(Shell), ItemTemplate);
-            RenderTreeBuilderHelper.AddDataTemplateProperty(builder, sequence++, typeof(Shell), MenuItemTemplate);
+            RenderTreeBuilderHelper.AddContentProperty<MC.Shell>(builder, sequence++, FlyoutBackdrop, (x, value) => x.FlyoutBackdrop = (MC.Brush)value);
+            RenderTreeBuilderHelper.AddContentProperty<MC.Shell>(builder, sequence++, FlyoutBackground, (x, value) => x.FlyoutBackground = (MC.Brush)value);
+            RenderTreeBuilderHelper.AddDataTemplateProperty<MC.Shell>(builder, sequence++, FlyoutContent, (x, template) => x.FlyoutContentTemplate = template);
+            RenderTreeBuilderHelper.AddDataTemplateProperty<MC.Shell>(builder, sequence++, FlyoutFooter, (x, template) => x.FlyoutFooterTemplate = template);
+            RenderTreeBuilderHelper.AddDataTemplateProperty<MC.Shell>(builder, sequence++, FlyoutHeader, (x, template) => x.FlyoutHeaderTemplate = template);
+            RenderTreeBuilderHelper.AddDataTemplateProperty<MC.Shell, MC.BaseShellItem>(builder, sequence++, ItemTemplate, (x, template) => x.ItemTemplate = template);
+            RenderTreeBuilderHelper.AddDataTemplateProperty<MC.Shell, MC.BaseShellItem>(builder, sequence++, MenuItemTemplate, (x, template) => x.MenuItemTemplate = template);
         }
 
         static partial void RegisterAdditionalHandlers();

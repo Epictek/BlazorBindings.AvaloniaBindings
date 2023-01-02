@@ -6,6 +6,7 @@ using Microsoft.Maui;
 using Microsoft.Maui.Hosting;
 using System;
 using System.Collections.Generic;
+using System.Runtime.ExceptionServices;
 using System.Threading;
 using System.Threading.Tasks;
 using MauiDispatching = Microsoft.Maui.Dispatching;
@@ -78,7 +79,7 @@ namespace BlazorBindings.UnitTests
         protected override void HandleException(Exception exception)
         {
             Exceptions.Add(exception);
-            base.HandleException(exception);
+            ExceptionDispatchInfo.Throw(exception);
         }
 
         public override Dispatcher Dispatcher => NullDispatcher.Instance;

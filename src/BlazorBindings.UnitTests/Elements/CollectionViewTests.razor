@@ -1,0 +1,23 @@
+﻿@using NUnit.Framework;
+
+@inherits ElementTestBase
+
+@code {
+    [Test]
+    public async Task ItemTemplateShouldBeValidDataTemplate()
+    {
+        var collectionView = await Render<MC.CollectionView>(
+    @<CollectionView ItemsSource="new[] { 1, 2, 3 }">
+        <ItemTemplate>
+            <Label>@context - @(context == 1 ? "one" : "many")</Label>
+            </ItemTemplate>
+        </CollectionView>
+    );
+
+        var label1 = collectionView.ItemTemplate.CreateContent<MC.Label>(1, collectionView);
+        Assert.That(label1.Text, Is.EqualTo("1 - one"));
+
+        var label2 = collectionView.ItemTemplate.CreateContent<MC.Label>(2, collectionView);
+        Assert.That(label2.Text, Is.EqualTo("2 - many"));
+    }
+}

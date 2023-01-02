@@ -8,7 +8,6 @@
 using AC = AlohaKit.Controls;
 using BlazorBindings.Core;
 using BlazorBindings.Maui.Elements;
-using BlazorBindings.Maui.Elements.Handlers;
 using MC = Microsoft.Maui.Controls;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
@@ -21,14 +20,6 @@ namespace BlazorBindings.Maui.Elements.AlohaKit
     {
         static Slider()
         {
-            ElementHandlerRegistry.RegisterPropertyContentHandler<Slider>(nameof(Background),
-                (renderer, parent, component) => new ContentPropertyHandler<AC.Slider>((x, value) => x.Background = (MC.Brush)value));
-            ElementHandlerRegistry.RegisterPropertyContentHandler<Slider>(nameof(MaximumBrush),
-                (renderer, parent, component) => new ContentPropertyHandler<AC.Slider>((x, value) => x.MaximumBrush = (MC.Brush)value));
-            ElementHandlerRegistry.RegisterPropertyContentHandler<Slider>(nameof(MinimumBrush),
-                (renderer, parent, component) => new ContentPropertyHandler<AC.Slider>((x, value) => x.MinimumBrush = (MC.Brush)value));
-            ElementHandlerRegistry.RegisterPropertyContentHandler<Slider>(nameof(ThumbBrush),
-                (renderer, parent, component) => new ContentPropertyHandler<AC.Slider>((x, value) => x.ThumbBrush = (MC.Brush)value));
             RegisterAdditionalHandlers();
         }
 
@@ -138,10 +129,10 @@ namespace BlazorBindings.Maui.Elements.AlohaKit
         protected override void RenderAdditionalElementContent(RenderTreeBuilder builder, ref int sequence)
         {
             base.RenderAdditionalElementContent(builder, ref sequence);
-            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(Slider), Background);
-            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(Slider), MaximumBrush);
-            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(Slider), MinimumBrush);
-            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(Slider), ThumbBrush);
+            RenderTreeBuilderHelper.AddContentProperty<AC.Slider>(builder, sequence++, Background, (x, value) => x.Background = (MC.Brush)value);
+            RenderTreeBuilderHelper.AddContentProperty<AC.Slider>(builder, sequence++, MaximumBrush, (x, value) => x.MaximumBrush = (MC.Brush)value);
+            RenderTreeBuilderHelper.AddContentProperty<AC.Slider>(builder, sequence++, MinimumBrush, (x, value) => x.MinimumBrush = (MC.Brush)value);
+            RenderTreeBuilderHelper.AddContentProperty<AC.Slider>(builder, sequence++, ThumbBrush, (x, value) => x.ThumbBrush = (MC.Brush)value);
         }
 
         static partial void RegisterAdditionalHandlers();

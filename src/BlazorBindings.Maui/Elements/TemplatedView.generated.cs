@@ -6,7 +6,6 @@
 // </auto-generated>
 
 using BlazorBindings.Core;
-using BlazorBindings.Maui.Elements.Handlers;
 using MC = Microsoft.Maui.Controls;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
@@ -21,9 +20,6 @@ namespace BlazorBindings.Maui.Elements
     {
         static TemplatedView()
         {
-            ElementHandlerRegistry.RegisterPropertyContentHandler<TemplatedView>(nameof(ControlTemplate),
-                (renderer, parent, component) => new ControlTemplatePropertyHandler<MC.TemplatedView>(component,
-                    (x, controlTemplate) => x.ControlTemplate = controlTemplate));
             RegisterAdditionalHandlers();
         }
 
@@ -53,7 +49,7 @@ namespace BlazorBindings.Maui.Elements
         protected override void RenderAdditionalElementContent(RenderTreeBuilder builder, ref int sequence)
         {
             base.RenderAdditionalElementContent(builder, ref sequence);
-            RenderTreeBuilderHelper.AddControlTemplateProperty(builder, sequence++, typeof(TemplatedView), ControlTemplate);
+            RenderTreeBuilderHelper.AddControlTemplateProperty<MC.TemplatedView>(builder, sequence++, ControlTemplate, (x, template) => x.ControlTemplate = template);
         }
 
         static partial void RegisterAdditionalHandlers();

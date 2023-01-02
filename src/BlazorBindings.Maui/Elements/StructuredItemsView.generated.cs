@@ -6,7 +6,6 @@
 // </auto-generated>
 
 using BlazorBindings.Core;
-using BlazorBindings.Maui.Elements.Handlers;
 using MC = Microsoft.Maui.Controls;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
@@ -18,10 +17,6 @@ namespace BlazorBindings.Maui.Elements
     {
         static StructuredItemsView()
         {
-            ElementHandlerRegistry.RegisterPropertyContentHandler<StructuredItemsView<T>>(nameof(Footer),
-                (renderer, parent, component) => new ContentPropertyHandler<MC.StructuredItemsView>((x, value) => x.Footer = (object)value));
-            ElementHandlerRegistry.RegisterPropertyContentHandler<StructuredItemsView<T>>(nameof(Header),
-                (renderer, parent, component) => new ContentPropertyHandler<MC.StructuredItemsView>((x, value) => x.Header = (object)value));
             RegisterAdditionalHandlers();
         }
 
@@ -68,8 +63,8 @@ namespace BlazorBindings.Maui.Elements
         protected override void RenderAdditionalElementContent(RenderTreeBuilder builder, ref int sequence)
         {
             base.RenderAdditionalElementContent(builder, ref sequence);
-            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(StructuredItemsView<T>), Footer);
-            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(StructuredItemsView<T>), Header);
+            RenderTreeBuilderHelper.AddContentProperty<MC.StructuredItemsView>(builder, sequence++, Footer, (x, value) => x.Footer = (object)value);
+            RenderTreeBuilderHelper.AddContentProperty<MC.StructuredItemsView>(builder, sequence++, Header, (x, value) => x.Header = (object)value);
         }
 
         static partial void RegisterAdditionalHandlers();

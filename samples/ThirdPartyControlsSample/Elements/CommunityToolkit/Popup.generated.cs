@@ -7,7 +7,6 @@
 
 using BlazorBindings.Core;
 using BlazorBindings.Maui.Elements;
-using BlazorBindings.Maui.Elements.Handlers;
 using CMV = CommunityToolkit.Maui.Views;
 using CommunityToolkit.Maui.Core;
 using MC = Microsoft.Maui.Controls;
@@ -26,8 +25,6 @@ namespace BlazorBindings.Maui.Elements.CommunityToolkit
     {
         static Popup()
         {
-            ElementHandlerRegistry.RegisterPropertyContentHandler<Popup>(nameof(ChildContent),
-                (renderer, parent, component) => new ContentPropertyHandler<CMV.Popup>((x, value) => x.Content = (MC.View)value));
             RegisterAdditionalHandlers();
         }
 
@@ -145,7 +142,7 @@ namespace BlazorBindings.Maui.Elements.CommunityToolkit
         protected override void RenderAdditionalElementContent(RenderTreeBuilder builder, ref int sequence)
         {
             base.RenderAdditionalElementContent(builder, ref sequence);
-            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(Popup), ChildContent);
+            RenderTreeBuilderHelper.AddContentProperty<CMV.Popup>(builder, sequence++, ChildContent, (x, value) => x.Content = (MC.View)value);
         }
 
         static partial void RegisterAdditionalHandlers();

@@ -1,0 +1,20 @@
+﻿@using NUnit.Framework;
+
+@inherits ElementTestBase
+
+@code {
+    [Test]
+    public async Task ShouldBeAbleToSetControlTemplate()
+    {
+        var button = await Render<MC.RadioButton>(
+    @<RadioButton>
+        <ControlTemplate>
+            <Label>Radio Template</Label>
+        </ControlTemplate>
+    </RadioButton>
+    );
+
+        var templateRoot = button.GetTemplateRoot<MC.Label>();
+        Assert.That(templateRoot.Text, Is.EqualTo("Radio Template"));
+    }
+}

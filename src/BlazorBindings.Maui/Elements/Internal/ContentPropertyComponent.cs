@@ -1,28 +1,22 @@
-﻿// Copyright (c) Microsoft Corporation.
-// Licensed under the MIT license.
-
-using BlazorBindings.Core;
+﻿using BlazorBindings.Core;
+using Microsoft.AspNetCore.Components;
 using System;
-using System.ComponentModel;
 using MC = Microsoft.Maui.Controls;
 
-namespace BlazorBindings.Maui.Elements.Handlers
+namespace BlazorBindings.Maui.Elements.Internal
 {
-    /// <remarks>Experimental API, subject to change.</remarks>
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    public class ContentPropertyHandler<TElementType> : IMauiContainerElementHandler, INonChildContainerElement
+    internal class ContentPropertyComponent<TControl> : NativeControlComponentBase, IMauiContainerElementHandler, INonChildContainerElement
     {
-        private readonly Action<TElementType, MC.BindableObject> _setPropertyAction;
-        private TElementType _parent;
+        private TControl _parent;
 
-        public ContentPropertyHandler(Action<TElementType, MC.BindableObject> setPropertyAction)
-        {
-            _setPropertyAction = setPropertyAction;
-        }
+        [Parameter] public Action<TControl, MC.BindableObject> SetPropertyAction { get; set; }
+        [Parameter] public RenderFragment ChildContent { get; set; }
+
+        protected override RenderFragment GetChildContent() => ChildContent;
 
         public void SetParent(object parentElement)
         {
-            _parent = (TElementType)parentElement;
+            _parent = (TControl)parentElement;
         }
 
         public void RemoveFromParent(object parentElement)
@@ -32,7 +26,7 @@ namespace BlazorBindings.Maui.Elements.Handlers
 
         void IMauiContainerElementHandler.AddChild(MC.BindableObject child, int physicalSiblingIndex)
         {
-            _setPropertyAction(_parent, child);
+            SetPropertyAction(_parent, child);
         }
 
         int IMauiContainerElementHandler.GetChildIndex(MC.BindableObject child)
@@ -42,7 +36,7 @@ namespace BlazorBindings.Maui.Elements.Handlers
 
         void IMauiContainerElementHandler.RemoveChild(MC.BindableObject child)
         {
-            _setPropertyAction(_parent, null);
+            SetPropertyAction(_parent, null);
         }
 
         MC.BindableObject IMauiElementHandler.ElementControl => _parent as MC.BindableObject;

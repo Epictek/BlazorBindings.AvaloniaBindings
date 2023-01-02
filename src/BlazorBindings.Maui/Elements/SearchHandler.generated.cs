@@ -6,7 +6,6 @@
 // </auto-generated>
 
 using BlazorBindings.Core;
-using BlazorBindings.Maui.Elements.Handlers;
 using MC = Microsoft.Maui.Controls;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
@@ -26,9 +25,6 @@ namespace BlazorBindings.Maui.Elements
     {
         static SearchHandler()
         {
-            ElementHandlerRegistry.RegisterPropertyContentHandler<SearchHandler<T>>(nameof(ItemTemplate),
-                (renderer, parent, component) => new DataTemplatePropertyHandler<MC.SearchHandler, T>(component,
-                    (x, dataTemplate) => x.ItemTemplate = dataTemplate));
             RegisterAdditionalHandlers();
         }
 
@@ -432,7 +428,7 @@ namespace BlazorBindings.Maui.Elements
         protected override void RenderAdditionalElementContent(RenderTreeBuilder builder, ref int sequence)
         {
             base.RenderAdditionalElementContent(builder, ref sequence);
-            RenderTreeBuilderHelper.AddDataTemplateProperty(builder, sequence++, typeof(SearchHandler<T>), ItemTemplate);
+            RenderTreeBuilderHelper.AddDataTemplateProperty<MC.SearchHandler, T>(builder, sequence++, ItemTemplate, (x, template) => x.ItemTemplate = template);
         }
 
         static partial void RegisterAdditionalHandlers();

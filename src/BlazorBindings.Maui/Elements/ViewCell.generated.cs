@@ -6,7 +6,6 @@
 // </auto-generated>
 
 using BlazorBindings.Core;
-using BlazorBindings.Maui.Elements.Handlers;
 using MC = Microsoft.Maui.Controls;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
@@ -21,8 +20,6 @@ namespace BlazorBindings.Maui.Elements
     {
         static ViewCell()
         {
-            ElementHandlerRegistry.RegisterPropertyContentHandler<ViewCell>(nameof(ChildContent),
-                (renderer, parent, component) => new ContentPropertyHandler<MC.ViewCell>((x, value) => x.View = (MC.View)value));
             RegisterAdditionalHandlers();
         }
 
@@ -52,7 +49,7 @@ namespace BlazorBindings.Maui.Elements
         protected override void RenderAdditionalElementContent(RenderTreeBuilder builder, ref int sequence)
         {
             base.RenderAdditionalElementContent(builder, ref sequence);
-            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(ViewCell), ChildContent);
+            RenderTreeBuilderHelper.AddContentProperty<MC.ViewCell>(builder, sequence++, ChildContent, (x, value) => x.View = (MC.View)value);
         }
 
         static partial void RegisterAdditionalHandlers();

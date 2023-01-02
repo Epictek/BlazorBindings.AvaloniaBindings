@@ -78,12 +78,7 @@ namespace BlazorBindings.Maui.ComponentGenerator
                 classModifiers += "abstract ";
             }
 
-            var staticConstructorBody = "";
-            foreach (var prop in contentProperties)
-            {
-                staticConstructorBody += prop.GetContentHandlerRegistration();
-            }
-            staticConstructorBody += "\r\n            RegisterAdditionalHandlers();";
+            var staticConstructorBody = "\r\n            RegisterAdditionalHandlers();";
 
             var createNativeElement = isComponentAbstract ? "" : $@"
         protected override {generatedType.GetTypeNameAndAddNamespace(typeToGenerate)} CreateNativeElement() => new();";

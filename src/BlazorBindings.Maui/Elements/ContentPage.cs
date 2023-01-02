@@ -1,9 +1,6 @@
-using BlazorBindings.Core;
-using BlazorBindings.Maui.Elements.Handlers;
 using BlazorBindings.Maui.Elements.Input;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
-using Microsoft.Maui.Controls;
 using Microsoft.Maui.Graphics;
 using MC = Microsoft.Maui.Controls;
 
@@ -11,24 +8,6 @@ namespace BlazorBindings.Maui.Elements
 {
     public partial class ContentPage : TemplatedPage
     {
-        static partial void RegisterAdditionalHandlers()
-        {
-            ElementHandlerRegistry.RegisterPropertyContentHandler<ContentPage>(nameof(TitleView),
-                (renderer, parent, component) => new ContentPropertyHandler<MC.Page>((x, value) =>
-                {
-                    MC.Shell.SetTitleView(x, (MC.View)value);
-                    MC.NavigationPage.SetTitleView(x, (MC.View)value);
-                }));
-
-            ElementHandlerRegistry.RegisterPropertyContentHandler<ContentPage>(nameof(ShellSearchHandler),
-                (renderer, parent, component) => new ContentPropertyHandler<MC.Page>((x, value) =>
-                    MC.Shell.SetSearchHandler(x, (MC.SearchHandler)value)));
-
-            ElementHandlerRegistry.RegisterPropertyContentHandler<ContentPage>(nameof(BackButtonBehavior),
-                (renderer, parent, component) => new ContentPropertyHandler<MC.Page>((x, value) =>
-                    MC.Shell.SetBackButtonBehavior(x, (MC.BackButtonBehavior)value)));
-        }
-
         /// <summary>
         /// Sets a value that indicates whether or not this Page element has a navigation bar.
         /// </summary>
@@ -50,7 +29,7 @@ namespace BlazorBindings.Maui.Elements
         /// Change Shell navigation behavior.
         /// This property is ignored if the application does not use Shell.
         /// </summary>
-        [Parameter] public PresentationMode? ShellPresentationMode { get; set; }
+        [Parameter] public MC.PresentationMode? ShellPresentationMode { get; set; }
 
         /// <summary>
         /// Defines the color used for the title of the page.
@@ -113,8 +92,8 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(ShellPresentationMode):
                     if (!Equals(ShellPresentationMode, value))
                     {
-                        ShellPresentationMode = (PresentationMode?)value;
-                        MC.Shell.SetPresentationMode(NativeControl, ShellPresentationMode ?? (PresentationMode)MC.Shell.PresentationModeProperty.DefaultValue);
+                        ShellPresentationMode = (MC.PresentationMode?)value;
+                        MC.Shell.SetPresentationMode(NativeControl, ShellPresentationMode ?? (MC.PresentationMode)MC.Shell.PresentationModeProperty.DefaultValue);
                     }
                     return true;
                 case nameof(TitleColor):
@@ -174,8 +153,13 @@ namespace BlazorBindings.Maui.Elements
         protected override void RenderAdditionalPartialElementContent(RenderTreeBuilder builder, ref int sequence)
         {
             base.RenderAdditionalPartialElementContent(builder, ref sequence);
-            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(ContentPage), TitleView);
-            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(ContentPage), ShellSearchHandler);
+            RenderTreeBuilderHelper.AddContentProperty<MC.ContentPage>(builder, sequence++, TitleView, (x, value) =>
+            {
+                MC.Shell.SetTitleView(x, (MC.View)value);
+                MC.NavigationPage.SetTitleView(x, (MC.View)value);
+            });
+            RenderTreeBuilderHelper.AddContentProperty<MC.ContentView>(builder, sequence++, ShellSearchHandler, (x, value) =>
+                MC.Shell.SetSearchHandler(x, (MC.SearchHandler)value));
         }
     }
 }

@@ -6,7 +6,6 @@
 // </auto-generated>
 
 using BlazorBindings.Core;
-using BlazorBindings.Maui.Elements.Handlers;
 using MC = Microsoft.Maui.Controls;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
@@ -22,8 +21,6 @@ namespace BlazorBindings.Maui.Elements
     {
         static TabbedPage()
         {
-            ElementHandlerRegistry.RegisterPropertyContentHandler<TabbedPage>(nameof(BarBackground),
-                (renderer, parent, component) => new ContentPropertyHandler<MC.TabbedPage>((x, value) => x.BarBackground = (MC.Brush)value));
             RegisterAdditionalHandlers();
         }
 
@@ -94,7 +91,7 @@ namespace BlazorBindings.Maui.Elements
         protected override void RenderAdditionalElementContent(RenderTreeBuilder builder, ref int sequence)
         {
             base.RenderAdditionalElementContent(builder, ref sequence);
-            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(TabbedPage), BarBackground);
+            RenderTreeBuilderHelper.AddContentProperty<MC.TabbedPage>(builder, sequence++, BarBackground, (x, value) => x.BarBackground = (MC.Brush)value);
         }
 
         static partial void RegisterAdditionalHandlers();

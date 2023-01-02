@@ -6,7 +6,6 @@
 // </auto-generated>
 
 using BlazorBindings.Core;
-using BlazorBindings.Maui.Elements.Handlers;
 using MC = Microsoft.Maui.Controls;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
@@ -24,10 +23,6 @@ namespace BlazorBindings.Maui.Elements
     {
         static VisualElement()
         {
-            ElementHandlerRegistry.RegisterPropertyContentHandler<VisualElement>(nameof(Background),
-                (renderer, parent, component) => new ContentPropertyHandler<MC.VisualElement>((x, value) => x.Background = (MC.Brush)value));
-            ElementHandlerRegistry.RegisterPropertyContentHandler<VisualElement>(nameof(Shadow),
-                (renderer, parent, component) => new ContentPropertyHandler<MC.VisualElement>((x, value) => x.Shadow = (MC.Shadow)value));
             RegisterAdditionalHandlers();
         }
 
@@ -432,8 +427,8 @@ namespace BlazorBindings.Maui.Elements
         protected override void RenderAdditionalElementContent(RenderTreeBuilder builder, ref int sequence)
         {
             base.RenderAdditionalElementContent(builder, ref sequence);
-            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(VisualElement), Background);
-            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(VisualElement), Shadow);
+            RenderTreeBuilderHelper.AddContentProperty<MC.VisualElement>(builder, sequence++, Background, (x, value) => x.Background = (MC.Brush)value);
+            RenderTreeBuilderHelper.AddContentProperty<MC.VisualElement>(builder, sequence++, Shadow, (x, value) => x.Shadow = (MC.Shadow)value);
         }
 
         static partial void RegisterAdditionalHandlers();

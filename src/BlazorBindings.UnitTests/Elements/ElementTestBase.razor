@@ -1,14 +1,18 @@
 ﻿@using BlazorBindings.Maui.Elements.Handlers;
 @using Microsoft.AspNetCore.Components.Rendering;
 @using System.Reflection;
+@using System.Runtime.ExceptionServices;
+
+@implements IHandleEvent
 
 @code {
-    private MauiBlazorBindingsRenderer _renderer = TestBlazorBindingsRenderer.Create();
+    private TestBlazorBindingsRenderer _renderer = (TestBlazorBindingsRenderer)TestBlazorBindingsRenderer.Create();
+    private RenderFragmentComponent _renderedComponent;
 
     protected async Task<T> Render<T>(RenderFragment renderFragment) where T : MC.BindableObject
     {
         var container = new RootContainerHandler();
-        var component = await _renderer.AddComponent<RenderFragmentComponent>(container, new Dictionary<string, object>
+        _renderedComponent = await _renderer.AddComponent<RenderFragmentComponent>(container, new Dictionary<string, object>
             {
                 ["RenderFragment"] = renderFragment
             });
@@ -16,6 +20,26 @@
         return (T)container.Elements[0];
     }
 
+    protected new void StateHasChanged()
+    {
+        _renderedComponent?.StateHasChanged();
+        ThrowOnException();
+    }
+
+    protected void ThrowOnException()
+    {
+        if (_renderer.Exceptions.Count > 0)
+        {
+            ExceptionDispatchInfo.Throw(_renderer.Exceptions[0]);
+        }
+    }
+
+    Task IHandleEvent.HandleEventAsync(EventCallbackWorkItem callback, object arg)
+    {
+        var task = (_renderedComponent as IHandleEvent)?.HandleEventAsync(callback, arg);
+        ThrowOnException();
+        return task ?? Task.CompletedTask;
+    }
 
     private class RenderFragmentComponent : ComponentBase
     {
@@ -24,6 +48,11 @@
         protected override void BuildRenderTree(RenderTreeBuilder builder)
         {
             RenderFragment(builder);
+        }
+
+        public new void StateHasChanged()
+        {
+            base.StateHasChanged();
         }
     }
 }

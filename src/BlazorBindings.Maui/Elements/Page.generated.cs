@@ -6,7 +6,6 @@
 // </auto-generated>
 
 using BlazorBindings.Core;
-using BlazorBindings.Maui.Elements.Handlers;
 using MC = Microsoft.Maui.Controls;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
@@ -23,10 +22,6 @@ namespace BlazorBindings.Maui.Elements
     {
         static Page()
         {
-            ElementHandlerRegistry.RegisterPropertyContentHandler<Page>(nameof(MenuBarItems),
-                (renderer, parent, component) => new ListContentPropertyHandler<MC.Page, MC.MenuBarItem>(x => x.MenuBarItems));
-            ElementHandlerRegistry.RegisterPropertyContentHandler<Page>(nameof(ToolbarItems),
-                (renderer, parent, component) => new ListContentPropertyHandler<MC.Page, MC.ToolbarItem>(x => x.ToolbarItems));
             RegisterAdditionalHandlers();
         }
 
@@ -178,8 +173,8 @@ namespace BlazorBindings.Maui.Elements
         protected override void RenderAdditionalElementContent(RenderTreeBuilder builder, ref int sequence)
         {
             base.RenderAdditionalElementContent(builder, ref sequence);
-            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(Page), MenuBarItems);
-            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(Page), ToolbarItems);
+            RenderTreeBuilderHelper.AddListContentProperty<MC.Page, MC.MenuBarItem>(builder, sequence++, MenuBarItems, x => x.MenuBarItems);
+            RenderTreeBuilderHelper.AddListContentProperty<MC.Page, MC.ToolbarItem>(builder, sequence++, ToolbarItems, x => x.ToolbarItems);
         }
 
         static partial void RegisterAdditionalHandlers();

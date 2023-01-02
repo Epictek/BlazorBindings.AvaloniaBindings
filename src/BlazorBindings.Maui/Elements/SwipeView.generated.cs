@@ -6,7 +6,6 @@
 // </auto-generated>
 
 using BlazorBindings.Core;
-using BlazorBindings.Maui.Elements.Handlers;
 using MC = Microsoft.Maui.Controls;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
@@ -18,14 +17,6 @@ namespace BlazorBindings.Maui.Elements
     {
         static SwipeView()
         {
-            ElementHandlerRegistry.RegisterPropertyContentHandler<SwipeView>(nameof(BottomItems),
-                (renderer, parent, component) => new ContentPropertyHandler<MC.SwipeView>((x, value) => x.BottomItems = (MC.SwipeItems)value));
-            ElementHandlerRegistry.RegisterPropertyContentHandler<SwipeView>(nameof(LeftItems),
-                (renderer, parent, component) => new ContentPropertyHandler<MC.SwipeView>((x, value) => x.LeftItems = (MC.SwipeItems)value));
-            ElementHandlerRegistry.RegisterPropertyContentHandler<SwipeView>(nameof(RightItems),
-                (renderer, parent, component) => new ContentPropertyHandler<MC.SwipeView>((x, value) => x.RightItems = (MC.SwipeItems)value));
-            ElementHandlerRegistry.RegisterPropertyContentHandler<SwipeView>(nameof(TopItems),
-                (renderer, parent, component) => new ContentPropertyHandler<MC.SwipeView>((x, value) => x.TopItems = (MC.SwipeItems)value));
             RegisterAdditionalHandlers();
         }
 
@@ -105,10 +96,10 @@ namespace BlazorBindings.Maui.Elements
         protected override void RenderAdditionalElementContent(RenderTreeBuilder builder, ref int sequence)
         {
             base.RenderAdditionalElementContent(builder, ref sequence);
-            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(SwipeView), BottomItems);
-            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(SwipeView), LeftItems);
-            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(SwipeView), RightItems);
-            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(SwipeView), TopItems);
+            RenderTreeBuilderHelper.AddContentProperty<MC.SwipeView>(builder, sequence++, BottomItems, (x, value) => x.BottomItems = (MC.SwipeItems)value);
+            RenderTreeBuilderHelper.AddContentProperty<MC.SwipeView>(builder, sequence++, LeftItems, (x, value) => x.LeftItems = (MC.SwipeItems)value);
+            RenderTreeBuilderHelper.AddContentProperty<MC.SwipeView>(builder, sequence++, RightItems, (x, value) => x.RightItems = (MC.SwipeItems)value);
+            RenderTreeBuilderHelper.AddContentProperty<MC.SwipeView>(builder, sequence++, TopItems, (x, value) => x.TopItems = (MC.SwipeItems)value);
         }
 
         static partial void RegisterAdditionalHandlers();

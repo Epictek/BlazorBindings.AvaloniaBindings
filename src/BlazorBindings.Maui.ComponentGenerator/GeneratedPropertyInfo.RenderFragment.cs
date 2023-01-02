@@ -32,77 +32,37 @@ namespace BlazorBindings.Maui.ComponentGenerator
 ";
         }
 
-        public string GetContentHandlerRegistration()
-        {
-            // ElementHandlerRegistry.RegisterPropertyContentHandler<ContentPage>(nameof(ChildContent),
-            //    (renderer, parent, component) => new ContentPropertyHandler<MC.ContentPage>((page, value) => page.Content = (MC.View)value));
-
-            var contentHandler = GetContentHandler();
-
-            var genericArgument = ContainingType.IsGeneric ? $"{ComponentName}<T>" : ComponentName;
-
-            return @$"
-            ElementHandlerRegistry.RegisterPropertyContentHandler<{genericArgument}>(nameof({ComponentPropertyName}),
-                (renderer, parent, component) => {contentHandler});";
-        }
-
-        private string GetContentHandler()
+        public string RenderContentProperty()
         {
             var type = (INamedTypeSymbol)_propertyInfo.Type;
 
             if (IsControlTemplate)
             {
-                // new ControlTemplatePropertyHandler<MC.TemplatedView>(component, (view, controlTemplate) => view.ControlTemplate = controlTemplate)
-                var controlTemplateHandlerName = GetTypeNameAndAddNamespace("BlazorBindings.Maui.Elements.Handlers", "ControlTemplatePropertyHandler");
-                return $"new {controlTemplateHandlerName}<{MauiContainingTypeName}>(component,\r\n                    (x, controlTemplate) => x.{_propertyInfo.Name} = controlTemplate)";
+                // RenderTreeBuilderHelper.AddControlTemplateProperty<MC.TemplatedView>(builder, sequence++, ControlTemplate, (x, template) => x.ControlTemplate = template);
+                return $"\r\n            RenderTreeBuilderHelper.AddControlTemplateProperty<{MauiContainingTypeName}>(builder, sequence++, {ComponentPropertyName}, (x, template) => x.{_propertyInfo.Name} = template);";
             }
             else if (IsDataTemplate && !IsGeneric)
             {
-                // new DataTemplatePropertyHandler<MC.ItemsView>(component, (view, valueElement) => view.EmptyViewTemplate = dataTemplate)
-                var dataTemplateHandlerName = GetTypeNameAndAddNamespace("BlazorBindings.Maui.Elements.Handlers", "DataTemplatePropertyHandler");
-                return $"new {dataTemplateHandlerName}<{MauiContainingTypeName}>(component,\r\n                    (x, dataTemplate) => x.{_propertyInfo.Name} = dataTemplate)";
+                // RenderTreeBuilderHelper.AddDataTemplateProperty<MC.Shell>(builder, sequence++, FlyoutContent, (x, template) => x.FlyoutContentTemplate = template);
+                return $"\r\n            RenderTreeBuilderHelper.AddDataTemplateProperty<{MauiContainingTypeName}>(builder, sequence++, {ComponentPropertyName}, (x, template) => x.{_propertyInfo.Name} = template);";
             }
             else if (IsDataTemplate && IsGeneric)
             {
-                // new DataTemplatePropertyHandler<MC.ItemsView, T>(component, (view, dataTemplate) => view.ItemTemplate = dataTemplate)
-                var typeArgumentName = GenericTypeArgument is null ? "T" : GetTypeNameAndAddNamespace(GenericTypeArgument);
-                var dataTemplateHandlerName = GetTypeNameAndAddNamespace("BlazorBindings.Maui.Elements.Handlers", "DataTemplatePropertyHandler");
-                return $"new {dataTemplateHandlerName}<{MauiContainingTypeName}, {typeArgumentName}>(component,\r\n                    (x, dataTemplate) => x.{_propertyInfo.Name} = dataTemplate)";
+                // RenderTreeBuilderHelper.AddDataTemplateProperty<MC.ItemsView, T>(builder, sequence++, ItemTemplate, (x, template) => x.ItemTemplate = template);
+                var itemTypeName = GenericTypeArgument is null ? "T" : GetTypeNameAndAddNamespace(GenericTypeArgument);
+                return $"\r\n            RenderTreeBuilderHelper.AddDataTemplateProperty<{MauiContainingTypeName}, {itemTypeName}>(builder, sequence++, {ComponentPropertyName}, (x, template) => x.{_propertyInfo.Name} = template);";
             }
             else if (type.IsGenericType && type.ConstructedFrom.SpecialType == SpecialType.System_Collections_Generic_IList_T)
             {
-                // new ListContentPropertyHandler<MC.Page, MC.ToolbarItem>(page => page.ToolbarItems)
+                // RenderTreeBuilderHelper.AddListContentProperty<MC.Layout, IView>(builder, sequence++, ChildContent, x => x.Children);
                 var itemTypeName = GetTypeNameAndAddNamespace(type.TypeArguments[0]);
-                var listContentHandlerTypeName = GetTypeNameAndAddNamespace("BlazorBindings.Maui.Elements.Handlers", "ListContentPropertyHandler");
-                return $"new {listContentHandlerTypeName}<{MauiContainingTypeName}, {itemTypeName}>(x => x.{_propertyInfo.Name})";
+                return $"\r\n            RenderTreeBuilderHelper.AddListContentProperty<{MauiContainingTypeName}, {itemTypeName}>(builder, sequence++, {ComponentPropertyName}, x => x.{_propertyInfo.Name});";
             }
             else
             {
-                // new ContentPropertyHandler<MC.ContentPage>((page, value) => page.Content = (MC.View)value));
+                // RenderTreeBuilderHelper.AddContentProperty<MC.ContentPage>(builder, sequence++, ChildContent, (x, value) => x.Content = (MC.View)value);
                 var propTypeName = GetTypeNameAndAddNamespace(type);
-                var contentHandlerTypeName = GetTypeNameAndAddNamespace("BlazorBindings.Maui.Elements.Handlers", "ContentPropertyHandler");
-                return $"new {contentHandlerTypeName}<{MauiContainingTypeName}>((x, value) => x.{_propertyInfo.Name} = ({propTypeName})value)";
-            }
-        }
-
-        public string RenderContentProperty()
-        {
-            var componentTypeOf = ContainingType.IsGeneric ? $"{ComponentName}<T>" : ComponentName;
-
-            if (IsControlTemplate)
-            {
-                // RenderTreeBuilderHelper.AddControlTemplateProperty(builder, sequence++, typeof(TemplatedView), ControlTemplate);
-                return $"\r\n            RenderTreeBuilderHelper.AddControlTemplateProperty(builder, sequence++, typeof({componentTypeOf}), {ComponentPropertyName});";
-            }
-            else if (IsDataTemplate)
-            {
-                // RenderTreeBuilderHelper.AddDataTemplateProperty(builder, sequence++, typeof(ItemsView<T>), ItemTemplate);
-                return $"\r\n            RenderTreeBuilderHelper.AddDataTemplateProperty(builder, sequence++, typeof({componentTypeOf}), {ComponentPropertyName});";
-            }
-            else
-            {
-                // RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(ContentPage), ChildContent);
-                return $"\r\n            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof({componentTypeOf}), {ComponentPropertyName});";
+                return $"\r\n            RenderTreeBuilderHelper.AddContentProperty<{MauiContainingTypeName}>(builder, sequence++, {ComponentPropertyName}, (x, value) => x.{_propertyInfo.Name} = ({propTypeName})value);";
             }
         }
 

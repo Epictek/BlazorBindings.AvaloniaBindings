@@ -31,7 +31,7 @@ using System.Runtime.CompilerServices;
 [assembly: GenerateComponent(typeof(Entry))]
 [assembly: GenerateComponent(typeof(FlexLayout))]
 [assembly: GenerateComponent(typeof(FlyoutItem))]
-[assembly: GenerateComponent(typeof(FlyoutPage), Aliases = new[] { "Detail:Detail" })]
+[assembly: GenerateComponent(typeof(FlyoutPage), Exclude = new[] { nameof(FlyoutPage.Detail) })]
 [assembly: GenerateComponent(typeof(Frame))]
 [assembly: GenerateComponent(typeof(GestureElement))]
 [assembly: GenerateComponent(typeof(GradientBrush))]

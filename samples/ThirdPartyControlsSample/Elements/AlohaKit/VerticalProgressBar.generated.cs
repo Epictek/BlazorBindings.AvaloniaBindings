@@ -8,7 +8,6 @@
 using AC = AlohaKit.Controls;
 using BlazorBindings.Core;
 using BlazorBindings.Maui.Elements;
-using BlazorBindings.Maui.Elements.Handlers;
 using MC = Microsoft.Maui.Controls;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
@@ -21,8 +20,6 @@ namespace BlazorBindings.Maui.Elements.AlohaKit
     {
         static VerticalProgressBar()
         {
-            ElementHandlerRegistry.RegisterPropertyContentHandler<VerticalProgressBar>(nameof(ProgressBrush),
-                (renderer, parent, component) => new ContentPropertyHandler<AC.VerticalProgressBar>((x, value) => x.ProgressBrush = (MC.Brush)value));
             RegisterAdditionalHandlers();
         }
 
@@ -73,7 +70,7 @@ namespace BlazorBindings.Maui.Elements.AlohaKit
         protected override void RenderAdditionalElementContent(RenderTreeBuilder builder, ref int sequence)
         {
             base.RenderAdditionalElementContent(builder, ref sequence);
-            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(VerticalProgressBar), ProgressBrush);
+            RenderTreeBuilderHelper.AddContentProperty<AC.VerticalProgressBar>(builder, sequence++, ProgressBrush, (x, value) => x.ProgressBrush = (MC.Brush)value);
         }
 
         static partial void RegisterAdditionalHandlers();

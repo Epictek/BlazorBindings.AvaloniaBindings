@@ -9,6 +9,7 @@
         var button = await Render<MC.Button>(@<Button OnClick="HandleButtonClick" />);
 
         button.SendClicked();
+        StateHasChanged();
 
         Assert.That(clicked, Is.True);
     }

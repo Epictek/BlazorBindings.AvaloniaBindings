@@ -8,7 +8,6 @@
 using AC = AlohaKit.Controls;
 using BlazorBindings.Core;
 using BlazorBindings.Maui.Elements;
-using BlazorBindings.Maui.Elements.Handlers;
 using MC = Microsoft.Maui.Controls;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
@@ -23,10 +22,6 @@ namespace BlazorBindings.Maui.Elements.AlohaKit
     {
         static Button()
         {
-            ElementHandlerRegistry.RegisterPropertyContentHandler<Button>(nameof(Background),
-                (renderer, parent, component) => new ContentPropertyHandler<AC.Button>((x, value) => x.Background = (MC.Brush)value));
-            ElementHandlerRegistry.RegisterPropertyContentHandler<Button>(nameof(Stroke),
-                (renderer, parent, component) => new ContentPropertyHandler<AC.Button>((x, value) => x.Stroke = (MC.Brush)value));
             RegisterAdditionalHandlers();
         }
 
@@ -169,8 +164,8 @@ namespace BlazorBindings.Maui.Elements.AlohaKit
         protected override void RenderAdditionalElementContent(RenderTreeBuilder builder, ref int sequence)
         {
             base.RenderAdditionalElementContent(builder, ref sequence);
-            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(Button), Background);
-            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(Button), Stroke);
+            RenderTreeBuilderHelper.AddContentProperty<AC.Button>(builder, sequence++, Background, (x, value) => x.Background = (MC.Brush)value);
+            RenderTreeBuilderHelper.AddContentProperty<AC.Button>(builder, sequence++, Stroke, (x, value) => x.Stroke = (MC.Brush)value);
         }
 
         static partial void RegisterAdditionalHandlers();

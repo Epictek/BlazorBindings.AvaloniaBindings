@@ -8,7 +8,6 @@
 using AC = AlohaKit.Controls;
 using BlazorBindings.Core;
 using BlazorBindings.Maui.Elements;
-using BlazorBindings.Maui.Elements.Handlers;
 using MC = Microsoft.Maui.Controls;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
@@ -21,10 +20,6 @@ namespace BlazorBindings.Maui.Elements.AlohaKit
     {
         static Avatar()
         {
-            ElementHandlerRegistry.RegisterPropertyContentHandler<Avatar>(nameof(Background),
-                (renderer, parent, component) => new ContentPropertyHandler<AC.Avatar>((x, value) => x.Background = (MC.Brush)value));
-            ElementHandlerRegistry.RegisterPropertyContentHandler<Avatar>(nameof(Fill),
-                (renderer, parent, component) => new ContentPropertyHandler<AC.Avatar>((x, value) => x.Fill = (MC.Brush)value));
             RegisterAdditionalHandlers();
         }
 
@@ -94,8 +89,8 @@ namespace BlazorBindings.Maui.Elements.AlohaKit
         protected override void RenderAdditionalElementContent(RenderTreeBuilder builder, ref int sequence)
         {
             base.RenderAdditionalElementContent(builder, ref sequence);
-            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(Avatar), Background);
-            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(Avatar), Fill);
+            RenderTreeBuilderHelper.AddContentProperty<AC.Avatar>(builder, sequence++, Background, (x, value) => x.Background = (MC.Brush)value);
+            RenderTreeBuilderHelper.AddContentProperty<AC.Avatar>(builder, sequence++, Fill, (x, value) => x.Fill = (MC.Brush)value);
         }
 
         static partial void RegisterAdditionalHandlers();
