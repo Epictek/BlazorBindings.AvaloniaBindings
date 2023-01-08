@@ -55,10 +55,15 @@
     <FlexLayoutPage />
 
     @*Shell*@
-    <ShellPropertiesPage @bind-ShellBackgroundColor="_backgroundColor"
-    @bind-ShellForegroundColor="_foregroundColor"
-    @bind-ShellUnselectedColor="_unselectedColor"
-    @bind-ShellTabBarTitleColor="_tabBarTitleColor" />
+    <ShellContent Title="Shell Properties">
+        <ContentTemplate>
+            <ShellPropertiesPage @bind-ShellBackgroundColor="_backgroundColor"
+            @bind-ShellForegroundColor="_foregroundColor"
+            @bind-ShellUnselectedColor="_unselectedColor"
+            @bind-ShellTabBarTitleColor="_tabBarTitleColor" />
+        </ContentTemplate>
+    </ShellContent>
+
     <ShellItemsPage />
 
     @*Navigation*@

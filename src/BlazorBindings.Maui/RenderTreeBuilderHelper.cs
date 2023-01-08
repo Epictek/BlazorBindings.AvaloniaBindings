@@ -114,9 +114,24 @@ namespace BlazorBindings.Maui
             }
         }
 
-        private static string GetElementName(Type containingType, string propertyName)
+        internal static void AddSyncDataTemplateProperty<T>(
+            RenderTreeBuilder builder,
+            int sequence,
+            RenderFragment template,
+            Action<T, MC.DataTemplate> setDataTemplateAction)
+            where T : MC.BindableObject
         {
-            return $"p-{containingType.FullName}.{propertyName}";
+            if (template != null)
+            {
+                builder.OpenRegion(sequence);
+
+                builder.OpenComponent<SyncControlTemplateItemsComponent<T>>(0);
+                builder.AddAttribute(1, nameof(SyncControlTemplateItemsComponent<T>.SetDataTemplateAction), setDataTemplateAction);
+                builder.AddAttribute(2, nameof(SyncControlTemplateItemsComponent<T>.Template), template);
+                builder.CloseComponent();
+
+                builder.CloseRegion();
+            }
         }
     }
 }
