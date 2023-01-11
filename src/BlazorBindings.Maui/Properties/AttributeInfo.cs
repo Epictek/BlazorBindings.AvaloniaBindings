@@ -54,6 +54,17 @@ using System.Runtime.CompilerServices;
 [assembly: GenerateComponent(typeof(Label))]
 [assembly: GenerateComponent(typeof(Layout))]
 [assembly: GenerateComponent(typeof(LinearGradientBrush))]
+[assembly: GenerateComponent(typeof(ListView),
+    Exclude = new[] { nameof(ListView.ItemTemplate) },
+    Include = new[] { nameof(ListView.ItemsSource) },
+    GenericProperties = new[] {
+        nameof(ListView.ItemsSource),
+        $"{nameof(ListView.GroupHeaderTemplate)}:System.Object",
+        nameof(ListView.GroupDisplayBinding),
+        nameof(ListView.GroupShortNameBinding)},
+    Aliases = new[] {
+        $"{nameof(ListView.HeaderTemplate)}:Header",
+        $"{nameof(ListView.FooterTemplate)}:Footer" })]
 [assembly: GenerateComponent(typeof(MenuItem))]
 [assembly: GenerateComponent(typeof(NavigableElement))]
 [assembly: GenerateComponent(typeof(Page))]

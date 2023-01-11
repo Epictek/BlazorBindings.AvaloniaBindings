@@ -12,6 +12,8 @@ namespace BlazorBindings.Maui.Elements.Internal
     internal class RootContainerComponent : NativeControlComponentBase, IMauiContainerElementHandler, INonChildContainerElement
     {
         [Parameter] public RenderFragment ChildContent { get; set; }
+        [Parameter] public EventCallback<MC.BindableObject> OnElementAdded { get; set; }
+
         protected override RenderFragment GetChildContent() => ChildContent;
 
         public List<MC.BindableObject> Elements { get; } = new List<MC.BindableObject>();
@@ -20,6 +22,7 @@ namespace BlazorBindings.Maui.Elements.Internal
         {
             var index = Math.Min(physicalSiblingIndex, Elements.Count);
             Elements.Insert(index, child);
+            OnElementAdded.InvokeAsync(child);
         }
 
         void IMauiContainerElementHandler.RemoveChild(MC.BindableObject child)
