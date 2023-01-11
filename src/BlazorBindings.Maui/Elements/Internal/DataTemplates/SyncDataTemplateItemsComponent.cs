@@ -63,7 +63,10 @@ namespace BlazorBindings.Maui.Elements.DataTemplates
         int IMauiContainerElementHandler.GetChildIndex(MC.BindableObject child) => -1;
         void IElementHandler.ApplyAttribute(ulong attributeEventHandlerId, string attributeName, object attributeValue, string attributeEventUpdatesAttributeName) { }
 
-
+        // In order to be able to render the item syncroniously, we need to have an item upfront, before the render.
+        // Unfortunately, regular DataTemplate does not have an access to the item, it is set set BindingContext afterwards.
+        // In order to workaround this issue, we use a DataTemplateSelector, which returns the same DataTemplate. But we're able
+        // to store the item from OnSelectTemplate method, which is used to render the item in DataTemplate.
         class DataTemplateSelector : MC.DataTemplateSelector
         {
             private readonly MC.DataTemplate _dataTemplate;
