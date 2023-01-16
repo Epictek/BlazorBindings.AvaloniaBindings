@@ -18,9 +18,9 @@ using System.Threading.Tasks;
 
 namespace BlazorBindings.Maui.Elements.AlohaKit
 {
-    public partial class Button : BlazorBindings.Maui.Elements.GraphicsView
+    public partial class AlhButton : BlazorBindings.Maui.Elements.GraphicsView
     {
-        static Button()
+        static AlhButton()
         {
             RegisterAdditionalHandlers();
         }

@@ -24,21 +24,23 @@ namespace BlazorBindings.Maui.ComponentGenerator
             //}
 
             var typeToGenerate = generatedInfo.TypeSymbol;
-            var componentName = typeToGenerate.Name;
+            var componentName = generatedInfo.TypeAlias ?? typeToGenerate.Name;
             var componentNamespace = GetComponentNamespace(typeToGenerate);
 
             var baseType = GetBaseTypeOfInterest(typeToGenerate);
-            var componentBaseName = componentNamespace == GetComponentNamespace(baseType)
-                ? baseType.Name
-                : $"{GetComponentNamespace(baseType)}.{baseType.Name}";
+            var componentBaseName = generatedInfo.BaseTypeInfo?.TypeAlias ?? baseType.Name;
+
+            if (componentNamespace != GetComponentNamespace(baseType))
+                componentBaseName = $"{GetComponentNamespace(baseType)}.{componentBaseName}";
 
             // header
             var headerText = generatedInfo.FileHeader;
 
             // usings
             var usings = GetDefaultUsings(typeToGenerate, componentNamespace);
-            var componentNamespacePrefix = GetNamespacePrefix(typeToGenerate, usings);
             var generatedType = new GeneratedTypeInfo(compilation, generatedInfo, componentName, componentBaseName, typeToGenerate, usings);
+
+            var mauiTypeName = generatedType.GetTypeNameAndAddNamespace(typeToGenerate);
 
             // props
             var valueProperties = GeneratedPropertyInfo.GetValueProperties(generatedType);
@@ -130,7 +132,7 @@ namespace {componentNamespace}
             {staticConstructorBody.Trim()}
         }}
 {propertyDeclarations}
-        public new {componentNamespacePrefix}{componentName} NativeControl => ({componentNamespacePrefix}{componentName})((BindableObject)this).NativeControl;
+        public new {mauiTypeName} NativeControl => ({mauiTypeName})((BindableObject)this).NativeControl;
 {createNativeElement}
 {handleParameter}{renderAdditionalElementContent}
 
@@ -166,32 +168,6 @@ namespace {componentNamespace}
             }
 
             return usings;
-        }
-
-        private static string GetNamespacePrefix(INamedTypeSymbol type, List<UsingStatement> usings)
-        {
-            // Check if there's a 'using' already. If so, check if it has an alias. If not, add a new 'using'.
-            var namespaceAlias = string.Empty;
-            var namespaceName = type.ContainingNamespace.GetFullName();
-
-            var existingUsing = usings.FirstOrDefault(u => u.Namespace == namespaceName);
-            if (existingUsing == null)
-            {
-                usings.Add(new UsingStatement { Namespace = namespaceName, IsUsed = true, });
-                return string.Empty;
-            }
-            else
-            {
-                existingUsing.IsUsed = true;
-                if (existingUsing.Alias != null)
-                {
-                    return existingUsing.Alias + ".";
-                }
-                else
-                {
-                    return string.Empty;
-                }
-            }
         }
 
         internal static string GetXmlDocContents(ISymbol symbol, string indent)

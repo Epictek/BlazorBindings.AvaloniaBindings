@@ -74,17 +74,27 @@ namespace BlazorBindings.Maui.ComponentGenerator
                 .Where(a => a.AttributeClass?.ToDisplayString() == "BlazorBindings.Maui.ComponentGenerator.GenerateComponentAttribute")
                 .Select(a =>
                 {
+                    var typeSymbol = a.ConstructorArguments.FirstOrDefault().Value as INamedTypeSymbol;
+
+                    var propertiesAliases = GetNamedArgumentValues(a, "Aliases")
+                        .Select(v => v.Split(':'))
+                        .ToDictionary(v => v[0], v => v[1]);
+
+                    // Type alias has type name as a key.
+                    propertiesAliases.Remove(typeSymbol.Name, out var typeAlias);
+
                     return new GenerateComponentSettings
                     {
                         FileHeader = FileHeader,
-                        TypeSymbol = a.ConstructorArguments.FirstOrDefault().Value as INamedTypeSymbol,
+                        TypeAlias = typeAlias,
+                        TypeSymbol = typeSymbol,
                         Exclude = GetNamedArgumentValues(a, "Exclude").ToHashSet(),
                         Include = GetNamedArgumentValues(a, "Include").ToHashSet(),
                         ContentProperties = GetNamedArgumentValues(a, "ContentProperties").ToHashSet(),
                         PropertyChangedEvents = GetNamedArgumentValues(a, "PropertyChangedEvents"),
                         GenericProperties = GetNamedArgumentValues(a, "GenericProperties").Select(v => v.Split(':')).ToDictionary(v => v[0],
                             v => v.ElementAtOrDefault(1) is string genericArgName ? compilation.GetTypeByMetadataName(genericArgName) : null),
-                        Aliases = GetNamedArgumentValues(a, "Aliases").Select(v => v.Split(':')).ToDictionary(v => v[0], v => v[1]),
+                        Aliases = propertiesAliases,
                         IsGeneric = (a.NamedArguments.FirstOrDefault(a => a.Key == "IsGeneric").Value.Value as bool?) ?? false
                     };
                 })

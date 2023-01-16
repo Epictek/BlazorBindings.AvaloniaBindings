@@ -9,6 +9,7 @@ namespace BlazorBindings.Maui.ComponentGenerator
         private bool _isForcedGeneric;
 
         public string FileHeader { get; set; }
+        public string TypeAlias { get; set; }
         public INamedTypeSymbol TypeSymbol { get; set; }
         public HashSet<string> Exclude { get; set; }
         public HashSet<string> Include { get; set; }

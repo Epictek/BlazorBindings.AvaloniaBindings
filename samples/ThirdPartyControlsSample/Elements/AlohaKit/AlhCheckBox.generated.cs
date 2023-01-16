@@ -16,9 +16,9 @@ using System.Threading.Tasks;
 
 namespace BlazorBindings.Maui.Elements.AlohaKit
 {
-    public partial class CheckBox : BlazorBindings.Maui.Elements.GraphicsView
+    public partial class AlhCheckBox : BlazorBindings.Maui.Elements.GraphicsView
     {
-        static CheckBox()
+        static AlhCheckBox()
         {
             RegisterAdditionalHandlers();
         }

@@ -13,7 +13,7 @@
 
             <BoxView HeightRequest="1" Color="Colors.Gray" />
 
-            <BlazorBindings.Maui.Elements.Slider Minimum="0" Maximum="1" @bind-Value="sliderValue" />
+            <Slider Minimum="0" Maximum="1" @bind-Value="sliderValue" />
 
             <Grid ColumnDefinitions="*,Auto">
                 <VerticalProgressBar Progress="sliderValue" ProgressColor="Colors.Green" Grid.Column="1" />
@@ -37,22 +37,22 @@
             <BoxView HeightRequest="1" Color="Colors.Gray" />
 
             <HorizontalStackLayout>
-                <BlazorBindings.Maui.Elements.AlohaKit.CheckBox @bind-IsChecked="checkboxChecked" />
+                <AlhCheckBox @bind-IsChecked="checkboxChecked" />
                 <Label>Are you busy?</Label>
             </HorizontalStackLayout>
-            <BlazorBindings.Maui.Elements.AlohaKit.BusyIndicator IsVisible="@checkboxChecked" />
+            <BusyIndicator IsVisible="@checkboxChecked" />
 
             <HorizontalStackLayout>
                 <Label>Toggle @(toggleOn ? "on" : "off")</Label>
-                <ToggleSwitch @bind-IsOn="toggleOn" />
-            </HorizontalStackLayout>
+                    <ToggleSwitch @bind-IsOn="toggleOn" />
+                </HorizontalStackLayout>
 
-        </VerticalStackLayout>
+            </VerticalStackLayout>
 
-    </ScrollView>
-</ContentPage>
+        </ScrollView>
+    </ContentPage>
 
-@code {
+    @code {
     int ratingValue = 3;
     string RatingDescription => ratingValue switch
     {

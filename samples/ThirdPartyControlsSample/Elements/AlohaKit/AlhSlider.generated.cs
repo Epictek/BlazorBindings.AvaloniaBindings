@@ -16,9 +16,9 @@ using System.Threading.Tasks;
 
 namespace BlazorBindings.Maui.Elements.AlohaKit
 {
-    public partial class Slider : BlazorBindings.Maui.Elements.GraphicsView
+    public partial class AlhSlider : BlazorBindings.Maui.Elements.GraphicsView
     {
-        static Slider()
+        static AlhSlider()
         {
             RegisterAdditionalHandlers();
         }
