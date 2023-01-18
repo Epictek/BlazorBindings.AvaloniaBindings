@@ -40,7 +40,7 @@ namespace BlazorBindings.Maui
 
                 if (!elementsComponentTask.IsCompleted && parent is MC.Application app)
                 {
-                    // MAUI requires the Application to have the MainPage. If rendering task is not completed synchroniously,
+                    // MAUI requires the Application to have the MainPage. If rendering task is not completed synchronously,
                     // we need to set MainPage to something.
                     app.MainPage ??= new MC.ContentPage();
                 }

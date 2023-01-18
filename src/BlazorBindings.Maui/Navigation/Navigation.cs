@@ -109,23 +109,24 @@ namespace BlazorBindings.Maui
         [EditorBrowsable(EditorBrowsableState.Never)]
         public async Task<T> BuildElement<T>(Type componentType, Dictionary<string, object> arguments) where T : Element
         {
-            var scope = _services.CreateScope();
-            var serviceProvider = scope.ServiceProvider;
-            var renderer = serviceProvider.GetRequiredService<MauiBlazorBindingsRenderer>();
+            var renderer = _services.GetRequiredService<MauiBlazorBindingsRenderer>();
 
-            var element = (Element)(await renderer.GetElementFromRenderedComponent(componentType, arguments)).Element;
+            var (bindableObject, componentTask) = await renderer.GetElementFromRenderedComponent(componentType, arguments);
+            var element = (Element)bindableObject;
 
             element.ParentChanged += DisposeScopeWhenParentRemoved;
 
             return element as T
                 ?? throw new InvalidOperationException($"The target component of a navigation must derive from the {typeof(T).Name} component.");
 
-            void DisposeScopeWhenParentRemoved(object _, EventArgs __)
+            async void DisposeScopeWhenParentRemoved(object _, EventArgs __)
             {
                 if (element.Parent is null)
                 {
-                    scope.Dispose();
                     element.ParentChanged -= DisposeScopeWhenParentRemoved;
+
+                    var component = await componentTask;
+                    renderer.RemoveRootComponent(component);
                 }
             }
         }
