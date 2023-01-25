@@ -74,18 +74,10 @@ namespace BlazorBindings.Maui.Elements
         /// </value>
         [Parameter] public Color PlaceholderColor { get; set; }
         /// <summary>
-        /// Gets or sets the text of the input view.
-        /// </summary>
-        /// <value>
-        /// A string containing the text of the input view. The default value is null.
-        /// </value>
-        [Parameter] public string Text { get; set; }
-        /// <summary>
         /// Gets or sets the text color.
         /// </summary>
         [Parameter] public Color TextColor { get; set; }
         [Parameter] public TextTransform? TextTransform { get; set; }
-        [Parameter] public EventCallback<string> TextChanged { get; set; }
 
         public new MC.InputView NativeControl => (MC.InputView)((BindableObject)this).NativeControl;
 
@@ -143,13 +135,6 @@ namespace BlazorBindings.Maui.Elements
                         NativeControl.PlaceholderColor = PlaceholderColor;
                     }
                     break;
-                case nameof(Text):
-                    if (!Equals(Text, value))
-                    {
-                        Text = (string)value;
-                        NativeControl.Text = Text;
-                    }
-                    break;
                 case nameof(TextColor):
                     if (!Equals(TextColor, value))
                     {
@@ -162,21 +147,6 @@ namespace BlazorBindings.Maui.Elements
                     {
                         TextTransform = (TextTransform?)value;
                         NativeControl.TextTransform = TextTransform ?? (TextTransform)MC.InputView.TextTransformProperty.DefaultValue;
-                    }
-                    break;
-                case nameof(TextChanged):
-                    if (!Equals(TextChanged, value))
-                    {
-                        void NativeControlTextChanged(object sender, MC.TextChangedEventArgs e)
-                        {
-                            var value = NativeControl.Text;
-                            Text = value;
-                            InvokeEventCallback(TextChanged, value);
-                        }
-
-                        TextChanged = (EventCallback<string>)value;
-                        NativeControl.TextChanged -= NativeControlTextChanged;
-                        NativeControl.TextChanged += NativeControlTextChanged;
                     }
                     break;
 

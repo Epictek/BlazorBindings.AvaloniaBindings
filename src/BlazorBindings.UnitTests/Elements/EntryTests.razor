@@ -1,0 +1,66 @@
+@inherits ElementTestBase
+
+@code {
+    [SetCulture("en-US")]
+    [TestCase("test123", "test123")]
+    [TestCase("123", 123)]
+    [TestCase("123.45", 123.45)]
+    public async Task BindedValueIsUpdatedWhenTextChanged<T>(string text, T expectedValue)
+    {
+        T value = default;
+        var entry = await Render<MC.Entry>(@<Entry @bind-Text="value" />);
+
+        entry.UpdateText(text);
+
+        Assert.That(value, Is.EqualTo(expectedValue));
+    }
+
+    [SetCulture("en-US")]
+    [TestCase("test123", "test123")]
+    [TestCase(123, "123")]
+    [TestCase(123.45, "123.45")]
+    public async Task TextIsUpdatedWhenBindedValueChanged<T>(T valueToSet, string expectedText)
+    {
+        T value = default;
+        var entry = await Render<MC.Entry>(@<Entry @bind-Text="value" />);
+
+        value = valueToSet;
+        StateHasChanged();
+
+        Assert.That(entry.Text, Is.EqualTo(expectedText));
+    }
+
+    [SetCulture("uk-UA")]
+    [Test]
+    public async Task InvariantCultureParseIsAttemptedIfCurrentFailed()
+    {
+        double? value = null;
+        var entry = await Render<MC.Entry>(@<Entry @bind-Text="value" />);
+
+        // Current culture
+        entry.UpdateText("12,34");
+        Assert.That(value, Is.EqualTo(12.34));
+
+        // Invariant culture
+        entry.UpdateText("23.45");
+        Assert.That(value, Is.EqualTo(23.45));
+    }
+
+    [Test]
+    public async Task ValueIsSetToDefaultIfFailedToParse()
+    {
+        double? value = 3.14;
+        var entry = await Render<MC.Entry>(@<Entry @bind-Text="value" />);
+
+        entry.UpdateText("not-a-number");
+        Assert.That(value, Is.Null);
+
+        Unfocus(entry);
+        Assert.That(entry.Text, Is.Null.Or.Empty);
+    }
+
+    void Unfocus(MC.Entry entry)
+    {
+        entry.RaiseEvent(nameof(entry.Unfocused), new MC.FocusEventArgs(entry, false));
+    }
+}

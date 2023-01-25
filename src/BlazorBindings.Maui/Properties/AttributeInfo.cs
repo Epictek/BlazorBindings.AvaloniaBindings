@@ -28,7 +28,7 @@ using System.Runtime.CompilerServices;
     Exclude = new[] { nameof(Element.Handler), nameof(Element.ChildAdded), nameof(Element.ChildRemoved),
         nameof(Element.DescendantAdded), nameof(Element.DescendantRemoved), nameof(Element.ParentChanged),
         nameof(Element.ParentChanging), nameof(Element.HandlerChanged), nameof(Element.HandlerChanging) })]
-[assembly: GenerateComponent(typeof(Entry))]
+[assembly: GenerateComponent(typeof(Entry), IsGeneric = true)]
 [assembly: GenerateComponent(typeof(FlexLayout))]
 [assembly: GenerateComponent(typeof(FlyoutItem))]
 [assembly: GenerateComponent(typeof(FlyoutPage), Exclude = new[] { nameof(FlyoutPage.Detail) })]
@@ -46,7 +46,7 @@ using System.Runtime.CompilerServices;
 [assembly: GenerateComponent(typeof(IndicatorView),
     PropertyChangedEvents = new[] { nameof(IndicatorView.Position) },
     Exclude = new[] { nameof(IndicatorView.ItemsSource), nameof(IndicatorView.IndicatorLayout) })]
-[assembly: GenerateComponent(typeof(InputView))]
+[assembly: GenerateComponent(typeof(InputView), Exclude = new[] { nameof(InputView.Text), nameof(InputView.TextChanged) })]
 [assembly: GenerateComponent(typeof(ItemsView),
     GenericProperties = new[] { nameof(ItemsView.ItemsSource), nameof(ItemsView.ItemTemplate) },
     ContentProperties = new[] { nameof(ItemsView.EmptyView) },
