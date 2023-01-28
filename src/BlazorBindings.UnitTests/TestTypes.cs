@@ -86,12 +86,16 @@ namespace BlazorBindings.UnitTests
         {
         }
 
+        public bool ThrowExceptions { get; set; } = true;
+
         public List<Exception> Exceptions { get; } = new();
 
         protected override void HandleException(Exception exception)
         {
             Exceptions.Add(exception);
-            ExceptionDispatchInfo.Throw(exception);
+
+            if (ThrowExceptions)
+                ExceptionDispatchInfo.Throw(exception);
         }
 
         public override Dispatcher Dispatcher => NullDispatcher.Instance;

@@ -1,10 +1,8 @@
-﻿using BlazorBindings.Maui;
-using BlazorBindings.UnitTests.Components;
+﻿using BlazorBindings.UnitTests.Components;
 using Microsoft.Maui.Controls;
 using NUnit.Framework;
 using System;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using MC = Microsoft.Maui.Controls;
 
@@ -63,7 +61,6 @@ namespace BlazorBindings.UnitTests
         }
 
         [Test]
-        [Ignore("https://github.com/Dreamescaper/BlazorBindings.Maui/issues/42")]
         public void ShouldThrowExceptionIfHappenedDuringSyncRender()
         {
             void action() => _ = _renderer.AddComponent<ComponentWithException>(new NavigationPage());
@@ -74,6 +71,8 @@ namespace BlazorBindings.UnitTests
         [Test]
         public async Task RendererShouldHandleAsyncExceptions()
         {
+            _renderer.ThrowExceptions = false;
+
             var contentView = new MC.ContentView();
             await _renderer.AddComponent<ButtonWithAnExceptionOnClick>(contentView);
             var button = (MC.Button)contentView.Content;
