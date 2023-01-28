@@ -85,40 +85,24 @@ namespace BlazorBindings.Core
 
         protected Task InvokeAsync(Func<Task> workItem) => _renderHandle.Dispatcher.InvokeAsync(workItem);
 
-        protected Task InvokeEventCallback<T>(EventCallback<T> eventCallback, T value)
+        protected Task InvokeEventCallbackAsync<T>(EventCallback<T> eventCallback, T value)
         {
-            return _renderHandle.Dispatcher.InvokeAsync(async () =>
-            {
-                try
-                {
-                    await eventCallback.InvokeAsync(value);
-                }
-                catch (Exception ex)
-                {
-                    // Take a look here for the reasoning
-                    // https://github.com/dotnet/aspnetcore/issues/44920
-                    _eventCallbackException = ex;
-                    StateHasChanged();
-                }
-            });
+            return _renderHandle.Dispatcher.InvokeAsync(() => HandleExceptionAsync(eventCallback.InvokeAsync(value)));
         }
 
-        protected Task InvokeEventCallback(EventCallback eventCallback)
+        protected Task InvokeEventCallbackAsync(EventCallback eventCallback)
         {
-            return _renderHandle.Dispatcher.InvokeAsync(async () =>
-            {
-                try
-                {
-                    await eventCallback.InvokeAsync();
-                }
-                catch (Exception ex)
-                {
-                    // Take a look here for the reasoning
-                    // https://github.com/dotnet/aspnetcore/issues/44920
-                    _eventCallbackException = ex;
-                    StateHasChanged();
-                }
-            });
+            return _renderHandle.Dispatcher.InvokeAsync(() => HandleExceptionAsync(eventCallback.InvokeAsync()));
+        }
+
+        protected void InvokeEventCallback<T>(EventCallback<T> eventCallback, T value)
+        {
+            AwaitVoid(InvokeEventCallbackAsync(eventCallback, value));
+        }
+
+        protected void InvokeEventCallback(EventCallback eventCallback)
+        {
+            AwaitVoid(InvokeEventCallbackAsync(eventCallback));
         }
 
         protected virtual RenderFragment GetChildContent() => null;
@@ -126,6 +110,37 @@ namespace BlazorBindings.Core
         internal void SetElementReference(IElementHandler elementHandler)
         {
             ElementHandler = elementHandler ?? throw new ArgumentNullException(nameof(elementHandler));
+        }
+
+        private async Task HandleExceptionAsync(Task task)
+        {
+            // Take a look here for the reasoning
+            // https://github.com/dotnet/aspnetcore/issues/44920
+
+            if (task.Exception != null)
+            {
+                // Developer experience during debugging is not great in Android. Therefore I try to 
+                // throw an exception without awaiting if possible.
+                _eventCallbackException = task.Exception.InnerException;
+                StateHasChanged();
+            }
+            else
+            {
+                try
+                {
+                    await task;
+                }
+                catch (Exception ex)
+                {
+                    _eventCallbackException = ex;
+                    StateHasChanged();
+                }
+            }
+        }
+
+        private static async void AwaitVoid(Task task)
+        {
+            await task;
         }
 
         void IComponent.Attach(RenderHandle renderHandle)

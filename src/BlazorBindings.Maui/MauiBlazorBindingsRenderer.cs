@@ -53,7 +53,7 @@ namespace BlazorBindings.Maui
 
         protected override void HandleException(Exception exception)
         {
-            ErrorPageHelper.ShowExceptionPage(exception);
+            ExceptionDispatchInfo.Throw(exception);
         }
 
         protected override ElementManager CreateNativeControlManager()

@@ -16,16 +16,10 @@ namespace BlazorBindings.Maui.Elements
             {
                 if (!Equals(OnRefreshing, value))
                 {
-                    async void NativeControlRefreshing(object sender, EventArgs e)
+                    void NativeControlRefreshing(object sender, EventArgs e)
                     {
-                        try
-                        {
-                            await InvokeEventCallback(OnRefreshing);
-                        }
-                        finally
-                        {
-                            NativeControl.IsRefreshing = false;
-                        }
+                        InvokeEventCallback(OnRefreshing);
+                        NativeControl.IsRefreshing = false;
                     }
 
                     OnRefreshing = (EventCallback)value;
