@@ -119,8 +119,10 @@ namespace BlazorBindings.Core
 
             if (task.Exception != null)
             {
-                // Developer experience during debugging is not great in Android. Therefore I try to 
+                // Developer experience for async exceptions is not great in Android. Therefore I try to 
                 // throw an exception without awaiting if possible.
+                // https://developercommunity.visualstudio.com/t/VS-doesnt-break-properly-on-async-excep/10263624
+
                 _eventCallbackException = task.Exception.InnerException;
                 StateHasChanged();
             }
@@ -140,6 +142,16 @@ namespace BlazorBindings.Core
 
         private static async void AwaitVoid(Task task)
         {
+            // This async void method is needed to handle possible exceptions in the task.
+            // EventHandlers are void methods. If we need to use async-await, we have to use async void method.
+            // If we simply invoke task without awaiting, the exception will simply be ignored and missed.
+            // async void, otoh, raises the exception to async context (which usually makes the process crash).
+
+            // OTOH, exceptions from async void methods are bad during debug
+            // https://developercommunity.visualstudio.com/t/VS-doesnt-break-properly-on-async-excep/10263624
+            // Therefore we isolate async void here, and try throwing the exceptions without async void method
+            // if they happened synchronously.
+
             await task;
         }
 
