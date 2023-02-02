@@ -12,7 +12,7 @@ namespace ControlGallery
         {
             var builder = MauiApp.CreateBuilder();
             builder
-                .UseMauiApp<BlazorBindingsApplication<AppShell>>()
+                .UseMauiApp<App>()
                 .UseSkiaSharp()
                 .UseMauiBlazorBindings()
                 .ConfigureFonts(fonts =>
@@ -22,5 +22,12 @@ namespace ControlGallery
 
             return builder.Build();
         }
+    }
+
+    public class App : BlazorBindingsApplication<AppShell>
+    {
+        public App(IServiceProvider services) : base(services) { }
+
+        public override Type WrapperComponentType => typeof(Root);
     }
 }

@@ -1,0 +1,11 @@
+﻿@using ControlGallery.Views.ErrorBoundaries
+
+<CascadingValue Value="123" Name="test">
+    <GlobalErrorBoundary>
+        @ChildContent
+    </GlobalErrorBoundary>
+</CascadingValue>
+
+@code {
+    [Parameter] public RenderFragment ChildContent { get; set; }
+}

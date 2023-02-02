@@ -14,10 +14,16 @@ namespace BlazorBindings.Maui
     public partial class Navigation : INavigation
     {
         protected readonly IServiceProvider _services;
+        private Type _wrapperComponentType;
 
         public Navigation(IServiceProvider services)
         {
             _services = services;
+        }
+
+        internal void SetWrapperComponentType(Type wrapperComponentType)
+        {
+            _wrapperComponentType = wrapperComponentType;
         }
 
         protected MC.INavigation MauiNavigation => Application.Current.MainPage.Navigation;
@@ -109,6 +115,15 @@ namespace BlazorBindings.Maui
         [EditorBrowsable(EditorBrowsableState.Never)]
         public async Task<T> BuildElement<T>(Type componentType, Dictionary<string, object> arguments) where T : Element
         {
+            if (_wrapperComponentType != null)
+            {
+                arguments = new()
+                {
+                    ["ChildContent"] = RenderFragments.FromComponentType(componentType, arguments)
+                };
+                componentType = _wrapperComponentType;
+            }
+
             var renderer = _services.GetRequiredService<MauiBlazorBindingsRenderer>();
 
             var (bindableObject, componentTask) = await renderer.GetElementFromRenderedComponent(componentType, arguments);

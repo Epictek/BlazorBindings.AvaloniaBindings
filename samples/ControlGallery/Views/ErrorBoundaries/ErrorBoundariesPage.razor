@@ -1,0 +1,41 @@
+﻿<ContentPage Title="Error boundaries">
+    <VerticalStackLayout Margin="8">
+
+        <Border StrokeColor="Colors.Black" StrokeThickness="1">
+            <VerticalStackLayout>
+                <Label>Inside of Local Error Boundary</Label>
+
+                <ErrorBoundary @ref="errorBoundary">
+                    <ChildContent>
+                        <Button Text="Throw" OnClick="ThrowException" />
+                    </ChildContent>
+
+                    <ErrorContent>
+                        <Label>Exception '@context.Message' is handled by the local ErrorBoundary.</Label>
+                        <Button Text="Recover" OnClick="Recover" />
+                    </ErrorContent>
+                </ErrorBoundary>
+
+            </VerticalStackLayout>
+        </Border>
+
+
+        <Label>Outside of local Error Boundary</Label>
+        <Button Text="Throw" OnClick="ThrowException" />
+
+    </VerticalStackLayout>
+</ContentPage>
+
+@code {
+    ErrorBoundary errorBoundary;
+
+    void Recover()
+    {
+        errorBoundary.Recover();
+    }
+
+    void ThrowException()
+    {
+        throw new InvalidOperationException("Something unxepected happened.");
+    }
+}
