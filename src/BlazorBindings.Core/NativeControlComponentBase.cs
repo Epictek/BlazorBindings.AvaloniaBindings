@@ -97,12 +97,26 @@ namespace BlazorBindings.Core
 
         protected void InvokeEventCallback<T>(EventCallback<T> eventCallback, T value)
         {
-            AwaitVoid(InvokeEventCallbackAsync(eventCallback, value));
+            try
+            {
+                AwaitVoid(InvokeEventCallbackAsync(eventCallback, value));
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex);
+            }
         }
 
         protected void InvokeEventCallback(EventCallback eventCallback)
         {
-            AwaitVoid(InvokeEventCallbackAsync(eventCallback));
+            try
+            {
+                AwaitVoid(InvokeEventCallbackAsync(eventCallback));
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex);
+            }
         }
 
         protected virtual RenderFragment GetChildContent() => null;
@@ -122,9 +136,7 @@ namespace BlazorBindings.Core
                 // Developer experience for async exceptions is not great in Android. Therefore I try to 
                 // throw an exception without awaiting if possible.
                 // https://developercommunity.visualstudio.com/t/VS-doesnt-break-properly-on-async-excep/10263624
-
-                _eventCallbackException = task.Exception.InnerException;
-                StateHasChanged();
+                HandleException(task.Exception.InnerException);
             }
             else
             {
@@ -134,13 +146,18 @@ namespace BlazorBindings.Core
                 }
                 catch (Exception ex)
                 {
-                    _eventCallbackException = ex;
-                    StateHasChanged();
+                    HandleException(ex);
                 }
             }
         }
 
-        private static async void AwaitVoid(Task task)
+        private void HandleException(Exception ex)
+        {
+            _eventCallbackException = ex;
+            StateHasChanged();
+        }
+
+        private async void AwaitVoid(Task task)
         {
             // This async void method is needed to handle possible exceptions in the task.
             // EventHandlers are void methods. If we need to use async-await, we have to use async void method.
@@ -152,7 +169,14 @@ namespace BlazorBindings.Core
             // Therefore we isolate async void here, and try throwing the exceptions without async void method
             // if they happened synchronously.
 
-            await task;
+            try
+            {
+                await task;
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex);
+            }
         }
 
         void IComponent.Attach(RenderHandle renderHandle)
