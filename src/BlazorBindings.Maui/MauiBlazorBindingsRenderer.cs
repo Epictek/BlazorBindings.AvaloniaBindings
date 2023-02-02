@@ -22,6 +22,21 @@ namespace BlazorBindings.Maui
 
         public override Dispatcher Dispatcher { get; } = new MauiDeviceDispatcher();
 
+        public Task AddComponent(Type componentType, MC.Application parent, Dictionary<string, object> parameters = null)
+        {
+            var handler = new ApplicationHandler(parent);
+            var addComponentTask = AddComponent(componentType, handler, parameters);
+
+            if (!addComponentTask.IsCompleted && parent is MC.Application app)
+            {
+                // MAUI requires the Application to have the MainPage. If rendering task is not completed synchronously,
+                // we need to set MainPage to something.
+                app.MainPage ??= new MC.ContentPage();
+            }
+
+            return addComponentTask;
+        }
+
         public Task<TComponent> AddComponent<TComponent>(MC.Element parent, Dictionary<string, object> parameters = null) where TComponent : IComponent
         {
             var componentTask = AddComponentLocal();
