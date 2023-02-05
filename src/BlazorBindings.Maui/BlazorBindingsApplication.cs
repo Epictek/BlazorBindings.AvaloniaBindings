@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Maui.Controls;
 using System;
+using System.Threading.Tasks;
 
 namespace BlazorBindings.Maui
 {
@@ -10,7 +11,10 @@ namespace BlazorBindings.Maui
         public BlazorBindingsApplication(IServiceProvider services)
         {
             var renderer = services.GetRequiredService<MauiBlazorBindingsRenderer>();
-            _ = renderer.AddComponent<T>(this);
+            var task = renderer.AddComponent(typeof(T), this);
+            AwaitVoid(task);
+
+            static async void AwaitVoid(Task task) => await task;
         }
     }
 }

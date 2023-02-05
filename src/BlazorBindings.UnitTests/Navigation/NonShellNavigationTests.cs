@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-using BlazorBindings.Maui;
 using BlazorBindings.UnitTests.Components;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Maui.Dispatching;
@@ -144,6 +143,54 @@ namespace BlazorBindings.UnitTests.Navigation
             await _navigationService.PopAsync();
 
             Assert.That(isDisposed);
+        }
+
+        [Test]
+        public async Task NavigatedComponentShouldBeAbleToReplacePage()
+        {
+            await _navigationService.PushAsync<SwitchablePages>();
+            var navigatedPage = _mauiNavigation.NavigationStack.Last();
+
+            Assert.That(_mauiNavigation.NavigationStack.Count, Is.EqualTo(2));
+            Assert.That(navigatedPage.Title, Is.EqualTo("Page1"));
+
+            var switchButton = (MC.Button)((MC.ContentPage)navigatedPage).Content;
+            switchButton.SendClicked();
+            navigatedPage = _mauiNavigation.NavigationStack.Last();
+
+            Assert.That(_mauiNavigation.NavigationStack.Count, Is.EqualTo(2));
+            Assert.That(navigatedPage.Title, Is.EqualTo("Page2"));
+
+            switchButton = (MC.Button)((MC.ContentPage)navigatedPage).Content;
+            switchButton.SendClicked();
+            navigatedPage = _mauiNavigation.NavigationStack.Last();
+
+            Assert.That(_mauiNavigation.NavigationStack.Count, Is.EqualTo(2));
+            Assert.That(navigatedPage.Title, Is.EqualTo("Page1"));
+        }
+
+        [Test]
+        public async Task NavigatedModalShouldBeAbleToReplacePage()
+        {
+            await _navigationService.PushModalAsync<SwitchablePages>();
+            var navigatedPage = _mauiNavigation.ModalStack.Last();
+
+            Assert.That(_mauiNavigation.ModalStack.Count, Is.EqualTo(1));
+            Assert.That(navigatedPage.Title, Is.EqualTo("Page1"));
+
+            var switchButton = (MC.Button)((MC.ContentPage)navigatedPage).Content;
+            switchButton.SendClicked();
+            navigatedPage = _mauiNavigation.ModalStack.Last();
+
+            Assert.That(_mauiNavigation.ModalStack.Count, Is.EqualTo(1));
+            Assert.That(navigatedPage.Title, Is.EqualTo("Page2"));
+
+            switchButton = (MC.Button)((MC.ContentPage)navigatedPage).Content;
+            switchButton.SendClicked();
+            navigatedPage = _mauiNavigation.ModalStack.Last();
+
+            Assert.That(_mauiNavigation.ModalStack.Count, Is.EqualTo(1));
+            Assert.That(navigatedPage.Title, Is.EqualTo("Page1"));
         }
     }
 }
