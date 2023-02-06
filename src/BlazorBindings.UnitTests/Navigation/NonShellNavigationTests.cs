@@ -137,9 +137,11 @@ namespace BlazorBindings.UnitTests.Navigation
         public async Task ComponentShouldBeDisposedOnPopAsync()
         {
             var isDisposed = false;
-            PageContentWithDispose.OnDispose += () => isDisposed = true;
-
             await _navigationService.PushAsync<PageContentWithDispose>();
+            var mauiPage = _mauiNavigation.NavigationStack.Last();
+            var component = (PageContentWithDispose)mauiPage.GetValue(TestProperties.ComponentProperty);
+            component.OnDispose += () => isDisposed = true;
+
             await _navigationService.PopAsync();
 
             Assert.That(isDisposed);
