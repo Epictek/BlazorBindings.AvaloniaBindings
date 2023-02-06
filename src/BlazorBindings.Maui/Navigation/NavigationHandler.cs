@@ -41,7 +41,7 @@ namespace BlazorBindings.Maui
                 await _navigation.PushAsync(child, _firstAdd && _animated);
             }
 
-            _taskCompletionSource.SetResult();
+            _taskCompletionSource.TrySetResult();
             _firstAdd = false;
 
             child.ParentChanged += ParentChanged;
