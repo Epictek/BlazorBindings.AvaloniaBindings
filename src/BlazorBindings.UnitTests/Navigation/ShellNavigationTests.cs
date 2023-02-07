@@ -41,5 +41,20 @@ namespace BlazorBindings.UnitTests.Navigation
             Assert.That(() => _navigationService.NavigateToAsync("/non/existing/route"),
                 Throws.InvalidOperationException.With.Message.Contains("not registered"));
         }
+
+        [Test]
+        public async Task ComponentShouldBeDisposedOnPopAsync()
+        {
+            await _navigationService.NavigateToAsync($"/test/path/DisposeTest");
+            var mauiPage = _mauiNavigation.NavigationStack.Last();
+            var component = (PageWithUrl)mauiPage.GetValue(TestProperties.ComponentProperty);
+
+            var isDisposed = false;
+            component.OnDispose += () => isDisposed = true;
+
+            await _mauiNavigation.PopAsync();
+
+            Assert.That(isDisposed);
+        }
     }
 }

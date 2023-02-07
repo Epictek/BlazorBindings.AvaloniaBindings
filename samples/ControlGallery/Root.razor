@@ -1,11 +1,32 @@
 ﻿@using ControlGallery.Views.ErrorBoundaries
 
 <CascadingValue Value="123" Name="test">
-    <GlobalErrorBoundary>
-        @ChildContent
-    </GlobalErrorBoundary>
+    <ErrorBoundary @ref="_errorBoundary">
+        <ChildContent>
+            @ChildContent
+        </ChildContent>
+
+        <ErrorContent>
+            <ContentPage Title="Error">
+                <VerticalStackLayout Margin="8" Spacing="8">
+                    <Label Text="Oops!" HorizontalOptions="LayoutOptions.Center" FontSize="20" />
+                    <Label Text="Unexpected error has occured:" />
+                    <Label>@context.Message</Label>
+
+                    <Button Text="Return" OnClick="Recover" />
+                </VerticalStackLayout>
+            </ContentPage>
+        </ErrorContent>
+    </ErrorBoundary>
 </CascadingValue>
 
 @code {
     [Parameter] public RenderFragment ChildContent { get; set; }
+
+    private ErrorBoundary _errorBoundary;
+
+    void Recover()
+    {
+        _errorBoundary.Recover();
+    }
 }

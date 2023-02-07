@@ -1,5 +1,4 @@
 ﻿using BlazorBindings.UnitTests.Components;
-using Microsoft.Maui.Controls;
 using NUnit.Framework;
 using System;
 using System.Linq;
@@ -11,10 +10,11 @@ namespace BlazorBindings.UnitTests
     public class MauiBlazorBindingsRendererTests
     {
         private readonly TestBlazorBindingsRenderer _renderer = (TestBlazorBindingsRenderer)TestBlazorBindingsRenderer.Create();
+        private readonly MC.Application _application = new TestApplication();
 
         public MauiBlazorBindingsRendererTests()
         {
-            MC.Application.Current = new TestApplication();
+            MC.Application.Current = _application;
         }
 
         [TestCase(typeof(MC.ContentView))]
@@ -63,7 +63,7 @@ namespace BlazorBindings.UnitTests
         [Test]
         public void ShouldThrowExceptionIfHappenedDuringSyncRender()
         {
-            void action() => _ = _renderer.AddComponent<ComponentWithException>(new NavigationPage());
+            void action() => _ = _renderer.AddComponent<ComponentWithException>(new MC.NavigationPage());
 
             Assert.That(action, Throws.InvalidOperationException.With.Message.EqualTo("Should fail here."));
         }
@@ -80,6 +80,24 @@ namespace BlazorBindings.UnitTests
 
             Assert.That(() => _renderer.Exceptions, Is.Not.Empty.After(1000, 10));
             Assert.That(_renderer.Exceptions[0].Message, Is.EqualTo("HandleExceptionTest"));
+        }
+
+        [Test]
+        public async Task RenderedComponentShouldBeAbleToReplaceMainPage()
+        {
+            await _renderer.AddComponent(typeof(SwitchablePages), _application);
+
+            Assert.That(_application.MainPage.Title, Is.EqualTo("Page1"));
+
+            var switchButton = (MC.Button)((MC.ContentPage)_application.MainPage).Content;
+            switchButton.SendClicked();
+
+            Assert.That(_application.MainPage.Title, Is.EqualTo("Page2"));
+
+            switchButton = (MC.Button)((MC.ContentPage)_application.MainPage).Content;
+            switchButton.SendClicked();
+
+            Assert.That(_application.MainPage.Title, Is.EqualTo("Page1"));
         }
 
         private static MC.Element GetChildContent(MC.Element container)

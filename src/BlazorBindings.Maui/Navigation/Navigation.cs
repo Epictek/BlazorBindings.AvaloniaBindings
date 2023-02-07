@@ -14,11 +14,13 @@ namespace BlazorBindings.Maui
     public partial class Navigation : INavigation
     {
         protected readonly IServiceProvider _services;
+        private readonly MauiBlazorBindingsRenderer _renderer;
         private Type _wrapperComponentType;
 
         public Navigation(IServiceProvider services)
         {
             _services = services;
+            _renderer = services.GetRequiredService<MauiBlazorBindingsRenderer>();
         }
 
         internal void SetWrapperComponentType(Type wrapperComponentType)
@@ -31,51 +33,33 @@ namespace BlazorBindings.Maui
         /// <summary>
         /// Push page component <typeparamref name="T"/> to the Navigation Stack.
         /// </summary>
-        public async Task PushAsync<T>(Dictionary<string, object> arguments = null, bool animated = true) where T : IComponent
+        public Task PushAsync<T>(Dictionary<string, object> arguments = null, bool animated = true) where T : IComponent
         {
-            await NavigationAction(async () =>
-            {
-                var page = await BuildElement<Page>(typeof(T), arguments);
-                await MauiNavigation.PushAsync(page, animated);
-            });
+            return Navigate(typeof(T), arguments, NavigationTarget.Navigation, animated);
         }
 
         /// <summary>
         /// Push page component <typeparamref name="T"/> to the Modal Stack.
         /// </summary>
-        public async Task PushModalAsync<T>(Dictionary<string, object> arguments = null, bool animated = true) where T : IComponent
+        public Task PushModalAsync<T>(Dictionary<string, object> arguments = null, bool animated = true) where T : IComponent
         {
-            await NavigationAction(async () =>
-            {
-                var page = await BuildElement<Page>(typeof(T), arguments);
-                await MauiNavigation.PushModalAsync(page, animated);
-            });
+            return Navigate(typeof(T), arguments, NavigationTarget.Modal, animated);
         }
 
         /// <summary>
         /// Push page component from the <paramref name="renderFragment"/> to the Modal Stack.
         /// </summary>
-        /// <remarks>Experimental API, subject to change.</remarks>
-        public async Task PushModalAsync(RenderFragment renderFragment, bool animated = true)
+        public Task PushModalAsync(RenderFragment renderFragment, bool animated = true)
         {
-            await NavigationAction(async () =>
-            {
-                var page = await BuildElement<Page>(renderFragment);
-                await MauiNavigation.PushModalAsync(page, animated);
-            });
+            return Navigate(renderFragment, NavigationTarget.Modal, animated);
         }
 
         /// <summary>
         /// Push page component from the <paramref name="renderFragment"/> to the Navigation Stack.
         /// </summary>
-        /// <remarks>Experimental API, subject to change.</remarks>
-        public async Task PushAsync(RenderFragment renderFragment, bool animated = true)
+        public Task PushAsync(RenderFragment renderFragment, bool animated = true)
         {
-            await NavigationAction(async () =>
-            {
-                var page = await BuildElement<Page>(renderFragment);
-                await MauiNavigation.PushAsync(page, animated);
-            });
+            return Navigate(renderFragment, NavigationTarget.Navigation, animated);
         }
 
         public async Task PopModalAsync(bool animated = true)
@@ -90,21 +74,7 @@ namespace BlazorBindings.Maui
 
         public async Task PopToRootAsync(bool animated = true)
         {
-            await NavigationAction(() => MauiNavigation.PopToRootAsync(animated));
-        }
-
-        /// <summary>
-        /// Returns rendered MAUI element from <paramref name="renderFragment"/>.
-        /// This method is exposed for extensibility purposes, and shouldn't be used directly.
-        /// </summary>
-        /// <remarks>Experimental API, subject to change.</remarks>
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public Task<T> BuildElement<T>(RenderFragment renderFragment) where T : Element
-        {
-            return BuildElement<T>(typeof(RenderFragmentComponent), new()
-            {
-                [nameof(RenderFragmentComponent.RenderFragment)] = renderFragment
-            });
+            await MauiNavigation.PopToRootAsync(animated);
         }
 
         /// <summary>
@@ -144,6 +114,39 @@ namespace BlazorBindings.Maui
                     renderer.RemoveRootComponent(component);
                 }
             }
+        }
+
+        private Task Navigate(RenderFragment renderFragment, NavigationTarget target, bool animated)
+        {
+            return Navigate(typeof(RenderFragmentComponent), new()
+            {
+                [nameof(RenderFragmentComponent.RenderFragment)] = renderFragment
+            }, target, animated);
+        }
+
+        private async Task Navigate(Type componentType, Dictionary<string, object> arguments, NavigationTarget target, bool animated)
+        {
+            if (_wrapperComponentType != null)
+            {
+                arguments = new()
+                {
+                    ["ChildContent"] = RenderFragments.FromComponentType(componentType, arguments)
+                };
+                componentType = _wrapperComponentType;
+            }
+
+            await NavigationAction(() =>
+            {
+                var navigationHandler = new NavigationHandler(MauiNavigation, target, animated);
+                var renderTask = _renderer.AddComponent(componentType, navigationHandler, arguments);
+
+                navigationHandler.PageClosed += async () =>
+                {
+                    _renderer.RemoveRootComponent(await renderTask);
+                };
+
+                return Task.WhenAny(renderTask, navigationHandler.WaitForNavigation());
+            });
         }
 
         static bool _navigationInProgress;
