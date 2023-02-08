@@ -15,6 +15,12 @@ namespace BlazorBindings.UnitTests
             PageContent.ValidateContent(application.MainPage);
         }
 
+        [Test]
+        public void SetsTheMainPage_WithRootWrapper()
+        {
+            var application = CreateApplicationWithWrapper<PageContentWithCascadingParameter, WrapperWithCascadingValue>();
+            PageContentWithCascadingParameter.ValidateContent(application.MainPage, WrapperWithCascadingValue.Value);
+        }
 
         private static BlazorBindingsApplication<T> CreateApplication<T>() where T : IComponent
         {

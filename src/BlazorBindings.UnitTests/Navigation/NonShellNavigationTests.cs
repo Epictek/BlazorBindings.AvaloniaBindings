@@ -194,5 +194,27 @@ namespace BlazorBindings.UnitTests.Navigation
             Assert.That(_mauiNavigation.ModalStack.Count, Is.EqualTo(1));
             Assert.That(navigatedPage.Title, Is.EqualTo("Page1"));
         }
+
+        [Test]
+        public async Task PushPageWithRootWrapper()
+        {
+            _navigationService.SetWrapperComponentType(typeof(WrapperWithCascadingValue));
+
+            await _navigationService.PushAsync<PageContentWithCascadingParameter>();
+            var navigatedPage = _mauiNavigation.NavigationStack.Last();
+
+            PageContentWithCascadingParameter.ValidateContent(navigatedPage, WrapperWithCascadingValue.Value);
+        }
+
+        [Test]
+        public async Task PushModalWithRootWrapper()
+        {
+            _navigationService.SetWrapperComponentType(typeof(WrapperWithCascadingValue));
+
+            await _navigationService.PushModalAsync<PageContentWithCascadingParameter>();
+            var navigatedPage = _mauiNavigation.ModalStack.Last();
+
+            PageContentWithCascadingParameter.ValidateContent(navigatedPage, WrapperWithCascadingValue.Value);
+        }
     }
 }
