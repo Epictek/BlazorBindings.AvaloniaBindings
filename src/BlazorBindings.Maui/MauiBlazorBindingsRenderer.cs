@@ -27,6 +27,12 @@ namespace BlazorBindings.Maui
             var handler = new ApplicationHandler(parent);
             var addComponentTask = AddComponent(componentType, handler, parameters);
 
+            if (addComponentTask.Exception != null)
+            {
+                // If exception was thrown during the sync execution - throw it straight away.
+                ExceptionDispatchInfo.Throw(addComponentTask.Exception.InnerException);
+            }
+
             if (!addComponentTask.IsCompleted && parent is MC.Application app)
             {
                 // MAUI requires the Application to have the MainPage. If rendering task is not completed synchronously,

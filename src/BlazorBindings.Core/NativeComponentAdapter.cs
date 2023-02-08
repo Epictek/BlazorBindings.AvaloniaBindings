@@ -217,7 +217,8 @@ namespace BlazorBindings.Core
                         }
                         else if (!string.IsNullOrWhiteSpace(frame.MarkupContent))
                         {
-                            throw new NotImplementedException("Nonempty markup: " + frame.MarkupContent);
+                            var typeName = _targetElement?.TargetElement?.GetType()?.Name;
+                            throw new NotImplementedException($"Element {typeName} does not support markup content: " + frame.MarkupContent);
                         }
 #pragma warning disable CA2000 // Dispose objects before losing scope; adapters are disposed when they are removed from the adapter tree
                         var childAdapter = CreateAdapter(_targetElement ?? _closestPhysicalParent);
@@ -234,7 +235,8 @@ namespace BlazorBindings.Core
                         }
                         else if (!string.IsNullOrWhiteSpace(frame.TextContent))
                         {
-                            throw new NotImplementedException("Nonempty text: " + frame.TextContent);
+                            var typeName = _targetElement?.TargetElement?.GetType()?.Name;
+                            throw new NotImplementedException($"Element {typeName} does not support text content: " + frame.MarkupContent);
                         }
 #pragma warning disable CA2000 // Dispose objects before losing scope; adapters are disposed when they are removed from the adapter tree
                         var childAdapter = CreateAdapter(_targetElement ?? _closestPhysicalParent);

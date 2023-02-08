@@ -1,5 +1,5 @@
 ﻿<ContentPage Title="Error boundaries">
-    <VerticalStackLayout Margin="8">
+    <VerticalStackLayout Margin="8" Spacing="6">
 
         <Border StrokeColor="Colors.Black" StrokeThickness="1" Padding="6">
             <VerticalStackLayout>
@@ -19,14 +19,23 @@
             </VerticalStackLayout>
         </Border>
 
-
-        <Label>Outside of local Error Boundary</Label>
+        <Label>Outside of local Error Boundary</Label> |
         <Button Text="Throw" OnClick="ThrowException" />
 
+        @if (ShowNavigation)
+        {
+            <Label>Navigations</Label>
+            <Button Text="Open page" OnClick="PushToStack" />
+            <Button Text="Open modal" OnClick="PushModal" />
+        }
     </VerticalStackLayout>
 </ContentPage>
 
 @code {
+    [Parameter] public bool ShowNavigation { get; set; } = true;
+
+    [Inject] INavigation Navigation { get; set; }
+
     ErrorBoundary errorBoundary;
 
     void Recover()
@@ -37,5 +46,15 @@
     void ThrowException()
     {
         throw new InvalidOperationException("Something unxepected happened.");
+    }
+
+    async Task PushToStack()
+    {
+        await Navigation.PushAsync(@<ErrorBoundariesPage ShowNavigation="false" />);
+    }
+
+    async Task PushModal()
+    {
+        await Navigation.PushModalAsync(@<ErrorBoundariesPage ShowNavigation="false" />);
     }
 }
