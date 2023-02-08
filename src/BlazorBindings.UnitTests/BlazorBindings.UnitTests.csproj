@@ -4,6 +4,7 @@
     <TargetFramework>net7.0</TargetFramework>
     <IsPackable>false</IsPackable>
 	<UseMaui>true</UseMaui>
+	<EnablePreviewFeatures>true</EnablePreviewFeatures>
   </PropertyGroup>
 	
   <ItemGroup>
