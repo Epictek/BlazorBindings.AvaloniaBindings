@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Maui.Controls;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
+using System.Runtime.Versioning;
 using System.Threading.Tasks;
 using IComponent = Microsoft.AspNetCore.Components.IComponent;
 using MC = Microsoft.Maui.Controls;
@@ -82,18 +82,9 @@ namespace BlazorBindings.Maui
         /// This method is exposed for extensibility purposes, and shouldn't be used directly.
         /// </summary>
         /// <remarks>Experimental API, subject to change.</remarks>
-        [EditorBrowsable(EditorBrowsableState.Never)]
+        [RequiresPreviewFeatures]
         public async Task<T> BuildElement<T>(Type componentType, Dictionary<string, object> arguments) where T : Element
         {
-            if (_wrapperComponentType != null)
-            {
-                arguments = new()
-                {
-                    ["ChildContent"] = RenderFragments.FromComponentType(componentType, arguments)
-                };
-                componentType = _wrapperComponentType;
-            }
-
             var renderer = _services.GetRequiredService<MauiBlazorBindingsRenderer>();
 
             var (bindableObject, componentTask) = await renderer.GetElementFromRenderedComponent(componentType, arguments);
