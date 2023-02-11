@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Components.RenderTree;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace BlazorBindings.Core
@@ -15,6 +16,7 @@ namespace BlazorBindings.Core
         private readonly Dictionary<int, NativeComponentAdapter> _componentIdToAdapter = new Dictionary<int, NativeComponentAdapter>();
         private ElementManager _elementManager;
         private readonly Dictionary<ulong, Action<ulong>> _eventRegistrations = new Dictionary<ulong, Action<ulong>>();
+        private readonly List<(int Id, IComponent Component)> _rootComponents = new();
 
 
         public NativeComponentRenderer(IServiceProvider serviceProvider, ILoggerFactory loggerFactory)
@@ -44,7 +46,7 @@ namespace BlazorBindings.Core
         /// <returns></returns>
         public async Task<TComponent> AddComponent<TComponent>(IElementHandler parent, Dictionary<string, object> parameters = null) where TComponent : IComponent
         {
-            return (TComponent)await AddComponent(typeof(TComponent), parent, parameters).ConfigureAwait(false);
+            return (TComponent)await AddComponent(typeof(TComponent), parent, parameters);
         }
 
         /// <summary>
@@ -63,6 +65,8 @@ namespace BlazorBindings.Core
                     var component = InstantiateComponent(componentType);
                     var componentId = AssignRootComponentId(component);
 
+                    _rootComponents.Add((componentId, component));
+
                     var rootAdapter = new NativeComponentAdapter(this, closestPhysicalParent: parent, knownTargetElement: parent)
                     {
                         Name = $"RootAdapter attached to {parent.GetType().FullName}",
@@ -71,17 +75,25 @@ namespace BlazorBindings.Core
                     _componentIdToAdapter[componentId] = rootAdapter;
 
                     var parameterView = parameters?.Count > 0 ? ParameterView.FromDictionary(parameters) : ParameterView.Empty;
-                    await RenderRootComponentAsync(componentId, parameterView).ConfigureAwait(false);
+                    await RenderRootComponentAsync(componentId, parameterView);
                     return component;
-                }).ConfigureAwait(false);
+                });
             }
-#pragma warning disable CA1031 // Do not catch general exception types
             catch (Exception ex)
-#pragma warning restore CA1031 // Do not catch general exception types
             {
                 HandleException(ex);
                 return null;
             }
+        }
+
+        /// <summary>
+        /// Removes the specified component from the renderer, causing the component and its
+        /// descendants to be disposed.
+        /// </summary>
+        public void RemoveRootComponent(IComponent component)
+        {
+            var componentId = _rootComponents.LastOrDefault(c => c.Component == component).Id;
+            RemoveRootComponent(componentId);
         }
 
         protected override Task UpdateDisplayAsync(in RenderBatch renderBatch)

@@ -7,13 +7,13 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
+using System.Runtime.Versioning;
 using MC = Microsoft.Maui.Controls;
 
 namespace BlazorBindings.Maui
 {
     /// <remarks>Experimental API, subject to change.</remarks>
-    [EditorBrowsable(EditorBrowsableState.Never)]
+    [RequiresPreviewFeatures]
     public static class RenderTreeBuilderHelper
     {
         public static void AddContentProperty<TControl>(

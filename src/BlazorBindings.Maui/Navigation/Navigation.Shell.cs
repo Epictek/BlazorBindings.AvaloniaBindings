@@ -39,7 +39,7 @@ namespace BlazorBindings.Maui
                 {
                     throw new InvalidOperationException($"A route factory for URI '{uri}' could not be found.");
                 }
-                await routeFactory.CreateAsync().ConfigureAwait(true);
+                await routeFactory.CreateAsync();
                 await shell.GoToAsync(route.Route.BaseUri);
             }
             else
@@ -97,7 +97,7 @@ namespace BlazorBindings.Maui
             foreach (var keyValue in parameters)
             {
                 var propertyType = componentType.GetProperty(keyValue.Key)?.PropertyType ?? typeof(string);
-                if (!TryParse(propertyType, keyValue.Value, out var parsedValue))
+                if (!StringConverter.TryParse(propertyType, keyValue.Value, CultureInfo.InvariantCulture, out var parsedValue))
                 {
                     throw new InvalidOperationException($"The value {keyValue.Value} can not be converted to a {propertyType.Name}");
                 }
@@ -130,74 +130,6 @@ namespace BlazorBindings.Maui
             }
 
             return BuildElement<MC.Page>(componentType, parameters);
-        }
-
-        /// <summary>
-        /// Converts a string into the specified type. If conversion was successful, parsed property will be of the correct type and method will return true.
-        /// If conversion fails it will return false and parsed property will be null.
-        /// This method supports the 8 data types that are valid navigation parameters in Blazor. Passing a string is also safe but will be returned as is because no conversion is neccessary.
-        /// </summary>
-        /// <param name="type"></param>
-        /// <param name="s"></param>
-        /// <param name="result">The parsed object of the type specified. This will be null if conversion failed.</param>
-        /// <returns>True if s was converted successfully, otherwise false</returns>
-        internal static bool TryParse(Type type, string s, out object result)
-        {
-            bool success;
-
-            type = Nullable.GetUnderlyingType(type) ?? type;
-
-            if (type == typeof(string))
-            {
-                result = s;
-                success = true;
-            }
-            else if (type == typeof(int))
-            {
-                success = int.TryParse(s, NumberStyles.Integer, NumberFormatInfo.InvariantInfo, out var parsed);
-                result = parsed;
-            }
-            else if (type == typeof(Guid))
-            {
-                success = Guid.TryParse(s, out var parsed);
-                result = parsed;
-            }
-            else if (type == typeof(bool))
-            {
-                success = bool.TryParse(s, out var parsed);
-                result = parsed;
-            }
-            else if (type == typeof(DateTime))
-            {
-                success = DateTime.TryParse(s, DateTimeFormatInfo.InvariantInfo, DateTimeStyles.None, out var parsed);
-                result = parsed;
-            }
-            else if (type == typeof(decimal))
-            {
-                success = decimal.TryParse(s, NumberStyles.Number, NumberFormatInfo.InvariantInfo, out var parsed);
-                result = parsed;
-            }
-            else if (type == typeof(double))
-            {
-                success = double.TryParse(s, NumberStyles.Float, NumberFormatInfo.InvariantInfo, out var parsed);
-                result = parsed;
-            }
-            else if (type == typeof(float))
-            {
-                success = float.TryParse(s, NumberStyles.Float, NumberFormatInfo.InvariantInfo, out var parsed);
-                result = parsed;
-            }
-            else if (type == typeof(long))
-            {
-                success = long.TryParse(s, NumberStyles.Integer, NumberFormatInfo.InvariantInfo, out var parsed);
-                result = parsed;
-            }
-            else
-            {
-                result = null;
-                success = false;
-            }
-            return success;
         }
     }
 }

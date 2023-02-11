@@ -27,10 +27,16 @@ namespace BlazorBindings.Maui.Elements.AlohaKit
         [Parameter] public double? FontSize { get; set; }
         [Parameter] public double? Interval { get; set; }
         [Parameter] public double? Maximum { get; set; }
+        [Parameter] public Color MaximumColorColor { get; set; }
+        [Parameter] public Color MaximumTextColor { get; set; }
         [Parameter] public double? Minimum { get; set; }
+        [Parameter] public Color MinimumColorColor { get; set; }
+        [Parameter] public Color MinimumTextColor { get; set; }
         [Parameter] public AC.NumericUpDownDrawable NumericUpDownDrawable { get; set; }
         [Parameter] public Color TextColor { get; set; }
         [Parameter] public double? Value { get; set; }
+        [Parameter] public RenderFragment MaximumColor { get; set; }
+        [Parameter] public RenderFragment MinimumColor { get; set; }
         [Parameter] public EventCallback<double> ValueChanged { get; set; }
 
         public new AC.NumericUpDown NativeControl => (AC.NumericUpDown)((BindableObject)this).NativeControl;
@@ -69,11 +75,39 @@ namespace BlazorBindings.Maui.Elements.AlohaKit
                         NativeControl.Maximum = Maximum ?? (double)AC.NumericUpDown.MaximumProperty.DefaultValue;
                     }
                     break;
+                case nameof(MaximumColorColor):
+                    if (!Equals(MaximumColorColor, value))
+                    {
+                        MaximumColorColor = (Color)value;
+                        NativeControl.MaximumColor = MaximumColorColor;
+                    }
+                    break;
+                case nameof(MaximumTextColor):
+                    if (!Equals(MaximumTextColor, value))
+                    {
+                        MaximumTextColor = (Color)value;
+                        NativeControl.MaximumTextColor = MaximumTextColor;
+                    }
+                    break;
                 case nameof(Minimum):
                     if (!Equals(Minimum, value))
                     {
                         Minimum = (double?)value;
                         NativeControl.Minimum = Minimum ?? (double)AC.NumericUpDown.MinimumProperty.DefaultValue;
+                    }
+                    break;
+                case nameof(MinimumColorColor):
+                    if (!Equals(MinimumColorColor, value))
+                    {
+                        MinimumColorColor = (Color)value;
+                        NativeControl.MinimumColor = MinimumColorColor;
+                    }
+                    break;
+                case nameof(MinimumTextColor):
+                    if (!Equals(MinimumTextColor, value))
+                    {
+                        MinimumTextColor = (Color)value;
+                        NativeControl.MinimumTextColor = MinimumTextColor;
                     }
                     break;
                 case nameof(NumericUpDownDrawable):
@@ -99,6 +133,12 @@ namespace BlazorBindings.Maui.Elements.AlohaKit
                     break;
                 case nameof(Background):
                     Background = (RenderFragment)value;
+                    break;
+                case nameof(MaximumColor):
+                    MaximumColor = (RenderFragment)value;
+                    break;
+                case nameof(MinimumColor):
+                    MinimumColor = (RenderFragment)value;
                     break;
                 case nameof(ValueChanged):
                     if (!Equals(ValueChanged, value))
@@ -126,6 +166,8 @@ namespace BlazorBindings.Maui.Elements.AlohaKit
         {
             base.RenderAdditionalElementContent(builder, ref sequence);
             RenderTreeBuilderHelper.AddContentProperty<AC.NumericUpDown>(builder, sequence++, Background, (x, value) => x.Background = (MC.Brush)value);
+            RenderTreeBuilderHelper.AddContentProperty<AC.NumericUpDown>(builder, sequence++, MaximumColor, (x, value) => x.MaximumColor = (MC.Brush)value);
+            RenderTreeBuilderHelper.AddContentProperty<AC.NumericUpDown>(builder, sequence++, MinimumColor, (x, value) => x.MinimumColor = (MC.Brush)value);
         }
 
         static partial void RegisterAdditionalHandlers();

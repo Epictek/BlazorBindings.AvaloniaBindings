@@ -1,11 +1,22 @@
 ﻿@implements IDisposable
 
-<ContentPage Title="Test">
+<ContentPage @ref="_page" Title="Test">
     <NonPageContent />
 </ContentPage>
 
 @code {
-    public static event Action OnDispose;
+    ContentPage _page;
+
+    public event Action OnDispose;
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // This is needed to be able to get component from tests.
+            _page.NativeControl.SetValue(TestProperties.ComponentProperty, this);
+        }
+    }
 
     public void Dispose()
     {

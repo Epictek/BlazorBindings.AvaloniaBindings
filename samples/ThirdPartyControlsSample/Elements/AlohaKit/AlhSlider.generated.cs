@@ -29,6 +29,7 @@ namespace BlazorBindings.Maui.Elements.AlohaKit
         [Parameter] public Color MinimumColor { get; set; }
         [Parameter] public AC.SliderDrawable SliderDrawable { get; set; }
         [Parameter] public Color ThumbColor { get; set; }
+        [Parameter] public AC.ThumbShape? ThumbShape { get; set; }
         [Parameter] public double? Value { get; set; }
         [Parameter] public RenderFragment MaximumBrush { get; set; }
         [Parameter] public RenderFragment MinimumBrush { get; set; }
@@ -83,6 +84,13 @@ namespace BlazorBindings.Maui.Elements.AlohaKit
                     {
                         ThumbColor = (Color)value;
                         NativeControl.ThumbBrush = ThumbColor;
+                    }
+                    break;
+                case nameof(ThumbShape):
+                    if (!Equals(ThumbShape, value))
+                    {
+                        ThumbShape = (AC.ThumbShape?)value;
+                        NativeControl.ThumbShape = ThumbShape ?? (AC.ThumbShape)AC.Slider.ThumbShapeProperty.DefaultValue;
                     }
                     break;
                 case nameof(Value):

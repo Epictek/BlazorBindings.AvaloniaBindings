@@ -3,6 +3,9 @@
 <ContentPage Title="Navigation target">
     <ScrollView>
         <VerticalStackLayout Padding="6" Spacing="6">
+
+            <Label>@Test</Label>
+
             <Label Text="Target page" />
 
             <Label Text="Name:" />
@@ -19,6 +22,8 @@
 </ContentPage>
 
 @code {
+    [CascadingParameter(Name = "test")] public int Test { get; set; }
+
     [Parameter] public NavigationParameterModel Item { get; set; }
     [Parameter] public EventCallback<NavigationParameterModel> ItemChanged { get; set; }
     [Parameter] public EventCallback EventHappened { get; set; }

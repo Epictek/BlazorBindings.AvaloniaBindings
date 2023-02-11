@@ -1,0 +1,4 @@
+[*.cs]
+
+# CA2252: This API requires opting into preview features
+dotnet_diagnostic.CA2252.severity = none

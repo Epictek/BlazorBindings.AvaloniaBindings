@@ -27,6 +27,7 @@ namespace BlazorBindings.Maui.Elements.AlohaKit
 
         [Parameter] public AC.ButtonDrawable ButtonDrawable { get; set; }
         [Parameter] public CornerRadius? CornerRadius { get; set; }
+        [Parameter] public float? FontSize { get; set; }
         [Parameter] public bool? HasShadow { get; set; }
         [Parameter] public TextAlignment? HorizontalTextAlignment { get; set; }
         [Parameter] public Color ShadowColor { get; set; }
@@ -48,6 +49,13 @@ namespace BlazorBindings.Maui.Elements.AlohaKit
         {
             switch (name)
             {
+                case nameof(BackgroundColor):
+                    if (!Equals(BackgroundColor, value))
+                    {
+                        BackgroundColor = (Color)value;
+                        NativeControl.BackgroundColor = BackgroundColor;
+                    }
+                    break;
                 case nameof(ButtonDrawable):
                     if (!Equals(ButtonDrawable, value))
                     {
@@ -60,6 +68,13 @@ namespace BlazorBindings.Maui.Elements.AlohaKit
                     {
                         CornerRadius = (CornerRadius?)value;
                         NativeControl.CornerRadius = CornerRadius ?? (CornerRadius)AC.Button.CornerRadiusProperty.DefaultValue;
+                    }
+                    break;
+                case nameof(FontSize):
+                    if (!Equals(FontSize, value))
+                    {
+                        FontSize = (float?)value;
+                        NativeControl.FontSize = FontSize ?? (float)AC.Button.FontSizeProperty.DefaultValue;
                     }
                     break;
                 case nameof(HasShadow):

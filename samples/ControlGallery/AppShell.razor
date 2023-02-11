@@ -3,6 +3,7 @@
 @using ControlGallery.Views.Collections.CollectionView
 @using ControlGallery.Views.Collections.ListView
 @using ControlGallery.Views.EditText
+@using ControlGallery.Views.ErrorBoundaries
 @using ControlGallery.Views.Gestures
 @using ControlGallery.Views.InitiateCommands
 @using ControlGallery.Views.Layouts
@@ -60,9 +61,9 @@
     <ShellContent Title="Shell Properties">
         <ContentTemplate>
             <ShellPropertiesPage @bind-ShellBackgroundColor="_backgroundColor"
-            @bind-ShellForegroundColor="_foregroundColor"
-            @bind-ShellUnselectedColor="_unselectedColor"
-            @bind-ShellTabBarTitleColor="_tabBarTitleColor" />
+                                 @bind-ShellForegroundColor="_foregroundColor"
+                                 @bind-ShellUnselectedColor="_unselectedColor"
+                                 @bind-ShellTabBarTitleColor="_tabBarTitleColor" />
         </ContentTemplate>
     </ShellContent>
 
@@ -79,6 +80,7 @@
     <SkiaCanvasPage />
     <GestureEvents />
     <GestureRecognizersPage />
+    <ErrorBoundariesPage />
 </Shell>
 
 @code {
