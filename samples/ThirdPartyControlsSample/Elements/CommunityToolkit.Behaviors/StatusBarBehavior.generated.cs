@@ -16,6 +16,9 @@ using System.Threading.Tasks;
 
 namespace BlazorBindings.Maui.Elements.CommunityToolkit.Behaviors
 {
+    /// <summary>
+    /// <see cref="T:Microsoft.Maui.Controls.PlatformBehavior`2" /> that controls the Status bar color
+    /// </summary>
     public partial class StatusBarBehavior : BlazorBindings.Maui.Elements.Behavior
     {
         static StatusBarBehavior()
@@ -23,7 +26,13 @@ namespace BlazorBindings.Maui.Elements.CommunityToolkit.Behaviors
             RegisterAdditionalHandlers();
         }
 
+        /// <summary>
+        /// Property that holds the value of the Status bar color.
+        /// </summary>
         [Parameter] public Color StatusBarColor { get; set; }
+        /// <summary>
+        /// Property that holds the value of the Status bar color.
+        /// </summary>
         [Parameter] public StatusBarStyle? StatusBarStyle { get; set; }
 
         public new CMB.StatusBarBehavior NativeControl => (CMB.StatusBarBehavior)((BindableObject)this).NativeControl;

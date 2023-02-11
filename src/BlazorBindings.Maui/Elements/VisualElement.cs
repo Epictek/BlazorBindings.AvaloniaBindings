@@ -10,12 +10,6 @@ namespace BlazorBindings.Maui.Elements
 {
     public abstract partial class VisualElement
     {
-        static partial void RegisterAdditionalHandlers()
-        {
-            ElementHandlerRegistry.RegisterPropertyContentHandler<VisualElement>(nameof(Behaviors),
-                (renderer, parent, component) => new ListContentPropertyHandler<MC.VisualElement, MC.Behavior>(x => x.Behaviors));
-        }
-
         // This property is defined manually to allow to override it's behavior (see Shell).
         /// <summary>
         /// Gets or sets the color which will fill the background of a VisualElement.
@@ -48,7 +42,8 @@ namespace BlazorBindings.Maui.Elements
         {
             base.RenderAdditionalPartialElementContent(builder, ref sequence);
 
-            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(VisualElement), Behaviors);
+            RenderTreeBuilderHelper.AddListContentProperty<MC.VisualElement, MC.Behavior>(builder, sequence++, Behaviors, 
+                x => x.Behaviors);
         }
     }
 }
