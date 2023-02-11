@@ -12,6 +12,9 @@ using System.Threading.Tasks;
 
 namespace BlazorBindings.Maui.Elements
 {
+    /// <summary>
+    /// A <see cref="T:Microsoft.Maui.Controls.View" /> control that inputs a discrete value, constrained to a range.
+    /// </summary>
     public partial class Stepper : View
     {
         static Stepper()
@@ -19,9 +22,33 @@ namespace BlazorBindings.Maui.Elements
             RegisterAdditionalHandlers();
         }
 
+        /// <summary>
+        /// Gets or sets the increment by which Value is increased or decreased.
+        /// </summary>
+        /// <value>
+        /// A double.
+        /// </value>
         [Parameter] public double? Increment { get; set; }
+        /// <summary>
+        /// Gets or sets the maximum selectable value.
+        /// </summary>
+        /// <value>
+        /// A double.
+        /// </value>
         [Parameter] public double? Maximum { get; set; }
+        /// <summary>
+        /// Gets or sets the minimum selectabel value.
+        /// </summary>
+        /// <value>
+        /// A double.
+        /// </value>
         [Parameter] public double? Minimum { get; set; }
+        /// <summary>
+        /// Gets or sets the current value.
+        /// </summary>
+        /// <value>
+        /// A double.
+        /// </value>
         [Parameter] public double? Value { get; set; }
         [Parameter] public EventCallback<double> ValueChanged { get; set; }
 

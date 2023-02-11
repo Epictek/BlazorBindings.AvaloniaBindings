@@ -16,7 +16,7 @@ jobs:
       with:
         fetch-depth: 0        
     - name: Install .NET
-      uses: actions/setup-dotnet@v2
+      uses: actions/setup-dotnet@v3
       with:
         dotnet-version: '7.0.x'
     - name: Install MAUI
@@ -24,7 +24,7 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore BlazorBindings.Maui.sln
     - name: Run tests
-      run: dotnet test src/BlazorBindings.UnitTests --no-restore --verbosity normal
+      run: dotnet test src/BlazorBindings.UnitTests --no-restore --verbosity normal --collect:"XPlat Code Coverage"
     - name: Build templates
       run: |
         cd templates
@@ -33,7 +33,7 @@ jobs:
     - name: Pack nugets
       run: dotnet pack -o ./packages -c Release --no-restore
     - name: Upload a Build Artifact
-      uses: actions/upload-artifact@v3.0.0
+      uses: actions/upload-artifact@v3
       with:
         path: packages
 
@@ -41,7 +41,7 @@ jobs:
     runs-on: windows-2022
     needs: [build]
     steps:
-    - uses: actions/download-artifact@v3.0.0
+    - uses: actions/download-artifact@v3
     
     - name: Publish to Myget
       run: dotnet nuget push */*.nupkg -k ${{ secrets.MYGET_TOKEN }} -s https://www.myget.org/F/blazorbindings/api/v2/package

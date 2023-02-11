@@ -14,6 +14,9 @@ using System.Threading.Tasks;
 
 namespace BlazorBindings.Maui.Elements
 {
+    /// <summary>
+    /// The base class of a view which can take keyboard input.
+    /// </summary>
     public abstract partial class InputView : View
     {
         static InputView()
@@ -21,17 +24,60 @@ namespace BlazorBindings.Maui.Elements
             RegisterAdditionalHandlers();
         }
 
+        /// <summary>
+        /// Gets or sets a value that indicates the number of device-independent units that should be in between characters in the text displayed by the Entry. Applies to Text and Placeholder.
+        /// </summary>
+        /// <value>
+        /// The number of device-independent units that should be in between characters in the text.
+        /// </value>
         [Parameter] public double? CharacterSpacing { get; set; }
+        /// <summary>
+        /// Gets or sets a value that indicates whether user should be prevented from modifying the text. Default is <see langword="false" />.
+        /// </summary>
+        /// <value>
+        /// If <see langword="true" />, user cannot modify text. Else, <see langword="false" />.
+        /// </value>
         [Parameter] public bool? IsReadOnly { get; set; }
+        /// <summary>
+        /// Gets or sets a value that controls whether spell checking is enabled.
+        /// </summary>
+        /// <value>
+        /// <see langword="true" /> if spell checking is enabled. Otherwise <see langword="false" />.
+        /// </value>
         [Parameter] public bool? IsSpellCheckEnabled { get; set; }
+        /// <summary>
+        /// Gets or sets the Keyboard for the InputView.
+        /// </summary>
+        /// <value>
+        /// The <see cref="T:Microsoft.Maui.Keyboard" /> to use for the InputView.
+        /// </value>
         [Parameter] public Keyboard Keyboard { get; set; }
+        /// <summary>
+        /// Gets or sets the maximum allowed length of input.
+        /// </summary>
+        /// <value>
+        /// An integer in the interval [0,<c>int.MaxValue</c>]. The default value is <c>Int.MaxValue</c>.
+        /// </value>
         [Parameter] public int? MaxLength { get; set; }
+        /// <summary>
+        /// Gets or sets the text that is displayed when the control is empty.
+        /// </summary>
+        /// <value>
+        /// The text that is displayed when the control is empty.
+        /// </value>
         [Parameter] public string Placeholder { get; set; }
+        /// <summary>
+        /// Gets or sets the color of the placeholder text.
+        /// </summary>
+        /// <value>
+        /// The color of the placeholder text.
+        /// </value>
         [Parameter] public Color PlaceholderColor { get; set; }
-        [Parameter] public string Text { get; set; }
+        /// <summary>
+        /// Gets or sets the text color.
+        /// </summary>
         [Parameter] public Color TextColor { get; set; }
         [Parameter] public TextTransform? TextTransform { get; set; }
-        [Parameter] public EventCallback<string> TextChanged { get; set; }
 
         public new MC.InputView NativeControl => (MC.InputView)((BindableObject)this).NativeControl;
 
@@ -89,13 +135,6 @@ namespace BlazorBindings.Maui.Elements
                         NativeControl.PlaceholderColor = PlaceholderColor;
                     }
                     break;
-                case nameof(Text):
-                    if (!Equals(Text, value))
-                    {
-                        Text = (string)value;
-                        NativeControl.Text = Text;
-                    }
-                    break;
                 case nameof(TextColor):
                     if (!Equals(TextColor, value))
                     {
@@ -108,21 +147,6 @@ namespace BlazorBindings.Maui.Elements
                     {
                         TextTransform = (TextTransform?)value;
                         NativeControl.TextTransform = TextTransform ?? (TextTransform)MC.InputView.TextTransformProperty.DefaultValue;
-                    }
-                    break;
-                case nameof(TextChanged):
-                    if (!Equals(TextChanged, value))
-                    {
-                        void NativeControlTextChanged(object sender, MC.TextChangedEventArgs e)
-                        {
-                            var value = NativeControl.Text;
-                            Text = value;
-                            InvokeEventCallback(TextChanged, value);
-                        }
-
-                        TextChanged = (EventCallback<string>)value;
-                        NativeControl.TextChanged -= NativeControlTextChanged;
-                        NativeControl.TextChanged += NativeControlTextChanged;
                     }
                     break;
 

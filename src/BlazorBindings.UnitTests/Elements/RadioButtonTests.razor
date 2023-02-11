@@ -1,0 +1,95 @@
+﻿@using NUnit.Framework;
+
+@inherits ElementTestBase
+
+@code {
+    [Test]
+    public async Task BindedRadioButtonGroupShouldBeUpdatedBasedOnSelection()
+    {
+        string bindedValue = null;
+        var radioGroup = await Render<MC.Layout>(
+    @<RadioButtonGroup @bind-SelectedValue="bindedValue">
+        <RadioButton Value=@("Red") />
+        <RadioButton Value=@("Green") />
+        <RadioButton Value=@("Blue") />
+    </RadioButtonGroup>
+    );
+
+        var radioButtons = radioGroup.Children.Cast<MC.RadioButton>().ToArray();
+        bool[] checkedValues() => radioButtons.Select(r => r.IsChecked).ToArray();
+
+        Assert.That(checkedValues, Has.All.False);
+
+        radioButtons[1].IsChecked = true;
+        Assert.That(bindedValue, Is.EqualTo("Green"));
+        Assert.That(checkedValues, Is.EqualTo(new[] { false, true, false }));
+
+        radioButtons[2].IsChecked = true;
+        Assert.That(bindedValue, Is.EqualTo("Blue"));
+        Assert.That(checkedValues, Is.EqualTo(new[] { false, false, true }));
+
+        bindedValue = "Red";
+        StateHasChanged();
+        Assert.That(checkedValues, Is.EqualTo(new[] { true, false, false }));
+    }
+
+    [Test]
+    public async Task SelectedRadioButtonShouldBeUpdatedBasedOnBindedValue()
+    {
+        int bindedValue = 0;
+        var radioGroup = await Render<MC.Layout>(
+    @<RadioButtonGroup @bind-SelectedValue="bindedValue">
+        <RadioButton Value="42" />
+        <RadioButton Value="43" />
+        <RadioButton Value="44" />
+    </RadioButtonGroup>
+    );
+
+        var radioButtons = radioGroup.Children.Cast<MC.RadioButton>().ToArray();
+        bool[] checkedValues() => radioButtons.Select(r => r.IsChecked).ToArray();
+
+        Assert.That(checkedValues, Has.All.False);
+
+        bindedValue = 43;
+        StateHasChanged();
+        Assert.That(checkedValues, Is.EqualTo(new[] { false, true, false }));
+
+        bindedValue = 44;
+        StateHasChanged();
+        Assert.That(checkedValues, Is.EqualTo(new[] { false, false, true }));
+    }
+
+    [Test]
+    public async Task SetTextAndValueToRadioButton()
+    {
+        var button = await Render<MC.RadioButton>(@<RadioButton Text="Second" Value="2" />);
+
+        Assert.That(button.Value, Is.EqualTo(2));
+        Assert.That(button.Content, Is.EqualTo("Second"));
+    }
+
+
+    [Test]
+    public async Task SetValueOnlyToRadioButton()
+    {
+        var button = await Render<MC.RadioButton>(@<RadioButton Value="42" />);
+
+        Assert.That(button.Value, Is.EqualTo(42));
+        Assert.That(button.Content, Is.EqualTo("42"));
+    }
+
+    [Test]
+    public async Task ShouldBeAbleToSetControlTemplate()
+    {
+        var button = await Render<MC.RadioButton>(
+    @<RadioButton>
+        <ControlTemplate>
+            <Label>Radio Template</Label>
+        </ControlTemplate>
+    </RadioButton>
+    );
+
+        var templateRoot = button.GetTemplateContent<MC.Label>();
+        Assert.That(templateRoot.Text, Is.EqualTo("Radio Template"));
+    }
+}

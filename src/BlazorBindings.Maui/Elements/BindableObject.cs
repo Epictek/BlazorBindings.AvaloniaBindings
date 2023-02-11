@@ -5,7 +5,7 @@ using BlazorBindings.Core;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using System;
-using System.ComponentModel;
+using System.Runtime.Versioning;
 using System.Threading.Tasks;
 using MC = Microsoft.Maui.Controls;
 
@@ -23,8 +23,8 @@ namespace BlazorBindings.Maui.Elements
             {
                 HandleParameter(parameterValue.Name, parameterValue.Value);
             }
-
-            return base.SetParametersAsync(ParameterView.Empty);
+            StateHasChanged();
+            return Task.CompletedTask;
         }
 
         protected sealed override void RenderAttributes(AttributesBuilder builder)
@@ -51,7 +51,7 @@ namespace BlazorBindings.Maui.Elements
             RenderAdditionalPartialElementContent(builder, ref sequence);
         }
 
-        [EditorBrowsable(EditorBrowsableState.Never)]
+        [RequiresPreviewFeatures]
         protected virtual void RenderAdditionalPartialElementContent(RenderTreeBuilder builder, ref int sequence) { }
 
         protected virtual bool HandleAdditionalParameter(string name, object value) => false;

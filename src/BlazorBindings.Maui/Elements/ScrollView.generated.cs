@@ -6,7 +6,6 @@
 // </auto-generated>
 
 using BlazorBindings.Core;
-using BlazorBindings.Maui.Elements.Handlers;
 using MC = Microsoft.Maui.Controls;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
@@ -15,18 +14,40 @@ using System.Threading.Tasks;
 
 namespace BlazorBindings.Maui.Elements
 {
+    /// <summary>
+    /// An element capable of scrolling if its Content requires.
+    /// </summary>
     public partial class ScrollView : BlazorBindings.Maui.Elements.Compatibility.Layout
     {
         static ScrollView()
         {
-            ElementHandlerRegistry.RegisterPropertyContentHandler<ScrollView>(nameof(ChildContent),
-                (renderer, parent, component) => new ContentPropertyHandler<MC.ScrollView>((x, value) => x.Content = (MC.View)value));
             RegisterAdditionalHandlers();
         }
 
+        /// <summary>
+        /// Gets or sets a value that controls when the horizontal scroll bar is visible.
+        /// </summary>
+        /// <value>
+        /// A value that controls when the horizontal scroll bar is visible.
+        /// </value>
         [Parameter] public ScrollBarVisibility? HorizontalScrollBarVisibility { get; set; }
+        /// <summary>
+        /// Gets or sets the scrolling direction of the ScrollView.
+        /// </summary>
         [Parameter] public ScrollOrientation? Orientation { get; set; }
+        /// <summary>
+        /// Gets or sets a value that controls when the vertical scroll bar is visible.
+        /// </summary>
+        /// <value>
+        /// A value that controls when the vertical scroll bar is visible.
+        /// </value>
         [Parameter] public ScrollBarVisibility? VerticalScrollBarVisibility { get; set; }
+        /// <summary>
+        /// Gets or sets a <see cref="T:Microsoft.Maui.Controls.View" /> to display in the <see cref="T:Microsoft.Maui.Controls.ScrollView" />.
+        /// </summary>
+        /// <value>
+        /// The <see cref="T:Microsoft.Maui.Controls.View" /> that is displayed.
+        /// </value>
         [Parameter] public RenderFragment ChildContent { get; set; }
         [Parameter] public EventCallback<MC.ScrolledEventArgs> OnScrolled { get; set; }
 
@@ -82,7 +103,7 @@ namespace BlazorBindings.Maui.Elements
         protected override void RenderAdditionalElementContent(RenderTreeBuilder builder, ref int sequence)
         {
             base.RenderAdditionalElementContent(builder, ref sequence);
-            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(ScrollView), ChildContent);
+            RenderTreeBuilderHelper.AddContentProperty<MC.ScrollView>(builder, sequence++, ChildContent, (x, value) => x.Content = (MC.View)value);
         }
 
         static partial void RegisterAdditionalHandlers();

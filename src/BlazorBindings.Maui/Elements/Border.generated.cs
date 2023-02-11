@@ -6,7 +6,6 @@
 // </auto-generated>
 
 using BlazorBindings.Core;
-using BlazorBindings.Maui.Elements.Handlers;
 using MC = Microsoft.Maui.Controls;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
@@ -21,12 +20,6 @@ namespace BlazorBindings.Maui.Elements
     {
         static Border()
         {
-            ElementHandlerRegistry.RegisterPropertyContentHandler<Border>(nameof(ChildContent),
-                (renderer, parent, component) => new ContentPropertyHandler<MC.Border>((x, value) => x.Content = (MC.View)value));
-            ElementHandlerRegistry.RegisterPropertyContentHandler<Border>(nameof(Stroke),
-                (renderer, parent, component) => new ContentPropertyHandler<MC.Border>((x, value) => x.Stroke = (MC.Brush)value));
-            ElementHandlerRegistry.RegisterPropertyContentHandler<Border>(nameof(StrokeShape),
-                (renderer, parent, component) => new ContentPropertyHandler<MC.Border>((x, value) => x.StrokeShape = (IShape)value));
             RegisterAdditionalHandlers();
         }
 
@@ -117,9 +110,9 @@ namespace BlazorBindings.Maui.Elements
         protected override void RenderAdditionalElementContent(RenderTreeBuilder builder, ref int sequence)
         {
             base.RenderAdditionalElementContent(builder, ref sequence);
-            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(Border), ChildContent);
-            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(Border), Stroke);
-            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(Border), StrokeShape);
+            RenderTreeBuilderHelper.AddContentProperty<MC.Border>(builder, sequence++, ChildContent, (x, value) => x.Content = (MC.View)value);
+            RenderTreeBuilderHelper.AddContentProperty<MC.Border>(builder, sequence++, Stroke, (x, value) => x.Stroke = (MC.Brush)value);
+            RenderTreeBuilderHelper.AddContentProperty<MC.Border>(builder, sequence++, StrokeShape, (x, value) => x.StrokeShape = (IShape)value);
         }
 
         static partial void RegisterAdditionalHandlers();

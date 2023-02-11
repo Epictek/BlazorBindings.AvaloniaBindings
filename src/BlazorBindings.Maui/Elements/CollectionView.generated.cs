@@ -12,6 +12,9 @@ using System.Threading.Tasks;
 
 namespace BlazorBindings.Maui.Elements
 {
+    /// <summary>
+    /// A <see cref="T:Microsoft.Maui.Controls.SelectableItemsView" /> that presents a collection of items.
+    /// </summary>
     public partial class CollectionView<T> : ReorderableItemsView<T>
     {
         static CollectionView()

@@ -1,0 +1,107 @@
+﻿@using System.Reflection;
+@inherits ElementTestBase
+
+@code {
+    [Test]
+    public async Task OnTapInvokesCallback()
+    {
+        bool tapped = false;
+        var view = await Render<MC.View>(@<BoxView OnTap="() => tapped = true" />);
+
+        SingleTap(view);
+
+        Assert.That(tapped, Is.True);
+    }
+
+    [Test]
+    public async Task OnDoubleTapInvokesCallback()
+    {
+        bool tapped = false;
+        var view = await Render<MC.View>(@<BoxView OnDoubleTap="() => tapped = true" />);
+
+        DoubleTap(view);
+
+        Assert.That(tapped, Is.True);
+    }
+
+    [Test]
+    public async Task OnSwipeInvokesCallback()
+    {
+        SwipeDirection? swipeDirection = null;
+        var view = await Render<MC.View>(@<BoxView OnSwipe="arg => swipeDirection = arg.Direction" />);
+
+        Swipe(view, SwipeDirection.Left);
+        Assert.That(swipeDirection, Is.EqualTo(SwipeDirection.Left));
+
+        Swipe(view, SwipeDirection.Right);
+        Assert.That(swipeDirection, Is.EqualTo(SwipeDirection.Right));
+
+        Swipe(view, SwipeDirection.Up);
+        Assert.That(swipeDirection, Is.EqualTo(SwipeDirection.Up));
+
+        Swipe(view, SwipeDirection.Down);
+        Assert.That(swipeDirection, Is.EqualTo(SwipeDirection.Down));
+    }
+
+    [Test]
+    public async Task OnPinchUpdateInvokesCallback()
+    {
+        GestureStatus? status = null;
+        var view = await Render<MC.View>(@<BoxView OnPinchUpdate="arg => status = arg.Status" />);
+
+        SendPinch(view);
+        Assert.That(status, Is.EqualTo(GestureStatus.Running));
+
+        SendPinchEnded(view);
+        Assert.That(status, Is.EqualTo(GestureStatus.Completed));
+    }
+
+    [Test]
+    public async Task OnPanUpdateInvokesCallback()
+    {
+        (double, double) totalXY = (0, 0);
+        var view = await Render<MC.View>(@<BoxView OnPanUpdate="arg => totalXY = (arg.TotalX, arg.TotalY)" />);
+
+        SendPan(view, 42, -24);
+        Assert.That(totalXY, Is.EqualTo((42, -24)));
+    }
+
+    private void SingleTap(MC.View view)
+    {
+        var gestureRecognizer = view.GestureRecognizers.OfType<MC.TapGestureRecognizer>().First(g => g.NumberOfTapsRequired == 1);
+        var method = typeof(MC.TapGestureRecognizer).GetMethods(BindingFlags.Instance | BindingFlags.NonPublic).First(m => m.Name == "SendTapped");
+        method.Invoke(gestureRecognizer, new[] { view, null });
+    }
+
+    private void DoubleTap(MC.View view)
+    {
+        var gestureRecognizer = view.GestureRecognizers.OfType<MC.TapGestureRecognizer>().First(g => g.NumberOfTapsRequired == 2);
+        var method = typeof(MC.TapGestureRecognizer).GetMethods(BindingFlags.Instance | BindingFlags.NonPublic).First(m => m.Name == "SendTapped");
+        method.Invoke(gestureRecognizer, new[] { view, null });
+    }
+
+    private void Swipe(MC.View view, SwipeDirection direction)
+    {
+        var gestureRecognizer = view.GestureRecognizers.OfType<MC.SwipeGestureRecognizer>().First();
+        gestureRecognizer.SendSwiped(view, direction);
+    }
+
+    private void SendPinch(MC.View view)
+    {
+        var gestureRecognizer = (MC.IPinchGestureController)view.GestureRecognizers.OfType<MC.PinchGestureRecognizer>().First();
+        gestureRecognizer.SendPinch(view, 2, Point.Zero);
+    }
+
+    private void SendPinchEnded(MC.View view)
+    {
+        var gestureRecognizer = (MC.IPinchGestureController)view.GestureRecognizers.OfType<MC.PinchGestureRecognizer>().First();
+        gestureRecognizer.SendPinchEnded(view);
+    }
+
+    private void SendPan(MC.View view, double totalX, double totalY)
+    {
+        var gestureRecognizer = (MC.IPanGestureController)view.GestureRecognizers.OfType<MC.PanGestureRecognizer>().First();
+        gestureRecognizer.SendPan(view, totalX, totalY, 123);
+    }
+
+}

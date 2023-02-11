@@ -29,10 +29,10 @@ using System.Runtime.CompilerServices;
     Exclude = new[] { nameof(Element.Handler), nameof(Element.ChildAdded), nameof(Element.ChildRemoved),
         nameof(Element.DescendantAdded), nameof(Element.DescendantRemoved), nameof(Element.ParentChanged),
         nameof(Element.ParentChanging), nameof(Element.HandlerChanged), nameof(Element.HandlerChanging) })]
-[assembly: GenerateComponent(typeof(Entry))]
+[assembly: GenerateComponent(typeof(Entry), IsGeneric = true)]
 [assembly: GenerateComponent(typeof(FlexLayout))]
 [assembly: GenerateComponent(typeof(FlyoutItem))]
-[assembly: GenerateComponent(typeof(FlyoutPage), Aliases = new[] { "Detail:Detail" })]
+[assembly: GenerateComponent(typeof(FlyoutPage), Exclude = new[] { nameof(FlyoutPage.Detail) })]
 [assembly: GenerateComponent(typeof(Frame))]
 [assembly: GenerateComponent(typeof(GestureElement))]
 [assembly: GenerateComponent(typeof(GradientBrush))]
@@ -44,7 +44,10 @@ using System.Runtime.CompilerServices;
 [assembly: GenerateComponent(typeof(HorizontalStackLayout))]
 [assembly: GenerateComponent(typeof(Image))]
 [assembly: GenerateComponent(typeof(ImageButton))]
-[assembly: GenerateComponent(typeof(InputView))]
+[assembly: GenerateComponent(typeof(IndicatorView),
+    PropertyChangedEvents = new[] { nameof(IndicatorView.Position) },
+    Exclude = new[] { nameof(IndicatorView.ItemsSource), nameof(IndicatorView.IndicatorLayout) })]
+[assembly: GenerateComponent(typeof(InputView), Exclude = new[] { nameof(InputView.Text), nameof(InputView.TextChanged) })]
 [assembly: GenerateComponent(typeof(ItemsView),
     GenericProperties = new[] { nameof(ItemsView.ItemsSource), nameof(ItemsView.ItemTemplate) },
     ContentProperties = new[] { nameof(ItemsView.EmptyView) },
@@ -52,13 +55,23 @@ using System.Runtime.CompilerServices;
 [assembly: GenerateComponent(typeof(Label))]
 [assembly: GenerateComponent(typeof(Layout))]
 [assembly: GenerateComponent(typeof(LinearGradientBrush))]
+[assembly: GenerateComponent(typeof(ListView),
+    Exclude = new[] { nameof(ListView.ItemTemplate) },
+    Include = new[] { nameof(ListView.ItemsSource) },
+    GenericProperties = new[] {
+        nameof(ListView.ItemsSource),
+        $"{nameof(ListView.GroupHeaderTemplate)}:System.Object",
+        nameof(ListView.GroupDisplayBinding),
+        nameof(ListView.GroupShortNameBinding)},
+    Aliases = new[] {
+        $"{nameof(ListView.HeaderTemplate)}:Header",
+        $"{nameof(ListView.FooterTemplate)}:Footer" })]
 [assembly: GenerateComponent(typeof(MenuItem))]
 [assembly: GenerateComponent(typeof(NavigableElement))]
 [assembly: GenerateComponent(typeof(Page))]
 [assembly: GenerateComponent(typeof(Picker),
-    GenericProperties = new[] { nameof(Picker.ItemsSource), nameof(Picker.SelectedItem) },
-    PropertyChangedEvents = new[] { nameof(Picker.SelectedItem) },
-    Exclude = new[] { nameof(Picker.ItemDisplayBinding) })]
+    GenericProperties = new[] { nameof(Picker.ItemsSource), nameof(Picker.SelectedItem), nameof(Picker.ItemDisplayBinding) },
+    PropertyChangedEvents = new[] { nameof(Picker.SelectedItem) })]
 [assembly: GenerateComponent(typeof(ProgressBar))]
 [assembly: GenerateComponent(typeof(RadialGradientBrush))]
 [assembly: GenerateComponent(typeof(RadioButton))]
@@ -67,6 +80,7 @@ using System.Runtime.CompilerServices;
     PropertyChangedEvents = new[] { nameof(RefreshView.IsRefreshing) })]
 [assembly: GenerateComponent(typeof(ReorderableItemsView), Exclude = new[] { nameof(ReorderableItemsView.CanMixGroups) })]
 [assembly: GenerateComponent(typeof(ScrollView))]
+[assembly: GenerateComponent(typeof(SearchBar))]
 [assembly: GenerateComponent(typeof(SearchHandler),
     GenericProperties = new[] { nameof(SearchHandler.ItemsSource), nameof(SearchHandler.SelectedItem), nameof(SearchHandler.ItemTemplate) },
     PropertyChangedEvents = new[] { nameof(SearchHandler.Query), nameof(SearchHandler.SelectedItem) })]
@@ -98,10 +112,21 @@ using System.Runtime.CompilerServices;
     ContentProperties = new[] { nameof(StructuredItemsView.Header), nameof(StructuredItemsView.Footer) },
     Exclude = new[] { nameof(StructuredItemsView.HeaderTemplate), nameof(StructuredItemsView.FooterTemplate) })]
 [assembly: GenerateComponent(typeof(Stepper))]
+[assembly: GenerateComponent(typeof(SwipeView),
+    ContentProperties = new[] { nameof(SwipeView.LeftItems), nameof(SwipeView.RightItems), nameof(SwipeView.TopItems), nameof(SwipeView.BottomItems) })]
+[assembly: GenerateComponent(typeof(SwipeItems),
+    Exclude = new[] { nameof(SwipeItems.CollectionChanged) })]
+[assembly: GenerateComponent(typeof(SwipeItem))]
+[assembly: GenerateComponent(typeof(SwipeItemView))]
 [assembly: GenerateComponent(typeof(Switch))]
 [assembly: GenerateComponent(typeof(Tab))]
 [assembly: GenerateComponent(typeof(TabBar))]
 [assembly: GenerateComponent(typeof(TabbedPage))]
+[assembly: GenerateComponent(typeof(TableView),
+    Exclude = new[] { nameof(TableView.Root) })]
+[assembly: GenerateComponent(typeof(TableRoot))]
+[assembly: GenerateComponent(typeof(TableSection))]
+[assembly: GenerateComponent(typeof(TableSectionBase))]
 [assembly: GenerateComponent(typeof(TemplatedPage), Exclude = new[] { nameof(TemplatedPage.ControlTemplate) })]
 [assembly: GenerateComponent(typeof(TemplatedView))]
 [assembly: GenerateComponent(typeof(TimePicker), Exclude = new[] { nameof(TimePicker.Time) })]
@@ -110,6 +135,16 @@ using System.Runtime.CompilerServices;
 [assembly: GenerateComponent(typeof(View))]
 [assembly: GenerateComponent(typeof(VisualElement), Exclude = new[] { nameof(VisualElement.BackgroundColor) })]
 [assembly: GenerateComponent(typeof(WebView))]
+
+// Cells
+[assembly: GenerateComponent(typeof(TextCell))]
+[assembly: GenerateComponent(typeof(ImageCell))]
+[assembly: GenerateComponent(typeof(SwitchCell))]
+[assembly: GenerateComponent(typeof(EntryCell),
+    PropertyChangedEvents = new[] { nameof(EntryCell.Text) })]
+[assembly: GenerateComponent(typeof(ViewCell))]
+[assembly: GenerateComponent(typeof(Cell))]
+
 
 // GestureRecognizers
 [assembly: GenerateComponent(typeof(GestureRecognizer))]

@@ -13,6 +13,9 @@ using System.Threading.Tasks;
 
 namespace BlazorBindings.Maui.Elements
 {
+    /// <summary>
+    /// An element containing a single child, with some framing options.
+    /// </summary>
     public partial class Frame : ContentView
     {
         static Frame()
@@ -20,8 +23,23 @@ namespace BlazorBindings.Maui.Elements
             RegisterAdditionalHandlers();
         }
 
+        /// <summary>
+        /// Gets or sets the border color for the frame.
+        /// </summary>
+        /// <value>
+        /// The border color for the frame.
+        /// </value>
         [Parameter] public Color BorderColor { get; set; }
+        /// <summary>
+        /// Gets or sets the corner radius of the frame.
+        /// </summary>
         [Parameter] public float? CornerRadius { get; set; }
+        /// <summary>
+        /// Gets or sets a flag indicating if the Frame has a shadow displayed.
+        /// </summary>
+        /// <value>
+        /// A <see cref="T:System.Boolean" /> indicating whether or not the Frame has a shadow. Default is <see langword="true" />.
+        /// </value>
         [Parameter] public bool? HasShadow { get; set; }
 
         public new MC.Frame NativeControl => (MC.Frame)((BindableObject)this).NativeControl;

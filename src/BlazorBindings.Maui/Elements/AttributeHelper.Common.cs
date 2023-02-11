@@ -2,13 +2,16 @@
 // Licensed under the MIT license.
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Runtime.Versioning;
 
 namespace BlazorBindings.Maui.Elements
 {
+    [RequiresPreviewFeatures]
     public static partial class AttributeHelper
     {
         public static bool GetBool(object value, bool defaultValueIfNull = default)
@@ -70,6 +73,11 @@ namespace BlazorBindings.Maui.Elements
         public static IList<string> GetStringList(object attributeValue)
         {
             return ((string)attributeValue)?.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim()).ToList();
+        }
+
+        public static IList GetIList<T>(IList<T> listT)
+        {
+            return listT as IList ?? throw new ArgumentException("Property requires a value implementing both IList and IList<T>.");
         }
     }
 }

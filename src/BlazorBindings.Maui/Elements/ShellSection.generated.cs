@@ -12,6 +12,9 @@ using System.Threading.Tasks;
 
 namespace BlazorBindings.Maui.Elements
 {
+    /// <summary>
+    /// Grouped content in a Shell application, navigable by bottom tabs.
+    /// </summary>
     public partial class ShellSection : ShellGroupItem
     {
         static ShellSection()

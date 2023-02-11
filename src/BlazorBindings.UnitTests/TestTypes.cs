@@ -3,9 +3,12 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Maui;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui.Controls.Internals;
 using Microsoft.Maui.Hosting;
 using System;
 using System.Collections.Generic;
+using System.Runtime.ExceptionServices;
 using System.Threading;
 using System.Threading.Tasks;
 using MauiDispatching = Microsoft.Maui.Dispatching;
@@ -23,6 +26,8 @@ namespace BlazorBindings.UnitTests
                 MauiContext = new MauiContext(serviceProvider),
                 VirtualView = this
             };
+
+            DependencyService.RegisterSingleton(new TestSystemResources());
         }
 
         class TestHandler : IElementHandler
@@ -36,6 +41,13 @@ namespace BlazorBindings.UnitTests
             public void SetVirtualView(IElement view) => VirtualView = view;
             public void UpdateValue(string property) { }
         }
+
+#pragma warning disable CS0612 // Type or member is obsolete. Unfortunately, I need to register this, otherwise some tests fail.
+        class TestSystemResources : ISystemResourcesProvider
+#pragma warning restore CS0612 // Type or member is obsolete
+        {
+            public IResourceDictionary GetSystemResources() => new ResourceDictionary();
+        }
     }
 
     public static class TestServiceProvider
@@ -43,7 +55,8 @@ namespace BlazorBindings.UnitTests
         public static IServiceProvider Create()
         {
             var builder = MauiApp.CreateBuilder();
-            builder.Services.AddScoped<MauiBlazorBindingsRenderer, TestBlazorBindingsRenderer>();
+            builder.UseMauiBlazorBindings();
+            builder.Services.AddSingleton<MauiBlazorBindingsRenderer, TestBlazorBindingsRenderer>();
             builder.Services.AddSingleton<MauiDispatching.IDispatcher, TestDispatcher>();
             return builder.Build().Services;
         }
@@ -73,12 +86,16 @@ namespace BlazorBindings.UnitTests
         {
         }
 
+        public bool ThrowExceptions { get; set; } = true;
+
         public List<Exception> Exceptions { get; } = new();
 
         protected override void HandleException(Exception exception)
         {
             Exceptions.Add(exception);
-            base.HandleException(exception);
+
+            if (ThrowExceptions)
+                ExceptionDispatchInfo.Throw(exception);
         }
 
         public override Dispatcher Dispatcher => NullDispatcher.Instance;

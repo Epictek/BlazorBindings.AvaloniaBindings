@@ -11,16 +11,16 @@ namespace BlazorBindings.Maui.ComponentGenerator.Extensions
             return typeSymbol.GetMembers(method).FirstOrDefault() as IMethodSymbol;
         }
 
-        public static IEventSymbol GetEvent(this ITypeSymbol typeSymbol, string eventName, bool includeBaseTypes)
+        public static ISymbol GetMember(this ITypeSymbol typeSymbol, string memberName, bool includeBaseTypes)
         {
             var currentType = typeSymbol;
 
             while (currentType != null)
             {
-                var eventSymbol = currentType.GetMembers(eventName).FirstOrDefault() as IEventSymbol;
+                var symbol = currentType.GetMembers(memberName).FirstOrDefault();
 
-                if (eventSymbol != null || !includeBaseTypes)
-                    return eventSymbol;
+                if (symbol != null || !includeBaseTypes)
+                    return symbol;
 
                 currentType = currentType.BaseType;
             }
@@ -29,22 +29,14 @@ namespace BlazorBindings.Maui.ComponentGenerator.Extensions
             return null;
         }
 
+        public static IEventSymbol GetEvent(this ITypeSymbol typeSymbol, string eventName, bool includeBaseTypes)
+        {
+            return GetMember(typeSymbol, eventName, includeBaseTypes) as IEventSymbol;
+        }
+
         public static IPropertySymbol GetProperty(this ITypeSymbol typeSymbol, string propName, bool includeBaseTypes = false)
         {
-            var currentType = typeSymbol;
-
-            while (currentType != null)
-            {
-                var eventSymbol = currentType.GetMembers(propName).FirstOrDefault() as IPropertySymbol;
-
-                if (eventSymbol != null || !includeBaseTypes)
-                    return eventSymbol;
-
-                currentType = currentType.BaseType;
-            }
-
-
-            return null;
+            return GetMember(typeSymbol, propName, includeBaseTypes) as IPropertySymbol;
         }
 
         public static string GetFullName(this INamespaceOrTypeSymbol namespaceOrType)

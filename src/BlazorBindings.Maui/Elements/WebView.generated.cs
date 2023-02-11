@@ -13,6 +13,9 @@ using System.Threading.Tasks;
 
 namespace BlazorBindings.Maui.Elements
 {
+    /// <summary>
+    /// A <see cref="T:Microsoft.Maui.Controls.View" /> that presents HTML content.
+    /// </summary>
     public partial class WebView : View
     {
         static WebView()
@@ -20,7 +23,13 @@ namespace BlazorBindings.Maui.Elements
             RegisterAdditionalHandlers();
         }
 
+        /// <summary>
+        /// When set this will act as a sync for cookies.
+        /// </summary>
         [Parameter] public CookieContainer Cookies { get; set; }
+        /// <summary>
+        /// Gets or sets the <see cref="T:Microsoft.Maui.Controls.WebViewSource" /> object that represents the location that this <see cref="T:Microsoft.Maui.Controls.WebView" /> object displays.
+        /// </summary>
         [Parameter] public MC.WebViewSource Source { get; set; }
         [Parameter] public EventCallback<MC.WebNavigatedEventArgs> OnNavigated { get; set; }
         [Parameter] public EventCallback<MC.WebNavigatingEventArgs> OnNavigating { get; set; }

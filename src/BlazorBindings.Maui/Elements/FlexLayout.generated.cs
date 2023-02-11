@@ -13,6 +13,9 @@ using System.Threading.Tasks;
 
 namespace BlazorBindings.Maui.Elements
 {
+    /// <summary>
+    /// A Flexbox-like layout that lays out child elements in optionally wrappable rows or columns of child elements.
+    /// </summary>
     public partial class FlexLayout : Layout
     {
         static FlexLayout()
@@ -20,11 +23,44 @@ namespace BlazorBindings.Maui.Elements
             RegisterAdditionalHandlers();
         }
 
+        /// <summary>
+        /// Gets or sets a value that controls how multiple rows or columns of child elements are aligned.
+        /// </summary>
         [Parameter] public FlexAlignContent? AlignContent { get; set; }
+        /// <summary>
+        /// Gets or sets a value that controls how child elements are laid out within their row or column.
+        /// </summary>
+        /// <value>
+        /// A value that controls how child elements are laid out within their row or column.
+        /// </value>
         [Parameter] public FlexAlignItems? AlignItems { get; set; }
+        /// <summary>
+        /// Gets or sets the flex direction for child elements within this layout.
+        /// </summary>
+        /// <value>
+        /// The flex direction for child elements within this layout.
+        /// </value>
         [Parameter] public FlexDirection? Direction { get; set; }
+        /// <summary>
+        /// Gets or sets a value that that describes how child elements are justified when there is extra space around them.
+        /// </summary>
+        /// <value>
+        /// A value that that describes how child elements are justified when there is extra space around them.
+        /// </value>
         [Parameter] public FlexJustify? JustifyContent { get; set; }
+        /// <summary>
+        /// Gets or sets a value that controls whether the coordinates of child elements are specified in absolute or relative terms.
+        /// </summary>
+        /// <value>
+        /// A value that controls whether the coordinates of child elements are specified in absolute or relative terms.
+        /// </value>
         [Parameter] public FlexPosition? Position { get; set; }
+        /// <summary>
+        /// Gets or sets a value that controls whether and how child elements within this layout wrap.
+        /// </summary>
+        /// <value>
+        /// A value that controls whether and how child elements within this layout wrap.
+        /// </value>
         [Parameter] public FlexWrap? Wrap { get; set; }
 
         public new MC.FlexLayout NativeControl => (MC.FlexLayout)((BindableObject)this).NativeControl;

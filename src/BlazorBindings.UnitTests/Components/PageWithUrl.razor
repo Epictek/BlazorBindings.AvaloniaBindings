@@ -1,11 +1,30 @@
-﻿@page "/test/path/{Title}"
+﻿@implements IDisposable
+@page "/test/path/{Title}"
 
-<ContentPage Title="@Title">
+<ContentPage @ref="_page" Title="@Title">
     <NonPageContent />
 </ContentPage>
 
 @code {
+    ContentPage _page;
+
     [Parameter] public string Title { get; set; }
+    public event Action OnDispose;
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // This is needed to be able to get component from tests.
+            _page.NativeControl.SetValue(TestProperties.ComponentProperty, this);
+        }
+    }
+
+    public void Dispose()
+    {
+        OnDispose?.Invoke();
+        OnDispose = null;
+    }
 
     public static void ValidateContent(MC.Element content)
     {

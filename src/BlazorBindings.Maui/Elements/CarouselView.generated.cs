@@ -13,6 +13,9 @@ using System.Threading.Tasks;
 
 namespace BlazorBindings.Maui.Elements
 {
+    /// <summary>
+    /// A <see cref="T:Microsoft.Maui.Controls.ItemsView" /> whose scrollable child views 'snap' into place.
+    /// </summary>
     public partial class CarouselView<T> : ItemsView<T>
     {
         static CarouselView()

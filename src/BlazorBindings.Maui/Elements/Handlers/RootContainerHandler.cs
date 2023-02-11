@@ -4,7 +4,7 @@
 using BlazorBindings.Core;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
+using System.Runtime.Versioning;
 using System.Threading.Tasks;
 using MC = Microsoft.Maui.Controls;
 
@@ -15,7 +15,7 @@ namespace BlazorBindings.Maui.Elements.Handlers
     /// from a Blazor component.
     /// </summary>
     /// <remarks>Experimental API, subject to change.</remarks>
-    [EditorBrowsable(EditorBrowsableState.Never)]
+    [RequiresPreviewFeatures]
     public class RootContainerHandler : IMauiContainerElementHandler, INonChildContainerElement
     {
         private TaskCompletionSource<MC.BindableObject> _taskCompletionSource;

@@ -6,7 +6,6 @@
 // </auto-generated>
 
 using BlazorBindings.Core;
-using BlazorBindings.Maui.Elements.Handlers;
 using MC = Microsoft.Maui.Controls;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
@@ -17,38 +16,151 @@ using System.Threading.Tasks;
 
 namespace BlazorBindings.Maui.Elements
 {
+    /// <summary>
+    /// A <see cref="T:Microsoft.Maui.Controls.Element" /> that occupies an area on the screen, has a visual appearance, and can obtain touch input.
+    /// </summary>
     public abstract partial class VisualElement : NavigableElement
     {
         static VisualElement()
         {
-            ElementHandlerRegistry.RegisterPropertyContentHandler<VisualElement>(nameof(Background),
-                (renderer, parent, component) => new ContentPropertyHandler<MC.VisualElement>((x, value) => x.Background = (MC.Brush)value));
-            ElementHandlerRegistry.RegisterPropertyContentHandler<VisualElement>(nameof(Shadow),
-                (renderer, parent, component) => new ContentPropertyHandler<MC.VisualElement>((x, value) => x.Shadow = (MC.Shadow)value));
             RegisterAdditionalHandlers();
         }
 
+        /// <summary>
+        /// Gets or sets the X component of the center point for any transform, relative to the bounds of the element.
+        /// </summary>
+        /// <value>
+        /// The value that declares the X component of the transform. The default value is 0.5.
+        /// </value>
         [Parameter] public double? AnchorX { get; set; }
+        /// <summary>
+        /// Gets or sets the Y component of the center point for any transform, relative to the bounds of the element.
+        /// </summary>
+        /// <value>
+        /// The value that declares the Y component of the transform. The default value is 0.5.
+        /// </value>
         [Parameter] public double? AnchorY { get; set; }
+        /// <summary>
+        /// Gets or sets the layout flow direction.
+        /// </summary>
+        /// <value>
+        /// The layout flow direction.
+        /// </value>
         [Parameter] public FlowDirection? FlowDirection { get; set; }
         [Parameter] public Rect? Frame { get; set; }
+        /// <summary>
+        /// Gets or sets the desired height override of this element.
+        /// </summary>
+        /// <value>
+        /// The height this element desires to be.
+        /// </value>
         [Parameter] public double? HeightRequest { get; set; }
+        /// <summary>
+        /// Gets or sets a value indicating whether this element should be involved in the user interaction cycle.
+        /// </summary>
+        /// <value>
+        /// <see langword="false" /> if the element and its children should receive input; <see langword="true" /> if neither the element nor its children should receive input and should, instead, pass inputs to the elements that are visually behind the current visual element. Default is <see langword="false" />.
+        /// </value>
         [Parameter] public bool? InputTransparent { get; set; }
+        /// <summary>
+        /// Gets or sets a value indicating whether this element is enabled in the user interface.
+        /// </summary>
+        /// <value>
+        /// <see langword="true" /> if the element is enabled; otherwise, <see langword="false" />. The default value is <see langword="true" />
+        /// </value>
         [Parameter] public bool? IsEnabled { get; set; }
+        /// <summary>
+        /// Gets or sets a value that determines whether this elements should be part of the visual tree or not.
+        /// </summary>
+        /// <value>
+        /// <see langword="true" /> if the element should be rendered; otherwise, <see langword="false" />. Default value is <see langword="true" />.
+        /// </value>
         [Parameter] public bool? IsVisible { get; set; }
         [Parameter] public double? MaximumHeightRequest { get; set; }
         [Parameter] public double? MaximumWidthRequest { get; set; }
+        /// <summary>
+        /// Gets or sets a value which overrides the minimum height the element will request during layout.
+        /// </summary>
+        /// <value>
+        /// The minimum height the element requires. Default value is -1.
+        /// </value>
         [Parameter] public double? MinimumHeightRequest { get; set; }
+        /// <summary>
+        /// Gets or sets a value which overrides the minimum width the element will request during layout.
+        /// </summary>
+        /// <value>
+        /// The minimum width the element requires. Default value is -1.
+        /// </value>
         [Parameter] public double? MinimumWidthRequest { get; set; }
+        /// <summary>
+        /// Gets or sets the opacity value applied to the element when it is rendered.
+        /// </summary>
+        /// <value>
+        /// The opacity value. Default opacity is 1.0. Values will be clamped between 0 and 1 on set.
+        /// </value>
         [Parameter] public double? Opacity { get; set; }
+        /// <summary>
+        /// Gets or sets the rotation (in degrees) about the Z-axis (affine rotation) when the element is rendered.
+        /// </summary>
+        /// <value>
+        /// The rotation about the Z-axis in degrees.
+        /// </value>
         [Parameter] public double? Rotation { get; set; }
+        /// <summary>
+        /// Gets or sets the rotation (in degrees) about the X-axis (perspective rotation) when the element is rendered.
+        /// </summary>
+        /// <value>
+        /// The rotation about the X-axis in degrees.
+        /// </value>
         [Parameter] public double? RotationX { get; set; }
+        /// <summary>
+        /// Gets or sets the rotation (in degrees) about the Y-axis (perspective rotation) when the element is rendered.
+        /// </summary>
+        /// <value>
+        /// The rotation about the Y-axis in degrees.
+        /// </value>
         [Parameter] public double? RotationY { get; set; }
+        /// <summary>
+        /// Gets or sets the scale factor applied to the element.
+        /// </summary>
+        /// <value>
+        /// The scale factor of the element. Default value is 1.0.
+        /// </value>
         [Parameter] public double? Scale { get; set; }
+        /// <summary>
+        /// Gets or sets a scale value to apply to the X direction.
+        /// </summary>
+        /// <value>
+        /// The scale value to apply to the X direction.
+        /// </value>
         [Parameter] public double? ScaleX { get; set; }
+        /// <summary>
+        /// Gets or sets a scale value to apply to the Y direction.
+        /// </summary>
+        /// <value>
+        /// The scale value to apply to the Y direction.
+        /// </value>
         [Parameter] public double? ScaleY { get; set; }
+        /// <summary>
+        /// Gets or sets the X translation delta of the element.
+        /// </summary>
+        /// <value>
+        /// The amount to translate the element.
+        /// </value>
         [Parameter] public double? TranslationX { get; set; }
+        /// <summary>
+        /// Gets or sets the Y translation delta of the element.
+        /// </summary>
+        /// <value>
+        /// The amount to translate the element.
+        /// </value>
         [Parameter] public double? TranslationY { get; set; }
+        /// <summary>
+        /// Gets or sets the desired width override of this element.
+        /// </summary>
+        /// <value>
+        /// The width this element desires to be.
+        /// </value>
         [Parameter] public double? WidthRequest { get; set; }
         [Parameter] public int? ZIndex { get; set; }
         [Parameter] public RenderFragment Background { get; set; }
@@ -315,8 +427,8 @@ namespace BlazorBindings.Maui.Elements
         protected override void RenderAdditionalElementContent(RenderTreeBuilder builder, ref int sequence)
         {
             base.RenderAdditionalElementContent(builder, ref sequence);
-            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(VisualElement), Background);
-            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(VisualElement), Shadow);
+            RenderTreeBuilderHelper.AddContentProperty<MC.VisualElement>(builder, sequence++, Background, (x, value) => x.Background = (MC.Brush)value);
+            RenderTreeBuilderHelper.AddContentProperty<MC.VisualElement>(builder, sequence++, Shadow, (x, value) => x.Shadow = (MC.Shadow)value);
         }
 
         static partial void RegisterAdditionalHandlers();

@@ -1,10 +1,10 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-using Buildalyzer;
-using Buildalyzer.Workspaces;
 using CommandLine;
+using Microsoft.Build.Locator;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.MSBuild;
 using System;
 using System.IO;
 using System.Linq;
@@ -24,6 +24,8 @@ namespace BlazorBindings.Maui.ComponentGenerator
 
         public static async Task Main(string[] args)
         {
+            MSBuildLocator.RegisterInstance(MSBuildLocator.QueryVisualStudioInstances().MaxBy(instance => instance.Version));
+
             await Parser.Default
                 .ParseArguments<Options>(args)
                 .WithParsedAsync(async o =>
@@ -72,17 +74,27 @@ namespace BlazorBindings.Maui.ComponentGenerator
                 .Where(a => a.AttributeClass?.ToDisplayString() == "BlazorBindings.Maui.ComponentGenerator.GenerateComponentAttribute")
                 .Select(a =>
                 {
+                    var typeSymbol = a.ConstructorArguments.FirstOrDefault().Value as INamedTypeSymbol;
+
+                    var propertiesAliases = GetNamedArgumentValues(a, "Aliases")
+                        .Select(v => v.Split(':'))
+                        .ToDictionary(v => v[0], v => v[1]);
+
+                    // Type alias has type name as a key.
+                    propertiesAliases.Remove(typeSymbol.Name, out var typeAlias);
+
                     return new GenerateComponentSettings
                     {
                         FileHeader = FileHeader,
-                        TypeSymbol = a.ConstructorArguments.FirstOrDefault().Value as INamedTypeSymbol,
+                        TypeAlias = typeAlias,
+                        TypeSymbol = typeSymbol,
                         Exclude = GetNamedArgumentValues(a, "Exclude").ToHashSet(),
                         Include = GetNamedArgumentValues(a, "Include").ToHashSet(),
                         ContentProperties = GetNamedArgumentValues(a, "ContentProperties").ToHashSet(),
                         PropertyChangedEvents = GetNamedArgumentValues(a, "PropertyChangedEvents"),
                         GenericProperties = GetNamedArgumentValues(a, "GenericProperties").Select(v => v.Split(':')).ToDictionary(v => v[0],
                             v => v.ElementAtOrDefault(1) is string genericArgName ? compilation.GetTypeByMetadataName(genericArgName) : null),
-                        Aliases = GetNamedArgumentValues(a, "Aliases").Select(v => v.Split(':')).ToDictionary(v => v[0], v => v[1]),
+                        Aliases = propertiesAliases,
                         IsGeneric = (a.NamedArguments.FirstOrDefault(a => a.Key == "IsGeneric").Value.Value as bool?) ?? false
                     };
                 })
@@ -117,10 +129,10 @@ namespace BlazorBindings.Maui.ComponentGenerator
         {
             Console.WriteLine("Creating project compilation.");
 
-            var manager = new AnalyzerManager();
-            var analyzer = manager.GetProject(o.ProjectPath);
-            var workspace = analyzer.GetWorkspace();
-            var compilation = await workspace.CurrentSolution.Projects.First().GetCompilationAsync();
+            var workspace = MSBuildWorkspace.Create();
+            var project = await workspace.OpenProjectAsync(o.ProjectPath);
+            var compilation = await project.GetCompilationAsync();
+
             return compilation;
         }
 

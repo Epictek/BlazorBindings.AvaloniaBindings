@@ -8,7 +8,7 @@ public static class MauiProgram
     {
         var builder = MauiApp.CreateBuilder();
         builder
-            .UseMauiApp<App>()
+            .UseMauiApp<BlazorBindingsApplication<AppShell>>()
             .UseMauiBlazorBindings()
             .ConfigureFonts(fonts =>
             {

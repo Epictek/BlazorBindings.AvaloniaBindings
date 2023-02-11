@@ -14,24 +14,63 @@ using System.Threading.Tasks;
 
 namespace BlazorBindings.Maui.Elements
 {
-    public partial class Entry : InputView
+    /// <summary>
+    /// Entry is a single line text entry. It is best used for collecting small discrete pieces of information, like usernames and passwords.
+    /// </summary>
+    public partial class Entry<T> : InputView
     {
         static Entry()
         {
             RegisterAdditionalHandlers();
         }
 
+        /// <summary>
+        /// Determines the behavior of the clear text button on this entry.
+        /// </summary>
         [Parameter] public ClearButtonVisibility? ClearButtonVisibility { get; set; }
+        /// <summary>
+        /// Gets or sets the position of the cursor. The value must be more than or equal to 0 and less or equal to the length of <see cref="P:Microsoft.Maui.Controls.InputView.Text" />.
+        /// </summary>
         [Parameter] public int? CursorPosition { get; set; }
+        /// <summary>
+        /// Gets or sets a value that indicates whether the font for the text of this entry is bold, italic, or neither.
+        /// </summary>
         [Parameter] public MC.FontAttributes? FontAttributes { get; set; }
+        /// <summary>
+        /// Determines whether or not the font of this entry should scale automatically according to the operating system settings. Default value is <see langword="true" />.
+        /// </summary>
         [Parameter] public bool? FontAutoScalingEnabled { get; set; }
+        /// <summary>
+        /// Gets or sets the font family for the text of this entry.
+        /// </summary>
         [Parameter] public string FontFamily { get; set; }
+        /// <summary>
+        /// Gets or sets the size of the font for the text of this entry.
+        /// </summary>
         [Parameter] public double? FontSize { get; set; }
+        /// <summary>
+        /// Gets or sets the horizontal text alignment.
+        /// </summary>
         [Parameter] public TextAlignment? HorizontalTextAlignment { get; set; }
+        /// <summary>
+        /// Gets or sets a value that indicates if the entry should visually obscure typed text. Value is <see langword="true" /> if the element is a password box; otherwise, <see langword="false" />. Default value is <see langword="false" />.
+        /// </summary>
         [Parameter] public bool? IsPassword { get; set; }
+        /// <summary>
+        /// Determines whether text prediction and automatic text correction is enabled. Default value is <see langword="true" />.
+        /// </summary>
         [Parameter] public bool? IsTextPredictionEnabled { get; set; }
+        /// <summary>
+        /// Determines what the return key on the on-screen keyboard should look like.
+        /// </summary>
         [Parameter] public ReturnType? ReturnType { get; set; }
+        /// <summary>
+        /// Gets or sets the length of the selection. The selection will start at <see cref="P:Microsoft.Maui.Controls.Entry.CursorPosition" />.
+        /// </summary>
         [Parameter] public int? SelectionLength { get; set; }
+        /// <summary>
+        /// Gets or sets the vertical text alignment.
+        /// </summary>
         [Parameter] public TextAlignment? VerticalTextAlignment { get; set; }
         [Parameter] public EventCallback OnCompleted { get; set; }
 

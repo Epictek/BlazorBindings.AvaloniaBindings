@@ -6,8 +6,9 @@
         <CarouselView Grid.Row="0"
                       ItemsSource="items"
                       Loop="false"
-                      @bind-CurrentItem="currentItem"
-                      @bind-Position="currentPosition">
+                      IndicatorView="() => indicatorView"
+        @bind-CurrentItem="currentItem"
+        @bind-Position="currentPosition">
 
             <ItemTemplate>
                 <Frame BackgroundColor="Colors.LightPink"
@@ -24,6 +25,10 @@
         </CarouselView>
 
         <VerticalStackLayout Grid.Row="1">
+            <IndicatorView @ref="indicatorView" HorizontalOptions="LayoutOptions.Center"
+                           IndicatorColor="Colors.DarkGray"
+                           SelectedIndicatorColor="Colors.LightGray" />
+
             <Label>Current item: @currentItem?.Name</Label>
             <Label>Current position: @currentPosition</Label>
             <Button Text="Set last position" OnClick="() => currentPosition = 3" />
@@ -40,6 +45,7 @@
         new("Gill", "https://static.wikia.nocookie.net/pixar/images/7/72/Gill.png/revision/latest/scale-to-width-down/350?cb=20210322233843")
     };
 
+    IndicatorView indicatorView;
     Item currentItem;
     int currentPosition;
 

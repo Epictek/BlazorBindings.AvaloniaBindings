@@ -57,11 +57,10 @@ namespace BlazorBindings.Maui.Elements
 
         [Parameter] public RenderFragment ChildContent { get; set; }
 
-        // <summary>
-        // Defines the background color in the Shell chrome. The color will not fill in behind the Shell content.
-        // </summary>
-        // Cannot add 'new' properties.
-        //[Parameter] public Color BackgroundColor { get; set; }
+        /// <summary>
+        /// Defines the background color in the Shell chrome. The color will not fill in behind the Shell content.
+        /// </summary>
+        [Parameter] public new Color BackgroundColor { get; set; }
 
         /// <summary>
         /// Defines the color to shade text and icons that are disabled.

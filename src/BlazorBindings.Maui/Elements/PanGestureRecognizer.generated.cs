@@ -12,6 +12,9 @@ using System.Threading.Tasks;
 
 namespace BlazorBindings.Maui.Elements
 {
+    /// <summary>
+    /// A gesture recognizer for panning content that is larger than its parent view.
+    /// </summary>
     public partial class PanGestureRecognizer : GestureRecognizer
     {
         static PanGestureRecognizer()
@@ -19,6 +22,9 @@ namespace BlazorBindings.Maui.Elements
             RegisterAdditionalHandlers();
         }
 
+        /// <summary>
+        /// Gets or sets the number of touch points in the gesture.
+        /// </summary>
         [Parameter] public int? TouchPoints { get; set; }
         [Parameter] public EventCallback<MC.PanUpdatedEventArgs> OnPanUpdated { get; set; }
 

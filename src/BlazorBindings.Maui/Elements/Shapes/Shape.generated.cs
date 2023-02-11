@@ -7,7 +7,6 @@
 
 using BlazorBindings.Core;
 using BlazorBindings.Maui.Elements;
-using BlazorBindings.Maui.Elements.Handlers;
 using MC = Microsoft.Maui.Controls;
 using MCS = Microsoft.Maui.Controls.Shapes;
 using Microsoft.AspNetCore.Components;
@@ -21,10 +20,6 @@ namespace BlazorBindings.Maui.Elements.Shapes
     {
         static Shape()
         {
-            ElementHandlerRegistry.RegisterPropertyContentHandler<Shape>(nameof(Fill),
-                (renderer, parent, component) => new ContentPropertyHandler<MCS.Shape>((x, value) => x.Fill = (MC.Brush)value));
-            ElementHandlerRegistry.RegisterPropertyContentHandler<Shape>(nameof(Stroke),
-                (renderer, parent, component) => new ContentPropertyHandler<MCS.Shape>((x, value) => x.Stroke = (MC.Brush)value));
             RegisterAdditionalHandlers();
         }
 
@@ -118,8 +113,8 @@ namespace BlazorBindings.Maui.Elements.Shapes
         protected override void RenderAdditionalElementContent(RenderTreeBuilder builder, ref int sequence)
         {
             base.RenderAdditionalElementContent(builder, ref sequence);
-            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(Shape), Fill);
-            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(Shape), Stroke);
+            RenderTreeBuilderHelper.AddContentProperty<MCS.Shape>(builder, sequence++, Fill, (x, value) => x.Fill = (MC.Brush)value);
+            RenderTreeBuilderHelper.AddContentProperty<MCS.Shape>(builder, sequence++, Stroke, (x, value) => x.Stroke = (MC.Brush)value);
         }
 
         static partial void RegisterAdditionalHandlers();

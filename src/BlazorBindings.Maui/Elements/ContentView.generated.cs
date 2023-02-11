@@ -6,7 +6,6 @@
 // </auto-generated>
 
 using BlazorBindings.Core;
-using BlazorBindings.Maui.Elements.Handlers;
 using MC = Microsoft.Maui.Controls;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
@@ -14,15 +13,22 @@ using System.Threading.Tasks;
 
 namespace BlazorBindings.Maui.Elements
 {
+    /// <summary>
+    /// An element that contains a single child element.
+    /// </summary>
     public partial class ContentView : TemplatedView
     {
         static ContentView()
         {
-            ElementHandlerRegistry.RegisterPropertyContentHandler<ContentView>(nameof(ChildContent),
-                (renderer, parent, component) => new ContentPropertyHandler<MC.ContentView>((x, value) => x.Content = (MC.View)value));
             RegisterAdditionalHandlers();
         }
 
+        /// <summary>
+        /// Gets or sets the content of the ContentView.
+        /// </summary>
+        /// <value>
+        /// A <see cref="T:Microsoft.Maui.Controls.View" /> that contains the content.
+        /// </value>
         [Parameter] public RenderFragment ChildContent { get; set; }
 
         public new MC.ContentView NativeControl => (MC.ContentView)((BindableObject)this).NativeControl;
@@ -46,7 +52,7 @@ namespace BlazorBindings.Maui.Elements
         protected override void RenderAdditionalElementContent(RenderTreeBuilder builder, ref int sequence)
         {
             base.RenderAdditionalElementContent(builder, ref sequence);
-            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(ContentView), ChildContent);
+            RenderTreeBuilderHelper.AddContentProperty<MC.ContentView>(builder, sequence++, ChildContent, (x, value) => x.Content = (MC.View)value);
         }
 
         static partial void RegisterAdditionalHandlers();

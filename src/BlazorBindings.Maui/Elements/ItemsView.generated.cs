@@ -6,7 +6,6 @@
 // </auto-generated>
 
 using BlazorBindings.Core;
-using BlazorBindings.Maui.Elements.Handlers;
 using MC = Microsoft.Maui.Controls;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
@@ -17,15 +16,13 @@ using System.Threading.Tasks;
 
 namespace BlazorBindings.Maui.Elements
 {
+    /// <summary>
+    /// A <see cref="T:Microsoft.Maui.Controls.View" /> that serves as a base class for views that contain a templated list of items.
+    /// </summary>
     public abstract partial class ItemsView<T> : View
     {
         static ItemsView()
         {
-            ElementHandlerRegistry.RegisterPropertyContentHandler<ItemsView<T>>(nameof(EmptyView),
-                (renderer, parent, component) => new ContentPropertyHandler<MC.ItemsView>((x, value) => x.EmptyView = (object)value));
-            ElementHandlerRegistry.RegisterPropertyContentHandler<ItemsView<T>>(nameof(ItemTemplate),
-                (renderer, parent, component) => new DataTemplatePropertyHandler<MC.ItemsView, T>(component,
-                    (x, dataTemplate) => x.ItemTemplate = dataTemplate));
             RegisterAdditionalHandlers();
         }
 
@@ -128,8 +125,8 @@ namespace BlazorBindings.Maui.Elements
         protected override void RenderAdditionalElementContent(RenderTreeBuilder builder, ref int sequence)
         {
             base.RenderAdditionalElementContent(builder, ref sequence);
-            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(ItemsView<T>), EmptyView);
-            RenderTreeBuilderHelper.AddDataTemplateProperty(builder, sequence++, typeof(ItemsView<T>), ItemTemplate);
+            RenderTreeBuilderHelper.AddContentProperty<MC.ItemsView>(builder, sequence++, EmptyView, (x, value) => x.EmptyView = (object)value);
+            RenderTreeBuilderHelper.AddDataTemplateProperty<MC.ItemsView, T>(builder, sequence++, ItemTemplate, (x, template) => x.ItemTemplate = template);
         }
 
         static partial void RegisterAdditionalHandlers();

@@ -1,0 +1,43 @@
+﻿<ContentPage Title="Search Bar">
+    <VerticalStackLayout Spacing="8">
+        <SearchBar @bind-Text="_searchQuery" @bind-Text:after="UpdateSearchResults" />
+
+        <Label>Type any text to start searching.</Label>
+
+        <CollectionView ItemsSource="_displayedItems">
+            <EmptyView>
+                <Label>No items found.</Label>
+            </EmptyView>
+        </CollectionView>
+    </VerticalStackLayout>
+
+</ContentPage>
+
+@code {
+    string[] _allItems = new[]
+    {
+        "Old Fashioned",
+        "Negroni",
+        "Daiquiri",
+        "Dry Martini",
+        "Margarita",
+        "Espresso Martini",
+        "Whiskey Sour",
+        "Manhattan"
+    };
+
+    protected override void OnInitialized()
+    {
+        _displayedItems = _allItems;
+    }
+
+    string _searchQuery;
+
+    string[] _displayedItems;
+
+    async Task UpdateSearchResults()
+    {
+        await Task.Delay(500);
+        _displayedItems = _allItems.Where(i => i.Contains(_searchQuery, StringComparison.OrdinalIgnoreCase)).ToArray();
+    }
+}

@@ -13,6 +13,9 @@ using System.Threading.Tasks;
 
 namespace BlazorBindings.Maui.Elements
 {
+    /// <summary>
+    /// Class that presents a menu item and associates it with a command.
+    /// </summary>
     public partial class MenuItem : BaseMenuItem
     {
         static MenuItem()
@@ -22,9 +25,24 @@ namespace BlazorBindings.Maui.Elements
 
         [Parameter] public string @class { get; set; }
         [Parameter] public MC.ImageSource IconImageSource { get; set; }
+        /// <summary>
+        /// Gets or sets a value that indicates whether or not the menu item removes its associated UI element.
+        /// </summary>
+        /// <value>
+        /// False
+        /// </value>
         [Parameter] public bool? IsDestructive { get; set; }
+        /// <summary>
+        /// For internal use by the Microsoft.Maui.Controls platform.
+        /// </summary>
         [Parameter] public bool? IsEnabled { get; set; }
+        /// <summary>
+        /// Sets the StyleClass of the generated <see cref="T:Microsoft.Maui.Controls.FlyoutItem" /> when used with <see cref="T:Microsoft.Maui.Controls.Shell" />
+        /// </summary>
         [Parameter] public string StyleClass { get; set; }
+        /// <summary>
+        /// The text of the menu item.
+        /// </summary>
         [Parameter] public string Text { get; set; }
         [Parameter] public EventCallback OnClick { get; set; }
 

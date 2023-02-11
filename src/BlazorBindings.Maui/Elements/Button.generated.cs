@@ -15,6 +15,9 @@ using System.Threading.Tasks;
 
 namespace BlazorBindings.Maui.Elements
 {
+    /// <summary>
+    /// A button <see cref="T:Microsoft.Maui.Controls.View" /> that reacts to touch events.
+    /// </summary>
     public partial class Button : View
     {
         static Button()
@@ -22,19 +25,61 @@ namespace BlazorBindings.Maui.Elements
             RegisterAdditionalHandlers();
         }
 
+        /// <summary>
+        /// Gets or sets a color that describes the border stroke color of the button.
+        /// </summary>
         [Parameter] public Color BorderColor { get; set; }
+        /// <summary>
+        /// Gets or sets the width of the border, in device-independent units.
+        /// </summary>
         [Parameter] public double? BorderWidth { get; set; }
+        /// <summary>
+        /// Gets or sets the spacing between each of the characters of <see cref="P:Microsoft.Maui.Controls.Button.Text" /> when displayed on the button.
+        /// </summary>
         [Parameter] public double? CharacterSpacing { get; set; }
+        /// <summary>
+        /// Gets or sets the corner radius for the button, in device-independent units.
+        /// </summary>
         [Parameter] public int? CornerRadius { get; set; }
+        /// <summary>
+        /// Gets or sets a value that indicates whether the font for the text of this button is bold, italic, or neither.
+        /// </summary>
         [Parameter] public MC.FontAttributes? FontAttributes { get; set; }
+        /// <summary>
+        /// Determines whether or not the font of this entry should scale automatically according to the operating system settings. Default value is <see langword="true" />.
+        /// </summary>
         [Parameter] public bool? FontAutoScalingEnabled { get; set; }
+        /// <summary>
+        /// Gets or sets the font family for the text of this entry.
+        /// </summary>
         [Parameter] public string FontFamily { get; set; }
+        /// <summary>
+        /// Gets or sets the size of the font for the text of this entry.
+        /// </summary>
         [Parameter] public double? FontSize { get; set; }
+        /// <summary>
+        /// Allows you to display a bitmap image on the Button.
+        /// </summary>
         [Parameter] public MC.ImageSource ImageSource { get; set; }
+        /// <summary>
+        /// Determines how <see cref="P:Microsoft.Maui.Controls.Button.Text" /> is shown when the length is overflowing the size of this button.
+        /// </summary>
         [Parameter] public LineBreakMode? LineBreakMode { get; set; }
+        /// <summary>
+        /// Gets or sets the padding for the button.
+        /// </summary>
         [Parameter] public Thickness? Padding { get; set; }
+        /// <summary>
+        /// Gets or sets the text displayed as the content of the button. The default value is <see langword="null" />.
+        /// </summary>
         [Parameter] public string Text { get; set; }
+        /// <summary>
+        /// Gets or sets the <see cref="T:Microsoft.Maui.Graphics.Color" /> for the text of the button.
+        /// </summary>
         [Parameter] public Color TextColor { get; set; }
+        /// <summary>
+        /// Applies text transformation to the <see cref="P:Microsoft.Maui.Controls.Button.Text" /> displayed on this button.
+        /// </summary>
         [Parameter] public TextTransform? TextTransform { get; set; }
         [Parameter] public EventCallback OnClick { get; set; }
         [Parameter] public EventCallback OnPress { get; set; }

@@ -12,6 +12,9 @@ using System.Threading.Tasks;
 
 namespace BlazorBindings.Maui.Elements
 {
+    /// <summary>
+    /// Recognizer for pinch gestures.
+    /// </summary>
     public partial class PinchGestureRecognizer : GestureRecognizer
     {
         static PinchGestureRecognizer()

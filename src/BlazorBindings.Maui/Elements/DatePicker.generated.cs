@@ -13,6 +13,9 @@ using System.Threading.Tasks;
 
 namespace BlazorBindings.Maui.Elements
 {
+    /// <summary>
+    /// A <see cref="T:Microsoft.Maui.Controls.View" /> that allows date picking.
+    /// </summary>
     public partial class DatePicker : View
     {
         static DatePicker()
@@ -21,11 +24,32 @@ namespace BlazorBindings.Maui.Elements
         }
 
         [Parameter] public double? CharacterSpacing { get; set; }
+        /// <summary>
+        /// Gets a value that indicates whether the font for the date picker text is bold, italic, or neither.
+        /// </summary>
         [Parameter] public MC.FontAttributes? FontAttributes { get; set; }
         [Parameter] public bool? FontAutoScalingEnabled { get; set; }
+        /// <summary>
+        /// Gets or sets the font family for the picker text.
+        /// </summary>
         [Parameter] public string FontFamily { get; set; }
+        /// <summary>
+        /// Gets or sets the size of the font for the text in the picker.
+        /// </summary>
+        /// <value>
+        /// A <see langword="double" /> that indicates the size of the font.
+        /// </value>
         [Parameter] public double? FontSize { get; set; }
+        /// <summary>
+        /// The format of the date to display to the user. This is a dependency property.
+        /// </summary>
+        /// <value>
+        /// A valid date format.
+        /// </value>
         [Parameter] public string Format { get; set; }
+        /// <summary>
+        /// Gets or sets the text color for the date picker.
+        /// </summary>
         [Parameter] public Color TextColor { get; set; }
 
         public new MC.DatePicker NativeControl => (MC.DatePicker)((BindableObject)this).NativeControl;

@@ -7,7 +7,6 @@
 
 using BlazorBindings.Core;
 using BlazorBindings.Maui.Elements;
-using BlazorBindings.Maui.Elements.Handlers;
 using MC = Microsoft.Maui.Controls;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
@@ -23,35 +22,38 @@ namespace BlazorBindings.Maui.Elements.XCalendar
     {
         static CalendarView()
         {
-            ElementHandlerRegistry.RegisterPropertyContentHandler<CalendarView>(nameof(DayNamesTemplate),
-                (renderer, parent, component) => new ControlTemplatePropertyHandler<XMV.CalendarView>(component,
-                    (x, controlTemplate) => x.DayNamesTemplate = controlTemplate));
-            ElementHandlerRegistry.RegisterPropertyContentHandler<CalendarView>(nameof(DayNameTemplate),
-                (renderer, parent, component) => new DataTemplatePropertyHandler<XMV.CalendarView, ICalendarDay>(component,
-                    (x, dataTemplate) => x.DayNameTemplate = dataTemplate));
-            ElementHandlerRegistry.RegisterPropertyContentHandler<CalendarView>(nameof(DaysViewTemplate),
-                (renderer, parent, component) => new ControlTemplatePropertyHandler<XMV.CalendarView>(component,
-                    (x, controlTemplate) => x.DaysViewTemplate = controlTemplate));
-            ElementHandlerRegistry.RegisterPropertyContentHandler<CalendarView>(nameof(DayTemplate),
-                (renderer, parent, component) => new DataTemplatePropertyHandler<XMV.CalendarView, ICalendarDay>(component,
-                    (x, dataTemplate) => x.DayTemplate = dataTemplate));
-            ElementHandlerRegistry.RegisterPropertyContentHandler<CalendarView>(nameof(NavigationViewTemplate),
-                (renderer, parent, component) => new ControlTemplatePropertyHandler<XMV.CalendarView>(component,
-                    (x, controlTemplate) => x.NavigationViewTemplate = controlTemplate));
             RegisterAdditionalHandlers();
         }
 
         [Parameter] public double? DayNameHorizontalSpacing { get; set; }
+        /// <summary>
+        /// The height of the view showing the days of the week.
+        /// </summary>
         [Parameter] public double? DayNamesHeightRequest { get; set; }
         [Parameter] public double? DayNameVerticalSpacing { get; set; }
         [Parameter] public IEnumerable<ICalendarDay> Days { get; set; }
         [Parameter] public IList<DayOfWeek> DaysOfWeek { get; set; }
+        /// <summary>
+        /// The height of the view used to display the <see cref="P:XCalendar.Maui.Views.CalendarView.Days" />
+        /// </summary>
         [Parameter] public double? DaysViewHeightRequest { get; set; }
         [Parameter] public DateTime? NavigatedDate { get; set; }
         [Parameter] public RenderFragment DayNamesTemplate { get; set; }
+        /// <summary>
+        /// The template used to display the days of the week.
+        /// </summary>
         [Parameter] public RenderFragment<ICalendarDay> DayNameTemplate { get; set; }
+        /// <summary>
+        /// The template used to display the <see cref="P:XCalendar.Maui.Views.CalendarView.Days" />.
+        /// </summary>
         [Parameter] public RenderFragment DaysViewTemplate { get; set; }
+        /// <summary>
+        /// The template used to display a <see cref="T:XCalendar.Core.Interfaces.ICalendarDay" />
+        /// </summary>
         [Parameter] public RenderFragment<ICalendarDay> DayTemplate { get; set; }
+        /// <summary>
+        /// The template used to display the view for navigating the calendar.
+        /// </summary>
         [Parameter] public RenderFragment NavigationViewTemplate { get; set; }
 
         public new XMV.CalendarView NativeControl => (XMV.CalendarView)((BindableObject)this).NativeControl;
@@ -136,11 +138,11 @@ namespace BlazorBindings.Maui.Elements.XCalendar
         protected override void RenderAdditionalElementContent(RenderTreeBuilder builder, ref int sequence)
         {
             base.RenderAdditionalElementContent(builder, ref sequence);
-            RenderTreeBuilderHelper.AddControlTemplateProperty(builder, sequence++, typeof(CalendarView), DayNamesTemplate);
-            RenderTreeBuilderHelper.AddDataTemplateProperty(builder, sequence++, typeof(CalendarView), DayNameTemplate);
-            RenderTreeBuilderHelper.AddControlTemplateProperty(builder, sequence++, typeof(CalendarView), DaysViewTemplate);
-            RenderTreeBuilderHelper.AddDataTemplateProperty(builder, sequence++, typeof(CalendarView), DayTemplate);
-            RenderTreeBuilderHelper.AddControlTemplateProperty(builder, sequence++, typeof(CalendarView), NavigationViewTemplate);
+            RenderTreeBuilderHelper.AddControlTemplateProperty<XMV.CalendarView>(builder, sequence++, DayNamesTemplate, (x, template) => x.DayNamesTemplate = template);
+            RenderTreeBuilderHelper.AddDataTemplateProperty<XMV.CalendarView, ICalendarDay>(builder, sequence++, DayNameTemplate, (x, template) => x.DayNameTemplate = template);
+            RenderTreeBuilderHelper.AddControlTemplateProperty<XMV.CalendarView>(builder, sequence++, DaysViewTemplate, (x, template) => x.DaysViewTemplate = template);
+            RenderTreeBuilderHelper.AddDataTemplateProperty<XMV.CalendarView, ICalendarDay>(builder, sequence++, DayTemplate, (x, template) => x.DayTemplate = template);
+            RenderTreeBuilderHelper.AddControlTemplateProperty<XMV.CalendarView>(builder, sequence++, NavigationViewTemplate, (x, template) => x.NavigationViewTemplate = template);
         }
 
         static partial void RegisterAdditionalHandlers();

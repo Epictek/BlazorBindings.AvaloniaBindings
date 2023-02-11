@@ -1,10 +1,7 @@
-﻿using BlazorBindings.Maui;
-using BlazorBindings.UnitTests.Components;
-using Microsoft.Maui.Controls;
+﻿using BlazorBindings.UnitTests.Components;
 using NUnit.Framework;
 using System;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using MC = Microsoft.Maui.Controls;
 
@@ -13,10 +10,11 @@ namespace BlazorBindings.UnitTests
     public class MauiBlazorBindingsRendererTests
     {
         private readonly TestBlazorBindingsRenderer _renderer = (TestBlazorBindingsRenderer)TestBlazorBindingsRenderer.Create();
+        private readonly MC.Application _application = new TestApplication();
 
         public MauiBlazorBindingsRendererTests()
         {
-            MC.Application.Current = new TestApplication();
+            MC.Application.Current = _application;
         }
 
         [TestCase(typeof(MC.ContentView))]
@@ -63,10 +61,9 @@ namespace BlazorBindings.UnitTests
         }
 
         [Test]
-        [Ignore("https://github.com/Dreamescaper/BlazorBindings.Maui/issues/42")]
         public void ShouldThrowExceptionIfHappenedDuringSyncRender()
         {
-            void action() => _ = _renderer.AddComponent<ComponentWithException>(new NavigationPage());
+            void action() => _ = _renderer.AddComponent<ComponentWithException>(new MC.NavigationPage());
 
             Assert.That(action, Throws.InvalidOperationException.With.Message.EqualTo("Should fail here."));
         }
@@ -74,6 +71,8 @@ namespace BlazorBindings.UnitTests
         [Test]
         public async Task RendererShouldHandleAsyncExceptions()
         {
+            _renderer.ThrowExceptions = false;
+
             var contentView = new MC.ContentView();
             await _renderer.AddComponent<ButtonWithAnExceptionOnClick>(contentView);
             var button = (MC.Button)contentView.Content;
@@ -81,6 +80,24 @@ namespace BlazorBindings.UnitTests
 
             Assert.That(() => _renderer.Exceptions, Is.Not.Empty.After(1000, 10));
             Assert.That(_renderer.Exceptions[0].Message, Is.EqualTo("HandleExceptionTest"));
+        }
+
+        [Test]
+        public async Task RenderedComponentShouldBeAbleToReplaceMainPage()
+        {
+            await _renderer.AddComponent(typeof(SwitchablePages), _application);
+
+            Assert.That(_application.MainPage.Title, Is.EqualTo("Page1"));
+
+            var switchButton = (MC.Button)((MC.ContentPage)_application.MainPage).Content;
+            switchButton.SendClicked();
+
+            Assert.That(_application.MainPage.Title, Is.EqualTo("Page2"));
+
+            switchButton = (MC.Button)((MC.ContentPage)_application.MainPage).Content;
+            switchButton.SendClicked();
+
+            Assert.That(_application.MainPage.Title, Is.EqualTo("Page1"));
         }
 
         private static MC.Element GetChildContent(MC.Element container)

@@ -131,6 +131,16 @@ namespace BlazorBindings.Maui.ComponentGenerator
 
                         return $"{propName} ?? {defaultValue}";
                     }
+
+                    if (IsGeneric && namedType.GetFullName() == "Microsoft.Maui.Controls.BindingBase")
+                    {
+                        return $"AttributeHelper.GetBinding({propName})";
+                    }
+
+                    if (IsGeneric && namedType.GetFullName() == "System.Collections.IList")
+                    {
+                        return $"AttributeHelper.GetIList({propName})";
+                    }
                 }
 
                 return propName;
@@ -141,11 +151,13 @@ namespace BlazorBindings.Maui.ComponentGenerator
         {
             var componentInfo = generatedType.Settings;
 
-            var props = componentInfo.TypeSymbol.GetMembers().OfType<IPropertySymbol>()
+            var props = GetMembers<IPropertySymbol>(componentInfo.TypeSymbol, generatedType.Settings.Include)
                 .Where(p => !componentInfo.Exclude.Contains(p.Name))
+                .Where(p => !componentInfo.ContentProperties.Contains(p.Name))
                 .Where(IsPublicProperty)
                 .Where(HasPublicSetter)
                 .Where(prop => IsExplicitlyAllowed(prop, generatedType) || !DisallowedComponentTypes.Contains(prop.Type.GetFullName()))
+                .Where(prop => prop.Type.GetFullName() == "Microsoft.Maui.Controls.Brush" || !IsRenderFragmentPropertySymbol(generatedType, prop))
                 .OrderBy(prop => prop.Name, StringComparer.OrdinalIgnoreCase);
 
             return props.Select(prop =>
@@ -206,7 +218,11 @@ namespace BlazorBindings.Maui.ComponentGenerator
             }
             else if (namedTypeSymbol.GetFullName() == "System.Collections.IList" && isGeneric)
             {
-                return containingType.GetTypeNameAndAddNamespace("System.Collections.Generic", $"List<{typeArgumentName}>");
+                return containingType.GetTypeNameAndAddNamespace("System.Collections.Generic", $"IList<{typeArgumentName}>");
+            }
+            else if (namedTypeSymbol.GetFullName() == "Microsoft.Maui.Controls.BindingBase" && isGeneric)
+            {
+                return "Func<T, string>";
             }
             else if (namedTypeSymbol.SpecialType == SpecialType.System_Object && isGeneric)
             {
@@ -288,6 +304,15 @@ namespace BlazorBindings.Maui.ComponentGenerator
         private string GetTypeNameAndAddNamespace(string @namespace, string typeName)
         {
             return ContainingType.GetTypeNameAndAddNamespace(@namespace, typeName);
+        }
+
+        private static IEnumerable<T> GetMembers<T>(ITypeSymbol typeSymbol, IEnumerable<string> includeBaseMemberNames) where T : ISymbol
+        {
+            var baseMembers = includeBaseMemberNames
+                .Select(member => typeSymbol.GetMember(member, true))
+                .Where(member => member != null);
+
+            return typeSymbol.GetMembers().Union(baseMembers, SymbolEqualityComparer.Default).OfType<T>();
         }
     }
 }

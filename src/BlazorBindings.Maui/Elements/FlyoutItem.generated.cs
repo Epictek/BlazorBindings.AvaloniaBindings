@@ -12,6 +12,9 @@ using System.Threading.Tasks;
 
 namespace BlazorBindings.Maui.Elements
 {
+    /// <summary>
+    /// A <see cref="T:Microsoft.Maui.Controls.ShellItem" /> that has a collection of <see cref="T:Microsoft.Maui.Controls.Tab" /> objects.
+    /// </summary>
     public partial class FlyoutItem : ShellItem
     {
         static FlyoutItem()

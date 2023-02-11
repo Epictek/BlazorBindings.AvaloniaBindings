@@ -7,7 +7,6 @@
 
 using BlazorBindings.Core;
 using BlazorBindings.Maui.Elements;
-using BlazorBindings.Maui.Elements.Handlers;
 using CMV = CommunityToolkit.Maui.Views;
 using CommunityToolkit.Maui.Core;
 using MC = Microsoft.Maui.Controls;
@@ -19,21 +18,43 @@ using System.Threading.Tasks;
 
 namespace BlazorBindings.Maui.Elements.CommunityToolkit
 {
+    /// <summary>
+    /// Represents a small View that pops up at front the Page. Implements <see cref="T:CommunityToolkit.Maui.Core.IPopup" />.
+    /// </summary>
     public partial class Popup : BlazorBindings.Maui.Elements.Element
     {
         static Popup()
         {
-            ElementHandlerRegistry.RegisterPropertyContentHandler<Popup>(nameof(ChildContent),
-                (renderer, parent, component) => new ContentPropertyHandler<CMV.Popup>((x, value) => x.Content = (MC.View)value));
             RegisterAdditionalHandlers();
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether the popup can be dismissed by tapping outside of the Popup.
+        /// </summary>
         [Parameter] public bool? CanBeDismissedByTappingOutsideOfPopup { get; set; }
+        /// <summary>
+        /// Gets or sets the <see cref="P:CommunityToolkit.Maui.Views.Popup.Color" /> of the Popup.
+        /// </summary>
         [Parameter] public Color Color { get; set; }
+        /// <summary>
+        /// Gets or sets the <see cref="T:Microsoft.Maui.Controls.LayoutOptions" /> for positioning the <see cref="T:CommunityToolkit.Maui.Views.Popup" /> horizontally on the screen.
+        /// </summary>
         [Parameter] public MMP.LayoutAlignment? HorizontalOptions { get; set; }
+        /// <summary>
+        /// Gets or sets the <see cref="P:CommunityToolkit.Maui.Views.Popup.Size" /> of the Popup Display.
+        /// </summary>
         [Parameter] public Size? Size { get; set; }
+        /// <summary>
+        /// Gets or sets the <see cref="T:Microsoft.Maui.Controls.LayoutOptions" /> for positioning the <see cref="T:CommunityToolkit.Maui.Views.Popup" /> vertically on the screen.
+        /// </summary>
         [Parameter] public MMP.LayoutAlignment? VerticalOptions { get; set; }
+        /// <summary>
+        /// Property that represents the Window that's showing the Popup.
+        /// </summary>
         [Parameter] public MC.Window Window { get; set; }
+        /// <summary>
+        /// Gets or sets the <see cref="T:Microsoft.Maui.Controls.View" /> content to render in the Popup.
+        /// </summary>
         [Parameter] public RenderFragment ChildContent { get; set; }
         [Parameter] public EventCallback<PopupClosedEventArgs> OnClosed { get; set; }
         [Parameter] public EventCallback<PopupOpenedEventArgs> OnOpened { get; set; }
@@ -121,7 +142,7 @@ namespace BlazorBindings.Maui.Elements.CommunityToolkit
         protected override void RenderAdditionalElementContent(RenderTreeBuilder builder, ref int sequence)
         {
             base.RenderAdditionalElementContent(builder, ref sequence);
-            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(Popup), ChildContent);
+            RenderTreeBuilderHelper.AddContentProperty<CMV.Popup>(builder, sequence++, ChildContent, (x, value) => x.Content = (MC.View)value);
         }
 
         static partial void RegisterAdditionalHandlers();

@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Xml;
 
 namespace BlazorBindings.Maui.ComponentGenerator
@@ -23,21 +24,23 @@ namespace BlazorBindings.Maui.ComponentGenerator
             //}
 
             var typeToGenerate = generatedInfo.TypeSymbol;
-            var componentName = typeToGenerate.Name;
+            var componentName = generatedInfo.TypeAlias ?? typeToGenerate.Name;
             var componentNamespace = GetComponentNamespace(typeToGenerate);
 
             var baseType = GetBaseTypeOfInterest(typeToGenerate);
-            var componentBaseName = componentNamespace == GetComponentNamespace(baseType)
-                ? baseType.Name
-                : $"{GetComponentNamespace(baseType)}.{baseType.Name}";
+            var componentBaseName = generatedInfo.BaseTypeInfo?.TypeAlias ?? baseType.Name;
+
+            if (componentNamespace != GetComponentNamespace(baseType))
+                componentBaseName = $"{GetComponentNamespace(baseType)}.{componentBaseName}";
 
             // header
             var headerText = generatedInfo.FileHeader;
 
             // usings
             var usings = GetDefaultUsings(typeToGenerate, componentNamespace);
-            var componentNamespacePrefix = GetNamespacePrefix(typeToGenerate, usings);
             var generatedType = new GeneratedTypeInfo(compilation, generatedInfo, componentName, componentBaseName, typeToGenerate, usings);
+
+            var mauiTypeName = generatedType.GetTypeNameAndAddNamespace(typeToGenerate);
 
             // props
             var valueProperties = GeneratedPropertyInfo.GetValueProperties(generatedType);
@@ -77,12 +80,7 @@ namespace BlazorBindings.Maui.ComponentGenerator
                 classModifiers += "abstract ";
             }
 
-            var staticConstructorBody = "";
-            foreach (var prop in contentProperties)
-            {
-                staticConstructorBody += prop.GetContentHandlerRegistration();
-            }
-            staticConstructorBody += "\r\n            RegisterAdditionalHandlers();";
+            var staticConstructorBody = "\r\n            RegisterAdditionalHandlers();";
 
             var createNativeElement = isComponentAbstract ? "" : $@"
         protected override {generatedType.GetTypeNameAndAddNamespace(typeToGenerate)} CreateNativeElement() => new();";
@@ -120,29 +118,30 @@ namespace BlazorBindings.Maui.ComponentGenerator
             var genericModifier = generatedInfo.IsGeneric ? "<T>" : "";
             var baseGenericModifier = generatedInfo.IsBaseTypeGeneric ? "<T>" : "";
 
-            var outputBuilder = new StringBuilder();
-            outputBuilder.Append($@"{headerText}
+            var xmlDoc = GetXmlDocContents(typeToGenerate, "    ");
+
+            var content = $@"{headerText}
 {usingsText}
 
 namespace {componentNamespace}
 {{
-    public {classModifiers}partial class {componentName}{genericModifier} : {componentBaseName}{baseGenericModifier}
+{xmlDoc}    public {classModifiers}partial class {componentName}{genericModifier} : {componentBaseName}{baseGenericModifier}
     {{
         static {componentName}()
         {{
             {staticConstructorBody.Trim()}
         }}
 {propertyDeclarations}
-        public new {componentNamespacePrefix}{componentName} NativeControl => ({componentNamespacePrefix}{componentName})((BindableObject)this).NativeControl;
+        public new {mauiTypeName} NativeControl => ({mauiTypeName})((BindableObject)this).NativeControl;
 {createNativeElement}
 {handleParameter}{renderAdditionalElementContent}
 
         static partial void RegisterAdditionalHandlers();
     }}
 }}
-");
+";
 
-            return (GetComponentGroup(typeToGenerate), componentName, outputBuilder.ToString());
+            return (GetComponentGroup(typeToGenerate), componentName, content);
         }
 
         private static List<UsingStatement> GetDefaultUsings(INamedTypeSymbol typeToGenerate, string componentNamespace)
@@ -171,35 +170,9 @@ namespace {componentNamespace}
             return usings;
         }
 
-        private static string GetNamespacePrefix(INamedTypeSymbol type, List<UsingStatement> usings)
+        internal static string GetXmlDocContents(ISymbol symbol, string indent)
         {
-            // Check if there's a 'using' already. If so, check if it has an alias. If not, add a new 'using'.
-            var namespaceAlias = string.Empty;
-            var namespaceName = type.ContainingNamespace.GetFullName();
-
-            var existingUsing = usings.FirstOrDefault(u => u.Namespace == namespaceName);
-            if (existingUsing == null)
-            {
-                usings.Add(new UsingStatement { Namespace = namespaceName, IsUsed = true, });
-                return string.Empty;
-            }
-            else
-            {
-                existingUsing.IsUsed = true;
-                if (existingUsing.Alias != null)
-                {
-                    return existingUsing.Alias + ".";
-                }
-                else
-                {
-                    return string.Empty;
-                }
-            }
-        }
-
-        internal static string GetXmlDocContents(IPropertySymbol prop, string indent)
-        {
-            var xmlDocString = prop.GetDocumentationCommentXml();
+            var xmlDocString = symbol.GetDocumentationCommentXml();
 
             if (string.IsNullOrEmpty(xmlDocString))
             {
@@ -244,8 +217,9 @@ namespace {componentNamespace}
             static string GetXmlDocText(XmlElement xmlDocElement)
             {
                 var allText = xmlDocElement?.InnerXml;
-                allText = allText.Replace("To be added.", string.Empty);
-                return string.IsNullOrWhiteSpace(allText) ? null : allText;
+                allText = allText?.Replace("To be added.", "").Replace("This is a bindable property.", "");
+                allText = allText is null ? null : Regex.Replace(allText, @"\s+", " ");
+                return string.IsNullOrWhiteSpace(allText) ? null : allText.Trim();
             }
         }
 

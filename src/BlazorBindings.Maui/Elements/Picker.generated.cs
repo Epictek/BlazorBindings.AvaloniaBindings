@@ -17,6 +17,9 @@ using System.Threading.Tasks;
 
 namespace BlazorBindings.Maui.Elements
 {
+    /// <summary>
+    /// A <see cref="T:Microsoft.Maui.Controls.View" /> control for picking an element in a list.
+    /// </summary>
     public partial class Picker<T> : View
     {
         static Picker()
@@ -25,15 +28,52 @@ namespace BlazorBindings.Maui.Elements
         }
 
         [Parameter] public double? CharacterSpacing { get; set; }
+        /// <summary>
+        /// Gets a value that indicates whether the font for the searchbar text is bold, italic, or neither.
+        /// </summary>
         [Parameter] public MC.FontAttributes? FontAttributes { get; set; }
         [Parameter] public bool? FontAutoScalingEnabled { get; set; }
+        /// <summary>
+        /// Gets or sets the font family for the picker text.
+        /// </summary>
         [Parameter] public string FontFamily { get; set; }
+        /// <summary>
+        /// Gets or sets the size of the font for the text in the picker.
+        /// </summary>
+        /// <value>
+        /// A <see langword="double" /> that indicates the size of the font.
+        /// </value>
         [Parameter] public double? FontSize { get; set; }
         [Parameter] public TextAlignment? HorizontalTextAlignment { get; set; }
-        [Parameter] public List<T> ItemsSource { get; set; }
+        /// <summary>
+        /// Gets or sets a binding that selects the property that will be displayed for each object in the list of items.
+        /// </summary>
+        [Parameter] public Func<T, string> ItemDisplayBinding { get; set; }
+        /// <summary>
+        /// Gets or sets the source list of items to template and display.
+        /// </summary>
+        [Parameter] public IList<T> ItemsSource { get; set; }
+        /// <summary>
+        /// Gets or sets the index of the selected item of the picker.
+        /// </summary>
+        /// <value>
+        /// An 0-based index representing the selected item in the list. Default is -1.
+        /// </value>
         [Parameter] public int? SelectedIndex { get; set; }
+        /// <summary>
+        /// Gets or sets the selected item.
+        /// </summary>
         [Parameter] public T SelectedItem { get; set; }
+        /// <summary>
+        /// Gets or sets the text color.
+        /// </summary>
         [Parameter] public Color TextColor { get; set; }
+        /// <summary>
+        /// Gets or sets the title for the Picker.
+        /// </summary>
+        /// <value>
+        /// A string.
+        /// </value>
         [Parameter] public string Title { get; set; }
         [Parameter] public Color TitleColor { get; set; }
         [Parameter] public TextAlignment? VerticalTextAlignment { get; set; }
@@ -90,11 +130,18 @@ namespace BlazorBindings.Maui.Elements
                         NativeControl.HorizontalTextAlignment = HorizontalTextAlignment ?? (TextAlignment)MC.Picker.HorizontalTextAlignmentProperty.DefaultValue;
                     }
                     break;
+                case nameof(ItemDisplayBinding):
+                    if (!Equals(ItemDisplayBinding, value))
+                    {
+                        ItemDisplayBinding = (Func<T, string>)value;
+                        NativeControl.ItemDisplayBinding = AttributeHelper.GetBinding(ItemDisplayBinding);
+                    }
+                    break;
                 case nameof(ItemsSource):
                     if (!Equals(ItemsSource, value))
                     {
-                        ItemsSource = (List<T>)value;
-                        NativeControl.ItemsSource = ItemsSource;
+                        ItemsSource = (IList<T>)value;
+                        NativeControl.ItemsSource = AttributeHelper.GetIList(ItemsSource);
                     }
                     break;
                 case nameof(SelectedIndex):

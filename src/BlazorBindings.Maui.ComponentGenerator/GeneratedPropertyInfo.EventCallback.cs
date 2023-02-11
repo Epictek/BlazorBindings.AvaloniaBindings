@@ -121,7 +121,7 @@ namespace BlazorBindings.Maui.ComponentGenerator
                     return generatedPropertyInfo;
                 });
 
-            var inferredEvents = componentType.GetMembers().OfType<IEventSymbol>()
+            var inferredEvents = GetMembers<IEventSymbol>(componentInfo.TypeSymbol, containingType.Settings.Include)
                 .Where(e => !componentInfo.Exclude.Contains(e.Name))
                 .Where(e => e.DeclaredAccessibility == Accessibility.Public && IsBrowsable(e))
                 .Select(eventInfo =>

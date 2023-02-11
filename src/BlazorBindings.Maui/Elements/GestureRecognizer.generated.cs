@@ -12,6 +12,9 @@ using System.Threading.Tasks;
 
 namespace BlazorBindings.Maui.Elements
 {
+    /// <summary>
+    /// The base class for all gesture recognizers.
+    /// </summary>
     public partial class GestureRecognizer : Element
     {
         static GestureRecognizer()

@@ -6,7 +6,6 @@
 // </auto-generated>
 
 using BlazorBindings.Core;
-using BlazorBindings.Maui.Elements.Handlers;
 using MC = Microsoft.Maui.Controls;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
@@ -15,16 +14,29 @@ using System.Threading.Tasks;
 
 namespace BlazorBindings.Maui.Elements
 {
+    /// <summary>
+    /// <see cref="T:Microsoft.Maui.Controls.MultiPage`1" /> that displays an array of tabs across the top of the screen, each of which loads content onto the screen.
+    /// </summary>
     public partial class TabbedPage : Page
     {
         static TabbedPage()
         {
-            ElementHandlerRegistry.RegisterPropertyContentHandler<TabbedPage>(nameof(BarBackground),
-                (renderer, parent, component) => new ContentPropertyHandler<MC.TabbedPage>((x, value) => x.BarBackground = (MC.Brush)value));
             RegisterAdditionalHandlers();
         }
 
+        /// <summary>
+        /// Gets or sets the background color of the bar.
+        /// </summary>
+        /// <value>
+        /// The background color of the bar.
+        /// </value>
         [Parameter] public Color BarBackgroundColor { get; set; }
+        /// <summary>
+        /// Gets or sets the color of text on the bar.
+        /// </summary>
+        /// <value>
+        /// The color of text on the bar.
+        /// </value>
         [Parameter] public Color BarTextColor { get; set; }
         [Parameter] public Color SelectedTabColor { get; set; }
         [Parameter] public Color UnselectedTabColor { get; set; }
@@ -79,7 +91,7 @@ namespace BlazorBindings.Maui.Elements
         protected override void RenderAdditionalElementContent(RenderTreeBuilder builder, ref int sequence)
         {
             base.RenderAdditionalElementContent(builder, ref sequence);
-            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(TabbedPage), BarBackground);
+            RenderTreeBuilderHelper.AddContentProperty<MC.TabbedPage>(builder, sequence++, BarBackground, (x, value) => x.BarBackground = (MC.Brush)value);
         }
 
         static partial void RegisterAdditionalHandlers();

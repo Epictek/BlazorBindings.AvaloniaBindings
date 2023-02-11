@@ -12,6 +12,9 @@ using System.Threading.Tasks;
 
 namespace BlazorBindings.Maui.Elements
 {
+    /// <summary>
+    /// A <see cref="T:Microsoft.Maui.Controls.Layout" /> that positions child elements in a single line which can be oriented vertically or horizontally.
+    /// </summary>
     public partial class StackLayout : StackBase
     {
         static StackLayout()
@@ -19,6 +22,12 @@ namespace BlazorBindings.Maui.Elements
             RegisterAdditionalHandlers();
         }
 
+        /// <summary>
+        /// Gets or sets the value which indicates the direction which child elements are positioned.
+        /// </summary>
+        /// <value>
+        /// A <see cref="T:Microsoft.Maui.Controls.StackOrientation" /> which indicates the direction children layouts flow. The default value is Vertical.
+        /// </value>
         [Parameter] public MC.StackOrientation? Orientation { get; set; }
 
         public new MC.StackLayout NativeControl => (MC.StackLayout)((BindableObject)this).NativeControl;

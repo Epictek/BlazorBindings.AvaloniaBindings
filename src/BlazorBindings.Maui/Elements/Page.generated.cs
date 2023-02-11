@@ -6,7 +6,6 @@
 // </auto-generated>
 
 using BlazorBindings.Core;
-using BlazorBindings.Maui.Elements.Handlers;
 using MC = Microsoft.Maui.Controls;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
@@ -16,23 +15,37 @@ using System.Threading.Tasks;
 
 namespace BlazorBindings.Maui.Elements
 {
+    /// <summary>
+    /// A <see cref="T:Microsoft.Maui.Controls.VisualElement" /> that occupies the entire screen.
+    /// </summary>
     public partial class Page : VisualElement
     {
         static Page()
         {
-            ElementHandlerRegistry.RegisterPropertyContentHandler<Page>(nameof(MenuBarItems),
-                (renderer, parent, component) => new ListContentPropertyHandler<MC.Page, MC.MenuBarItem>(x => x.MenuBarItems));
-            ElementHandlerRegistry.RegisterPropertyContentHandler<Page>(nameof(ToolbarItems),
-                (renderer, parent, component) => new ListContentPropertyHandler<MC.Page, MC.ToolbarItem>(x => x.ToolbarItems));
             RegisterAdditionalHandlers();
         }
 
         [Parameter] public MC.ImageSource BackgroundImageSource { get; set; }
         [Parameter] public MC.ImageSource IconImageSource { get; set; }
+        /// <summary>
+        /// Marks the Page as busy. This will cause the platform specific global activity indicator to show a busy state.
+        /// </summary>
+        /// <value>
+        /// A bool indicating if the Page is busy or not.
+        /// </value>
         [Parameter] public bool? IsBusy { get; set; }
+        /// <summary>
+        /// The space between the content of the <see cref="T:Microsoft.Maui.Controls.Page" /> and it's border.
+        /// </summary>
         [Parameter] public Thickness? Padding { get; set; }
+        /// <summary>
+        /// The <see cref="T:Microsoft.Maui.Controls.Page" />'s title.
+        /// </summary>
         [Parameter] public string Title { get; set; }
         [Parameter] public RenderFragment MenuBarItems { get; set; }
+        /// <summary>
+        /// A set of <see cref="T:Microsoft.Maui.Controls.ToolbarItem" />s, implemented in a platform-specific manner.
+        /// </summary>
         [Parameter] public RenderFragment ToolbarItems { get; set; }
         [Parameter] public EventCallback<MC.NavigatedToEventArgs> OnNavigatedTo { get; set; }
         [Parameter] public EventCallback<MC.NavigatingFromEventArgs> OnNavigatingFrom { get; set; }
@@ -160,8 +173,8 @@ namespace BlazorBindings.Maui.Elements
         protected override void RenderAdditionalElementContent(RenderTreeBuilder builder, ref int sequence)
         {
             base.RenderAdditionalElementContent(builder, ref sequence);
-            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(Page), MenuBarItems);
-            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(Page), ToolbarItems);
+            RenderTreeBuilderHelper.AddListContentProperty<MC.Page, MC.MenuBarItem>(builder, sequence++, MenuBarItems, x => x.MenuBarItems);
+            RenderTreeBuilderHelper.AddListContentProperty<MC.Page, MC.ToolbarItem>(builder, sequence++, ToolbarItems, x => x.ToolbarItems);
         }
 
         static partial void RegisterAdditionalHandlers();

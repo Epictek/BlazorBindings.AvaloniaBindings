@@ -13,10 +13,19 @@
 
         <Label>Email entry: @_email</Label>
         <Entry @bind-Text="_email" Keyboard="Keyboard.Email" />
-        
+
         @Separator
 
+        <Label>Int entry: @_int</Label>
+        <Entry @bind-Text="_int" Keyboard="Keyboard.Numeric" />
 
+        @Separator
+
+        <Label>Double? entry: @_double</Label>
+        <Entry @bind-Text="_double" Keyboard="Keyboard.Numeric" />
+        <Button Text="Set double to 12.34" OnClick="() => _double = 12.34" />
+
+        @Separator
 
     </StackLayout>
 </ContentPage>
@@ -25,6 +34,8 @@
 {
     string _text;
     string _email;
+    int _int;
+    double? _double;
     int _editsNumber;
 
     void OnCompleted() => _editsNumber++;

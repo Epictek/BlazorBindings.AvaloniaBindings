@@ -6,7 +6,6 @@
 // </auto-generated>
 
 using BlazorBindings.Core;
-using BlazorBindings.Maui.Elements.Handlers;
 using MC = Microsoft.Maui.Controls;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
@@ -19,13 +18,13 @@ using System.Threading.Tasks;
 
 namespace BlazorBindings.Maui.Elements
 {
+    /// <summary>
+    /// Default implementation of <see cref="T:Microsoft.Maui.Controls.ISearchHandlerController" />.
+    /// </summary>
     public partial class SearchHandler<T> : BindableObject
     {
         static SearchHandler()
         {
-            ElementHandlerRegistry.RegisterPropertyContentHandler<SearchHandler<T>>(nameof(ItemTemplate),
-                (renderer, parent, component) => new DataTemplatePropertyHandler<MC.SearchHandler, T>(component,
-                    (x, dataTemplate) => x.ItemTemplate = dataTemplate));
             RegisterAdditionalHandlers();
         }
 
@@ -33,33 +32,102 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public Color BackgroundColor { get; set; }
         [Parameter] public Color CancelButtonColor { get; set; }
         [Parameter] public double? CharacterSpacing { get; set; }
+        /// <summary>
+        /// The icon displayed to clear the contents of the search box.
+        /// </summary>
         [Parameter] public MC.ImageSource ClearIcon { get; set; }
+        /// <summary>
+        /// The accessible help text for the clear icon.
+        /// </summary>
         [Parameter] public string ClearIconHelpText { get; set; }
+        /// <summary>
+        /// The name of the clear icon for use with screen readers.
+        /// </summary>
         [Parameter] public string ClearIconName { get; set; }
+        /// <summary>
+        /// Whether the <see cref="P:Microsoft.Maui.Controls.SearchHandler.ClearPlaceholderCommand" /> can be executed.
+        /// </summary>
+        /// <value>
+        /// The default value is `true`.
+        /// </value>
         [Parameter] public bool? ClearPlaceholderEnabled { get; set; }
+        /// <summary>
+        /// The accessible help text for the <see cref="P:Microsoft.Maui.Controls.SearchHandler.ClearPlaceholderIcon" />.
+        /// </summary>
         [Parameter] public string ClearPlaceholderHelpText { get; set; }
+        /// <summary>
+        /// The clear placeholder icon displayed when the search box is empty.
+        /// </summary>
         [Parameter] public MC.ImageSource ClearPlaceholderIcon { get; set; }
+        /// <summary>
+        /// The name of the clear placeholder icon for use with screen readers.
+        /// </summary>
         [Parameter] public string ClearPlaceholderName { get; set; }
+        /// <summary>
+        /// The name or path of the property that is displayed for each item of data in the <see cref="P:Microsoft.Maui.Controls.SearchHandler.ItemsSource" /> collection.
+        /// </summary>
         [Parameter] public string DisplayMemberName { get; set; }
         [Parameter] public MC.FontAttributes? FontAttributes { get; set; }
         [Parameter] public bool? FontAutoScalingEnabled { get; set; }
         [Parameter] public string FontFamily { get; set; }
         [Parameter] public double? FontSize { get; set; }
         [Parameter] public TextAlignment? HorizontalTextAlignment { get; set; }
+        /// <summary>
+        /// Gets or sets whether the search box is enabled.
+        /// </summary>
+        /// <value>
+        /// The default value is `true`.
+        /// </value>
         [Parameter] public bool? IsSearchEnabled { get; set; }
+        /// <summary>
+        /// The collection of items to be displayed in the suggestion area. Default is <see langword="null" />.
+        /// </summary>
+        /// <value>
+        /// The default value is `null`.
+        /// </value>
         [Parameter] public IEnumerable<T> ItemsSource { get; set; }
         [Parameter] public Keyboard Keyboard { get; set; }
+        /// <summary>
+        /// The text to display when the search box is empty.
+        /// </summary>
         [Parameter] public string Placeholder { get; set; }
         [Parameter] public Color PlaceholderColor { get; set; }
+        /// <summary>
+        /// Gets or sets the text of the search box.
+        /// </summary>
         [Parameter] public string Query { get; set; }
+        /// <summary>
+        /// The icon used to indicate that search is available.
+        /// </summary>
         [Parameter] public MC.ImageSource QueryIcon { get; set; }
+        /// <summary>
+        /// The accessible help text for the <see cref="P:Microsoft.Maui.Controls.SearchHandler.QueryIcon" />.
+        /// </summary>
         [Parameter] public string QueryIconHelpText { get; set; }
+        /// <summary>
+        /// The name of the <see cref="P:Microsoft.Maui.Controls.SearchHandler.QueryIcon" /> for use with screen readers.
+        /// </summary>
         [Parameter] public string QueryIconName { get; set; }
+        /// <summary>
+        /// Gets or sets whether the search box is visible.
+        /// </summary>
+        /// <value>
+        /// The default is <see cref="F:Microsoft.Maui.Controls.SearchBoxVisibility.Expanded" /> (visible and expanded).
+        /// </value>
         [Parameter] public MC.SearchBoxVisibility? SearchBoxVisibility { get; set; }
+        /// <summary>
+        /// Gets or sets whether search results should be expected in the suggestion area on text entry.
+        /// </summary>
+        /// <value>
+        /// The default value is `false`.
+        /// </value>
         [Parameter] public bool? ShowsResults { get; set; }
         [Parameter] public Color TextColor { get; set; }
         [Parameter] public TextTransform? TextTransform { get; set; }
         [Parameter] public TextAlignment? VerticalTextAlignment { get; set; }
+        /// <summary>
+        /// The <see cref="T:Microsoft.Maui.Controls.DataTemplate" /> to apply to each item in <see cref="P:Microsoft.Maui.Controls.SearchHandler.ItemsSource" />.
+        /// </summary>
         [Parameter] public RenderFragment<T> ItemTemplate { get; set; }
         [Parameter] public EventCallback<string> QueryChanged { get; set; }
         [Parameter] public EventCallback<T> SelectedItemChanged { get; set; }
@@ -360,7 +428,7 @@ namespace BlazorBindings.Maui.Elements
         protected override void RenderAdditionalElementContent(RenderTreeBuilder builder, ref int sequence)
         {
             base.RenderAdditionalElementContent(builder, ref sequence);
-            RenderTreeBuilderHelper.AddDataTemplateProperty(builder, sequence++, typeof(SearchHandler<T>), ItemTemplate);
+            RenderTreeBuilderHelper.AddDataTemplateProperty<MC.SearchHandler, T>(builder, sequence++, ItemTemplate, (x, template) => x.ItemTemplate = template);
         }
 
         static partial void RegisterAdditionalHandlers();

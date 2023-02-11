@@ -13,6 +13,9 @@ using System.Threading.Tasks;
 
 namespace BlazorBindings.Maui.Elements
 {
+    /// <summary>
+    /// A visual control used to indicate that something is ongoing.
+    /// </summary>
     public partial class ActivityIndicator : View
     {
         static ActivityIndicator()
@@ -20,7 +23,19 @@ namespace BlazorBindings.Maui.Elements
             RegisterAdditionalHandlers();
         }
 
+        /// <summary>
+        /// Gets or sets the <see cref="T:Microsoft.Maui.Graphics.Color" /> of the ActivityIndicator.
+        /// </summary>
+        /// <value>
+        /// A <see cref="T:Microsoft.Maui.Graphics.Color" /> used to display the ActivityIndicator.
+        /// </value>
         [Parameter] public Color Color { get; set; }
+        /// <summary>
+        /// Gets or sets the value indicating if the ActivityIndicator is running.
+        /// </summary>
+        /// <value>
+        /// A <see cref="T:System.Boolean" /> indicating if the ActivityIndicator is running.
+        /// </value>
         [Parameter] public bool? IsRunning { get; set; }
 
         public new MC.ActivityIndicator NativeControl => (MC.ActivityIndicator)((BindableObject)this).NativeControl;

@@ -8,7 +8,6 @@
 using AC = AlohaKit.Controls;
 using BlazorBindings.Core;
 using BlazorBindings.Maui.Elements;
-using BlazorBindings.Maui.Elements.Handlers;
 using MC = Microsoft.Maui.Controls;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
@@ -22,10 +21,6 @@ namespace BlazorBindings.Maui.Elements.AlohaKit
     {
         static ToggleSwitch()
         {
-            ElementHandlerRegistry.RegisterPropertyContentHandler<ToggleSwitch>(nameof(Background),
-                (renderer, parent, component) => new ContentPropertyHandler<AC.ToggleSwitch>((x, value) => x.Background = (MC.Brush)value));
-            ElementHandlerRegistry.RegisterPropertyContentHandler<ToggleSwitch>(nameof(ThumbBrush),
-                (renderer, parent, component) => new ContentPropertyHandler<AC.ToggleSwitch>((x, value) => x.ThumbBrush = (MC.Brush)value));
             RegisterAdditionalHandlers();
         }
 
@@ -106,8 +101,8 @@ namespace BlazorBindings.Maui.Elements.AlohaKit
         protected override void RenderAdditionalElementContent(RenderTreeBuilder builder, ref int sequence)
         {
             base.RenderAdditionalElementContent(builder, ref sequence);
-            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(ToggleSwitch), Background);
-            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(ToggleSwitch), ThumbBrush);
+            RenderTreeBuilderHelper.AddContentProperty<AC.ToggleSwitch>(builder, sequence++, Background, (x, value) => x.Background = (MC.Brush)value);
+            RenderTreeBuilderHelper.AddContentProperty<AC.ToggleSwitch>(builder, sequence++, ThumbBrush, (x, value) => x.ThumbBrush = (MC.Brush)value);
         }
 
         static partial void RegisterAdditionalHandlers();

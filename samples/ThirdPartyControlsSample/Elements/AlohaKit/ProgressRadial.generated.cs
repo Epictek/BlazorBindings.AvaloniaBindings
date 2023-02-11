@@ -27,7 +27,6 @@ namespace BlazorBindings.Maui.Elements.AlohaKit
         [Parameter] public int? Maximum { get; set; }
         [Parameter] public int? Minimum { get; set; }
         [Parameter] public Color ProgressColor { get; set; }
-        [Parameter] public AC.ProgressRadialDrawable ProgressRadialDrawable { get; set; }
         [Parameter] public Color StrokeColor { get; set; }
         [Parameter] public Color TextColor { get; set; }
         [Parameter] public int? Value { get; set; }
@@ -41,6 +40,13 @@ namespace BlazorBindings.Maui.Elements.AlohaKit
         {
             switch (name)
             {
+                case nameof(BackgroundColor):
+                    if (!Equals(BackgroundColor, value))
+                    {
+                        BackgroundColor = (Color)value;
+                        NativeControl.BackgroundColor = BackgroundColor;
+                    }
+                    break;
                 case nameof(Direction):
                     if (!Equals(Direction, value))
                     {
@@ -74,13 +80,6 @@ namespace BlazorBindings.Maui.Elements.AlohaKit
                     {
                         ProgressColor = (Color)value;
                         NativeControl.ProgressColor = ProgressColor;
-                    }
-                    break;
-                case nameof(ProgressRadialDrawable):
-                    if (!Equals(ProgressRadialDrawable, value))
-                    {
-                        ProgressRadialDrawable = (AC.ProgressRadialDrawable)value;
-                        NativeControl.ProgressRadialDrawable = ProgressRadialDrawable;
                     }
                     break;
                 case nameof(StrokeColor):

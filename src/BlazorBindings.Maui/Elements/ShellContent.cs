@@ -2,15 +2,19 @@
 // Licensed under the MIT license.
 
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Rendering;
 using MC = Microsoft.Maui.Controls;
 
 namespace BlazorBindings.Maui.Elements
 {
     public partial class ShellContent : BaseShellItem, IMauiContainerElementHandler
     {
-#pragma warning disable CA1721 // Property names should not match get methods
+        /// <summary>
+        /// Gets or sets a data template to create when ShellContent becomes active.
+        /// </summary>
+        [Parameter] public RenderFragment ContentTemplate { get; set; }
+
         [Parameter] public RenderFragment ChildContent { get; set; }
-#pragma warning restore CA1721 // Property names should not match get methods
 
         protected override RenderFragment GetChildContent() => ChildContent;
 
@@ -19,6 +23,11 @@ namespace BlazorBindings.Maui.Elements
             if (name == nameof(ChildContent))
             {
                 ChildContent = (RenderFragment)value;
+                return true;
+            }
+            if (name == nameof(ContentTemplate))
+            {
+                ContentTemplate = (RenderFragment)value;
                 return true;
             }
             else
@@ -43,6 +52,13 @@ namespace BlazorBindings.Maui.Elements
             {
                 NativeControl.Content = null;
             }
+        }
+
+        protected override void RenderAdditionalPartialElementContent(RenderTreeBuilder builder, ref int sequence)
+        {
+            base.RenderAdditionalPartialElementContent(builder, ref sequence);
+
+            RenderTreeBuilderHelper.AddSyncDataTemplateProperty<MC.ShellContent>(builder, sequence++, ContentTemplate, (x, template) => x.ContentTemplate = template);
         }
     }
 }

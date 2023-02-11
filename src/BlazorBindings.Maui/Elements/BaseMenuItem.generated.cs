@@ -12,6 +12,9 @@ using System.Threading.Tasks;
 
 namespace BlazorBindings.Maui.Elements
 {
+    /// <summary>
+    /// Base class for menu items.
+    /// </summary>
     public abstract partial class BaseMenuItem : Element
     {
         static BaseMenuItem()

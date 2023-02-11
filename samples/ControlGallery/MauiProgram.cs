@@ -23,4 +23,11 @@ namespace ControlGallery
             return builder.Build();
         }
     }
+
+    public class App : BlazorBindingsApplication<AppShell>
+    {
+        public App(IServiceProvider services) : base(services) { }
+
+        public override Type WrapperComponentType => typeof(Root);
+    }
 }

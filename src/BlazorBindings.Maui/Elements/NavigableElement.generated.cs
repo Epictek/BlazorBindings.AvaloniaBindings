@@ -12,6 +12,9 @@ using System.Threading.Tasks;
 
 namespace BlazorBindings.Maui.Elements
 {
+    /// <summary>
+    /// A <see cref="T:Microsoft.Maui.Controls.Element" /> that supports navigation.
+    /// </summary>
     public abstract partial class NavigableElement : Element
     {
         static NavigableElement()

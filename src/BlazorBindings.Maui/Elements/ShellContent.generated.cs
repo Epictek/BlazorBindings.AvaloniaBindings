@@ -12,6 +12,9 @@ using System.Threading.Tasks;
 
 namespace BlazorBindings.Maui.Elements
 {
+    /// <summary>
+    /// Corresponds to a <see cref="T:Microsoft.Maui.Controls.ContentPage" /> contained in a <see cref="T:Microsoft.Maui.Controls.ShellSection" />.
+    /// </summary>
     public partial class ShellContent : BaseShellItem
     {
         static ShellContent()

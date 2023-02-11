@@ -13,6 +13,9 @@ using System.Threading.Tasks;
 
 namespace BlazorBindings.Maui.Elements
 {
+    /// <summary>
+    /// A <see cref="T:Microsoft.Maui.Controls.View" /> control that displays progress.
+    /// </summary>
     public partial class ProgressBar : View
     {
         static ProgressBar()
@@ -20,7 +23,19 @@ namespace BlazorBindings.Maui.Elements
             RegisterAdditionalHandlers();
         }
 
+        /// <summary>
+        /// Gets or sets the progress value.
+        /// </summary>
+        /// <value>
+        /// Gets or sets a value that specifies the fraction of the bar that is colored.
+        /// </value>
         [Parameter] public double? Progress { get; set; }
+        /// <summary>
+        /// Get or sets the color of the progress bar.
+        /// </summary>
+        /// <value>
+        /// The color of the progress bar.
+        /// </value>
         [Parameter] public Color ProgressColor { get; set; }
 
         public new MC.ProgressBar NativeControl => (MC.ProgressBar)((BindableObject)this).NativeControl;

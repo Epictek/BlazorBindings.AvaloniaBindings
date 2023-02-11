@@ -14,6 +14,9 @@ using System.Threading.Tasks;
 
 namespace BlazorBindings.Maui.Elements
 {
+    /// <summary>
+    /// A <see cref="T:Microsoft.Maui.Controls.View" /> that displays text.
+    /// </summary>
     public partial class Label : View
     {
         static Label()
@@ -22,20 +25,71 @@ namespace BlazorBindings.Maui.Elements
         }
 
         [Parameter] public double? CharacterSpacing { get; set; }
+        /// <summary>
+        /// Gets a value that indicates whether the font for the label is bold, italic, or neither.
+        /// </summary>
         [Parameter] public MC.FontAttributes? FontAttributes { get; set; }
         [Parameter] public bool? FontAutoScalingEnabled { get; set; }
+        /// <summary>
+        /// Gets or sets the font family to which the font for the label belongs.
+        /// </summary>
+        /// <value>
+        /// The font family, or null for the platform default font family.
+        /// </value>
         [Parameter] public string FontFamily { get; set; }
+        /// <summary>
+        /// Gets the size of the font for the label.
+        /// </summary>
         [Parameter] public double? FontSize { get; set; }
+        /// <summary>
+        /// Gets or sets the horizontal alignment of the Text property.
+        /// </summary>
         [Parameter] public TextAlignment? HorizontalTextAlignment { get; set; }
+        /// <summary>
+        /// Gets or sets the LineBreakMode for the Label.
+        /// </summary>
+        /// <value>
+        /// The <see cref="T:Microsoft.Maui.LineBreakMode" /> value for the Label. The default is <see cref="F:Microsoft.Maui.LineBreakMode.WordWrap" />
+        /// </value>
         [Parameter] public LineBreakMode? LineBreakMode { get; set; }
+        /// <summary>
+        /// Gets or sets the multiplier to apply to the default line height when displaying text.
+        /// </summary>
+        /// <value>
+        /// The multiplier to apply to the default line height when displaying text.
+        /// </value>
         [Parameter] public double? LineHeight { get; set; }
+        /// <summary>
+        /// Gets or sets the maximum number of lines allowed in the <see cref="T:Microsoft.Maui.Controls.Label" />.
+        /// </summary>
         [Parameter] public int? MaxLines { get; set; }
         [Parameter] public Thickness? Padding { get; set; }
+        /// <summary>
+        /// Gets or sets the text for the Label.
+        /// </summary>
+        /// <value>
+        /// The <see cref="T:System.String" /> value to be displayed inside of the Label.
+        /// </value>
         [Parameter] public string Text { get; set; }
+        /// <summary>
+        /// Gets or sets the <see cref="T:Microsoft.Maui.Graphics.Color" /> for the text of this Label.
+        /// </summary>
+        /// <value>
+        /// The <see cref="T:Microsoft.Maui.Graphics.Color" /> value.
+        /// </value>
         [Parameter] public Color TextColor { get; set; }
+        /// <summary>
+        /// Gets or sets the <see cref="T:Microsoft.Maui.TextDecorations" /> applied to <see cref="P:Microsoft.Maui.Controls.Label.Text" />.
+        /// </summary>
         [Parameter] public TextDecorations? TextDecorations { get; set; }
         [Parameter] public TextTransform? TextTransform { get; set; }
+        /// <summary>
+        /// Determines whether the Label should display plain text or HTML text.
+        /// </summary>
         [Parameter] public TextType? TextType { get; set; }
+        /// <summary>
+        /// Gets or sets the vertical alignement of the Text property.
+        /// </summary>
         [Parameter] public TextAlignment? VerticalTextAlignment { get; set; }
 
         public new MC.Label NativeControl => (MC.Label)((BindableObject)this).NativeControl;

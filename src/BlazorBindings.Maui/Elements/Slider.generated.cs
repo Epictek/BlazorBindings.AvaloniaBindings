@@ -14,6 +14,9 @@ using System.Threading.Tasks;
 
 namespace BlazorBindings.Maui.Elements
 {
+    /// <summary>
+    /// A <see cref="T:Microsoft.Maui.Controls.View" /> control that inputs a linear value.
+    /// </summary>
     public partial class Slider : View
     {
         static Slider()
@@ -21,12 +24,48 @@ namespace BlazorBindings.Maui.Elements
             RegisterAdditionalHandlers();
         }
 
+        /// <summary>
+        /// Gets or sets the maximum selectable value for the Slider.
+        /// </summary>
+        /// <value>
+        /// A double.
+        /// </value>
         [Parameter] public double? Maximum { get; set; }
+        /// <summary>
+        /// Gets or sets the color of the portion of the slider track that contains the maximum value of the slider.
+        /// </summary>
+        /// <value>
+        /// Thhe color of the portion of the slider track that contains the maximum value of the slider.
+        /// </value>
         [Parameter] public Color MaximumTrackColor { get; set; }
+        /// <summary>
+        /// Gets or sets the minimum selectable value for the Slider.
+        /// </summary>
+        /// <value>
+        /// A double.
+        /// </value>
         [Parameter] public double? Minimum { get; set; }
+        /// <summary>
+        /// Gets or sets the color of the portion of the slider track that contains the minimum value of the slider.
+        /// </summary>
+        /// <value>
+        /// Thhe color of the portion of the slider track that contains the minimum value of the slider.
+        /// </value>
         [Parameter] public Color MinimumTrackColor { get; set; }
+        /// <summary>
+        /// Gets or sets the color of the slider thumb button.
+        /// </summary>
+        /// <value>
+        /// The color of the slider thumb button.
+        /// </value>
         [Parameter] public Color ThumbColor { get; set; }
         [Parameter] public MC.ImageSource ThumbImageSource { get; set; }
+        /// <summary>
+        /// Gets or sets the current value.
+        /// </summary>
+        /// <value>
+        /// A double.
+        /// </value>
         [Parameter] public double? Value { get; set; }
         [Parameter] public EventCallback<double> ValueChanged { get; set; }
         [Parameter] public EventCallback OnDragStarted { get; set; }

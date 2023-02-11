@@ -12,6 +12,9 @@ using System.Threading.Tasks;
 
 namespace BlazorBindings.Maui.Elements
 {
+    /// <summary>
+    /// An element that can respond to gestures.
+    /// </summary>
     public partial class GestureElement : Element
     {
         static GestureElement()

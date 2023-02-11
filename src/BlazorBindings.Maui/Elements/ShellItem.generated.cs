@@ -12,6 +12,9 @@ using System.Threading.Tasks;
 
 namespace BlazorBindings.Maui.Elements
 {
+    /// <summary>
+    /// One or more items in the flyout. Contained within a <see cref="T:Microsoft.Maui.Controls.Shell" />.
+    /// </summary>
     public partial class ShellItem : ShellGroupItem
     {
         static ShellItem()

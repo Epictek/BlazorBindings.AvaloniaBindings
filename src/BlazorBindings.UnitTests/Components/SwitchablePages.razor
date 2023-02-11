@@ -1,0 +1,17 @@
+﻿@if (_switch)
+{
+    <ContentPage Title="Page1">
+        <Button OnClick="Switch" />
+    </ContentPage>
+}
+else
+{
+    <ContentPage Title="Page2">
+        <Button OnClick="Switch" />
+    </ContentPage>
+}
+
+@code {
+    bool _switch = true;
+    void Switch() => _switch = !_switch;
+}

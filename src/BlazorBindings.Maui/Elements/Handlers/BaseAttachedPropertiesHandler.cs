@@ -2,13 +2,13 @@
 // Licensed under the MIT license.
 
 using BlazorBindings.Core;
-using System.ComponentModel;
+using System.Runtime.Versioning;
 using MC = Microsoft.Maui.Controls;
 
 namespace BlazorBindings.Maui.Elements.Handlers
 {
     /// <remarks>Experimental API, subject to change.</remarks>
-    [EditorBrowsable(EditorBrowsableState.Never)]
+    [RequiresPreviewFeatures]
     public abstract class BaseAttachedPropertiesHandler : IMauiElementHandler, INonPhysicalChild
     {
         /// <summary>

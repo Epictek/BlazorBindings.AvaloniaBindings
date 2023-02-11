@@ -6,7 +6,6 @@
 // </auto-generated>
 
 using BlazorBindings.Core;
-using BlazorBindings.Maui.Elements.Handlers;
 using MC = Microsoft.Maui.Controls;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
@@ -16,40 +15,42 @@ using System.Threading.Tasks;
 
 namespace BlazorBindings.Maui.Elements
 {
+    /// <summary>
+    /// A <see cref="T:Microsoft.Maui.Controls.Page" /> that provides fundamental UI features that most applications require, leaving you to focus on the application's core workload.
+    /// </summary>
     public partial class Shell : Page
     {
         static Shell()
         {
-            ElementHandlerRegistry.RegisterPropertyContentHandler<Shell>(nameof(FlyoutBackdrop),
-                (renderer, parent, component) => new ContentPropertyHandler<MC.Shell>((x, value) => x.FlyoutBackdrop = (MC.Brush)value));
-            ElementHandlerRegistry.RegisterPropertyContentHandler<Shell>(nameof(FlyoutBackground),
-                (renderer, parent, component) => new ContentPropertyHandler<MC.Shell>((x, value) => x.FlyoutBackground = (MC.Brush)value));
-            ElementHandlerRegistry.RegisterPropertyContentHandler<Shell>(nameof(FlyoutContent),
-                (renderer, parent, component) => new DataTemplatePropertyHandler<MC.Shell>(component,
-                    (x, dataTemplate) => x.FlyoutContentTemplate = dataTemplate));
-            ElementHandlerRegistry.RegisterPropertyContentHandler<Shell>(nameof(FlyoutFooter),
-                (renderer, parent, component) => new DataTemplatePropertyHandler<MC.Shell>(component,
-                    (x, dataTemplate) => x.FlyoutFooterTemplate = dataTemplate));
-            ElementHandlerRegistry.RegisterPropertyContentHandler<Shell>(nameof(FlyoutHeader),
-                (renderer, parent, component) => new DataTemplatePropertyHandler<MC.Shell>(component,
-                    (x, dataTemplate) => x.FlyoutHeaderTemplate = dataTemplate));
-            ElementHandlerRegistry.RegisterPropertyContentHandler<Shell>(nameof(ItemTemplate),
-                (renderer, parent, component) => new DataTemplatePropertyHandler<MC.Shell, MC.BaseShellItem>(component,
-                    (x, dataTemplate) => x.ItemTemplate = dataTemplate));
-            ElementHandlerRegistry.RegisterPropertyContentHandler<Shell>(nameof(MenuItemTemplate),
-                (renderer, parent, component) => new DataTemplatePropertyHandler<MC.Shell, MC.BaseShellItem>(component,
-                    (x, dataTemplate) => x.MenuItemTemplate = dataTemplate));
             RegisterAdditionalHandlers();
         }
 
         [Parameter] public Color FlyoutBackdropColor { get; set; }
+        /// <summary>
+        /// Gets or sets the background color of the <see cref="P:Microsoft.Maui.Controls.Shell" /> Flyout.
+        /// </summary>
         [Parameter] public Color FlyoutBackgroundColor { get; set; }
         [Parameter] public MC.ImageSource FlyoutBackgroundImage { get; set; }
         [Parameter] public Aspect? FlyoutBackgroundImageAspect { get; set; }
+        /// <summary>
+        /// Setting the <see cref="T:Microsoft.Maui.FlyoutBehavior" /> property to Disabled hides the flyout, which is useful when you only have one ShellItem. The other valid FlyoutBehavior values are Flyout (default), and Locked.
+        /// </summary>
         [Parameter] public FlyoutBehavior? FlyoutBehavior { get; set; }
+        /// <summary>
+        /// Setting the FlyoutHeaderBehavior to CollapseOnScroll collapses the flyout as scrolling occurs. The other valid FlyoutHeaderBehavior values are Default, Fixed, and Scroll (scroll with the menu items).
+        /// </summary>
         [Parameter] public MC.FlyoutHeaderBehavior? FlyoutHeaderBehavior { get; set; }
         [Parameter] public double? FlyoutHeight { get; set; }
+        /// <summary>
+        /// Gets or sets the icon that, when pressed, opens the <see cref="P:Microsoft.Maui.Controls.Shell" /> Flyout.
+        /// </summary>
+        /// <value>
+        /// The default icon is a "hamburger" icon.
+        /// </value>
         [Parameter] public MC.ImageSource FlyoutIcon { get; set; }
+        /// <summary>
+        /// Gets or sets the visible status of the <see cref="P:Microsoft.Maui.Controls.Shell" /> Flyout.
+        /// </summary>
         [Parameter] public bool? FlyoutIsPresented { get; set; }
         [Parameter] public MC.ScrollMode? FlyoutVerticalScrollMode { get; set; }
         [Parameter] public double? FlyoutWidth { get; set; }
@@ -57,8 +58,17 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public RenderFragment FlyoutBackground { get; set; }
         [Parameter] public RenderFragment FlyoutContent { get; set; }
         [Parameter] public RenderFragment FlyoutFooter { get; set; }
+        /// <summary>
+        /// The flyout header appearance can be defined by setting the <see cref="P:Microsoft.Maui.Controls.Shell.FlyoutHeaderTemplate" /> property to a <see cref="P:Microsoft.Maui.Controls.DataTemplate" />.
+        /// </summary>
         [Parameter] public RenderFragment FlyoutHeader { get; set; }
+        /// <summary>
+        /// Gets or sets <see cref="T:Microsoft.Maui.Controls.DataTemplate" /> applied to each of the <see cref="P:Microsoft.Maui.Controls.Shell.Items" />.
+        /// </summary>
         [Parameter] public RenderFragment<MC.BaseShellItem> ItemTemplate { get; set; }
+        /// <summary>
+        /// Gets or sets the <see cref="T:Microsoft.Maui.Controls.DataTemplate" /> applied to <see cref="T:Microsoft.Maui.Controls.MenuItem" /> objects in the <see cref="P:Microsoft.Maui.Controls.ShellContent.MenuItems" /> collection.
+        /// </summary>
         [Parameter] public RenderFragment<MC.BaseShellItem> MenuItemTemplate { get; set; }
         [Parameter] public EventCallback<MC.ShellNavigatedEventArgs> OnNavigated { get; set; }
         [Parameter] public EventCallback<MC.ShellNavigatingEventArgs> OnNavigating { get; set; }
@@ -199,13 +209,13 @@ namespace BlazorBindings.Maui.Elements
         protected override void RenderAdditionalElementContent(RenderTreeBuilder builder, ref int sequence)
         {
             base.RenderAdditionalElementContent(builder, ref sequence);
-            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(Shell), FlyoutBackdrop);
-            RenderTreeBuilderHelper.AddContentProperty(builder, sequence++, typeof(Shell), FlyoutBackground);
-            RenderTreeBuilderHelper.AddDataTemplateProperty(builder, sequence++, typeof(Shell), FlyoutContent);
-            RenderTreeBuilderHelper.AddDataTemplateProperty(builder, sequence++, typeof(Shell), FlyoutFooter);
-            RenderTreeBuilderHelper.AddDataTemplateProperty(builder, sequence++, typeof(Shell), FlyoutHeader);
-            RenderTreeBuilderHelper.AddDataTemplateProperty(builder, sequence++, typeof(Shell), ItemTemplate);
-            RenderTreeBuilderHelper.AddDataTemplateProperty(builder, sequence++, typeof(Shell), MenuItemTemplate);
+            RenderTreeBuilderHelper.AddContentProperty<MC.Shell>(builder, sequence++, FlyoutBackdrop, (x, value) => x.FlyoutBackdrop = (MC.Brush)value);
+            RenderTreeBuilderHelper.AddContentProperty<MC.Shell>(builder, sequence++, FlyoutBackground, (x, value) => x.FlyoutBackground = (MC.Brush)value);
+            RenderTreeBuilderHelper.AddDataTemplateProperty<MC.Shell>(builder, sequence++, FlyoutContent, (x, template) => x.FlyoutContentTemplate = template);
+            RenderTreeBuilderHelper.AddDataTemplateProperty<MC.Shell>(builder, sequence++, FlyoutFooter, (x, template) => x.FlyoutFooterTemplate = template);
+            RenderTreeBuilderHelper.AddDataTemplateProperty<MC.Shell>(builder, sequence++, FlyoutHeader, (x, template) => x.FlyoutHeaderTemplate = template);
+            RenderTreeBuilderHelper.AddDataTemplateProperty<MC.Shell, MC.BaseShellItem>(builder, sequence++, ItemTemplate, (x, template) => x.ItemTemplate = template);
+            RenderTreeBuilderHelper.AddDataTemplateProperty<MC.Shell, MC.BaseShellItem>(builder, sequence++, MenuItemTemplate, (x, template) => x.MenuItemTemplate = template);
         }
 
         static partial void RegisterAdditionalHandlers();

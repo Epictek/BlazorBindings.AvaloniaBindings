@@ -1,0 +1,32 @@
+﻿@inherits ElementTestBase
+
+@code {
+    [Test]
+    public async Task SetArrayItemsSource()
+    {
+        var items = new[] { 1, 2, 3 };
+        var picker = await Render<MC.Picker>(@<Picker ItemsSource="items" />);
+
+        Assert.That(picker.Items, Is.EqualTo(new[] { "1", "2", "3" }));
+    }
+
+    [Test]
+    public async Task SetListItemsSource()
+    {
+        var items = new List<int> { 1, 2, 3 };
+        var picker = await Render<MC.Picker>(@<Picker ItemsSource="items" />);
+
+        Assert.That(picker.Items, Is.EqualTo(new[] { "1", "2", "3" }));
+    }
+
+    [Test]
+    public async Task SetDisplayBinding()
+    {
+        var items = new[] { "A", "b", "c" };
+        var picker = await Render<MC.Picker>(
+            @<Picker ItemsSource="items" ItemDisplayBinding=@(i => $"-{i.ToUpper()}-") />
+        );
+
+        Assert.That(picker.Items, Is.EqualTo(new[] { "-A-", "-B-", "-C-" }));
+    }
+}

@@ -31,7 +31,7 @@ namespace BlazorBindings.Maui.ShellNavigation
 
         public async Task CreateAsync()
         {
-            _element = await _pageFactory(_componentType).ConfigureAwait(false);
+            _element = await _pageFactory(_componentType);
         }
 
         public override bool Equals(object obj)

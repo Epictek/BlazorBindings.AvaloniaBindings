@@ -11,7 +11,7 @@ namespace BlazorBindingsXaminals
         {
             var builder = MauiApp.CreateBuilder();
             builder
-                .UseMauiApp<App>()
+                .UseMauiApp<BlazorBindingsApplication<AppShell>>()
                 .UseMauiBlazorBindings()
                 .ConfigureFonts(fonts =>
                 {

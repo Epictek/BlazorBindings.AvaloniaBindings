@@ -1,7 +1,9 @@
 ﻿@using ControlGallery.Views
 @using ControlGallery.Views.Collections
 @using ControlGallery.Views.Collections.CollectionView
+@using ControlGallery.Views.Collections.ListView
 @using ControlGallery.Views.EditText
+@using ControlGallery.Views.ErrorBoundaries
 @using ControlGallery.Views.Gestures
 @using ControlGallery.Views.InitiateCommands
 @using ControlGallery.Views.Layouts
@@ -23,6 +25,8 @@
     @*Initiate commands*@
     <ButtonPage />
     <RefreshViewPage />
+    <SearchBarPage />
+    <SwipeViewPage />
 
     @*Set values*@
     <SliderPage />
@@ -45,6 +49,8 @@
         <InfiniteScrollPage />
     </ShellSection>
     <PickerPage />
+    <TableViewPage />
+    <ListViewPage />
 
     @*Layouts*@
     <AbsoluteLayoutPage />
@@ -52,10 +58,15 @@
     <FlexLayoutPage />
 
     @*Shell*@
-    <ShellPropertiesPage @bind-ShellBackgroundColor="_backgroundColor"
-                         @bind-ShellForegroundColor="_foregroundColor"
-                         @bind-ShellUnselectedColor="_unselectedColor"
-                         @bind-ShellTabBarTitleColor="_tabBarTitleColor" />
+    <ShellContent Title="Shell Properties">
+        <ContentTemplate>
+            <ShellPropertiesPage @bind-ShellBackgroundColor="_backgroundColor"
+                                 @bind-ShellForegroundColor="_foregroundColor"
+                                 @bind-ShellUnselectedColor="_unselectedColor"
+                                 @bind-ShellTabBarTitleColor="_tabBarTitleColor" />
+        </ContentTemplate>
+    </ShellContent>
+
     <ShellItemsPage />
 
     @*Navigation*@
@@ -69,6 +80,7 @@
     <SkiaCanvasPage />
     <GestureEvents />
     <GestureRecognizersPage />
+    <ErrorBoundariesPage />
 </Shell>
 
 @code {
