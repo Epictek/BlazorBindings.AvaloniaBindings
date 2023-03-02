@@ -31,9 +31,7 @@ jobs:
         dotnet build -c Release --no-restore
         cd ..
     - name: Pack nugets
-      run: |
-        $path = [System.IO.Path]::GetFullPath("packages")
-        dotnet pack --property PackageOutputPath=$path -c Release --no-restore
+      run: dotnet pack -c Release --no-restore
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3
       with:
