@@ -1,32 +1,31 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-namespace BlazorBindings.Maui.Elements
+namespace BlazorBindings.Maui.Elements;
+
+public partial class RefreshView : ContentView
 {
-    public partial class RefreshView : ContentView
+    [Parameter] public EventCallback OnRefreshing { get; set; }
+
+    protected override bool HandleAdditionalParameter(string name, object value)
     {
-        [Parameter] public EventCallback OnRefreshing { get; set; }
-
-        protected override bool HandleAdditionalParameter(string name, object value)
+        if (name == nameof(OnRefreshing))
         {
-            if (name == nameof(OnRefreshing))
+            if (!Equals(OnRefreshing, value))
             {
-                if (!Equals(OnRefreshing, value))
+                void NativeControlRefreshing(object sender, EventArgs e)
                 {
-                    void NativeControlRefreshing(object sender, EventArgs e)
-                    {
-                        InvokeEventCallback(OnRefreshing);
-                        NativeControl.IsRefreshing = false;
-                    }
-
-                    OnRefreshing = (EventCallback)value;
-                    NativeControl.Refreshing -= NativeControlRefreshing;
-                    NativeControl.Refreshing += NativeControlRefreshing;
+                    InvokeEventCallback(OnRefreshing);
+                    NativeControl.IsRefreshing = false;
                 }
-                return true;
-            }
 
-            return base.HandleAdditionalParameter(name, value);
+                OnRefreshing = (EventCallback)value;
+                NativeControl.Refreshing -= NativeControlRefreshing;
+                NativeControl.Refreshing += NativeControlRefreshing;
+            }
+            return true;
         }
+
+        return base.HandleAdditionalParameter(name, value);
     }
 }

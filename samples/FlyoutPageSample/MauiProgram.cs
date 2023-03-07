@@ -1,16 +1,15 @@
 ﻿using BlazorBindings.Maui;
 using FlyoutPageSample.Views;
 
-namespace FlyoutPageSample
+namespace FlyoutPageSample;
+
+public static class MauiProgram
 {
-    public static class MauiProgram
+    public static MauiApp CreateMauiApp()
     {
-        public static MauiApp CreateMauiApp()
-        {
-            return MauiApp.CreateBuilder()
-                .UseMauiApp<BlazorBindingsApplication<MainPage>>()
-                .UseMauiBlazorBindings()
-                .Build();
-        }
+        return MauiApp.CreateBuilder()
+            .UseMauiApp<BlazorBindingsApplication<MainPage>>()
+            .UseMauiBlazorBindings()
+            .Build();
     }
 }

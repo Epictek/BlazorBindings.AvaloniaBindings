@@ -5,65 +5,64 @@ using System.Diagnostics;
 using MC = Microsoft.Maui.Controls;
 
 
-namespace BlazorBindings.Maui.Elements
+namespace BlazorBindings.Maui.Elements;
+
+public abstract partial class GradientBrush : Brush, IMauiContainerElementHandler
 {
-    public abstract partial class GradientBrush : Brush, IMauiContainerElementHandler
-    {
 #pragma warning disable CA1721 // Property names should not match get methods
-        [Parameter] public RenderFragment ChildContent { get; set; }
+    [Parameter] public RenderFragment ChildContent { get; set; }
 #pragma warning restore CA1721 // Property names should not match get methods
 
-        protected override RenderFragment GetChildContent() => ChildContent;
+    protected override RenderFragment GetChildContent() => ChildContent;
 
-        protected override bool HandleAdditionalParameter(string name, object value)
+    protected override bool HandleAdditionalParameter(string name, object value)
+    {
+        if (name == nameof(ChildContent))
         {
-            if (name == nameof(ChildContent))
-            {
-                ChildContent = (RenderFragment)value;
-                return true;
-            }
-            else
-            {
-                return base.HandleAdditionalParameter(name, value);
-            }
+            ChildContent = (RenderFragment)value;
+            return true;
+        }
+        else
+        {
+            return base.HandleAdditionalParameter(name, value);
+        }
+    }
+
+    void IMauiContainerElementHandler.AddChild(MC.BindableObject child, int physicalSiblingIndex)
+    {
+        if (child is not MC.GradientStop gradientStopChild)
+        {
+            throw new ArgumentException($"GradientBrush support GradientStop child elements only, but {child?.GetType()} found instead.", nameof(child));
         }
 
-        void IMauiContainerElementHandler.AddChild(MC.BindableObject child, int physicalSiblingIndex)
+        if (physicalSiblingIndex <= NativeControl.GradientStops.Count)
         {
-            if (child is not MC.GradientStop gradientStopChild)
-            {
-                throw new ArgumentException($"GradientBrush support GradientStop child elements only, but {child?.GetType()} found instead.", nameof(child));
-            }
+            NativeControl.GradientStops.Insert(physicalSiblingIndex, gradientStopChild);
+        }
+        else
+        {
+            Debug.WriteLine($"WARNING: {nameof(IMauiContainerElementHandler.AddChild)} called with {nameof(physicalSiblingIndex)}={physicalSiblingIndex}, but GradientBrushControl.GradientStops.Count={NativeControl.GradientStops}");
+            NativeControl.GradientStops.Add(gradientStopChild);
+        }
+    }
 
-            if (physicalSiblingIndex <= NativeControl.GradientStops.Count)
-            {
-                NativeControl.GradientStops.Insert(physicalSiblingIndex, gradientStopChild);
-            }
-            else
-            {
-                Debug.WriteLine($"WARNING: {nameof(IMauiContainerElementHandler.AddChild)} called with {nameof(physicalSiblingIndex)}={physicalSiblingIndex}, but GradientBrushControl.GradientStops.Count={NativeControl.GradientStops}");
-                NativeControl.GradientStops.Add(gradientStopChild);
-            }
+    int IMauiContainerElementHandler.GetChildIndex(MC.BindableObject child)
+    {
+        if (child is not MC.GradientStop gradientStopChild)
+        {
+            throw new ArgumentException($"GradientBrush support GradientStop child elements only, but {child?.GetType()} found instead.", nameof(child));
         }
 
-        int IMauiContainerElementHandler.GetChildIndex(MC.BindableObject child)
-        {
-            if (child is not MC.GradientStop gradientStopChild)
-            {
-                throw new ArgumentException($"GradientBrush support GradientStop child elements only, but {child?.GetType()} found instead.", nameof(child));
-            }
+        return NativeControl.GradientStops.IndexOf(gradientStopChild);
+    }
 
-            return NativeControl.GradientStops.IndexOf(gradientStopChild);
+    void IMauiContainerElementHandler.RemoveChild(MC.BindableObject child)
+    {
+        if (child is not MC.GradientStop gradientStopChild)
+        {
+            throw new ArgumentException($"GradientBrush support GradientStop child elements only, but {child?.GetType()} found instead.", nameof(child));
         }
 
-        void IMauiContainerElementHandler.RemoveChild(MC.BindableObject child)
-        {
-            if (child is not MC.GradientStop gradientStopChild)
-            {
-                throw new ArgumentException($"GradientBrush support GradientStop child elements only, but {child?.GetType()} found instead.", nameof(child));
-            }
-
-            NativeControl.GradientStops.Remove(gradientStopChild);
-        }
+        NativeControl.GradientStops.Remove(gradientStopChild);
     }
 }

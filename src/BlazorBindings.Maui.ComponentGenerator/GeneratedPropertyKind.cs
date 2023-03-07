@@ -1,9 +1,8 @@
-﻿namespace BlazorBindings.Maui.ComponentGenerator
+﻿namespace BlazorBindings.Maui.ComponentGenerator;
+
+public enum GeneratedPropertyKind
 {
-    public enum GeneratedPropertyKind
-    {
-        Value,
-        RenderFragment,
-        EventCallback
-    }
+    Value,
+    RenderFragment,
+    EventCallback
 }

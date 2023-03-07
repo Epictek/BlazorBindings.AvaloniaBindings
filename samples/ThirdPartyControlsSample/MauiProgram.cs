@@ -1,24 +1,23 @@
 ﻿using BlazorBindings.Maui;
 using CommunityToolkit.Maui;
 
-namespace ThirdPartyControlsSample
-{
-    public static class MauiProgram
-    {
-        public static MauiApp CreateMauiApp()
-        {
-            var builder = MauiApp.CreateBuilder();
-            builder
-                .UseMauiApp<BlazorBindingsApplication<AppShell>>()
-                .UseMauiBlazorBindings()
-                .UseMauiCommunityToolkit()
-                .ConfigureFonts(fonts =>
-                {
-                    fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-                    fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-                });
+namespace ThirdPartyControlsSample;
 
-            return builder.Build();
-        }
+public static class MauiProgram
+{
+    public static MauiApp CreateMauiApp()
+    {
+        var builder = MauiApp.CreateBuilder();
+        builder
+            .UseMauiApp<BlazorBindingsApplication<AppShell>>()
+            .UseMauiBlazorBindings()
+            .UseMauiCommunityToolkit()
+            .ConfigureFonts(fonts =>
+            {
+                fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+                fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+            });
+
+        return builder.Build();
     }
 }

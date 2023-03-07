@@ -3,20 +3,19 @@
 
 using BlazorBindings.Maui;
 
-namespace BlazorBindingsToDo
+namespace BlazorBindingsToDo;
+
+public static class MauiProgram
 {
-    public static class MauiProgram
+    public static MauiApp CreateMauiApp()
     {
-        public static MauiApp CreateMauiApp()
-        {
-            var builder = MauiApp.CreateBuilder();
-            builder
-                .UseMauiApp<BlazorBindingsApplication<TodoApp>>()
-                .UseMauiBlazorBindings();
+        var builder = MauiApp.CreateBuilder();
+        builder
+            .UseMauiApp<BlazorBindingsApplication<TodoApp>>()
+            .UseMauiBlazorBindings();
 
-            builder.Services.AddSingleton<AppState>();
+        builder.Services.AddSingleton<AppState>();
 
-            return builder.Build();
-        }
+        return builder.Build();
     }
 }

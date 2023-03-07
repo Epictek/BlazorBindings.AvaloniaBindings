@@ -1,28 +1,28 @@
 ﻿@inherits ElementTestBase
 
 @code {
-    [Test]
-    public async Task FlyoutDetailPageIsWrappedInNavigationPage()
-    {
-        var flyoutPage = await Render<MC.FlyoutPage>(
+[Test]
+public async Task FlyoutDetailPageIsWrappedInNavigationPage()
+{
+    var flyoutPage = await Render<MC.FlyoutPage>(
     @<FlyoutPage Title="FlyoutPage">
         <Detail>
             <ContentPage Title="Detail Page" />
         </Detail>
     </FlyoutPage>
-    );
+);
 
-        Assert.That(flyoutPage.Detail, Is.TypeOf<MC.NavigationPage>());
+    Assert.That(flyoutPage.Detail, Is.TypeOf<MC.NavigationPage>());
 
-        var rootPage = ((MC.NavigationPage)flyoutPage.Detail).RootPage;
-        Assert.That(rootPage.Title, Is.EqualTo("Detail Page"));
-    }
+    var rootPage = ((MC.NavigationPage)flyoutPage.Detail).RootPage;
+    Assert.That(rootPage.Title, Is.EqualTo("Detail Page"));
+}
 
-    [Test]
-    public async Task FlyoutPageShouldBeAbleToSwitchContent()
-    {
-        int pageNumber = 1;
-        var flyoutPage = await Render<MC.FlyoutPage>(
+[Test]
+public async Task FlyoutPageShouldBeAbleToSwitchContent()
+{
+    int pageNumber = 1;
+    var flyoutPage = await Render<MC.FlyoutPage>(
     @<FlyoutPage Title="FlyoutPage">
         <Flyout>
             <ContentPage Title="Flyout">
@@ -32,31 +32,31 @@
 
         <Detail>
             @if (pageNumber == 1)
-            {
-                <ContentPage Title="First Page">
+        {
+            <ContentPage Title="First Page">
                     <Label>1</Label>
                 </ContentPage>
-            }
-            else
-            {
-                <ContentPage Title="Second Page">
+        }
+        else
+        {
+            <ContentPage Title="Second Page">
                     <Label>2</Label>
                 </ContentPage>
-            }
+        }
         </Detail>
     </FlyoutPage>
-    );
+);
 
-        Assert.That(GetPageTitle(), Is.EqualTo("First Page"));
-        Assert.That(GetContentLabel(), Is.EqualTo("1"));
+    Assert.That(GetPageTitle(), Is.EqualTo("First Page"));
+    Assert.That(GetContentLabel(), Is.EqualTo("1"));
 
-        pageNumber = 2;
-        StateHasChanged();
+    pageNumber = 2;
+    StateHasChanged();
 
-        Assert.That(GetPageTitle(), Is.EqualTo("Second Page"));
-        Assert.That(GetContentLabel(), Is.EqualTo("2"));
+    Assert.That(GetPageTitle(), Is.EqualTo("Second Page"));
+    Assert.That(GetContentLabel(), Is.EqualTo("2"));
 
-        string GetPageTitle() => (flyoutPage.Detail as MC.NavigationPage)?.RootPage.Title;
-        string GetContentLabel() => (((flyoutPage.Detail as MC.NavigationPage)?.RootPage as MC.ContentPage)?.Content as MC.Label)?.Text;
-    }
+    string GetPageTitle() => (flyoutPage.Detail as MC.NavigationPage)?.RootPage.Title;
+    string GetContentLabel() => (((flyoutPage.Detail as MC.NavigationPage)?.RootPage as MC.ContentPage)?.Content as MC.Label)?.Text;
+}
 }

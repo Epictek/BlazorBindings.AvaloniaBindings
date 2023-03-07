@@ -1,6 +1,5 @@
-﻿namespace FluxorSample.Store
+﻿namespace FluxorSample.Store;
+
+public class IncrementCounterAction
 {
-    public class IncrementCounterAction
-    {
-    }
 }

@@ -53,21 +53,21 @@
     </ContentPage>
 
     @code {
-    int ratingValue = 3;
-    string RatingDescription => ratingValue switch
-    {
-        1 => "Garbage",
-        2 => "Bad",
-        3 => "Mediocre",
-        4 => "Good",
-        5 => "Awesome",
-        _ => "Why am I here?"
-    };
+int ratingValue = 3;
+string RatingDescription => ratingValue switch
+{
+    1 => "Garbage",
+    2 => "Bad",
+    3 => "Mediocre",
+    4 => "Good",
+    5 => "Awesome",
+    _ => "Why am I here?"
+};
 
-    double sliderValue;
+double sliderValue;
 
-    double numericUpDownValue;
+double numericUpDownValue;
 
-    bool checkboxChecked = true;
-    bool toggleOn;
+bool checkboxChecked = true;
+bool toggleOn;
 }

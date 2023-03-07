@@ -64,12 +64,12 @@
 </ContentPage>
 
 @code {
-    double _value = 10;
+double _value = 10;
 
-    string PolylinePoint => (100 + 5 * _value).ToString(CultureInfo.InvariantCulture);
-    float GradientOffset => (float)(0.5 + _value / 10);
-    double PolygonThickness => 3 + _value;
-    double LineX1 => 40 + 5 * _value;
-    double CircleThickness => 4 + _value / 5;
-    double EllipseWidth => 150 + _value;
+string PolylinePoint => (100 + 5 * _value).ToString(CultureInfo.InvariantCulture);
+float GradientOffset => (float)(0.5 + _value / 10);
+double PolygonThickness => 3 + _value;
+double LineX1 => 40 + 5 * _value;
+double CircleThickness => 4 + _value / 5;
+double EllipseWidth => 150 + _value;
 }

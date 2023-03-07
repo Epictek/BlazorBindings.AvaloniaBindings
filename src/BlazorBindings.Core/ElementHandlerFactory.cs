@@ -3,7 +3,6 @@
 
 using Microsoft.AspNetCore.Components;
 
-namespace BlazorBindings.Core
-{
-    internal delegate IElementHandler ElementHandlerFactory(NativeComponentRenderer renderer, IElementHandler parentHandler, IComponent component);
-}
+namespace BlazorBindings.Core;
+
+internal delegate IElementHandler ElementHandlerFactory(NativeComponentRenderer renderer, IElementHandler parentHandler, IComponent component);

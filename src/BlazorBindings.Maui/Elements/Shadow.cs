@@ -1,25 +1,24 @@
 using Microsoft.Maui.Graphics;
 
-namespace BlazorBindings.Maui.Elements
+namespace BlazorBindings.Maui.Elements;
+
+public partial class Shadow
 {
-    public partial class Shadow
+    [Parameter] public Color Color { get; set; }
+
+    protected override bool HandleAdditionalParameter(string name, object value)
     {
-        [Parameter] public Color Color { get; set; }
-
-        protected override bool HandleAdditionalParameter(string name, object value)
+        if (name == nameof(Color))
         {
-            if (name == nameof(Color))
+            if (!Equals(Color, value))
             {
-                if (!Equals(Color, value))
-                {
-                    Color = (Color)value;
-                    NativeControl.Brush = Color;
-                }
-
-                return true;
+                Color = (Color)value;
+                NativeControl.Brush = Color;
             }
 
-            return base.HandleAdditionalParameter(name, value);
+            return true;
         }
+
+        return base.HandleAdditionalParameter(name, value);
     }
 }

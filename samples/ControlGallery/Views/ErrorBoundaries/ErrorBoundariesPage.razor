@@ -23,38 +23,38 @@
         <Button Text="Throw" OnClick="ThrowException" />
 
         @if (ShowNavigation)
-        {
-            <Label>Navigations</Label>
-            <Button Text="Open page" OnClick="PushToStack" />
-            <Button Text="Open modal" OnClick="PushModal" />
-        }
+    {
+        <Label>Navigations</Label>
+        <Button Text="Open page" OnClick="PushToStack" />
+        <Button Text="Open modal" OnClick="PushModal" />
+    }
     </VerticalStackLayout>
 </ContentPage>
 
 @code {
-    [Parameter] public bool ShowNavigation { get; set; } = true;
+[Parameter] public bool ShowNavigation { get; set; } = true;
 
-    [Inject] INavigation Navigation { get; set; }
+[Inject] INavigation Navigation { get; set; }
 
-    ErrorBoundary errorBoundary;
+ErrorBoundary errorBoundary;
 
-    void Recover()
-    {
-        errorBoundary.Recover();
-    }
+void Recover()
+{
+    errorBoundary.Recover();
+}
 
-    void ThrowException()
-    {
-        throw new InvalidOperationException("Something unxepected happened.");
-    }
+void ThrowException()
+{
+    throw new InvalidOperationException("Something unxepected happened.");
+}
 
-    async Task PushToStack()
-    {
-        await Navigation.PushAsync(@<ErrorBoundariesPage ShowNavigation="false" />);
-    }
+async Task PushToStack()
+{
+    await Navigation.PushAsync(@<ErrorBoundariesPage ShowNavigation="false" />);
+}
 
-    async Task PushModal()
-    {
-        await Navigation.PushModalAsync(@<ErrorBoundariesPage ShowNavigation="false" />);
-    }
+async Task PushModal()
+{
+    await Navigation.PushModalAsync(@<ErrorBoundariesPage ShowNavigation="false" />);
+}
 }

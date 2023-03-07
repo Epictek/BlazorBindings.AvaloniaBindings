@@ -1,56 +1,55 @@
 ﻿using System.ComponentModel;
 using MC = Microsoft.Maui.Controls;
 
-namespace BlazorBindings.Maui.Elements
+namespace BlazorBindings.Maui.Elements;
+
+public class RadioButtonGroup<T> : StackLayout
 {
-    public class RadioButtonGroup<T> : StackLayout
+    [Parameter] public T SelectedValue { get; set; }
+    [Parameter] public EventCallback<T> SelectedValueChanged { get; set; }
+
+    private readonly string _groupId = Guid.NewGuid().ToString();
+
+    protected override MC.StackLayout CreateNativeElement()
     {
-        [Parameter] public T SelectedValue { get; set; }
-        [Parameter] public EventCallback<T> SelectedValueChanged { get; set; }
+        var stackLayout = new MC.StackLayout();
+        MC.RadioButtonGroup.SetGroupName(stackLayout, _groupId);
+        return stackLayout;
+    }
 
-        private readonly string _groupId = Guid.NewGuid().ToString();
-
-        protected override MC.StackLayout CreateNativeElement()
+    protected override void HandleParameter(string name, object value)
+    {
+        switch (name)
         {
-            var stackLayout = new MC.StackLayout();
-            MC.RadioButtonGroup.SetGroupName(stackLayout, _groupId);
-            return stackLayout;
-        }
+            case nameof(SelectedValue):
+                if (!Equals(SelectedValue, value))
+                {
+                    SelectedValue = (T)value;
+                    MC.RadioButtonGroup.SetSelectedValue(NativeControl, SelectedValue);
+                }
+                break;
 
-        protected override void HandleParameter(string name, object value)
-        {
-            switch (name)
-            {
-                case nameof(SelectedValue):
-                    if (!Equals(SelectedValue, value))
+            case nameof(SelectedValueChanged):
+                if (!Equals(SelectedValueChanged, value))
+                {
+                    void NativeControlPropertyChanged(object sender, PropertyChangedEventArgs e)
                     {
-                        SelectedValue = (T)value;
-                        MC.RadioButtonGroup.SetSelectedValue(NativeControl, SelectedValue);
-                    }
-                    break;
-
-                case nameof(SelectedValueChanged):
-                    if (!Equals(SelectedValueChanged, value))
-                    {
-                        void NativeControlPropertyChanged(object sender, PropertyChangedEventArgs e)
+                        if (e.PropertyName == "SelectedValue")
                         {
-                            if (e.PropertyName == "SelectedValue")
-                            {
-                                var value = (T)MC.RadioButtonGroup.GetSelectedValue(NativeControl);
-                                InvokeEventCallback(SelectedValueChanged, value);
-                            }
+                            var value = (T)MC.RadioButtonGroup.GetSelectedValue(NativeControl);
+                            InvokeEventCallback(SelectedValueChanged, value);
                         }
-
-                        SelectedValueChanged = (EventCallback<T>)value;
-                        NativeControl.PropertyChanged -= NativeControlPropertyChanged;
-                        NativeControl.PropertyChanged += NativeControlPropertyChanged;
                     }
-                    break;
 
-                default:
-                    base.HandleParameter(name, value);
-                    break;
-            }
+                    SelectedValueChanged = (EventCallback<T>)value;
+                    NativeControl.PropertyChanged -= NativeControlPropertyChanged;
+                    NativeControl.PropertyChanged += NativeControlPropertyChanged;
+                }
+                break;
+
+            default:
+                base.HandleParameter(name, value);
+                break;
         }
     }
 }

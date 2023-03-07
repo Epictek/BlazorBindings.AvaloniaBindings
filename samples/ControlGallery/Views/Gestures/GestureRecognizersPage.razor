@@ -22,26 +22,26 @@
 @code
 {
     int count;
-    double fontSize = 20;
-    string swipeState = "none";
+double fontSize = 20;
+string swipeState = "none";
 
-    void OnLabelTapped()
-    {
-        count += 1;
-    }
+void OnLabelTapped()
+{
+    count += 1;
+}
 
-    void OnLabelPanned(PanUpdatedEventArgs e)
-    {
-        fontSize = 20 + e.TotalX;
-    }
+void OnLabelPanned(PanUpdatedEventArgs e)
+{
+    fontSize = 20 + e.TotalX;
+}
 
-    void OnSwipeLabel(SwipedEventArgs e)
+void OnSwipeLabel(SwipedEventArgs e)
+{
+    swipeState = e.Direction switch
     {
-        swipeState = e.Direction switch
-        {
-            SwipeDirection.Left => "deleted",
-            SwipeDirection.Right => "archive",
-            _ => "unknown: " + e.Direction.ToString(),
-        };
-    }
+        SwipeDirection.Left => "deleted",
+        SwipeDirection.Right => "archive",
+        _ => "unknown: " + e.Direction.ToString(),
+    };
+}
 }

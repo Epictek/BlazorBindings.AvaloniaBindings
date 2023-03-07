@@ -1,10 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-namespace BlazorBindings.Maui
+namespace BlazorBindings.Maui;
+
+public interface IMauiElementHandler : IElementHandler
 {
-    public interface IMauiElementHandler : IElementHandler
-    {
-        Microsoft.Maui.Controls.BindableObject ElementControl { get; }
-    }
+    Microsoft.Maui.Controls.BindableObject ElementControl { get; }
 }

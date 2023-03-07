@@ -1,6 +1,5 @@
-﻿namespace FluxorSample.Store
+﻿namespace FluxorSample.Store;
+
+public class FetchDataAction
 {
-    public class FetchDataAction
-    {
-    }
 }

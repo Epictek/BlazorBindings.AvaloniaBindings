@@ -3,35 +3,34 @@
 
 using Microsoft.Maui.Graphics;
 
-namespace BlazorBindings.Maui.Elements
+namespace BlazorBindings.Maui.Elements;
+
+public static partial class AttributeHelper
 {
-    public static partial class AttributeHelper
+    /// <summary>
+    /// Helper method to serialize <see cref="Color" /> objects.
+    /// </summary>
+    public static string ColorToString(Color color)
     {
-        /// <summary>
-        /// Helper method to serialize <see cref="Color" /> objects.
-        /// </summary>
-        public static string ColorToString(Color color)
+        if (color is null)
         {
-            if (color is null)
-            {
-                return null;
-            }
-
-            return color.ToRgbaHex(true);
+            return null;
         }
 
-        /// <summary>
-        /// Helper method to deserialize <see cref="Color" /> objects.
-        /// </summary>
-        public static Color GetColor(object obj)
+        return color.ToRgbaHex(true);
+    }
+
+    /// <summary>
+    /// Helper method to deserialize <see cref="Color" /> objects.
+    /// </summary>
+    public static Color GetColor(object obj)
+    {
+        return obj switch
         {
-            return obj switch
-            {
-                null => null,
-                Color color => color,
-                string colorAsString => Color.FromRgba(colorAsString),
-                _ => throw new ArgumentException("Cannot convert parameter to Color.", nameof(obj))
-            };
-        }
+            null => null,
+            Color color => color,
+            string colorAsString => Color.FromRgba(colorAsString),
+            _ => throw new ArgumentException("Cannot convert parameter to Color.", nameof(obj))
+        };
     }
 }

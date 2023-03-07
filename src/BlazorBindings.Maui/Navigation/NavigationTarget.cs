@@ -1,7 +1,6 @@
-﻿namespace BlazorBindings.Maui
+﻿namespace BlazorBindings.Maui;
+
+internal enum NavigationTarget
 {
-    internal enum NavigationTarget
-    {
-        Navigation, Modal
-    }
+    Navigation, Modal
 }

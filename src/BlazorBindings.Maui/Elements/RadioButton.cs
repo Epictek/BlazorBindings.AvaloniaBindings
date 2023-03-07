@@ -1,34 +1,33 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-namespace BlazorBindings.Maui.Elements
+namespace BlazorBindings.Maui.Elements;
+
+public partial class RadioButton : TemplatedView
 {
-    public partial class RadioButton : TemplatedView
+    [Parameter] public string Text { get; set; }
+    [Parameter] public object Value { get; set; }
+
+    protected override bool HandleAdditionalParameter(string name, object value)
     {
-        [Parameter] public string Text { get; set; }
-        [Parameter] public object Value { get; set; }
-
-        protected override bool HandleAdditionalParameter(string name, object value)
+        switch (name)
         {
-            switch (name)
-            {
-                case nameof(Text):
-                    Text = (string)value;
-                    NativeControl.Content = Text;
-                    return true;
-                case nameof(Value):
-                    Value = value;
-                    NativeControl.Value = Value;
+            case nameof(Text):
+                Text = (string)value;
+                NativeControl.Content = Text;
+                return true;
+            case nameof(Value):
+                Value = value;
+                NativeControl.Value = Value;
 
-                    if (Text is null && Value is not null)
-                    {
-                        NativeControl.Content = Value.ToString();
-                    }
+                if (Text is null && Value is not null)
+                {
+                    NativeControl.Content = Value.ToString();
+                }
 
-                    return true;
-                default:
-                    return base.HandleAdditionalParameter(name, value);
-            }
+                return true;
+            default:
+                return base.HandleAdditionalParameter(name, value);
         }
     }
 }

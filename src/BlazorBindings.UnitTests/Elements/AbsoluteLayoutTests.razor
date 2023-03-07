@@ -2,10 +2,10 @@
 @inherits ElementTestBase
 
 @code {
-    [Test]
-    public async Task AddItemsToLayout()
-    {
-        var layout = await Render<MC.AbsoluteLayout>(
+[Test]
+public async Task AddItemsToLayout()
+{
+    var layout = await Render<MC.AbsoluteLayout>(
     @<AbsoluteLayout>
         <BoxView Color="Colors.Silver" AbsoluteLayout.LayoutBounds="0, 10, 200, 5" />
 
@@ -13,56 +13,56 @@
            AbsoluteLayout.LayoutBounds="0.5, 0.5, 110, 25"
            AbsoluteLayout.LayoutFlags="@AbsoluteLayoutFlags.PositionProportional" />
     </AbsoluteLayout>
-        );
+    );
 
-        var boxView = (MC.BoxView)layout.Children[0];
-        var label = (MC.Label)layout.Children[1];
+    var boxView = (MC.BoxView)layout.Children[0];
+    var label = (MC.Label)layout.Children[1];
 
-        Assert.That(MC.AbsoluteLayout.GetLayoutBounds(boxView), Is.EqualTo(new Rect(0, 10, 200, 5)));
+    Assert.That(MC.AbsoluteLayout.GetLayoutBounds(boxView), Is.EqualTo(new Rect(0, 10, 200, 5)));
 
-        Assert.That(MC.AbsoluteLayout.GetLayoutBounds(label), Is.EqualTo(new Rect(0.5, 0.5, 110, 25)));
-        Assert.That(MC.AbsoluteLayout.GetLayoutFlags(label), Is.EqualTo(AbsoluteLayoutFlags.PositionProportional));
-    }
+    Assert.That(MC.AbsoluteLayout.GetLayoutBounds(label), Is.EqualTo(new Rect(0.5, 0.5, 110, 25)));
+    Assert.That(MC.AbsoluteLayout.GetLayoutFlags(label), Is.EqualTo(AbsoluteLayoutFlags.PositionProportional));
+}
 
-    [Test]
-    public async Task SetLayoutBoundsAsStringWithAllDimensions()
-    {
-        var layout = await Render<MC.AbsoluteLayout>(
+[Test]
+public async Task SetLayoutBoundsAsStringWithAllDimensions()
+{
+    var layout = await Render<MC.AbsoluteLayout>(
     @<AbsoluteLayout>
         <BoxView Color="Colors.Silver" AbsoluteLayout.LayoutBounds="1, 2, 3, 4" />
     </AbsoluteLayout>
-        );
+    );
 
-        var boxView = (MC.BoxView)layout.Children[0];
-        var layoutBounds = MC.AbsoluteLayout.GetLayoutBounds(boxView);
-        Assert.That(layoutBounds, Is.EqualTo(new Rect(1, 2, 3, 4)));
-    }
+    var boxView = (MC.BoxView)layout.Children[0];
+    var layoutBounds = MC.AbsoluteLayout.GetLayoutBounds(boxView);
+    Assert.That(layoutBounds, Is.EqualTo(new Rect(1, 2, 3, 4)));
+}
 
-    [Test]
-    public async Task SetLayoutBoundsAsStringWithXYOnly()
-    {
-        var layout = await Render<MC.AbsoluteLayout>(
+[Test]
+public async Task SetLayoutBoundsAsStringWithXYOnly()
+{
+    var layout = await Render<MC.AbsoluteLayout>(
     @<AbsoluteLayout>
         <BoxView Color="Colors.Silver" AbsoluteLayout.LayoutBounds="2, 3" />
     </AbsoluteLayout>
-        );
+    );
 
-        var boxView = (MC.BoxView)layout.Children[0];
-        var layoutBounds = MC.AbsoluteLayout.GetLayoutBounds(boxView);
-        Assert.That(layoutBounds, Is.EqualTo(new Rect(2, 3, MC.AbsoluteLayout.AutoSize, MC.AbsoluteLayout.AutoSize)));
-    }
+    var boxView = (MC.BoxView)layout.Children[0];
+    var layoutBounds = MC.AbsoluteLayout.GetLayoutBounds(boxView);
+    Assert.That(layoutBounds, Is.EqualTo(new Rect(2, 3, MC.AbsoluteLayout.AutoSize, MC.AbsoluteLayout.AutoSize)));
+}
 
-    [Test]
-    public async Task SetLayoutBoundsAsRect()
-    {
-        var layout = await Render<MC.AbsoluteLayout>(
+[Test]
+public async Task SetLayoutBoundsAsRect()
+{
+    var layout = await Render<MC.AbsoluteLayout>(
     @<AbsoluteLayout>
         <BoxView Color="Colors.Silver" AbsoluteLayout.LayoutBounds="@(new Rect(2, 3, 4, 5))" />
     </AbsoluteLayout>
-    );
+);
 
-        var boxView = (MC.BoxView)layout.Children[0];
-        var layoutBounds = MC.AbsoluteLayout.GetLayoutBounds(boxView);
-        Assert.That(layoutBounds, Is.EqualTo(new Rect(2, 3, 4, 5)));
-    }
+    var boxView = (MC.BoxView)layout.Children[0];
+    var layoutBounds = MC.AbsoluteLayout.GetLayoutBounds(boxView);
+    Assert.That(layoutBounds, Is.EqualTo(new Rect(2, 3, 4, 5)));
+}
 }

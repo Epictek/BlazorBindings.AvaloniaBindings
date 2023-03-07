@@ -3,23 +3,22 @@
 
 using Microsoft.Maui.Controls;
 
-namespace BlazorBindings.Maui.Elements
-{
-    public partial class AttributeHelper
-    {
-        private static readonly DoubleCollectionConverter _doubleCollectionConverter = new();
+namespace BlazorBindings.Maui.Elements;
 
-        public static DoubleCollection GetDoubleCollection(object value)
+public partial class AttributeHelper
+{
+    private static readonly DoubleCollectionConverter _doubleCollectionConverter = new();
+
+    public static DoubleCollection GetDoubleCollection(object value)
+    {
+        return value switch
         {
-            return value switch
-            {
-                null => null,
-                DoubleCollection doubleCollection => doubleCollection,
-                double[] doubleArray => (DoubleCollection)doubleArray,
-                float[] floatArray => (DoubleCollection)floatArray,
-                string => (DoubleCollection)_doubleCollectionConverter.ConvertFromInvariantString((string)value),
-                _ => throw new ArgumentException("Cannot convert value to DoubleCollection.", nameof(value))
-            };
-        }
+            null => null,
+            DoubleCollection doubleCollection => doubleCollection,
+            double[] doubleArray => (DoubleCollection)doubleArray,
+            float[] floatArray => (DoubleCollection)floatArray,
+            string => (DoubleCollection)_doubleCollectionConverter.ConvertFromInvariantString((string)value),
+            _ => throw new ArgumentException("Cannot convert value to DoubleCollection.", nameof(value))
+        };
     }
 }

@@ -15,10 +15,10 @@
     </Tab>
 
     @for (int i = 0; i < tabCount; i++)
-    {
-        var currentIndex = i;
-        <ShellTab Title="@($"Tab #{currentIndex + 1}")" />
-    }
+{
+    var currentIndex = i;
+    <ShellTab Title="@($"Tab #{currentIndex + 1}")" />
+}
 </FlyoutItem>
 
 @for (int i = 0; i < menuItemCount; i++)
@@ -27,32 +27,32 @@
 }
 
 @code {
-    int tabCount = 1;
-    int menuItemCount = 0;
+int tabCount = 1;
+int menuItemCount = 0;
 
-    void AddTab()
-    {
-        tabCount++;
-    }
+void AddTab()
+{
+    tabCount++;
+}
 
-    void RemoveTab()
+void RemoveTab()
+{
+    if (tabCount > 1)
     {
-        if (tabCount > 1)
-        {
-            tabCount--;
-        }
+        tabCount--;
     }
+}
 
-    void AddMenuItem()
-    {
-        menuItemCount++;
-    }
+void AddMenuItem()
+{
+    menuItemCount++;
+}
 
-    void RemoveMenuItem()
+void RemoveMenuItem()
+{
+    if (menuItemCount > 0)
     {
-        if (menuItemCount > 0)
-        {
-            menuItemCount--;
-        }
+        menuItemCount--;
     }
+}
 }

@@ -23,19 +23,19 @@
 @code
 {
     [Parameter] public Animal Animal { get; set; }
-    [Parameter] public EventCallback<Animal> OnClick { get; set; }
+[Parameter] public EventCallback<Animal> OnClick { get; set; }
 
-    UriImageSource imageSource = new UriImageSource();
+UriImageSource imageSource = new UriImageSource();
 
-    protected override void OnParametersSet()
-    {
-        var uri = new Uri(Animal.ImageUrl);
-        imageSource.Uri = uri;
-    }
+protected override void OnParametersSet()
+{
+    var uri = new Uri(Animal.ImageUrl);
+    imageSource.Uri = uri;
+}
 
-    void Details()
-    {
-        if (OnClick.HasDelegate)
-            OnClick.InvokeAsync(Animal);
-    }
+void Details()
+{
+    if (OnClick.HasDelegate)
+        OnClick.InvokeAsync(Animal);
+}
 }

@@ -32,17 +32,17 @@
 </ContentPage>
 
 @code {
-    ImageSource dotNetBotSource = ImageSource.FromFile("dotnet_bot.png");
+ImageSource dotNetBotSource = ImageSource.FromFile("dotnet_bot.png");
 
-    string ButtonText => CounterState.Value.ClickCount switch
-    {
-        0 => "Click me",
-        1 => $"Clicked 1 time",
-        int i => $"Clicked {i} times"
-    };
+string ButtonText => CounterState.Value.ClickCount switch
+{
+    0 => "Click me",
+    1 => $"Clicked 1 time",
+    int i => $"Clicked {i} times"
+};
 
-    void OnCounterClicked()
-    {
-        Dispatcher.Dispatch(new IncrementCounterAction());
-    }
+void OnCounterClicked()
+{
+    Dispatcher.Dispatch(new IncrementCounterAction());
+}
 }

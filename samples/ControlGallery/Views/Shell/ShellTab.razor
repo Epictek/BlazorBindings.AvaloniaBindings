@@ -1,8 +1,8 @@
 ﻿<Tab Title="@Title">
     @for (int i = 0; i < count; i++)
-    {
-        var currentIndex = i;
-        <ShellContent Title="@($"Content #{currentIndex + 1}")">
+{
+    var currentIndex = i;
+    <ShellContent Title="@($"Content #{currentIndex + 1}")">
             <ContentPage>
                 <StackLayout>
                     <Label Text="@($"Tab {currentIndex + 1}")" />
@@ -11,24 +11,24 @@
                 </StackLayout>
             </ContentPage>
         </ShellContent>
-    }
+}
 </Tab>
 
 @code {
-    [Parameter] public string Title { get; set; }
+[Parameter] public string Title { get; set; }
 
-    int count = 2;
+int count = 2;
 
-    void AddShellContent()
+void AddShellContent()
+{
+    count++;
+}
+
+void RemoveShellContent()
+{
+    if (count > 1)
     {
-        count++;
+        count--;
     }
-
-    void RemoveShellContent()
-    {
-        if (count > 1)
-        {
-            count--;
-        }
-    }
+}
 }

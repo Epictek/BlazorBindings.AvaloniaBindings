@@ -1,26 +1,25 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 
-namespace ControlGallery.Views.ErrorBoundaries
-{
-    public class ErrorBoundary : ErrorBoundaryBase
-    {
-        protected override Task OnErrorAsync(Exception exception)
-        {
-            // Log the exception somewhere.
-            return Task.CompletedTask;
-        }
+namespace ControlGallery.Views.ErrorBoundaries;
 
-        protected override void BuildRenderTree(RenderTreeBuilder builder)
+public class ErrorBoundary : ErrorBoundaryBase
+{
+    protected override Task OnErrorAsync(Exception exception)
+    {
+        // Log the exception somewhere.
+        return Task.CompletedTask;
+    }
+
+    protected override void BuildRenderTree(RenderTreeBuilder builder)
+    {
+        if (CurrentException != null)
         {
-            if (CurrentException != null)
-            {
-                ErrorContent?.Invoke(CurrentException).Invoke(builder);
-            }
-            else
-            {
-                ChildContent?.Invoke(builder);
-            }
+            ErrorContent?.Invoke(CurrentException).Invoke(builder);
+        }
+        else
+        {
+            ChildContent?.Invoke(builder);
         }
     }
 }

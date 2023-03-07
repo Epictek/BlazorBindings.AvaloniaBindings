@@ -1,36 +1,35 @@
 using MC = Microsoft.Maui.Controls;
 
-namespace BlazorBindings.Maui.Elements
+namespace BlazorBindings.Maui.Elements;
+
+public partial class CarouselView<T> : IHandleAfterRender
 {
-    public partial class CarouselView<T> : IHandleAfterRender
+    private MC.IndicatorView _indicatorView;
+
+    [Parameter] public Func<IndicatorView> IndicatorView { get; set; }
+
+    protected override bool HandleAdditionalParameter(string name, object value)
     {
-        private MC.IndicatorView _indicatorView;
-
-        [Parameter] public Func<IndicatorView> IndicatorView { get; set; }
-
-        protected override bool HandleAdditionalParameter(string name, object value)
+        if (name == nameof(IndicatorView))
         {
-            if (name == nameof(IndicatorView))
-            {
-                IndicatorView = (Func<IndicatorView>)value;
-                return true;
-            }
-
-            return base.HandleAdditionalParameter(name, value);
+            IndicatorView = (Func<IndicatorView>)value;
+            return true;
         }
 
-        Task IHandleAfterRender.OnAfterRenderAsync()
+        return base.HandleAdditionalParameter(name, value);
+    }
+
+    Task IHandleAfterRender.OnAfterRenderAsync()
+    {
+        if (IndicatorView != null)
         {
-            if (IndicatorView != null)
+            var newIndicatorView = IndicatorView()?.NativeControl;
+            if (!Equals(newIndicatorView, _indicatorView))
             {
-                var newIndicatorView = IndicatorView()?.NativeControl;
-                if (!Equals(newIndicatorView, _indicatorView))
-                {
-                    _indicatorView = newIndicatorView;
-                    NativeControl.IndicatorView = newIndicatorView;
-                }
+                _indicatorView = newIndicatorView;
+                NativeControl.IndicatorView = newIndicatorView;
             }
-            return Task.CompletedTask;
         }
+        return Task.CompletedTask;
     }
 }

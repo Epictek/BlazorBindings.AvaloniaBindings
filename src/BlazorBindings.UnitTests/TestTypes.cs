@@ -8,127 +8,126 @@ using System.Runtime.ExceptionServices;
 using System.Threading;
 using MauiDispatching = Microsoft.Maui.Dispatching;
 
-namespace BlazorBindings.UnitTests
+namespace BlazorBindings.UnitTests;
+
+class TestApplication : MC.Application
 {
-    class TestApplication : MC.Application
+    public TestApplication(IServiceProvider serviceProvider = null)
     {
-        public TestApplication(IServiceProvider serviceProvider = null)
+        serviceProvider ??= TestServiceProvider.Create();
+        Handler = new TestHandler
         {
-            serviceProvider ??= TestServiceProvider.Create();
-            Handler = new TestHandler
-            {
-                MauiContext = new MauiContext(serviceProvider),
-                VirtualView = this
-            };
+            MauiContext = new MauiContext(serviceProvider),
+            VirtualView = this
+        };
 
-            DependencyService.RegisterSingleton(new TestSystemResources());
-        }
+        DependencyService.RegisterSingleton(new TestSystemResources());
+    }
 
-        class TestHandler : IElementHandler
-        {
-            public object PlatformView => null;
-            public IElement VirtualView { get; set; }
-            public IMauiContext MauiContext { get; set; }
-            public void DisconnectHandler() { }
-            public void Invoke(string command, object args = null) { }
-            public void SetMauiContext(IMauiContext mauiContext) => MauiContext = mauiContext;
-            public void SetVirtualView(IElement view) => VirtualView = view;
-            public void UpdateValue(string property) { }
-        }
+    class TestHandler : IElementHandler
+    {
+        public object PlatformView => null;
+        public IElement VirtualView { get; set; }
+        public IMauiContext MauiContext { get; set; }
+        public void DisconnectHandler() { }
+        public void Invoke(string command, object args = null) { }
+        public void SetMauiContext(IMauiContext mauiContext) => MauiContext = mauiContext;
+        public void SetVirtualView(IElement view) => VirtualView = view;
+        public void UpdateValue(string property) { }
+    }
 
 #pragma warning disable CS0612 // Type or member is obsolete. Unfortunately, I need to register this, otherwise some tests fail.
-        class TestSystemResources : ISystemResourcesProvider
+    class TestSystemResources : ISystemResourcesProvider
 #pragma warning restore CS0612 // Type or member is obsolete
-        {
-            public IResourceDictionary GetSystemResources() => new ResourceDictionary();
-        }
+    {
+        public IResourceDictionary GetSystemResources() => new ResourceDictionary();
+    }
+}
+
+public static class TestServiceProvider
+{
+    public static IServiceProvider Create()
+    {
+        var builder = MauiApp.CreateBuilder();
+        builder.UseMauiBlazorBindings();
+        builder.Services.AddSingleton<MauiBlazorBindingsRenderer, TestBlazorBindingsRenderer>();
+        builder.Services.AddSingleton<MauiDispatching.IDispatcher, TestDispatcher>();
+        return builder.Build().Services;
     }
 
-    public static class TestServiceProvider
+    class TestDispatcher : MauiDispatching.IDispatcher
     {
-        public static IServiceProvider Create()
+        public bool IsDispatchRequired => false;
+        public MauiDispatching.IDispatcherTimer CreateTimer() => null;
+        public bool Dispatch(Action action)
         {
-            var builder = MauiApp.CreateBuilder();
-            builder.UseMauiBlazorBindings();
-            builder.Services.AddSingleton<MauiBlazorBindingsRenderer, TestBlazorBindingsRenderer>();
-            builder.Services.AddSingleton<MauiDispatching.IDispatcher, TestDispatcher>();
-            return builder.Build().Services;
+            action();
+            return true;
         }
 
-        class TestDispatcher : MauiDispatching.IDispatcher
+        public bool DispatchDelayed(TimeSpan delay, Action action)
         {
-            public bool IsDispatchRequired => false;
-            public MauiDispatching.IDispatcherTimer CreateTimer() => null;
-            public bool Dispatch(Action action)
-            {
-                action();
-                return true;
-            }
-
-            public bool DispatchDelayed(TimeSpan delay, Action action)
-            {
-                Thread.Sleep(delay);
-                action();
-                return true;
-            }
+            Thread.Sleep(delay);
+            action();
+            return true;
         }
     }
+}
 
-    public class TestBlazorBindingsRenderer : MauiBlazorBindingsRenderer
+public class TestBlazorBindingsRenderer : MauiBlazorBindingsRenderer
+{
+    public TestBlazorBindingsRenderer(IServiceProvider serviceProvider, ILoggerFactory loggerFactory) : base(serviceProvider, loggerFactory)
     {
-        public TestBlazorBindingsRenderer(IServiceProvider serviceProvider, ILoggerFactory loggerFactory) : base(serviceProvider, loggerFactory)
+    }
+
+    public bool ThrowExceptions { get; set; } = true;
+
+    public List<Exception> Exceptions { get; } = new();
+
+    protected override void HandleException(Exception exception)
+    {
+        Exceptions.Add(exception);
+
+        if (ThrowExceptions)
+            ExceptionDispatchInfo.Throw(exception);
+    }
+
+    public override Dispatcher Dispatcher => NullDispatcher.Instance;
+
+    public static MauiBlazorBindingsRenderer Create()
+    {
+        return TestServiceProvider.Create().GetRequiredService<MauiBlazorBindingsRenderer>();
+    }
+
+    sealed class NullDispatcher : Dispatcher
+    {
+        public static readonly Dispatcher Instance = new NullDispatcher();
+
+        private NullDispatcher()
         {
         }
 
-        public bool ThrowExceptions { get; set; } = true;
+        public override bool CheckAccess() => true;
 
-        public List<Exception> Exceptions { get; } = new();
-
-        protected override void HandleException(Exception exception)
+        public override Task InvokeAsync(Action workItem)
         {
-            Exceptions.Add(exception);
-
-            if (ThrowExceptions)
-                ExceptionDispatchInfo.Throw(exception);
+            workItem();
+            return Task.CompletedTask;
         }
 
-        public override Dispatcher Dispatcher => NullDispatcher.Instance;
-
-        public static MauiBlazorBindingsRenderer Create()
+        public override Task InvokeAsync(Func<Task> workItem)
         {
-            return TestServiceProvider.Create().GetRequiredService<MauiBlazorBindingsRenderer>();
+            return workItem();
         }
 
-        sealed class NullDispatcher : Dispatcher
+        public override Task<TResult> InvokeAsync<TResult>(Func<TResult> workItem)
         {
-            public static readonly Dispatcher Instance = new NullDispatcher();
+            return Task.FromResult(workItem());
+        }
 
-            private NullDispatcher()
-            {
-            }
-
-            public override bool CheckAccess() => true;
-
-            public override Task InvokeAsync(Action workItem)
-            {
-                workItem();
-                return Task.CompletedTask;
-            }
-
-            public override Task InvokeAsync(Func<Task> workItem)
-            {
-                return workItem();
-            }
-
-            public override Task<TResult> InvokeAsync<TResult>(Func<TResult> workItem)
-            {
-                return Task.FromResult(workItem());
-            }
-
-            public override Task<TResult> InvokeAsync<TResult>(Func<Task<TResult>> workItem)
-            {
-                return workItem();
-            }
+        public override Task<TResult> InvokeAsync<TResult>(Func<Task<TResult>> workItem)
+        {
+            return workItem();
         }
     }
 }

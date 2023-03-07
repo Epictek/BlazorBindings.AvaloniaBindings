@@ -5,22 +5,22 @@
 </ContentPage>
 
 @code {
-    ContentPage _page;
+ContentPage _page;
 
-    public event Action OnDispose;
+public event Action OnDispose;
 
-    protected override void OnAfterRender(bool firstRender)
+protected override void OnAfterRender(bool firstRender)
+{
+    if (firstRender)
     {
-        if (firstRender)
-        {
-            // This is needed to be able to get component from tests.
-            _page.NativeControl.SetValue(TestProperties.ComponentProperty, this);
-        }
+        // This is needed to be able to get component from tests.
+        _page.NativeControl.SetValue(TestProperties.ComponentProperty, this);
     }
+}
 
-    public void Dispose()
-    {
-        OnDispose?.Invoke();
-        OnDispose = null;
-    }
+public void Dispose()
+{
+    OnDispose?.Invoke();
+    OnDispose = null;
+}
 }

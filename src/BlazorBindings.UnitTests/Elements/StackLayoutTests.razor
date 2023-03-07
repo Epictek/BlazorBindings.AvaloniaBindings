@@ -1,10 +1,10 @@
 ﻿@inherits ElementTestBase
 
 @code {
-    [Test]
-    public async Task AddLayoutChildren()
-    {
-        var layout = await Render<MC.Layout>(
+[Test]
+public async Task AddLayoutChildren()
+{
+    var layout = await Render<MC.Layout>(
     @<VerticalStackLayout>
         <Label>First</Label>
         <Button>Second</Button>
@@ -13,15 +13,15 @@
             <Label>Third</Label>
         </HorizontalStackLayout>
     </VerticalStackLayout>
-    );
+);
 
-        var label = (MC.Label)layout.Children[0];
-        var button = (MC.Button)layout.Children[1];
-        var innerLayout = (MC.Layout)layout.Children[2];
-        var innerLabel = (MC.Label)innerLayout.Children[0];
+    var label = (MC.Label)layout.Children[0];
+    var button = (MC.Button)layout.Children[1];
+    var innerLayout = (MC.Layout)layout.Children[2];
+    var innerLabel = (MC.Label)innerLayout.Children[0];
 
-        Assert.That(label.Text, Is.EqualTo("First"));
-        Assert.That(button.Text, Is.EqualTo("Second"));
-        Assert.That(innerLabel.Text, Is.EqualTo("Third"));
-    }
+    Assert.That(label.Text, Is.EqualTo("First"));
+    Assert.That(button.Text, Is.EqualTo("Second"));
+    Assert.That(innerLabel.Text, Is.EqualTo("Third"));
+}
 }

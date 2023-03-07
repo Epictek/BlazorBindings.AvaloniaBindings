@@ -1,31 +1,30 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-namespace BlazorBindings.Maui.Elements
+namespace BlazorBindings.Maui.Elements;
+
+public partial class Span : GestureElement, IHandleChildContentText
 {
-    public partial class Span : GestureElement, IHandleChildContentText
+
+    private readonly TextSpanContainer _textSpanContainer = new();
+
+    [Parameter] public RenderFragment ChildContent { get; set; }
+
+    protected override bool HandleAdditionalParameter(string name, object value)
     {
-
-        private readonly TextSpanContainer _textSpanContainer = new();
-
-        [Parameter] public RenderFragment ChildContent { get; set; }
-
-        protected override bool HandleAdditionalParameter(string name, object value)
+        if (name == nameof(ChildContent))
         {
-            if (name == nameof(ChildContent))
-            {
-                ChildContent = (RenderFragment)value;
-                return true;
-            }
-
-            return base.HandleAdditionalParameter(name, value);
+            ChildContent = (RenderFragment)value;
+            return true;
         }
 
-        protected override RenderFragment GetChildContent() => ChildContent;
+        return base.HandleAdditionalParameter(name, value);
+    }
 
-        void IHandleChildContentText.HandleText(int index, string text)
-        {
-            NativeControl.Text = _textSpanContainer.GetUpdatedText(index, text);
-        }
+    protected override RenderFragment GetChildContent() => ChildContent;
+
+    void IHandleChildContentText.HandleText(int index, string text)
+    {
+        NativeControl.Text = _textSpanContainer.GetUpdatedText(index, text);
     }
 }

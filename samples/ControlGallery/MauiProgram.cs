@@ -4,30 +4,29 @@
 using BlazorBindings.Maui;
 using SkiaSharp.Views.Maui.Controls.Hosting;
 
-namespace ControlGallery
+namespace ControlGallery;
+
+public static class MauiProgram
 {
-    public static class MauiProgram
+    public static MauiApp CreateMauiApp()
     {
-        public static MauiApp CreateMauiApp()
-        {
-            var builder = MauiApp.CreateBuilder();
-            builder
-                .UseMauiApp<App>()
-                .UseSkiaSharp()
-                .UseMauiBlazorBindings()
-                .ConfigureFonts(fonts =>
-                {
-                    fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-                });
+        var builder = MauiApp.CreateBuilder();
+        builder
+            .UseMauiApp<App>()
+            .UseSkiaSharp()
+            .UseMauiBlazorBindings()
+            .ConfigureFonts(fonts =>
+            {
+                fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+            });
 
-            return builder.Build();
-        }
+        return builder.Build();
     }
+}
 
-    public class App : BlazorBindingsApplication<AppShell>
-    {
-        public App(IServiceProvider services) : base(services) { }
+public class App : BlazorBindingsApplication<AppShell>
+{
+    public App(IServiceProvider services) : base(services) { }
 
-        public override Type WrapperComponentType => typeof(Root);
-    }
+    public override Type WrapperComponentType => typeof(Root);
 }

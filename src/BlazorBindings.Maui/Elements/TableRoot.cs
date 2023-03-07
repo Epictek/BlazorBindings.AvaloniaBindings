@@ -1,27 +1,26 @@
 using Microsoft.AspNetCore.Components.Rendering;
 using MC = Microsoft.Maui.Controls;
 
-namespace BlazorBindings.Maui.Elements
+namespace BlazorBindings.Maui.Elements;
+
+public partial class TableRoot
 {
-    public partial class TableRoot
+    [Parameter] public RenderFragment ChildContent { get; set; }
+
+    protected override bool HandleAdditionalParameter(string name, object value)
     {
-        [Parameter] public RenderFragment ChildContent { get; set; }
-
-        protected override bool HandleAdditionalParameter(string name, object value)
+        if (name == nameof(ChildContent))
         {
-            if (name == nameof(ChildContent))
-            {
-                ChildContent = (RenderFragment)value;
-                return true;
-            }
-
-            return base.HandleAdditionalParameter(name, value);
+            ChildContent = (RenderFragment)value;
+            return true;
         }
 
-        protected override void RenderAdditionalElementContent(RenderTreeBuilder builder, ref int sequence)
-        {
-            base.RenderAdditionalElementContent(builder, ref sequence);
-            RenderTreeBuilderHelper.AddListContentProperty<MC.TableRoot, MC.TableSection>(builder, sequence++, ChildContent, x => x);
-        }
+        return base.HandleAdditionalParameter(name, value);
+    }
+
+    protected override void RenderAdditionalElementContent(RenderTreeBuilder builder, ref int sequence)
+    {
+        base.RenderAdditionalElementContent(builder, ref sequence);
+        RenderTreeBuilderHelper.AddListContentProperty<MC.TableRoot, MC.TableSection>(builder, sequence++, ChildContent, x => x);
     }
 }

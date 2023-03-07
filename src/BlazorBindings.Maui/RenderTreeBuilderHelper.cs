@@ -6,147 +6,146 @@ using BlazorBindings.Maui.Elements.Internal;
 using Microsoft.AspNetCore.Components.Rendering;
 using MC = Microsoft.Maui.Controls;
 
-namespace BlazorBindings.Maui
+namespace BlazorBindings.Maui;
+
+/// <remarks>Experimental API, subject to change.</remarks>
+[RequiresPreviewFeatures]
+public static class RenderTreeBuilderHelper
 {
-    /// <remarks>Experimental API, subject to change.</remarks>
-    [RequiresPreviewFeatures]
-    public static class RenderTreeBuilderHelper
+    public static void AddContentProperty<TControl>(
+        RenderTreeBuilder builder,
+        int sequence,
+        RenderFragment content,
+        Action<TControl, MC.BindableObject> setPropertyAction)
     {
-        public static void AddContentProperty<TControl>(
-            RenderTreeBuilder builder,
-            int sequence,
-            RenderFragment content,
-            Action<TControl, MC.BindableObject> setPropertyAction)
+        if (content != null)
         {
-            if (content != null)
-            {
-                builder.OpenRegion(sequence);
+            builder.OpenRegion(sequence);
 
-                builder.OpenComponent<ContentPropertyComponent<TControl>>(0);
-                builder.AddAttribute(1, nameof(ContentPropertyComponent<TControl>.ChildContent), content);
-                builder.AddAttribute(2, nameof(ContentPropertyComponent<TControl>.SetPropertyAction), setPropertyAction);
-                builder.CloseComponent();
+            builder.OpenComponent<ContentPropertyComponent<TControl>>(0);
+            builder.AddAttribute(1, nameof(ContentPropertyComponent<TControl>.ChildContent), content);
+            builder.AddAttribute(2, nameof(ContentPropertyComponent<TControl>.SetPropertyAction), setPropertyAction);
+            builder.CloseComponent();
 
-                builder.CloseRegion();
-            }
+            builder.CloseRegion();
         }
+    }
 
-        public static void AddListContentProperty<TControl, TItem>(
-            RenderTreeBuilder builder,
-            int sequence,
-            RenderFragment content,
-            Func<TControl, IList<TItem>> listPropertyAccessor)
-            where TItem : class
+    public static void AddListContentProperty<TControl, TItem>(
+        RenderTreeBuilder builder,
+        int sequence,
+        RenderFragment content,
+        Func<TControl, IList<TItem>> listPropertyAccessor)
+        where TItem : class
+    {
+        if (content != null)
         {
-            if (content != null)
-            {
-                builder.OpenRegion(sequence);
+            builder.OpenRegion(sequence);
 
-                builder.OpenComponent<ListContentPropertyComponent<TControl, TItem>>(0);
-                builder.AddAttribute(1, nameof(ListContentPropertyComponent<TControl, TItem>.ChildContent), content);
-                builder.AddAttribute(2, nameof(ListContentPropertyComponent<TControl, TItem>.ListPropertyAccessor), listPropertyAccessor);
-                builder.CloseComponent();
+            builder.OpenComponent<ListContentPropertyComponent<TControl, TItem>>(0);
+            builder.AddAttribute(1, nameof(ListContentPropertyComponent<TControl, TItem>.ChildContent), content);
+            builder.AddAttribute(2, nameof(ListContentPropertyComponent<TControl, TItem>.ListPropertyAccessor), listPropertyAccessor);
+            builder.CloseComponent();
 
-                builder.CloseRegion();
-            }
+            builder.CloseRegion();
         }
+    }
 
-        public static void AddDataTemplateProperty<TControl, TItem>(
-            RenderTreeBuilder builder,
-            int sequence,
-            RenderFragment<TItem> template,
-            Action<TControl, MC.DataTemplate> setDataTemplateAction)
+    public static void AddDataTemplateProperty<TControl, TItem>(
+        RenderTreeBuilder builder,
+        int sequence,
+        RenderFragment<TItem> template,
+        Action<TControl, MC.DataTemplate> setDataTemplateAction)
+    {
+        if (template != null)
         {
-            if (template != null)
-            {
-                builder.OpenRegion(sequence);
+            builder.OpenRegion(sequence);
 
-                builder.OpenComponent<DataTemplateItemsComponent<TControl, TItem>>(0);
-                builder.AddAttribute(1, nameof(DataTemplateItemsComponent<TControl, TItem>.SetDataTemplateAction), setDataTemplateAction);
-                builder.AddAttribute(2, nameof(DataTemplateItemsComponent<TControl, TItem>.Template), template);
-                builder.CloseComponent();
+            builder.OpenComponent<DataTemplateItemsComponent<TControl, TItem>>(0);
+            builder.AddAttribute(1, nameof(DataTemplateItemsComponent<TControl, TItem>.SetDataTemplateAction), setDataTemplateAction);
+            builder.AddAttribute(2, nameof(DataTemplateItemsComponent<TControl, TItem>.Template), template);
+            builder.CloseComponent();
 
-                builder.CloseRegion();
-            }
+            builder.CloseRegion();
         }
+    }
 
-        public static void AddDataTemplateProperty<T>(
-            RenderTreeBuilder builder,
-            int sequence,
-            RenderFragment template,
-            Action<T, MC.DataTemplate> setDataTemplateAction)
-            where T : MC.BindableObject
+    public static void AddDataTemplateProperty<T>(
+        RenderTreeBuilder builder,
+        int sequence,
+        RenderFragment template,
+        Action<T, MC.DataTemplate> setDataTemplateAction)
+        where T : MC.BindableObject
+    {
+        if (template != null)
         {
-            if (template != null)
-            {
-                builder.OpenRegion(sequence);
+            builder.OpenRegion(sequence);
 
-                builder.OpenComponent<ControlTemplateItemsComponent<T>>(0);
-                builder.AddAttribute(1, nameof(ControlTemplateItemsComponent<T>.SetDataTemplateAction), setDataTemplateAction);
-                builder.AddAttribute(2, nameof(ControlTemplateItemsComponent<T>.Template), template);
-                builder.CloseComponent();
+            builder.OpenComponent<ControlTemplateItemsComponent<T>>(0);
+            builder.AddAttribute(1, nameof(ControlTemplateItemsComponent<T>.SetDataTemplateAction), setDataTemplateAction);
+            builder.AddAttribute(2, nameof(ControlTemplateItemsComponent<T>.Template), template);
+            builder.CloseComponent();
 
-                builder.CloseRegion();
-            }
+            builder.CloseRegion();
         }
+    }
 
-        public static void AddControlTemplateProperty<T>(
-            RenderTreeBuilder builder,
-             int sequence,
-            RenderFragment template,
-            Action<T, MC.ControlTemplate> setControlTemplateAction)
-            where T : MC.BindableObject
+    public static void AddControlTemplateProperty<T>(
+        RenderTreeBuilder builder,
+         int sequence,
+        RenderFragment template,
+        Action<T, MC.ControlTemplate> setControlTemplateAction)
+        where T : MC.BindableObject
+    {
+        if (template != null)
         {
-            if (template != null)
-            {
-                builder.OpenRegion(sequence);
+            builder.OpenRegion(sequence);
 
-                builder.OpenComponent<ControlTemplateItemsComponent<T>>(0);
-                builder.AddAttribute(1, nameof(ControlTemplateItemsComponent<T>.SetControlTemplateAction), setControlTemplateAction);
-                builder.AddAttribute(2, nameof(ControlTemplateItemsComponent<T>.Template), template);
-                builder.CloseComponent();
+            builder.OpenComponent<ControlTemplateItemsComponent<T>>(0);
+            builder.AddAttribute(1, nameof(ControlTemplateItemsComponent<T>.SetControlTemplateAction), setControlTemplateAction);
+            builder.AddAttribute(2, nameof(ControlTemplateItemsComponent<T>.Template), template);
+            builder.CloseComponent();
 
-                builder.CloseRegion();
-            }
+            builder.CloseRegion();
         }
+    }
 
-        internal static void AddSyncDataTemplateProperty<TControl, TItem>(
-            RenderTreeBuilder builder,
-            int sequence,
-            RenderFragment<TItem> template,
-            Action<TControl, MC.DataTemplate> setDataTemplateAction)
+    internal static void AddSyncDataTemplateProperty<TControl, TItem>(
+        RenderTreeBuilder builder,
+        int sequence,
+        RenderFragment<TItem> template,
+        Action<TControl, MC.DataTemplate> setDataTemplateAction)
+    {
+        if (template != null)
         {
-            if (template != null)
-            {
-                builder.OpenRegion(sequence);
+            builder.OpenRegion(sequence);
 
-                builder.OpenComponent<SyncDataTemplateItemsComponent<TControl, TItem>>(0);
-                builder.AddAttribute(1, nameof(SyncDataTemplateItemsComponent<TControl, TItem>.SetDataTemplateAction), setDataTemplateAction);
-                builder.AddAttribute(2, nameof(SyncDataTemplateItemsComponent<TControl, TItem>.Template), template);
-                builder.CloseComponent();
+            builder.OpenComponent<SyncDataTemplateItemsComponent<TControl, TItem>>(0);
+            builder.AddAttribute(1, nameof(SyncDataTemplateItemsComponent<TControl, TItem>.SetDataTemplateAction), setDataTemplateAction);
+            builder.AddAttribute(2, nameof(SyncDataTemplateItemsComponent<TControl, TItem>.Template), template);
+            builder.CloseComponent();
 
-                builder.CloseRegion();
-            }
+            builder.CloseRegion();
         }
+    }
 
-        internal static void AddSyncDataTemplateProperty<T>(
-            RenderTreeBuilder builder,
-            int sequence,
-            RenderFragment template,
-            Action<T, MC.DataTemplate> setDataTemplateAction)
-            where T : MC.BindableObject
+    internal static void AddSyncDataTemplateProperty<T>(
+        RenderTreeBuilder builder,
+        int sequence,
+        RenderFragment template,
+        Action<T, MC.DataTemplate> setDataTemplateAction)
+        where T : MC.BindableObject
+    {
+        if (template != null)
         {
-            if (template != null)
-            {
-                builder.OpenRegion(sequence);
+            builder.OpenRegion(sequence);
 
-                builder.OpenComponent<SyncControlTemplateItemsComponent<T>>(0);
-                builder.AddAttribute(1, nameof(SyncControlTemplateItemsComponent<T>.SetDataTemplateAction), setDataTemplateAction);
-                builder.AddAttribute(2, nameof(SyncControlTemplateItemsComponent<T>.Template), template);
-                builder.CloseComponent();
+            builder.OpenComponent<SyncControlTemplateItemsComponent<T>>(0);
+            builder.AddAttribute(1, nameof(SyncControlTemplateItemsComponent<T>.SetDataTemplateAction), setDataTemplateAction);
+            builder.AddAttribute(2, nameof(SyncControlTemplateItemsComponent<T>.Template), template);
+            builder.CloseComponent();
 
-                builder.CloseRegion();
-            }
+            builder.CloseRegion();
         }
     }
 }

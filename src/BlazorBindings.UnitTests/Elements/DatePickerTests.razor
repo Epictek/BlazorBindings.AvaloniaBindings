@@ -1,37 +1,37 @@
 ﻿@inherits ElementTestBase
 
 @code {
-    [Test]
-    public async Task BindedDateIsUpdatedWhenSelected()
-    {
-        DateOnly bindedDate = default;
-        var datePicker = await Render<MC.DatePicker>(@<DatePicker @bind-Date="bindedDate" />);
+[Test]
+public async Task BindedDateIsUpdatedWhenSelected()
+{
+    DateOnly bindedDate = default;
+    var datePicker = await Render<MC.DatePicker>(@<DatePicker @bind-Date="bindedDate" />);
 
-        datePicker.Date = new DateTime(2023, 01, 12);
+    datePicker.Date = new DateTime(2023, 01, 12);
 
-        Assert.That(bindedDate, Is.EqualTo(new DateOnly(2023, 01, 12)));
-    }
+    Assert.That(bindedDate, Is.EqualTo(new DateOnly(2023, 01, 12)));
+}
 
-    [Test]
-    public async Task SelectedDateIsUpdatedWhenBindedValueChanged()
-    {
-        DateOnly bindedDate = default;
-        var datePicker = await Render<MC.DatePicker>(@<DatePicker @bind-Date="bindedDate" />);
+[Test]
+public async Task SelectedDateIsUpdatedWhenBindedValueChanged()
+{
+    DateOnly bindedDate = default;
+    var datePicker = await Render<MC.DatePicker>(@<DatePicker @bind-Date="bindedDate" />);
 
-        bindedDate = new DateOnly(2023, 01, 12);
-        StateHasChanged();
+    bindedDate = new DateOnly(2023, 01, 12);
+    StateHasChanged();
 
-        Assert.That(datePicker.Date, Is.EqualTo(new DateTime(2023, 01, 12)));
-    }
+    Assert.That(datePicker.Date, Is.EqualTo(new DateTime(2023, 01, 12)));
+}
 
-    [Test]
-    public async Task SetMinMaxDate()
-    {
-        var minDate = new DateOnly(2023, 01, 01);
-        var maxDate = new DateOnly(2023, 12, 31);
-        var datePicker = await Render<MC.DatePicker>(@<DatePicker MinimumDate="minDate" MaximumDate="maxDate" />);
+[Test]
+public async Task SetMinMaxDate()
+{
+    var minDate = new DateOnly(2023, 01, 01);
+    var maxDate = new DateOnly(2023, 12, 31);
+    var datePicker = await Render<MC.DatePicker>(@<DatePicker MinimumDate="minDate" MaximumDate="maxDate" />);
 
-        Assert.That(datePicker.MinimumDate, Is.EqualTo(minDate.ToDateTime(TimeOnly.MinValue)));
-        Assert.That(datePicker.MaximumDate, Is.EqualTo(maxDate.ToDateTime(TimeOnly.MinValue)));
-    }
+    Assert.That(datePicker.MinimumDate, Is.EqualTo(minDate.ToDateTime(TimeOnly.MinValue)));
+    Assert.That(datePicker.MaximumDate, Is.EqualTo(maxDate.ToDateTime(TimeOnly.MinValue)));
+}
 }

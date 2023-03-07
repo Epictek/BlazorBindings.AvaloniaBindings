@@ -1,95 +1,94 @@
 using System.Globalization;
 using MC = Microsoft.Maui.Controls;
 
-namespace BlazorBindings.Maui.Elements
+namespace BlazorBindings.Maui.Elements;
+
+public partial class Entry<T>
 {
-    public partial class Entry<T>
+    [Parameter] public new T Text { get; set; }
+    [Parameter] public new EventCallback<T> TextChanged { get; set; }
+
+    protected override bool HandleAdditionalParameter(string name, object value)
     {
-        [Parameter] public new T Text { get; set; }
-        [Parameter] public new EventCallback<T> TextChanged { get; set; }
-
-        protected override bool HandleAdditionalParameter(string name, object value)
+        switch (name)
         {
-            switch (name)
-            {
-                case nameof(Text):
-                    if (!Equals(Text, value))
+            case nameof(Text):
+                if (!Equals(Text, value))
+                {
+                    Text = (T)value;
+                    UpdateText(Text);
+                }
+                return true;
+
+            case nameof(TextChanged):
+                if (!Equals(TextChanged, value))
+                {
+                    TextChanged = (EventCallback<T>)value;
+                    NativeControl.TextChanged -= NativeControlTextChanged;
+                    NativeControl.TextChanged += NativeControlTextChanged;
+
+                    if (typeof(T) != typeof(string))
                     {
-                        Text = (T)value;
-                        UpdateText(Text);
+                        NativeControl.Unfocused -= NativeControlUnfocused;
+                        NativeControl.Unfocused += NativeControlUnfocused;
                     }
-                    return true;
-
-                case nameof(TextChanged):
-                    if (!Equals(TextChanged, value))
-                    {
-                        TextChanged = (EventCallback<T>)value;
-                        NativeControl.TextChanged -= NativeControlTextChanged;
-                        NativeControl.TextChanged += NativeControlTextChanged;
-
-                        if (typeof(T) != typeof(string))
-                        {
-                            NativeControl.Unfocused -= NativeControlUnfocused;
-                            NativeControl.Unfocused += NativeControlUnfocused;
-                        }
-                    }
-                    return true;
-
-                default:
-                    return base.HandleAdditionalParameter(name, value);
-            }
-        }
-
-        private void UpdateText(T newValue)
-        {
-            NativeControl.Text = newValue?.ToString();
-        }
-
-        private void NativeControlTextChanged(object sender, MC.TextChangedEventArgs e)
-        {
-            var text = NativeControl.Text;
-
-            _ = TryParse(text, out var value);
-
-            if (!Equals(Text, value))
-            {
-                Text = value;
-                InvokeAsync(() => TextChanged.InvokeAsync(value));
-            }
-        }
-
-        void NativeControlUnfocused(object sender, MC.FocusEventArgs e)
-        {
-            if (!TryParse(NativeControl.Text, out _))
-            {
-                var value = default(T);
-                NativeControl.Text = value?.ToString();
-            }
-        }
-
-        static bool TryParse(string text, out T result)
-        {
-            if (typeof(T) == typeof(string))
-            {
-                result = (T)(object)text;
+                }
                 return true;
-            }
 
-            if (string.IsNullOrWhiteSpace(text))
-            {
-                result = default;
-                return true;
-            }
+            default:
+                return base.HandleAdditionalParameter(name, value);
+        }
+    }
 
-            if (StringConverter.TryParse(typeof(T), text, CultureInfo.CurrentCulture, out var resultObj)
-                || StringConverter.TryParse(typeof(T), text, CultureInfo.InvariantCulture, out resultObj))
-            {
-                result = (T)resultObj;
-                return true;
-            }
+    private void UpdateText(T newValue)
+    {
+        NativeControl.Text = newValue?.ToString();
+    }
 
+    private void NativeControlTextChanged(object sender, MC.TextChangedEventArgs e)
+    {
+        var text = NativeControl.Text;
+
+        _ = TryParse(text, out var value);
+
+        if (!Equals(Text, value))
+        {
+            Text = value;
+            InvokeAsync(() => TextChanged.InvokeAsync(value));
+        }
+    }
+
+    void NativeControlUnfocused(object sender, MC.FocusEventArgs e)
+    {
+        if (!TryParse(NativeControl.Text, out _))
+        {
+            var value = default(T);
+            NativeControl.Text = value?.ToString();
+        }
+    }
+
+    static bool TryParse(string text, out T result)
+    {
+        if (typeof(T) == typeof(string))
+        {
+            result = (T)(object)text;
+            return true;
+        }
+
+        if (string.IsNullOrWhiteSpace(text))
+        {
             result = default;
-            return false;
+            return true;
         }
+
+        if (StringConverter.TryParse(typeof(T), text, CultureInfo.CurrentCulture, out var resultObj)
+            || StringConverter.TryParse(typeof(T), text, CultureInfo.InvariantCulture, out resultObj))
+        {
+            result = (T)resultObj;
+            return true;
+        }
+
+        result = default;
+        return false;
     }
 }

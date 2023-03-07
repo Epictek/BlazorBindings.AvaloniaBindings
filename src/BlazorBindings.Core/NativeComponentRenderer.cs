@@ -5,156 +5,155 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.RenderTree;
 using Microsoft.Extensions.Logging;
 
-namespace BlazorBindings.Core
+namespace BlazorBindings.Core;
+
+public abstract class NativeComponentRenderer : Renderer
 {
-    public abstract class NativeComponentRenderer : Renderer
+    private readonly Dictionary<int, NativeComponentAdapter> _componentIdToAdapter = new Dictionary<int, NativeComponentAdapter>();
+    private ElementManager _elementManager;
+    private readonly Dictionary<ulong, Action<ulong>> _eventRegistrations = new Dictionary<ulong, Action<ulong>>();
+    private readonly List<(int Id, IComponent Component)> _rootComponents = new();
+
+
+    public NativeComponentRenderer(IServiceProvider serviceProvider, ILoggerFactory loggerFactory)
+        : base(serviceProvider, loggerFactory)
     {
-        private readonly Dictionary<int, NativeComponentAdapter> _componentIdToAdapter = new Dictionary<int, NativeComponentAdapter>();
-        private ElementManager _elementManager;
-        private readonly Dictionary<ulong, Action<ulong>> _eventRegistrations = new Dictionary<ulong, Action<ulong>>();
-        private readonly List<(int Id, IComponent Component)> _rootComponents = new();
+    }
 
+    protected abstract ElementManager CreateNativeControlManager();
 
-        public NativeComponentRenderer(IServiceProvider serviceProvider, ILoggerFactory loggerFactory)
-            : base(serviceProvider, loggerFactory)
+    internal ElementManager ElementManager
+    {
+        get
         {
+            return _elementManager ??= CreateNativeControlManager();
         }
+    }
 
-        protected abstract ElementManager CreateNativeControlManager();
+    public override Dispatcher Dispatcher { get; }
+         = Dispatcher.CreateDefault();
 
-        internal ElementManager ElementManager
+    /// <summary>
+    /// Creates a component of type <typeparamref name="TComponent"/> and adds it as a child of <paramref name="parent"/>.
+    /// </summary>
+    /// <typeparam name="TComponent"></typeparam>
+    /// <param name="parent"></param>
+    /// <param name="parameters"></param>
+    /// <returns></returns>
+    public async Task<TComponent> AddComponent<TComponent>(IElementHandler parent, Dictionary<string, object> parameters = null) where TComponent : IComponent
+    {
+        return (TComponent)await AddComponent(typeof(TComponent), parent, parameters);
+    }
+
+    /// <summary>
+    /// Creates a component of type <paramref name="componentType"/> and adds it as a child of <paramref name="parent"/>. If parameters are provided they will be set on the component.
+    /// </summary>
+    /// <param name="componentType"></param>
+    /// <param name="parent"></param>
+    /// <param name="parameters"></param>
+    /// <returns></returns>
+    public async Task<IComponent> AddComponent(Type componentType, IElementHandler parent, Dictionary<string, object> parameters = null)
+    {
+        try
         {
-            get
+            return await Dispatcher.InvokeAsync(async () =>
             {
-                return _elementManager ??= CreateNativeControlManager();
-            }
-        }
+                var component = InstantiateComponent(componentType);
+                var componentId = AssignRootComponentId(component);
 
-        public override Dispatcher Dispatcher { get; }
-             = Dispatcher.CreateDefault();
+                _rootComponents.Add((componentId, component));
 
-        /// <summary>
-        /// Creates a component of type <typeparamref name="TComponent"/> and adds it as a child of <paramref name="parent"/>.
-        /// </summary>
-        /// <typeparam name="TComponent"></typeparam>
-        /// <param name="parent"></param>
-        /// <param name="parameters"></param>
-        /// <returns></returns>
-        public async Task<TComponent> AddComponent<TComponent>(IElementHandler parent, Dictionary<string, object> parameters = null) where TComponent : IComponent
-        {
-            return (TComponent)await AddComponent(typeof(TComponent), parent, parameters);
-        }
-
-        /// <summary>
-        /// Creates a component of type <paramref name="componentType"/> and adds it as a child of <paramref name="parent"/>. If parameters are provided they will be set on the component.
-        /// </summary>
-        /// <param name="componentType"></param>
-        /// <param name="parent"></param>
-        /// <param name="parameters"></param>
-        /// <returns></returns>
-        public async Task<IComponent> AddComponent(Type componentType, IElementHandler parent, Dictionary<string, object> parameters = null)
-        {
-            try
-            {
-                return await Dispatcher.InvokeAsync(async () =>
+                var rootAdapter = new NativeComponentAdapter(this, closestPhysicalParent: parent, knownTargetElement: parent)
                 {
-                    var component = InstantiateComponent(componentType);
-                    var componentId = AssignRootComponentId(component);
+                    Name = $"RootAdapter attached to {parent.GetType().FullName}",
+                };
 
-                    _rootComponents.Add((componentId, component));
+                _componentIdToAdapter[componentId] = rootAdapter;
 
-                    var rootAdapter = new NativeComponentAdapter(this, closestPhysicalParent: parent, knownTargetElement: parent)
-                    {
-                        Name = $"RootAdapter attached to {parent.GetType().FullName}",
-                    };
-
-                    _componentIdToAdapter[componentId] = rootAdapter;
-
-                    var parameterView = parameters?.Count > 0 ? ParameterView.FromDictionary(parameters) : ParameterView.Empty;
-                    await RenderRootComponentAsync(componentId, parameterView);
-                    return component;
-                });
-            }
-            catch (Exception ex)
-            {
-                HandleException(ex);
-                return null;
-            }
+                var parameterView = parameters?.Count > 0 ? ParameterView.FromDictionary(parameters) : ParameterView.Empty;
+                await RenderRootComponentAsync(componentId, parameterView);
+                return component;
+            });
         }
-
-        /// <summary>
-        /// Removes the specified component from the renderer, causing the component and its
-        /// descendants to be disposed.
-        /// </summary>
-        public void RemoveRootComponent(IComponent component)
+        catch (Exception ex)
         {
-            var componentId = _rootComponents.LastOrDefault(c => c.Component == component).Id;
-            RemoveRootComponent(componentId);
+            HandleException(ex);
+            return null;
         }
+    }
 
-        protected override Task UpdateDisplayAsync(in RenderBatch renderBatch)
+    /// <summary>
+    /// Removes the specified component from the renderer, causing the component and its
+    /// descendants to be disposed.
+    /// </summary>
+    public void RemoveRootComponent(IComponent component)
+    {
+        var componentId = _rootComponents.LastOrDefault(c => c.Component == component).Id;
+        RemoveRootComponent(componentId);
+    }
+
+    protected override Task UpdateDisplayAsync(in RenderBatch renderBatch)
+    {
+        HashSet<int> processedComponentIds = new HashSet<int>();
+
+        var numUpdatedComponents = renderBatch.UpdatedComponents.Count;
+        for (var componentIndex = 0; componentIndex < numUpdatedComponents; componentIndex++)
         {
-            HashSet<int> processedComponentIds = new HashSet<int>();
+            var updatedComponent = renderBatch.UpdatedComponents.Array[componentIndex];
 
-            var numUpdatedComponents = renderBatch.UpdatedComponents.Count;
-            for (var componentIndex = 0; componentIndex < numUpdatedComponents; componentIndex++)
+            // If UpdatedComponent is already processed (due to recursive ApplyEdits) - skip it.
+            if (updatedComponent.Edits.Count > 0 && !processedComponentIds.Contains(updatedComponent.ComponentId))
             {
-                var updatedComponent = renderBatch.UpdatedComponents.Array[componentIndex];
-
-                // If UpdatedComponent is already processed (due to recursive ApplyEdits) - skip it.
-                if (updatedComponent.Edits.Count > 0 && !processedComponentIds.Contains(updatedComponent.ComponentId))
-                {
-                    var adapter = _componentIdToAdapter[updatedComponent.ComponentId];
-                    adapter.ApplyEdits(updatedComponent.ComponentId, updatedComponent.Edits, renderBatch.ReferenceFrames, renderBatch, processedComponentIds);
-                }
+                var adapter = _componentIdToAdapter[updatedComponent.ComponentId];
+                adapter.ApplyEdits(updatedComponent.ComponentId, updatedComponent.Edits, renderBatch.ReferenceFrames, renderBatch, processedComponentIds);
             }
-
-            var numDisposedComponents = renderBatch.DisposedComponentIDs.Count;
-            for (var i = 0; i < numDisposedComponents; i++)
-            {
-                var disposedComponentId = renderBatch.DisposedComponentIDs.Array[i];
-                if (_componentIdToAdapter.Remove(disposedComponentId, out var adapter))
-                {
-                    (adapter as IDisposable)?.Dispose();
-                }
-            }
-
-            var numDisposeEventHandlers = renderBatch.DisposedEventHandlerIDs.Count;
-            for (var i = 0; i < numDisposeEventHandlers; i++)
-            {
-                DisposeEvent(renderBatch.DisposedEventHandlerIDs.Array[i]);
-            }
-
-            return Task.CompletedTask;
         }
 
-        public void RegisterEvent(ulong eventHandlerId, Action<ulong> unregisterCallback)
+        var numDisposedComponents = renderBatch.DisposedComponentIDs.Count;
+        for (var i = 0; i < numDisposedComponents; i++)
         {
-            if (eventHandlerId == 0)
+            var disposedComponentId = renderBatch.DisposedComponentIDs.Array[i];
+            if (_componentIdToAdapter.Remove(disposedComponentId, out var adapter))
             {
-                throw new ArgumentOutOfRangeException(nameof(eventHandlerId), "Event handler ID must not be 0.");
+                (adapter as IDisposable)?.Dispose();
             }
-            if (unregisterCallback == null)
-            {
-                throw new ArgumentNullException(nameof(unregisterCallback));
-            }
-            _eventRegistrations.Add(eventHandlerId, unregisterCallback);
         }
 
-        private void DisposeEvent(ulong eventHandlerId)
+        var numDisposeEventHandlers = renderBatch.DisposedEventHandlerIDs.Count;
+        for (var i = 0; i < numDisposeEventHandlers; i++)
         {
-            if (!_eventRegistrations.TryGetValue(eventHandlerId, out var unregisterCallback))
-            {
-                throw new InvalidOperationException($"Attempting to dispose unknown event handler id '{eventHandlerId}'.");
-            }
-            unregisterCallback(eventHandlerId);
+            DisposeEvent(renderBatch.DisposedEventHandlerIDs.Array[i]);
         }
 
-        internal NativeComponentAdapter CreateAdapterForChildComponent(IElementHandler physicalParent, int componentId)
+        return Task.CompletedTask;
+    }
+
+    public void RegisterEvent(ulong eventHandlerId, Action<ulong> unregisterCallback)
+    {
+        if (eventHandlerId == 0)
         {
-            var result = new NativeComponentAdapter(this, physicalParent);
-            _componentIdToAdapter[componentId] = result;
-            return result;
+            throw new ArgumentOutOfRangeException(nameof(eventHandlerId), "Event handler ID must not be 0.");
         }
+        if (unregisterCallback == null)
+        {
+            throw new ArgumentNullException(nameof(unregisterCallback));
+        }
+        _eventRegistrations.Add(eventHandlerId, unregisterCallback);
+    }
+
+    private void DisposeEvent(ulong eventHandlerId)
+    {
+        if (!_eventRegistrations.TryGetValue(eventHandlerId, out var unregisterCallback))
+        {
+            throw new InvalidOperationException($"Attempting to dispose unknown event handler id '{eventHandlerId}'.");
+        }
+        unregisterCallback(eventHandlerId);
+    }
+
+    internal NativeComponentAdapter CreateAdapterForChildComponent(IElementHandler physicalParent, int componentId)
+    {
+        var result = new NativeComponentAdapter(this, physicalParent);
+        _componentIdToAdapter[componentId] = result;
+        return result;
     }
 }

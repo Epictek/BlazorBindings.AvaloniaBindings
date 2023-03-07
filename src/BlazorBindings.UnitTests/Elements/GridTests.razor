@@ -1,10 +1,10 @@
 ﻿@inherits ElementTestBase
 
 @code {
-    [Test]
-    public async Task AddItemsViaGridCell()
-    {
-        var grid = await Render<MC.Grid>(
+[Test]
+public async Task AddItemsViaGridCell()
+{
+    var grid = await Render<MC.Grid>(
     @<Grid>
         <GridCell Row="0" Column="0">
             <Label>0-0</Label>
@@ -22,80 +22,80 @@
             <Label>1-1</Label>
         </GridCell>
     </Grid>
-    );
+);
 
-        var label00 = (MC.Label)grid.Children[0];
-        var label01 = (MC.Label)grid.Children[1];
-        var label10 = (MC.Label)grid.Children[2];
-        var label11 = (MC.Label)grid.Children[3];
+    var label00 = (MC.Label)grid.Children[0];
+    var label01 = (MC.Label)grid.Children[1];
+    var label10 = (MC.Label)grid.Children[2];
+    var label11 = (MC.Label)grid.Children[3];
 
-        Assert.That(label00.Text, Is.EqualTo("0-0"));
-        Assert.That(GetGridProps(label00), Is.EqualTo((0, 0, 1, 1)));
+    Assert.That(label00.Text, Is.EqualTo("0-0"));
+    Assert.That(GetGridProps(label00), Is.EqualTo((0, 0, 1, 1)));
 
-        Assert.That(label01.Text, Is.EqualTo("0-1"));
-        Assert.That(GetGridProps(label01), Is.EqualTo((0, 1, 1, 2)));
+    Assert.That(label01.Text, Is.EqualTo("0-1"));
+    Assert.That(GetGridProps(label01), Is.EqualTo((0, 1, 1, 2)));
 
-        Assert.That(label10.Text, Is.EqualTo("1-0"));
-        Assert.That(GetGridProps(label10), Is.EqualTo((1, 0, 2, 1)));
+    Assert.That(label10.Text, Is.EqualTo("1-0"));
+    Assert.That(GetGridProps(label10), Is.EqualTo((1, 0, 2, 1)));
 
-        Assert.That(label11.Text, Is.EqualTo("1-1"));
-        Assert.That(GetGridProps(label11), Is.EqualTo((1, 1, 1, 1)));
-    }
+    Assert.That(label11.Text, Is.EqualTo("1-1"));
+    Assert.That(GetGridProps(label11), Is.EqualTo((1, 1, 1, 1)));
+}
 
-    [Test]
-    public async Task AddItemsViaAttachedProperties()
-    {
-        var grid = await Render<MC.Grid>(
+[Test]
+public async Task AddItemsViaAttachedProperties()
+{
+    var grid = await Render<MC.Grid>(
     @<Grid>
         <Label Grid.Row="0" Grid.Column="0">0-0</Label>
         <Label Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2">0-1</Label>
         <Label Grid.Row="1" Grid.Column="0" Grid.RowSpan="2">1-0</Label>
         <Label Grid.Row="1" Grid.Column="1">1-1</Label>
     </Grid>
-        );
+    );
 
-        var label00 = (MC.Label)grid.Children[0];
-        var label01 = (MC.Label)grid.Children[1];
-        var label10 = (MC.Label)grid.Children[2];
-        var label11 = (MC.Label)grid.Children[3];
+    var label00 = (MC.Label)grid.Children[0];
+    var label01 = (MC.Label)grid.Children[1];
+    var label10 = (MC.Label)grid.Children[2];
+    var label11 = (MC.Label)grid.Children[3];
 
-        Assert.That(label00.Text, Is.EqualTo("0-0"));
-        Assert.That(GetGridProps(label00), Is.EqualTo((0, 0, 1, 1)));
+    Assert.That(label00.Text, Is.EqualTo("0-0"));
+    Assert.That(GetGridProps(label00), Is.EqualTo((0, 0, 1, 1)));
 
-        Assert.That(label01.Text, Is.EqualTo("0-1"));
-        Assert.That(GetGridProps(label01), Is.EqualTo((0, 1, 1, 2)));
+    Assert.That(label01.Text, Is.EqualTo("0-1"));
+    Assert.That(GetGridProps(label01), Is.EqualTo((0, 1, 1, 2)));
 
-        Assert.That(label10.Text, Is.EqualTo("1-0"));
-        Assert.That(GetGridProps(label10), Is.EqualTo((1, 0, 2, 1)));
+    Assert.That(label10.Text, Is.EqualTo("1-0"));
+    Assert.That(GetGridProps(label10), Is.EqualTo((1, 0, 2, 1)));
 
-        Assert.That(label11.Text, Is.EqualTo("1-1"));
-        Assert.That(GetGridProps(label11), Is.EqualTo((1, 1, 1, 1)));
-    }
+    Assert.That(label11.Text, Is.EqualTo("1-1"));
+    Assert.That(GetGridProps(label11), Is.EqualTo((1, 1, 1, 1)));
+}
 
-    [Test]
-    public async Task SetColumnDefinitions()
-    {
-        var grid = await Render<MC.Grid>(@<Grid ColumnDefinitions="10, Auto, 20, *" /> );
+[Test]
+public async Task SetColumnDefinitions()
+{
+    var grid = await Render<MC.Grid>(@<Grid ColumnDefinitions="10, Auto, 20, *" /> );
 
-        Assert.That(grid.ColumnDefinitions[0].Width.Value, Is.EqualTo(10));
-        Assert.That(grid.ColumnDefinitions[1].Width.GridUnitType, Is.EqualTo(GridUnitType.Auto));
-        Assert.That(grid.ColumnDefinitions[2].Width.Value, Is.EqualTo(20));
-        Assert.That(grid.ColumnDefinitions[3].Width.GridUnitType, Is.EqualTo(GridUnitType.Star));
-    }
+    Assert.That(grid.ColumnDefinitions[0].Width.Value, Is.EqualTo(10));
+    Assert.That(grid.ColumnDefinitions[1].Width.GridUnitType, Is.EqualTo(GridUnitType.Auto));
+    Assert.That(grid.ColumnDefinitions[2].Width.Value, Is.EqualTo(20));
+    Assert.That(grid.ColumnDefinitions[3].Width.GridUnitType, Is.EqualTo(GridUnitType.Star));
+}
 
-    [Test]
-    public async Task SetRowDefinitions()
-    {
-        var grid = await Render<MC.Grid>(@<Grid RowDefinitions="10, Auto, 20, *" /> );
+[Test]
+public async Task SetRowDefinitions()
+{
+    var grid = await Render<MC.Grid>(@<Grid RowDefinitions="10, Auto, 20, *" /> );
 
-        Assert.That(grid.RowDefinitions[0].Height.Value, Is.EqualTo(10));
-        Assert.That(grid.RowDefinitions[1].Height.GridUnitType, Is.EqualTo(GridUnitType.Auto));
-        Assert.That(grid.RowDefinitions[2].Height.Value, Is.EqualTo(20));
-        Assert.That(grid.RowDefinitions[3].Height.GridUnitType, Is.EqualTo(GridUnitType.Star));
-    }
+    Assert.That(grid.RowDefinitions[0].Height.Value, Is.EqualTo(10));
+    Assert.That(grid.RowDefinitions[1].Height.GridUnitType, Is.EqualTo(GridUnitType.Auto));
+    Assert.That(grid.RowDefinitions[2].Height.Value, Is.EqualTo(20));
+    Assert.That(grid.RowDefinitions[3].Height.GridUnitType, Is.EqualTo(GridUnitType.Star));
+}
 
-    private (int Row, int Column, int RowSpan, int ColumnSpan) GetGridProps(MC.BindableObject target)
-    {
-        return (MC.Grid.GetRow(target), MC.Grid.GetColumn(target), MC.Grid.GetRowSpan(target), MC.Grid.GetColumnSpan(target));
-    }
+private (int Row, int Column, int RowSpan, int ColumnSpan) GetGridProps(MC.BindableObject target)
+{
+    return (MC.Grid.GetRow(target), MC.Grid.GetColumn(target), MC.Grid.GetRowSpan(target), MC.Grid.GetColumnSpan(target));
+}
 }

@@ -3,17 +3,16 @@
 
 using Microsoft.Maui.Controls;
 
-namespace BlazorBindings.Maui
-{
-    /// <remarks>Experimental API, subject to change.</remarks>
-    [RequiresPreviewFeatures]
-    public static class AttachedPropertyRegistry
-    {
-        internal static readonly Dictionary<string, Action<BindableObject, object>> AttachedPropertyHandlers = new();
+namespace BlazorBindings.Maui;
 
-        public static void RegisterAttachedPropertyHandler(string propertyName, Action<BindableObject, object> handler)
-        {
-            AttachedPropertyHandlers[propertyName] = handler;
-        }
+/// <remarks>Experimental API, subject to change.</remarks>
+[RequiresPreviewFeatures]
+public static class AttachedPropertyRegistry
+{
+    internal static readonly Dictionary<string, Action<BindableObject, object>> AttachedPropertyHandlers = new();
+
+    public static void RegisterAttachedPropertyHandler(string propertyName, Action<BindableObject, object> handler)
+    {
+        AttachedPropertyHandlers[propertyName] = handler;
     }
 }

@@ -14,22 +14,22 @@
 {
     [Parameter] public TodoItem Item { get; set; }
 
-    public async Task OnDetailsClick()
-    {
-        await Navigation.PushModalAsync(@<TodoEntryDetails Item="Item" />);
-    }
+public async Task OnDetailsClick()
+{
+    await Navigation.PushModalAsync(@<TodoEntryDetails Item="Item" />);
+}
 
-    // This intermediate property allows change notifications to be raised when the IsDone value is toggled
-    bool ItemIsDone
+// This intermediate property allows change notifications to be raised when the IsDone value is toggled
+bool ItemIsDone
+{
+    get => Item.IsDone;
+    set
     {
-        get => Item.IsDone;
-        set
+        if (value != Item.IsDone)
         {
-            if (value != Item.IsDone)
-            {
-                Item.IsDone = value;
-                _ = AppState.TodoDatabase.SaveItemAsync(Item);
-            }
+            Item.IsDone = value;
+            _ = AppState.TodoDatabase.SaveItemAsync(Item);
         }
     }
+}
 }

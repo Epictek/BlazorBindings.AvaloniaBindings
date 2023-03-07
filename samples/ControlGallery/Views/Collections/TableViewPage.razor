@@ -30,11 +30,11 @@
 </ContentPage>
 
 @code {
-    int tapped = 0;
-    string entryText;
-    bool switchOn;
-    bool indicatorEnabled = true;
+int tapped = 0;
+string entryText;
+bool switchOn;
+bool indicatorEnabled = true;
 
-    void OnCellTapped() => tapped++;
-    void StopTheIndicator() => indicatorEnabled = false;
+void OnCellTapped() => tapped++;
+void StopTheIndicator() => indicatorEnabled = false;
 }

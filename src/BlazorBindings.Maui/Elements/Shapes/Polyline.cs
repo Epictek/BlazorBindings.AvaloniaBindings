@@ -1,25 +1,24 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-namespace BlazorBindings.Maui.Elements.Shapes
+namespace BlazorBindings.Maui.Elements.Shapes;
+
+public partial class Polyline : Shape
 {
-    public partial class Polyline : Shape
+    [Parameter] public string Points { get; set; }
+
+    protected override bool HandleAdditionalParameter(string name, object value)
     {
-        [Parameter] public string Points { get; set; }
-
-        protected override bool HandleAdditionalParameter(string name, object value)
+        if (name == nameof(Points))
         {
-            if (name == nameof(Points))
+            if (!Equals(value, Points))
             {
-                if (!Equals(value, Points))
-                {
-                    Points = (string)value;
-                    NativeControl.Points = AttributeHelper.StringToPointCollection(Points);
-                }
-                return true;
+                Points = (string)value;
+                NativeControl.Points = AttributeHelper.StringToPointCollection(Points);
             }
-
-            return base.HandleAdditionalParameter(name, value);
+            return true;
         }
+
+        return base.HandleAdditionalParameter(name, value);
     }
 }

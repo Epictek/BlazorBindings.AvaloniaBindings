@@ -1,52 +1,51 @@
 using MC = Microsoft.Maui.Controls;
 
-namespace BlazorBindings.Maui.Elements
+namespace BlazorBindings.Maui.Elements;
+
+public partial class InputView
 {
-    public partial class InputView
+    /// <summary>
+    /// Gets or sets the text of the input view.
+    /// </summary>
+    /// <value>
+    /// A string containing the text of the input view. The default value is null.
+    /// </value>
+    [Parameter] public string Text { get; set; }
+
+    [Parameter] public EventCallback<string> TextChanged { get; set; }
+
+    protected override bool HandleAdditionalParameter(string name, object value)
     {
-        /// <summary>
-        /// Gets or sets the text of the input view.
-        /// </summary>
-        /// <value>
-        /// A string containing the text of the input view. The default value is null.
-        /// </value>
-        [Parameter] public string Text { get; set; }
+        // Adding those parameters manually to be able to override behavior in Entry.
 
-        [Parameter] public EventCallback<string> TextChanged { get; set; }
-
-        protected override bool HandleAdditionalParameter(string name, object value)
+        switch (name)
         {
-            // Adding those parameters manually to be able to override behavior in Entry.
+            case nameof(Text):
+                if (!Equals(Text, value))
+                {
+                    Text = (string)value;
+                    NativeControl.Text = Text;
+                }
+                return true;
 
-            switch (name)
-            {
-                case nameof(Text):
-                    if (!Equals(Text, value))
+            case nameof(TextChanged):
+                if (!Equals(TextChanged, value))
+                {
+                    void NativeControlTextChanged(object sender, MC.TextChangedEventArgs e)
                     {
-                        Text = (string)value;
-                        NativeControl.Text = Text;
+                        var value = NativeControl.Text;
+                        Text = value;
+                        InvokeEventCallback(TextChanged, value);
                     }
-                    return true;
 
-                case nameof(TextChanged):
-                    if (!Equals(TextChanged, value))
-                    {
-                        void NativeControlTextChanged(object sender, MC.TextChangedEventArgs e)
-                        {
-                            var value = NativeControl.Text;
-                            Text = value;
-                            InvokeEventCallback(TextChanged, value);
-                        }
+                    TextChanged = (EventCallback<string>)value;
+                    NativeControl.TextChanged -= NativeControlTextChanged;
+                    NativeControl.TextChanged += NativeControlTextChanged;
+                }
+                return true;
 
-                        TextChanged = (EventCallback<string>)value;
-                        NativeControl.TextChanged -= NativeControlTextChanged;
-                        NativeControl.TextChanged += NativeControlTextChanged;
-                    }
-                    return true;
-
-            }
-
-            return base.HandleAdditionalParameter(name, value);
         }
+
+        return base.HandleAdditionalParameter(name, value);
     }
 }

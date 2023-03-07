@@ -13,10 +13,10 @@
 </Shell>
 
 @code {
-    [Inject] IStore Store { get; set; }
+[Inject] IStore Store { get; set; }
 
-    protected async override Task OnInitializedAsync()
-    {
-        await Store.InitializeAsync();
-    }
+protected async override Task OnInitializedAsync()
+{
+    await Store.InitializeAsync();
+}
 }

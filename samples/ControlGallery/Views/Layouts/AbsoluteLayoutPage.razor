@@ -63,17 +63,17 @@
 </ContentPage>
 
 @code {
-    double _greenX;
-    double _greenY;
-    double _blueX;
-    double _blueY;
+double _greenX;
+double _greenY;
+double _blueX;
+double _blueY;
 
-    void SliderValueChanged(double value)
-    {
-        _blueX = value;
-        _greenX = value;
+void SliderValueChanged(double value)
+{
+    _blueX = value;
+    _greenX = value;
 
-        _greenY = (-Math.Cos(_blueX * 10) + 1) / 2;
-        _blueY = (-Math.Cos(_blueX * 20) + 1) / 2;
-    }
+    _greenY = (-Math.Cos(_blueX * 10) + 1) / 2;
+    _blueY = (-Math.Cos(_blueX * 20) + 1) / 2;
+}
 }

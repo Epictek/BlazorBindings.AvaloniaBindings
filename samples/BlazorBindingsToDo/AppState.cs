@@ -5,31 +5,30 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace BlazorBindingsToDo
+namespace BlazorBindingsToDo;
+
+public class AppState
 {
-    public class AppState
+    private TodoItemDatabase _todoDatabase;
+
+    public TodoItemDatabase TodoDatabase
     {
-        private TodoItemDatabase _todoDatabase;
-
-        public TodoItemDatabase TodoDatabase
+        get
         {
-            get
+            if (_todoDatabase == null)
             {
-                if (_todoDatabase == null)
-                {
-                    _todoDatabase =
-                        new TodoItemDatabase(
-                            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "TodoSQLite.db3"),
-                            dbChanged: NotifyStateChanged);
-                }
-                return _todoDatabase;
+                _todoDatabase =
+                    new TodoItemDatabase(
+                        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "TodoSQLite.db3"),
+                        dbChanged: NotifyStateChanged);
             }
+            return _todoDatabase;
         }
-
-        public int Counter { get; set; }
-
-        public event Func<Task> OnChange;
-
-        private async Task NotifyStateChanged() => await OnChange?.Invoke();
     }
+
+    public int Counter { get; set; }
+
+    public event Func<Task> OnChange;
+
+    private async Task NotifyStateChanged() => await OnChange?.Invoke();
 }

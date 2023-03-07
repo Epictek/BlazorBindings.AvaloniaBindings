@@ -7,38 +7,37 @@ using SkiaSharp.Views.Maui;
 using MC = Microsoft.Maui.Controls;
 using SK = SkiaSharp.Views.Maui.Controls;
 
-namespace BlazorBindings.Maui.SkiaSharp
+namespace BlazorBindings.Maui.SkiaSharp;
+
+public class SKCanvasView : View
 {
-    public class SKCanvasView : View
+    [Parameter] public EventCallback<SKPaintSurfaceEventArgs> OnPaintSurface { get; set; }
+
+    public new SK.SKCanvasView NativeControl => (SK.SKCanvasView)((Element)this).NativeControl;
+
+    protected override MC.Element CreateNativeElement() => new SK.SKCanvasView();
+
+    protected override void HandleParameter(string name, object value)
     {
-        [Parameter] public EventCallback<SKPaintSurfaceEventArgs> OnPaintSurface { get; set; }
-
-        public new SK.SKCanvasView NativeControl => (SK.SKCanvasView)((Element)this).NativeControl;
-
-        protected override MC.Element CreateNativeElement() => new SK.SKCanvasView();
-
-        protected override void HandleParameter(string name, object value)
+        if (name == nameof(OnPaintSurface))
         {
-            if (name == nameof(OnPaintSurface))
+            if (!Equals(OnPaintSurface, value))
             {
-                if (!Equals(OnPaintSurface, value))
-                {
-                    void NativeControlPaintSurface(object sender, SKPaintSurfaceEventArgs e) => OnPaintSurface.InvokeAsync(e);
+                void NativeControlPaintSurface(object sender, SKPaintSurfaceEventArgs e) => OnPaintSurface.InvokeAsync(e);
 
-                    OnPaintSurface = (EventCallback<SKPaintSurfaceEventArgs>)value;
-                    NativeControl.PaintSurface -= NativeControlPaintSurface;
-                    NativeControl.PaintSurface += NativeControlPaintSurface;
-                }
-            }
-            else
-            {
-                base.HandleParameter(name, value);
+                OnPaintSurface = (EventCallback<SKPaintSurfaceEventArgs>)value;
+                NativeControl.PaintSurface -= NativeControlPaintSurface;
+                NativeControl.PaintSurface += NativeControlPaintSurface;
             }
         }
-
-        public void InvalidateSurface()
+        else
         {
-            NativeControl.InvalidateSurface();
+            base.HandleParameter(name, value);
         }
+    }
+
+    public void InvalidateSurface()
+    {
+        NativeControl.InvalidateSurface();
     }
 }

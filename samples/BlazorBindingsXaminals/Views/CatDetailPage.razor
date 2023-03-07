@@ -11,14 +11,14 @@
     </ScrollView>
 </ContentPage>
 @code {
-    Animal Cat;
+Animal Cat;
 
-    [Parameter]
-    public string Name
+[Parameter]
+public string Name
+{
+    set
     {
-        set
-        {
-            Cat = CatData.Cats.FirstOrDefault(m => m.Name == Uri.UnescapeDataString(value));
-        }
+        Cat = CatData.Cats.FirstOrDefault(m => m.Name == Uri.UnescapeDataString(value));
     }
+}
 }

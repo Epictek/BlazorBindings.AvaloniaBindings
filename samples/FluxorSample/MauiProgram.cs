@@ -1,26 +1,25 @@
 ﻿using BlazorBindings.Maui;
 using Fluxor;
 
-namespace FluxorSample
+namespace FluxorSample;
+
+public static class MauiProgram
 {
-    public static class MauiProgram
+    public static MauiApp CreateMauiApp()
     {
-        public static MauiApp CreateMauiApp()
-        {
-            var builder = MauiApp.CreateBuilder();
-            builder
-                .UseMauiApp<BlazorBindingsApplication<AppShell>>()
-                .UseMauiBlazorBindings()
-                .ConfigureFonts(fonts =>
-                {
-                    fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-                });
+        var builder = MauiApp.CreateBuilder();
+        builder
+            .UseMauiApp<BlazorBindingsApplication<AppShell>>()
+            .UseMauiBlazorBindings()
+            .ConfigureFonts(fonts =>
+            {
+                fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+            });
 
-            builder.Services
-                .AddHttpClient()
-                .AddFluxor(options => options.ScanAssemblies(typeof(MauiProgram).Assembly));
+        builder.Services
+            .AddHttpClient()
+            .AddFluxor(options => options.ScanAssemblies(typeof(MauiProgram).Assembly));
 
-            return builder.Build();
-        }
+        return builder.Build();
     }
 }

@@ -3,10 +3,10 @@
 @inherits ElementTestBase
 @code {
 
-    [Test]
-    public async Task ShellAttachedProperties()
-    {
-        var shell = await Render<MC.Shell>(
+[Test]
+public async Task ShellAttachedProperties()
+{
+    var shell = await Render<MC.Shell>(
     @<Shell BackgroundColor="Colors.AliceBlue"
             DisabledColor="Colors.Beige"
             ForegroundColor="Colors.CadetBlue"
@@ -18,58 +18,59 @@
             TabBarTitleColor="Colors.NavajoWhite"
             TabBarUnselectedColor="Colors.Khaki">
     </Shell>
-        );
+        
+    );
 
-        Assert.That(MC.Shell.GetBackgroundColor(shell), Is.EqualTo(Colors.AliceBlue));
-        Assert.That(MC.Shell.GetDisabledColor(shell), Is.EqualTo(Colors.Beige));
-        Assert.That(MC.Shell.GetForegroundColor(shell), Is.EqualTo(Colors.CadetBlue));
-        Assert.That(MC.Shell.GetTitleColor(shell), Is.EqualTo(Colors.DarkBlue));
-        Assert.That(MC.Shell.GetUnselectedColor(shell), Is.EqualTo(Colors.Firebrick));
+    Assert.That(MC.Shell.GetBackgroundColor(shell), Is.EqualTo(Colors.AliceBlue));
+    Assert.That(MC.Shell.GetDisabledColor(shell), Is.EqualTo(Colors.Beige));
+    Assert.That(MC.Shell.GetForegroundColor(shell), Is.EqualTo(Colors.CadetBlue));
+    Assert.That(MC.Shell.GetTitleColor(shell), Is.EqualTo(Colors.DarkBlue));
+    Assert.That(MC.Shell.GetUnselectedColor(shell), Is.EqualTo(Colors.Firebrick));
 
-        Assert.That(MC.Shell.GetTabBarBackgroundColor(shell), Is.EqualTo(Colors.Gainsboro));
-        Assert.That(MC.Shell.GetTabBarDisabledColor(shell), Is.EqualTo(Colors.Honeydew));
-        Assert.That(MC.Shell.GetTabBarForegroundColor(shell), Is.EqualTo(Colors.IndianRed));
-        Assert.That(MC.Shell.GetTabBarTitleColor(shell), Is.EqualTo(Colors.NavajoWhite));
-        Assert.That(MC.Shell.GetTabBarUnselectedColor(shell), Is.EqualTo(Colors.Khaki));
-    }
+    Assert.That(MC.Shell.GetTabBarBackgroundColor(shell), Is.EqualTo(Colors.Gainsboro));
+    Assert.That(MC.Shell.GetTabBarDisabledColor(shell), Is.EqualTo(Colors.Honeydew));
+    Assert.That(MC.Shell.GetTabBarForegroundColor(shell), Is.EqualTo(Colors.IndianRed));
+    Assert.That(MC.Shell.GetTabBarTitleColor(shell), Is.EqualTo(Colors.NavajoWhite));
+    Assert.That(MC.Shell.GetTabBarUnselectedColor(shell), Is.EqualTo(Colors.Khaki));
+}
 
-    [Test]
-    public async Task AddPageDirectlyToShell()
-    {
-        var shell = await Render<MC.Shell>(
+[Test]
+public async Task AddPageDirectlyToShell()
+{
+    var shell = await Render<MC.Shell>(
     @<Shell>
         <PageContent />
     </Shell>
-    );
+);
 
-        var shellContent = shell.CurrentItem.Items[0].Items[0];
-        var page = ((MC.IShellContentController)shellContent).GetOrCreateContent();
+    var shellContent = shell.CurrentItem.Items[0].Items[0];
+    var page = ((MC.IShellContentController)shellContent).GetOrCreateContent();
 
-        PageContent.ValidateContent(page);
-    }
+    PageContent.ValidateContent(page);
+}
 
-    [Test]
-    public async Task AddShellContent()
-    {
-        var shell = await Render<MC.Shell>(
+[Test]
+public async Task AddShellContent()
+{
+    var shell = await Render<MC.Shell>(
     @<Shell>
         <ShellContent Title="Some Page">
             <PageContent />
         </ShellContent>
     </Shell>
-    );
+);
 
-        var shellContent = shell.CurrentItem.Items[0].Items[0];
-        var page = ((MC.IShellContentController)shellContent).GetOrCreateContent();
+    var shellContent = shell.CurrentItem.Items[0].Items[0];
+    var page = ((MC.IShellContentController)shellContent).GetOrCreateContent();
 
-        Assert.That(shellContent.Title, Is.EqualTo("Some Page"));
-        PageContent.ValidateContent(page);
-    }
+    Assert.That(shellContent.Title, Is.EqualTo("Some Page"));
+    PageContent.ValidateContent(page);
+}
 
-    [Test]
-    public async Task AddShellContentWithTemplate()
-    {
-        var shell = await Render<MC.Shell>(
+[Test]
+public async Task AddShellContentWithTemplate()
+{
+    var shell = await Render<MC.Shell>(
     @<Shell>
         <ShellContent Title="Some Page">
             <ContentTemplate>
@@ -77,12 +78,12 @@
             </ContentTemplate>
         </ShellContent>
     </Shell>
-    );
+);
 
-        var shellContent = shell.CurrentItem.Items[0].Items[0];
-        var page = ((MC.IShellContentController)shellContent).GetOrCreateContent();
+    var shellContent = shell.CurrentItem.Items[0].Items[0];
+    var page = ((MC.IShellContentController)shellContent).GetOrCreateContent();
 
-        Assert.That(shellContent.Title, Is.EqualTo("Some Page"));
-        PageContent.ValidateContent(page);
-    }
+    Assert.That(shellContent.Title, Is.EqualTo("Some Page"));
+    PageContent.ValidateContent(page);
+}
 }

@@ -1,20 +1,19 @@
-﻿namespace BlazorBindings.Maui
+﻿namespace BlazorBindings.Maui;
+
+internal static class RenderFragments
 {
-    internal static class RenderFragments
+    public static RenderFragment FromComponentType(Type componentType, Dictionary<string, object> parameters = null)
     {
-        public static RenderFragment FromComponentType(Type componentType, Dictionary<string, object> parameters = null)
+        return builder =>
         {
-            return builder =>
+            builder.OpenComponent(1, componentType);
+
+            if (parameters != null)
             {
-                builder.OpenComponent(1, componentType);
+                builder.AddMultipleAttributes(2, parameters);
+            }
 
-                if (parameters != null)
-                {
-                    builder.AddMultipleAttributes(2, parameters);
-                }
-
-                builder.CloseComponent();
-            };
-        }
+            builder.CloseComponent();
+        };
     }
 }

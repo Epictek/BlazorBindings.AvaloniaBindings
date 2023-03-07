@@ -11,9 +11,9 @@
             <Label>Name: @item.Name, Value: @item.Value</Label>
 
             @if (eventHappenedTimes > 0)
-            {
-                <Label>Event happened @eventHappenedTimes times!</Label>
-            }
+        {
+            <Label>Event happened @eventHappenedTimes times!</Label>
+        }
 
             <Button Text="Navigate with no parameters" OnClick="NavigateNoParameter" />
             <Button Text="Navigate with item passed" OnClick="NavigateWithItem" />
@@ -27,35 +27,35 @@
 </ContentPage>
 
 @code {
-    NavigationParameterModel item = new("Firefly", "Serenity");
-    int eventHappenedTimes;
+NavigationParameterModel item = new("Firefly", "Serenity");
+int eventHappenedTimes;
 
-    Task NavigateNoParameter() => Navigation.PushAsync<NavigationTargetPage>();
+Task NavigateNoParameter() => Navigation.PushAsync<NavigationTargetPage>();
 
-    Task NavigateWithItem() => Navigation.PushAsync<NavigationTargetPage>(new()
-            {
-                [nameof(NavigationTargetPage.Item)] = item
-            });
+Task NavigateWithItem() => Navigation.PushAsync<NavigationTargetPage>(new()
+        {
+            [nameof(NavigationTargetPage.Item)] = item
+        });
 
-    Task NavigateWithEvent() => Navigation.PushAsync<NavigationTargetPage>(new()
-            {
-                [nameof(NavigationTargetPage.Item)] = item,
-                [nameof(NavigationTargetPage.EventHappened)] = EventCallback.Factory.Create(this, EventHappened)
-            });
+Task NavigateWithEvent() => Navigation.PushAsync<NavigationTargetPage>(new()
+        {
+            [nameof(NavigationTargetPage.Item)] = item,
+            [nameof(NavigationTargetPage.EventHappened)] = EventCallback.Factory.Create(this, EventHappened)
+        });
 
-    Task NavigateToModal() => Navigation.PushModalAsync<NavigationTargetModalPage>(new()
-            {
-                [nameof(NavigationTargetModalPage.Item)] = item
-            });
+Task NavigateToModal() => Navigation.PushModalAsync<NavigationTargetModalPage>(new()
+        {
+            [nameof(NavigationTargetModalPage.Item)] = item
+        });
 
-    Task NavigateViaRenderFragment() => Navigation.PushAsync(
-        @<NavigationTargetPage Item="item" EventHappened="EventHappened" />);
+Task NavigateViaRenderFragment() => Navigation.PushAsync(
+    @<NavigationTargetPage Item="item" EventHappened="EventHappened" />);
 
-    Task NavigateViaRenderFragmentWithBind() => Navigation.PushAsync(
-        @<NavigationTargetPage @bind-Item="item" />);
+Task NavigateViaRenderFragmentWithBind() => Navigation.PushAsync(
+    @<NavigationTargetPage @bind-Item="item" />);
 
-    Task NavigateToModalViaRenderFragment() => Navigation.PushModalAsync(
-        @<NavigationTargetModalPage Item="item" />);
+Task NavigateToModalViaRenderFragment() => Navigation.PushModalAsync(
+    @<NavigationTargetModalPage Item="item" />);
 
-    void EventHappened() => eventHappenedTimes++;
+void EventHappened() => eventHappenedTimes++;
 }

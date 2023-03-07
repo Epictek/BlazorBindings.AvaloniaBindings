@@ -15,9 +15,9 @@
     <StackLayout>
         <Label Text="Successfully navigated using Shell"></Label>
         @if (Name != null)
-        {
-            <Label Text="@($"Name = {Name}")"></Label>
-        }
+    {
+        <Label Text="@($"Name = {Name}")"></Label>
+    }
         <Label Text="@($"Version = {Version}")"></Label>
         <Label Text="@($"Release Date = {ReleaseDate}")"></Label>
         <Label Text="@($"Long = {Long}")"></Label>
@@ -34,16 +34,16 @@
 
 @code {
 
-    [Parameter] public string Name { get; set; }
-    [Parameter] public int Version { get; set; }
-    [Parameter] public DateTime ReleaseDate { get; set; }
-    [Parameter] public long Long { get; set; }
-    [Parameter] public double Double { get; set; }
-    [Parameter] public float Float { get; set; }
-    [Parameter] public decimal Decimal { get; set; }
-    [Parameter] public Guid Guid { get; set; }
-    [Parameter] public Guid? NullableGuid { get; set; }
-    [Parameter] public bool Bool { get; set; }
-    [Parameter] public NavigationParameterModel Query1 { get; set; }
-    [Parameter] public NavigationParameterModel Query2 { get; set; }
+[Parameter] public string Name { get; set; }
+[Parameter] public int Version { get; set; }
+[Parameter] public DateTime ReleaseDate { get; set; }
+[Parameter] public long Long { get; set; }
+[Parameter] public double Double { get; set; }
+[Parameter] public float Float { get; set; }
+[Parameter] public decimal Decimal { get; set; }
+[Parameter] public Guid Guid { get; set; }
+[Parameter] public Guid? NullableGuid { get; set; }
+[Parameter] public bool Bool { get; set; }
+[Parameter] public NavigationParameterModel Query1 { get; set; }
+[Parameter] public NavigationParameterModel Query2 { get; set; }
 }

@@ -6,30 +6,30 @@
 </ContentPage>
 
 @code {
-    ContentPage _page;
+ContentPage _page;
 
-    [Parameter] public string Title { get; set; }
-    public event Action OnDispose;
+[Parameter] public string Title { get; set; }
+public event Action OnDispose;
 
-    protected override void OnAfterRender(bool firstRender)
+protected override void OnAfterRender(bool firstRender)
+{
+    if (firstRender)
     {
-        if (firstRender)
-        {
-            // This is needed to be able to get component from tests.
-            _page.NativeControl.SetValue(TestProperties.ComponentProperty, this);
-        }
+        // This is needed to be able to get component from tests.
+        _page.NativeControl.SetValue(TestProperties.ComponentProperty, this);
     }
+}
 
-    public void Dispose()
-    {
-        OnDispose?.Invoke();
-        OnDispose = null;
-    }
+public void Dispose()
+{
+    OnDispose?.Invoke();
+    OnDispose = null;
+}
 
-    public static void ValidateContent(MC.Element content)
-    {
-        var contentPage = content as MC.ContentPage;
-        Assert.IsNotNull(contentPage);
-        NonPageContent.ValidateContent(contentPage.Content);
-    }
+public static void ValidateContent(MC.Element content)
+{
+    var contentPage = content as MC.ContentPage;
+    Assert.IsNotNull(contentPage);
+    NonPageContent.ValidateContent(contentPage.Content);
+}
 }

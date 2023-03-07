@@ -1,50 +1,50 @@
 ﻿@inherits ElementTestBase
 @code {
 
-    [Test]
-    public async Task RenderShellAttachedProperties()
-    {
-        var page = await Render<MC.ContentPage>(
-            @<ContentPage TabBarIsVisible="false"
+[Test]
+public async Task RenderShellAttachedProperties()
+{
+    var page = await Render<MC.ContentPage>(
+        @<ContentPage TabBarIsVisible="false"
              NavBarIsVisible="false"
              NavBarHasShadow="true"
              ShellPresentationMode="MC.PresentationMode.ModalNotAnimated" />);
 
-        Assert.That(MC.Shell.GetTabBarIsVisible(page), Is.False);
-        Assert.That(MC.Shell.GetNavBarIsVisible(page), Is.False);
-        Assert.That(MC.Shell.GetNavBarHasShadow(page), Is.True);
-        Assert.That(MC.Shell.GetPresentationMode(page), Is.EqualTo(MC.PresentationMode.ModalNotAnimated));
-    }
+    Assert.That(MC.Shell.GetTabBarIsVisible(page), Is.False);
+    Assert.That(MC.Shell.GetNavBarIsVisible(page), Is.False);
+    Assert.That(MC.Shell.GetNavBarHasShadow(page), Is.True);
+    Assert.That(MC.Shell.GetPresentationMode(page), Is.EqualTo(MC.PresentationMode.ModalNotAnimated));
+}
 
-    [Test]
-    public async Task RenderShellAttachedProperties_TitleView()
-    {
-        var page = await Render<MC.ContentPage>(
+[Test]
+public async Task RenderShellAttachedProperties_TitleView()
+{
+    var page = await Render<MC.ContentPage>(
     @<ContentPage>
         <TitleView>
             <Label>TitleView</Label>
         </TitleView>
     </ContentPage>);
 
-        var titleView = MC.Shell.GetTitleView(page) as MC.Label;
-        Assert.That(titleView?.Text, Is.EqualTo("TitleView"));
-    }
+    var titleView = MC.Shell.GetTitleView(page) as MC.Label;
+    Assert.That(titleView?.Text, Is.EqualTo("TitleView"));
+}
 
-    [Test]
-    public async Task RenderShellAttachedProperties_BackButtonBehavior()
-    {
-        var isCommandInvoked = false;
-        var page = await Render<MC.ContentPage>(
+[Test]
+public async Task RenderShellAttachedProperties_BackButtonBehavior()
+{
+    var isCommandInvoked = false;
+    var page = await Render<MC.ContentPage>(
     @<ContentPage BackButtonVisible="true" OnBackButtonPressed="() => isCommandInvoked = true" />
-    );
+);
 
-        var backButtonBehavior = MC.Shell.GetBackButtonBehavior(page);
-        Assert.That(backButtonBehavior.IsVisible, Is.True);
+    var backButtonBehavior = MC.Shell.GetBackButtonBehavior(page);
+    Assert.That(backButtonBehavior.IsVisible, Is.True);
 
-        var command = backButtonBehavior.Command;
-        Assert.That(command.CanExecute(null), Is.True);
+    var command = backButtonBehavior.Command;
+    Assert.That(command.CanExecute(null), Is.True);
 
-        command.Execute(null);
-        Assert.That(isCommandInvoked);
-    }
+    command.Execute(null);
+    Assert.That(isCommandInvoked);
+}
 }

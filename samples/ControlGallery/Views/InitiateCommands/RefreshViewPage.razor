@@ -13,19 +13,19 @@
 </ContentPage>
 
 @code {
-    DateTime _refreshTime;
-    bool _isRefreshing = true;
-    int _refreshCount = 0;
+DateTime _refreshTime;
+bool _isRefreshing = true;
+int _refreshCount = 0;
 
-    public async Task Refresh()
-    {
-        await Task.Delay(2000);
-        _refreshTime = DateTime.Now;
-        _refreshCount++;
-    }
+public async Task Refresh()
+{
+    await Task.Delay(2000);
+    _refreshTime = DateTime.Now;
+    _refreshCount++;
+}
 
-    public void TriggerRefresh()
-    {
-        _isRefreshing = true;
-    }
+public void TriggerRefresh()
+{
+    _isRefreshing = true;
+}
 }

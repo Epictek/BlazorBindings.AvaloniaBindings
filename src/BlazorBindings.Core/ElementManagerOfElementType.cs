@@ -1,40 +1,39 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-namespace BlazorBindings.Core
+namespace BlazorBindings.Core;
+
+/// <summary>
+/// Utility intermediate class to make it easier to strongly-type a derived <see cref="ElementManager"/>.
+/// </summary>
+/// <typeparam name="TElementType"></typeparam>
+public abstract class ElementManager<TElementType> : ElementManager
 {
-    /// <summary>
-    /// Utility intermediate class to make it easier to strongly-type a derived <see cref="ElementManager"/>.
-    /// </summary>
-    /// <typeparam name="TElementType"></typeparam>
-    public abstract class ElementManager<TElementType> : ElementManager
+    private static TElementType ConvertToType(IElementHandler elementHandler, string parameterName)
     {
-        private static TElementType ConvertToType(IElementHandler elementHandler, string parameterName)
+        if (!(elementHandler is TElementType))
         {
-            if (!(elementHandler is TElementType))
-            {
-                throw new ArgumentException($"Expected parameter value of type '{elementHandler.GetType().FullName}' to be convertible to type '{typeof(TElementType).FullName}'.", parameterName);
-            }
-            return (TElementType)elementHandler;
+            throw new ArgumentException($"Expected parameter value of type '{elementHandler.GetType().FullName}' to be convertible to type '{typeof(TElementType).FullName}'.", parameterName);
         }
-
-        public sealed override void AddChildElement(IElementHandler parentHandler, IElementHandler childHandler, int physicalSiblingIndex)
-        {
-            AddChildElement(ConvertToType(parentHandler, nameof(parentHandler)), ConvertToType(childHandler, nameof(childHandler)), physicalSiblingIndex);
-        }
-
-        public sealed override int GetChildElementIndex(IElementHandler parentHandler, IElementHandler childHandler)
-        {
-            return GetChildElementIndex(ConvertToType(parentHandler, nameof(parentHandler)), ConvertToType(childHandler, nameof(childHandler)));
-        }
-
-        public sealed override void RemoveChildElement(IElementHandler parentHandler, IElementHandler childHandler)
-        {
-            RemoveChildElement(ConvertToType(parentHandler, nameof(parentHandler)), ConvertToType(childHandler, nameof(childHandler)));
-        }
-
-        protected abstract void AddChildElement(TElementType parentHandler, TElementType childHandler, int physicalSiblingIndex);
-        protected abstract int GetChildElementIndex(TElementType parentHandler, TElementType childHandler);
-        protected abstract void RemoveChildElement(TElementType parentHandler, TElementType childHandler);
+        return (TElementType)elementHandler;
     }
+
+    public sealed override void AddChildElement(IElementHandler parentHandler, IElementHandler childHandler, int physicalSiblingIndex)
+    {
+        AddChildElement(ConvertToType(parentHandler, nameof(parentHandler)), ConvertToType(childHandler, nameof(childHandler)), physicalSiblingIndex);
+    }
+
+    public sealed override int GetChildElementIndex(IElementHandler parentHandler, IElementHandler childHandler)
+    {
+        return GetChildElementIndex(ConvertToType(parentHandler, nameof(parentHandler)), ConvertToType(childHandler, nameof(childHandler)));
+    }
+
+    public sealed override void RemoveChildElement(IElementHandler parentHandler, IElementHandler childHandler)
+    {
+        RemoveChildElement(ConvertToType(parentHandler, nameof(parentHandler)), ConvertToType(childHandler, nameof(childHandler)));
+    }
+
+    protected abstract void AddChildElement(TElementType parentHandler, TElementType childHandler, int physicalSiblingIndex);
+    protected abstract int GetChildElementIndex(TElementType parentHandler, TElementType childHandler);
+    protected abstract void RemoveChildElement(TElementType parentHandler, TElementType childHandler);
 }

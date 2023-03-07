@@ -4,13 +4,12 @@
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Controls.Internals;
 
-namespace BlazorBindings.Maui.Elements
+namespace BlazorBindings.Maui.Elements;
+
+public static partial class AttributeHelper
 {
-    public static partial class AttributeHelper
+    public static BindingBase GetBinding<T, TResult>(Func<T, TResult> bindingFunc)
     {
-        public static BindingBase GetBinding<T, TResult>(Func<T, TResult> bindingFunc)
-        {
-            return new TypedBinding<T, TResult>((item) => (bindingFunc(item), true), null, null);
-        }
+        return new TypedBinding<T, TResult>((item) => (bindingFunc(item), true), null, null);
     }
 }

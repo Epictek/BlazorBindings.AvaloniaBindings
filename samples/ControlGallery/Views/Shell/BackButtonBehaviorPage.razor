@@ -7,9 +7,9 @@
         <Label>Press the back button.</Label>
 
         @if (_backPressed)
-        {
-            <Label>Back button was pressed.</Label>
-        }
+    {
+        <Label>Back button was pressed.</Label>
+    }
 
         <HorizontalStackLayout>
             <Label Text="Is Visible: " />
@@ -20,21 +20,21 @@
 </ContentPage>
 
 @code {
-    [Inject] INavigation Navigation { get; set; }
+[Inject] INavigation Navigation { get; set; }
 
-    ContentPage _page;
+ContentPage _page;
 
-    bool _backPressed;
-    bool _isVisible = true;
+bool _backPressed;
+bool _isVisible = true;
 
-    async Task OnBackPressed()
+async Task OnBackPressed()
+{
+    _backPressed = true;
+
+    var promptAccepted = await _page.NativeControl.DisplayAlert("Go Back", "Are you sure you want to go back?", "Yes", "No");
+    if (promptAccepted)
     {
-        _backPressed = true;
-
-        var promptAccepted = await _page.NativeControl.DisplayAlert("Go Back", "Are you sure you want to go back?", "Yes", "No");
-        if (promptAccepted)
-        {
-            await Navigation.PopAsync();
-        }
+        await Navigation.PopAsync();
     }
+}
 }

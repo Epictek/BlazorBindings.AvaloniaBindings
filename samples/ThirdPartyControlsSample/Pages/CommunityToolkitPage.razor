@@ -29,12 +29,12 @@
 @code {
     @inject Navigation Navigation;
 
-    ImageSource urlSource = "https://static.wikia.nocookie.net/firefly/images/f/fa/Wash.jpg";
+ImageSource urlSource = "https://static.wikia.nocookie.net/firefly/images/f/fa/Wash.jpg";
 
-    string popupResult;
+string popupResult;
 
-    async Task ShowPopup()
-    {
-        popupResult = (string)await Navigation.ShowPopupAsync<CommunityToolkitPopup>();
-    }
+async Task ShowPopup()
+{
+    popupResult = (string)await Navigation.ShowPopupAsync<CommunityToolkitPopup>();
+}
 }

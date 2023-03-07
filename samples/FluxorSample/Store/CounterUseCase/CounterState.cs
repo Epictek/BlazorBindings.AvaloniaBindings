@@ -1,16 +1,15 @@
 ﻿using Fluxor;
 
-namespace FluxorSample.Store.CounterUseCase
-{
-    [FeatureState]
-    public class CounterState
-    {
-        public int ClickCount { get; }
+namespace FluxorSample.Store.CounterUseCase;
 
-        private CounterState() { }
-        public CounterState(int clickCount)
-        {
-            ClickCount = clickCount;
-        }
+[FeatureState]
+public class CounterState
+{
+    public int ClickCount { get; }
+
+    private CounterState() { }
+    public CounterState(int clickCount)
+    {
+        ClickCount = clickCount;
     }
 }

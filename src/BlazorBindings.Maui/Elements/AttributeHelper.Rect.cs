@@ -4,26 +4,25 @@
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Graphics;
 
-namespace BlazorBindings.Maui.Elements
-{
-    public static partial class AttributeHelper
-    {
-        private static readonly BoundsTypeConverter _boundsTypeConverter = new();
+namespace BlazorBindings.Maui.Elements;
 
-        /// <summary>
-        /// Helper method deserialize LayoutBounds <see cref="Rect"/> objects.
-        /// The difference is that "10, 15" is not a valid Rect string, but could be a valid 
-        /// LayoutBounds <see cref="Rect"/> string (with Height and Width set to Auto).
-        /// </summary>
-        public static Rect GetBoundsRect(object value, Rect defaultValueIfNull = default)
+public static partial class AttributeHelper
+{
+    private static readonly BoundsTypeConverter _boundsTypeConverter = new();
+
+    /// <summary>
+    /// Helper method deserialize LayoutBounds <see cref="Rect"/> objects.
+    /// The difference is that "10, 15" is not a valid Rect string, but could be a valid 
+    /// LayoutBounds <see cref="Rect"/> string (with Height and Width set to Auto).
+    /// </summary>
+    public static Rect GetBoundsRect(object value, Rect defaultValueIfNull = default)
+    {
+        return value switch
         {
-            return value switch
-            {
-                null => defaultValueIfNull,
-                Rect rect => rect,
-                string rectangleAsString => (Rect)_boundsTypeConverter.ConvertFromInvariantString(rectangleAsString),
-                _ => throw new ArgumentException("Cannot convert value to Rect.", nameof(value)),
-            };
-        }
+            null => defaultValueIfNull,
+            Rect rect => rect,
+            string rectangleAsString => (Rect)_boundsTypeConverter.ConvertFromInvariantString(rectangleAsString),
+            _ => throw new ArgumentException("Cannot convert value to Rect.", nameof(value)),
+        };
     }
 }

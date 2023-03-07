@@ -17,19 +17,18 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading.Tasks;
 
-namespace BlazorBindings.Maui.Elements
+namespace BlazorBindings.Maui.Elements;
+
+public partial class SearchHandler<T>
 {
-    public partial class SearchHandler<T>
+    [Parameter] public T SelectedItem { get; set; }
+
+    protected override bool HandleAdditionalParameter(string name, object value)
     {
-        [Parameter] public T SelectedItem { get; set; }
+        // This property is no-op. The only purpose is to allow @bind-SelectedItem syntax.
+        if (name == nameof(SelectedItem))
+            return true;
 
-        protected override bool HandleAdditionalParameter(string name, object value)
-        {
-            // This property is no-op. The only purpose is to allow @bind-SelectedItem syntax.
-            if (name == nameof(SelectedItem))
-                return true;
-
-            return base.HandleAdditionalParameter(name, value);
-        }
+        return base.HandleAdditionalParameter(name, value);
     }
 }

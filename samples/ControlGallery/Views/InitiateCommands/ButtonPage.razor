@@ -11,13 +11,13 @@
 </ContentPage>
 
 @code {
-    ImageSource _favorite = ImageSource.FromFile("favorite.png");
-    ImageSource _nonFavorite = ImageSource.FromFile("not_favorite.png");
+ImageSource _favorite = ImageSource.FromFile("favorite.png");
+ImageSource _nonFavorite = ImageSource.FromFile("not_favorite.png");
 
-    bool isFavorite;
+bool isFavorite;
 
-    void ToggleFavorite()
-    {
-        isFavorite = !isFavorite;
-    }
+void ToggleFavorite()
+{
+    isFavorite = !isFavorite;
+}
 }

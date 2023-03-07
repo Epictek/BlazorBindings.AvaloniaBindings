@@ -3,8 +3,8 @@
         <Label>Favorite: @_favorite</Label>
 
         @foreach (var item in _items)
-        {
-            <SwipeView>
+    {
+        <SwipeView>
                 <RightItems>
                     <SwipeItems>
                         <SwipeItem BackgroundColor="Colors.Yellow"
@@ -24,29 +24,29 @@
                     </ContentView>
                 </ChildContent>
             </SwipeView>
-        }
+    }
     </VerticalStackLayout>
 
 </ContentPage>
 
 @code {
-    List<string> _items = new()
-    {
-        "Leonardo da Vinci",
-        "Michelangelo Buonarroti",
-        "Donato di Niccolò di Betto Bardi",
-        "Raffaello Sanzio da Urbino"
-    };
+List<string> _items = new()
+{
+    "Leonardo da Vinci",
+    "Michelangelo Buonarroti",
+    "Donato di Niccolò di Betto Bardi",
+    "Raffaello Sanzio da Urbino"
+};
 
-    string _favorite;
+string _favorite;
 
-    void MakeFavorite(string item)
-    {
-        _favorite = item;
-    }
+void MakeFavorite(string item)
+{
+    _favorite = item;
+}
 
-    void Remove(string item)
-    {
-        _items.Remove(item);
-    }
+void Remove(string item)
+{
+    _items.Remove(item);
+}
 }

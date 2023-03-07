@@ -4,82 +4,81 @@
 using System.Diagnostics;
 using MC = Microsoft.Maui.Controls;
 
-namespace BlazorBindings.Maui.Elements
+namespace BlazorBindings.Maui.Elements;
+
+public partial class ShellSection : ShellGroupItem, IMauiContainerElementHandler
 {
-    public partial class ShellSection : ShellGroupItem, IMauiContainerElementHandler
+    [Parameter] public RenderFragment ChildContent { get; set; }
+
+    protected override RenderFragment GetChildContent() => ChildContent;
+
+    protected override bool HandleAdditionalParameter(string name, object value)
     {
-        [Parameter] public RenderFragment ChildContent { get; set; }
-
-        protected override RenderFragment GetChildContent() => ChildContent;
-
-        protected override bool HandleAdditionalParameter(string name, object value)
+        if (name == nameof(ChildContent))
         {
-            if (name == nameof(ChildContent))
-            {
-                ChildContent = (RenderFragment)value;
-                return true;
-            }
-            else
-            {
-                return base.HandleAdditionalParameter(name, value);
-            }
+            ChildContent = (RenderFragment)value;
+            return true;
         }
-
-        void IMauiContainerElementHandler.AddChild(MC.BindableObject child, int physicalSiblingIndex)
+        else
         {
-            ArgumentNullException.ThrowIfNull(child);
-
-            MC.ShellContent contentToAdd = child switch
-            {
-                MC.TemplatedPage childAsTemplatedPage => childAsTemplatedPage,  // Implicit conversion
-                MC.ShellContent childAsShellContent => childAsShellContent,
-                _ => throw new NotSupportedException($"Handler of type '{GetType().FullName}' doesn't support adding a child (child type is '{child.GetType().FullName}').")
-            };
-
-            // Ensure that there is non-null Content to avoid exceptions in Xamarin.Forms
-            contentToAdd.Content ??= new MC.Page();
-
-            if (NativeControl.Items.Count >= physicalSiblingIndex)
-            {
-                NativeControl.Items.Insert(physicalSiblingIndex, contentToAdd);
-            }
-            else
-            {
-                Debug.WriteLine($"WARNING: {nameof(IMauiContainerElementHandler.AddChild)} called with {nameof(physicalSiblingIndex)}={physicalSiblingIndex}, but NativeControl.Items.Count={NativeControl.Items.Count}");
-                NativeControl.Items.Add(contentToAdd);
-            }
+            return base.HandleAdditionalParameter(name, value);
         }
+    }
 
-        int IMauiContainerElementHandler.GetChildIndex(MC.BindableObject child)
+    void IMauiContainerElementHandler.AddChild(MC.BindableObject child, int physicalSiblingIndex)
+    {
+        ArgumentNullException.ThrowIfNull(child);
+
+        MC.ShellContent contentToAdd = child switch
         {
-            var shellContent = GetContentForChild(child);
-            return NativeControl.Items.IndexOf(shellContent);
-        }
+            MC.TemplatedPage childAsTemplatedPage => childAsTemplatedPage,  // Implicit conversion
+            MC.ShellContent childAsShellContent => childAsShellContent,
+            _ => throw new NotSupportedException($"Handler of type '{GetType().FullName}' doesn't support adding a child (child type is '{child.GetType().FullName}').")
+        };
 
-        void IMauiContainerElementHandler.RemoveChild(MC.BindableObject child)
+        // Ensure that there is non-null Content to avoid exceptions in Xamarin.Forms
+        contentToAdd.Content ??= new MC.Page();
+
+        if (NativeControl.Items.Count >= physicalSiblingIndex)
         {
-            ArgumentNullException.ThrowIfNull(child);
-
-            MC.ShellContent contentToRemove = GetContentForChild(child)
-                ?? throw new NotSupportedException($"Handler of type '{GetType().FullName}' doesn't support removing a child (child type is '{child.GetType().FullName}').");
-
-            NativeControl.Items.Remove(contentToRemove);
+            NativeControl.Items.Insert(physicalSiblingIndex, contentToAdd);
         }
-
-
-        private MC.ShellContent GetContentForChild(MC.BindableObject child)
+        else
         {
-            return child switch
-            {
-                MC.TemplatedPage childAsTemplatedPage => GetContentForTemplatePage(childAsTemplatedPage),
-                MC.ShellContent childAsShellContent => childAsShellContent,
-                _ => null
-            };
+            Debug.WriteLine($"WARNING: {nameof(IMauiContainerElementHandler.AddChild)} called with {nameof(physicalSiblingIndex)}={physicalSiblingIndex}, but NativeControl.Items.Count={NativeControl.Items.Count}");
+            NativeControl.Items.Add(contentToAdd);
         }
+    }
 
-        private MC.ShellContent GetContentForTemplatePage(MC.TemplatedPage childAsTemplatedPage)
+    int IMauiContainerElementHandler.GetChildIndex(MC.BindableObject child)
+    {
+        var shellContent = GetContentForChild(child);
+        return NativeControl.Items.IndexOf(shellContent);
+    }
+
+    void IMauiContainerElementHandler.RemoveChild(MC.BindableObject child)
+    {
+        ArgumentNullException.ThrowIfNull(child);
+
+        MC.ShellContent contentToRemove = GetContentForChild(child)
+            ?? throw new NotSupportedException($"Handler of type '{GetType().FullName}' doesn't support removing a child (child type is '{child.GetType().FullName}').");
+
+        NativeControl.Items.Remove(contentToRemove);
+    }
+
+
+    private MC.ShellContent GetContentForChild(MC.BindableObject child)
+    {
+        return child switch
         {
-            return NativeControl.Items.FirstOrDefault(content => content.Content == childAsTemplatedPage);
-        }
+            MC.TemplatedPage childAsTemplatedPage => GetContentForTemplatePage(childAsTemplatedPage),
+            MC.ShellContent childAsShellContent => childAsShellContent,
+            _ => null
+        };
+    }
+
+    private MC.ShellContent GetContentForTemplatePage(MC.TemplatedPage childAsTemplatedPage)
+    {
+        return NativeControl.Items.FirstOrDefault(content => content.Content == childAsTemplatedPage);
     }
 }

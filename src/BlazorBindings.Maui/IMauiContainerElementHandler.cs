@@ -3,12 +3,11 @@
 
 using MC = Microsoft.Maui.Controls;
 
-namespace BlazorBindings.Maui
+namespace BlazorBindings.Maui;
+
+public interface IMauiContainerElementHandler : IMauiElementHandler
 {
-    public interface IMauiContainerElementHandler : IMauiElementHandler
-    {
-        void AddChild(MC.BindableObject child, int physicalSiblingIndex);
-        void RemoveChild(MC.BindableObject child);
-        int GetChildIndex(MC.BindableObject child);
-    }
+    void AddChild(MC.BindableObject child, int physicalSiblingIndex);
+    void RemoveChild(MC.BindableObject child);
+    int GetChildIndex(MC.BindableObject child);
 }
