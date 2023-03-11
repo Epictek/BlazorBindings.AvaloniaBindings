@@ -46,7 +46,7 @@ private MC.BindableObject CreateTemplateRoot(MC.DataTemplate template, object it
     return content;
 }
 
-private T CreateContent<T>(MC.DataTemplate template, object value)
+private T CreateContent<T>(MC.DataTemplate template, object value) where T : MC.View
 {
     var templateRoot = CreateTemplateRoot(template, value);
     return templateRoot.GetTemplateContent<T>();

@@ -5,14 +5,14 @@ namespace BlazorBindings.UnitTests.Extensions;
 
 public static class ControlsExtensions
 {
-    public static T GetTemplateContent<T>(this TemplatedView view)
+    public static T GetTemplateContent<T>(this TemplatedView view) where T : View
     {
-        return (T)((Layout)view.Children[0]).Children[0];
+        return (T)((ContentView)view.Children[0]).Content;
     }
 
-    public static T GetTemplateContent<T>(this object templateRoot)
+    public static T GetTemplateContent<T>(this object templateRoot) where T : View
     {
-        return (T)((Layout)templateRoot).Children[0];
+        return (T)((ContentView)templateRoot).Content;
     }
 
     public static void RaiseEvent<T>(this BindableObject bindableObject, string eventName, T args)

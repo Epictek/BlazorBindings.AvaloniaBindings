@@ -18,9 +18,9 @@ internal class ControlTemplateItemsComponent<T> : NativeControlComponentBase, IM
         {
             foreach (var itemRoot in _itemRoots)
             {
-                builder.OpenComponent<InitializedVerticalStackLayout>(1);
+                builder.OpenComponent<InitializedContentView>(1);
 
-                builder.AddAttribute(2, nameof(InitializedVerticalStackLayout.NativeControl), itemRoot);
+                builder.AddAttribute(2, nameof(InitializedContentView.NativeControl), itemRoot);
                 builder.AddAttribute(3, "ChildContent", (RenderFragment)(builder =>
                 {
                     Template.Invoke(builder);
@@ -35,11 +35,11 @@ internal class ControlTemplateItemsComponent<T> : NativeControlComponentBase, IM
     [Parameter] public Action<T, MC.DataTemplate> SetDataTemplateAction { get; set; }
     [Parameter] public RenderFragment Template { get; set; }
 
-    private readonly List<MC.VerticalStackLayout> _itemRoots = new();
+    private readonly List<MC.ContentView> _itemRoots = new();
 
     private MC.View AddTemplateRoot()
     {
-        var templateRoot = new MC.VerticalStackLayout();
+        var templateRoot = new MC.ContentView();
         _itemRoots.Add(templateRoot);
         StateHasChanged();
 
@@ -67,7 +67,7 @@ internal class ControlTemplateItemsComponent<T> : NativeControlComponentBase, IM
     void IElementHandler.ApplyAttribute(ulong attributeEventHandlerId, string attributeName, object attributeValue, string attributeEventUpdatesAttributeName) { }
     void IMauiContainerElementHandler.AddChild(MC.BindableObject child, int physicalSiblingIndex) { }
     void IMauiContainerElementHandler.RemoveChild(MC.BindableObject child) { }
-    int IMauiContainerElementHandler.GetChildIndex(MC.BindableObject child) => _itemRoots.IndexOf((MC.VerticalStackLayout)child);
+    int IMauiContainerElementHandler.GetChildIndex(MC.BindableObject child) => _itemRoots.IndexOf((MC.ContentView)child);
     MC.BindableObject IMauiElementHandler.ElementControl => null;
     object IElementHandler.TargetElement => null;
 }

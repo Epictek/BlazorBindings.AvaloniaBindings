@@ -35,6 +35,7 @@ namespace BlazorBindings.Maui.Elements
         [Parameter] public ScrollBarVisibility? VerticalScrollBarVisibility { get; set; }
         [Parameter] public RenderFragment EmptyView { get; set; }
         [Parameter] public RenderFragment<T> ItemTemplate { get; set; }
+        [Parameter] public RenderFragment<T> ItemTemplateSelector { get; set; }
         [Parameter] public EventCallback<MC.ScrollToRequestEventArgs> OnScrollToRequested { get; set; }
         [Parameter] public EventCallback<MC.ItemsViewScrolledEventArgs> OnScrolled { get; set; }
         [Parameter] public EventCallback OnRemainingItemsThresholdReached { get; set; }
@@ -87,6 +88,9 @@ namespace BlazorBindings.Maui.Elements
                 case nameof(ItemTemplate):
                     ItemTemplate = (RenderFragment<T>)value;
                     break;
+                case nameof(ItemTemplateSelector):
+                    ItemTemplateSelector = (RenderFragment<T>)value;
+                    break;
                 case nameof(OnScrollToRequested):
                     if (!Equals(OnScrollToRequested, value))
                     {
@@ -129,6 +133,7 @@ namespace BlazorBindings.Maui.Elements
             base.RenderAdditionalElementContent(builder, ref sequence);
             RenderTreeBuilderHelper.AddContentProperty<MC.ItemsView>(builder, sequence++, EmptyView, (x, value) => x.EmptyView = (object)value);
             RenderTreeBuilderHelper.AddDataTemplateProperty<MC.ItemsView, T>(builder, sequence++, ItemTemplate, (x, template) => x.ItemTemplate = template);
+            RenderTreeBuilderHelper.AddDataTemplateSelectorProperty<MC.ItemsView, T>(builder, sequence++, ItemTemplateSelector, (x, template) => x.ItemTemplate = template);
         }
 
         static partial void RegisterAdditionalHandlers();

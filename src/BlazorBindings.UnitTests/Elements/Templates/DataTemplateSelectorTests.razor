@@ -1,0 +1,50 @@
+﻿@using Microsoft.Maui.Controls.Internals;
+
+@inherits ElementTestBase
+
+@code {
+    [Test]
+    public async Task CreateContentFromDataTemplateSelector() {
+        var template = await RenderTemplate<int>(i =>
+    @<Label>@i - @(i == 1 ? "one" : "many")</Label>);
+
+        var label1 = CreateContent<MC.Label>(template, 1);
+        var label2 = CreateContent<MC.Label>(template, 2);
+
+        Assert.That(label1.Text, Is.EqualTo("1 - one"));
+        Assert.That(label2.Text, Is.EqualTo("2 - many"));
+    }
+
+    [Test]
+    public async Task TemplateContentChangesBasedOnBindingContext() {
+        var template = await RenderTemplate<int>(i =>
+    @<Label>@i - @(i == 1 ? "one" : "many")</Label>);
+
+        var templateRoot = CreateTemplateRoot(template, 1);
+        var label = templateRoot.GetTemplateContent<MC.Label>();
+
+        Assert.That(label.Text, Is.EqualTo("1 - one"));
+
+        templateRoot.BindingContext = 2;
+        StateHasChanged();
+
+        Assert.That(label.Text, Is.EqualTo("2 - many"));
+    }
+
+    private async Task<MC.DataTemplateSelector> RenderTemplate<T>(RenderFragment<T> templateFragment) {
+        var collectionView = await Render<MC.CollectionView>(@<CollectionView T="T" ItemTemplateSelector="templateFragment" />);
+        return (MC.DataTemplateSelector)collectionView.ItemTemplate;
+    }
+
+    private MC.BindableObject CreateTemplateRoot(MC.DataTemplateSelector templateSelector, object item) {
+        var template = templateSelector.SelectTemplate(item, null);
+        var content = (MC.BindableObject)template.CreateContent(item, null);
+        content.BindingContext = item;
+        return content;
+    }
+
+    private T CreateContent<T>(MC.DataTemplateSelector templateSelector, object value) where T : MC.View {
+        var templateRoot = CreateTemplateRoot(templateSelector, value);
+        return templateRoot.GetTemplateContent<T>();
+    }
+}

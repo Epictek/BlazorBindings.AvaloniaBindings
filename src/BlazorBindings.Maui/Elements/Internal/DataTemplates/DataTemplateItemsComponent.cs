@@ -13,9 +13,9 @@ internal class DataTemplateItemsComponent<TControl, TItem> : NativeControlCompon
     {
         foreach (var itemRoot in _itemRoots)
         {
-            builder.OpenComponent<InitializedVerticalStackLayout>(1);
+            builder.OpenComponent<InitializedContentView>(1);
 
-            builder.AddAttribute(2, nameof(InitializedVerticalStackLayout.NativeControl), itemRoot);
+            builder.AddAttribute(2, nameof(InitializedContentView.NativeControl), itemRoot);
             builder.AddAttribute(3, "ChildContent", (RenderFragment)(builder =>
             {
                 builder.OpenComponent<DataTemplateItemComponent<TItem>>(4);
@@ -31,11 +31,11 @@ internal class DataTemplateItemsComponent<TControl, TItem> : NativeControlCompon
     [Parameter] public Action<TControl, MC.DataTemplate> SetDataTemplateAction { get; set; }
     [Parameter] public RenderFragment<TItem> Template { get; set; }
 
-    private readonly List<MC.VerticalStackLayout> _itemRoots = new();
+    private readonly List<MC.ContentView> _itemRoots = new();
 
     public MC.View AddTemplateRoot()
     {
-        var templateRoot = new MC.VerticalStackLayout();
+        var templateRoot = new MC.ContentView();
         _itemRoots.Add(templateRoot);
         StateHasChanged();
         return templateRoot;
@@ -54,6 +54,6 @@ internal class DataTemplateItemsComponent<TControl, TItem> : NativeControlCompon
     object IElementHandler.TargetElement => null;
     void IMauiContainerElementHandler.AddChild(MC.BindableObject child, int physicalSiblingIndex) { }
     void IMauiContainerElementHandler.RemoveChild(MC.BindableObject child) { }
-    int IMauiContainerElementHandler.GetChildIndex(MC.BindableObject child) => _itemRoots.IndexOf((MC.VerticalStackLayout)child);
+    int IMauiContainerElementHandler.GetChildIndex(MC.BindableObject child) => _itemRoots.IndexOf((MC.ContentView)child);
     void IElementHandler.ApplyAttribute(ulong attributeEventHandlerId, string attributeName, object attributeValue, string attributeEventUpdatesAttributeName) { }
 }

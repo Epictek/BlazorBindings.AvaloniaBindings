@@ -9,14 +9,14 @@ public async Task SetIndicatorTemplate()
         <IndicatorTemplate>
             <Label Text="x" />
         </IndicatorTemplate>
-    </IndicatorView>
-);
+            </IndicatorView>
+        );
 
-    var children = indicatorView.IndicatorLayout.Children;
-    Assert.That(children.Count, Is.EqualTo(3));
+        var children = indicatorView.IndicatorLayout.Children;
+        Assert.That(children.Count, Is.EqualTo(3));
 
-    var label = (MC.Label)((MC.Layout)children[0]).Children[0];
-    Assert.That(label.Text, Is.EqualTo("x"));
+        var label = children[0].GetTemplateContent<MC.Label>();
+        Assert.That(label.Text, Is.EqualTo("x"));
 }
 
 [Test]

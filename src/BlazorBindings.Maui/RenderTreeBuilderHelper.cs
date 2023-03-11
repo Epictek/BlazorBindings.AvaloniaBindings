@@ -70,6 +70,25 @@ public static class RenderTreeBuilderHelper
         }
     }
 
+    public static void AddDataTemplateSelectorProperty<TControl, TItem>(
+        RenderTreeBuilder builder,
+        int sequence,
+        RenderFragment<TItem> template,
+        Action<TControl, MC.DataTemplateSelector> setDataTemplateSelectorAction)
+    {
+        if (template != null)
+        {
+            builder.OpenRegion(sequence);
+
+            builder.OpenComponent<DataTemplateSelectorComponent<TControl, TItem>>(0);
+            builder.AddAttribute(1, nameof(DataTemplateSelectorComponent<TControl, TItem>.SetDataTemplateSelectorAction), setDataTemplateSelectorAction);
+            builder.AddAttribute(2, nameof(DataTemplateSelectorComponent<TControl, TItem>.TemplateSelector), template);
+            builder.CloseComponent();
+
+            builder.CloseRegion();
+        }
+    }
+
     public static void AddDataTemplateProperty<T>(
         RenderTreeBuilder builder,
         int sequence,
