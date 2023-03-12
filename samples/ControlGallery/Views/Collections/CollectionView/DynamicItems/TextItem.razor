@@ -1,0 +1,12 @@
+﻿<Border BackgroundColor="Colors.LightBlue"
+        Margin="8"
+        Padding="8"
+        CornerRadius="4">
+
+    <Label Text="@Item.Text" />
+
+</Border>
+
+@code {
+    [Parameter] public TextItemModel Item { get; set; }
+}

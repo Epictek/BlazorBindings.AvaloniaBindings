@@ -5,14 +5,39 @@
 @code {
     [Test]
     public async Task CreateContentFromDataTemplateSelector() {
-        var template = await RenderTemplate<int>(i =>
-    @<Label>@i - @(i == 1 ? "one" : "many")</Label>);
+        var templateSelector = await RenderTemplate<int>(i => i >= 0
+        ? @<Label>@i - @(i == 1 ? "one" : "many")</Label>
+        : @<Border BackgroundColor="Colors.Red">
+        <Label>@i - Negative</Label>
+    </Border>);
 
-        var label1 = CreateContent<MC.Label>(template, 1);
-        var label2 = CreateContent<MC.Label>(template, 2);
+        var label1 = CreateContent<MC.Label>(templateSelector, 1);
+        var label2 = CreateContent<MC.Label>(templateSelector, 2);
+        var borderMinus1 = CreateContent<MC.Border>(templateSelector, -1);
+        var labelMinus1 = (MC.Label)borderMinus1.Content;
 
         Assert.That(label1.Text, Is.EqualTo("1 - one"));
         Assert.That(label2.Text, Is.EqualTo("2 - many"));
+        Assert.That(labelMinus1.Text, Is.EqualTo("-1 - Negative"));
+    }
+
+    [Test]
+    public async Task SelectorShouldCreateSeparateDataTemplatesPerChildComponent() {
+        var templateSelector = await RenderTemplate<int>(i => i >= 0
+        ? @<Label>@i - @(i == 1 ? "one" : "many")</Label>
+        : @<Border BackgroundColor="Colors.Red">
+        <Label>@i - Negative</Label>
+        </Border>
+    );
+
+        var templateA1 = templateSelector.SelectTemplate(1, null);
+        var templateA2 = templateSelector.SelectTemplate(2, null);
+        var templateB1 = templateSelector.SelectTemplate(-1, null);
+        var templateB2 = templateSelector.SelectTemplate(-2, null);
+
+        Assert.That(templateA1, Is.SameAs(templateA2));
+        Assert.That(templateB1, Is.SameAs(templateB2));
+        Assert.That(templateA1, Is.Not.SameAs(templateB1));
     }
 
     [Test]

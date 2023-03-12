@@ -11,14 +11,9 @@
                 <Label Text="Scroll to load more items." />
             </Header>
 
-            <ItemTemplateSelector>
-                @if (@context % 7 != 0) {
-                    <Item Value="@context" />
-                }
-                else {
-                    <ItemB Value="@context" />
-                }
-            </ItemTemplateSelector>
+            <ItemTemplate>
+                <Item Value="@context" />
+            </ItemTemplate>
 
             <Footer>
                 <ActivityIndicator IsRunning="_loading" />

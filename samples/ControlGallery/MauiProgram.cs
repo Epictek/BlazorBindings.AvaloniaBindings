@@ -20,6 +20,8 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
             });
 
+        builder.Services.AddSingleton<IMediaPicker>(MediaPicker.Default);
+
         return builder.Build();
     }
 }

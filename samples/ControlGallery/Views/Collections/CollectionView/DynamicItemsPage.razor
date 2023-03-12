@@ -1,0 +1,54 @@
+﻿@using System.Collections.ObjectModel;
+@using ControlGallery.Views.Collections.CollectionView.DynamicItems;
+
+<ContentPage Title="Chat">
+    <ToolbarItems>
+        <ToolbarItem Text="Pick" OnClick="SelectPhoto" />
+        <ToolbarItem Text="Capture" OnClick="CapturePhoto" />
+    </ToolbarItems>
+
+
+    <ChildContent>
+        <Grid RowDefinitions="Auto, *">
+            <Entry Grid.Row="0"
+                   @bind-Text="enteredText"
+                   Placeholder="Type something"
+                   OnCompleted="AddText" />
+
+            <CollectionView Grid.Row="1" ItemsSource="items">
+
+                <ItemTemplateSelector>
+                    @if (context is TextItemModel text) {
+                        <TextItem Item="text" />
+                    }
+                    else if (context is ImageItemModel image) {
+                        <ImageItem Item="image" />
+                    }
+                </ItemTemplateSelector>
+
+            </CollectionView>
+        </Grid>
+    </ChildContent>
+</ContentPage>
+
+@code {
+    [Inject] private IMediaPicker MediaPicker { get; set; }
+
+    ObservableCollection<ItemModel> items = new(Items.GetItems());
+    string enteredText;
+
+    async Task SelectPhoto() {
+        var photo = await MediaPicker.PickPhotoAsync();
+        items.Insert(0, new ImageItemModel(ImageSource.FromFile(photo.FullPath)));
+    }
+
+    async Task CapturePhoto() {
+        var photo = await MediaPicker.CapturePhotoAsync();
+        items.Insert(0, new ImageItemModel(ImageSource.FromFile(photo.FullPath)));
+    }
+
+    void AddText() {
+        items.Insert(0, new TextItemModel(enteredText));
+        enteredText = "";
+    }
+}
