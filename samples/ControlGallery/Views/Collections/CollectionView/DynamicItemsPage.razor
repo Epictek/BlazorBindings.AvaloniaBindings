@@ -1,34 +1,36 @@
 ﻿@using System.Collections.ObjectModel;
 @using ControlGallery.Views.Collections.CollectionView.DynamicItems;
+@using ControlGallery.Views.Shared
+@using UraniumUI.Icons.FontAwesome;
 
-<ContentPage Title="Chat">
-    <ToolbarItems>
-        <ToolbarItem Text="Pick" OnClick="SelectPhoto" />
-        <ToolbarItem Text="Capture" OnClick="CapturePhoto" />
-    </ToolbarItems>
+<ContentPage Title="Dynamic">
+    <Grid RowDefinitions="Auto, *">
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto,Auto" ColumnSpacing="6" Margin="6">
 
-
-    <ChildContent>
-        <Grid RowDefinitions="Auto, *">
-            <Entry Grid.Row="0"
-                   @bind-Text="enteredText"
+            <Entry Grid.Column="0" @bind-Text="enteredText"
                    Placeholder="Type something"
                    OnCompleted="AddText" />
 
-            <CollectionView Grid.Row="1" ItemsSource="items">
+            <FAIcon Grid.Column="1" Glyph="@Solid.Camera" OnTap="CapturePhoto" Color="Colors.LightBlue" />
+            <FAIcon Grid.Column="2" Glyph="@Solid.Images" OnTap="SelectPhoto" Color="Colors.LightBlue" />
 
-                <ItemTemplateSelector>
-                    @if (context is TextItemModel text) {
-                        <TextItem Item="text" />
-                    }
-                    else if (context is ImageItemModel image) {
-                        <ImageItem Item="image" />
-                    }
-                </ItemTemplateSelector>
-
-            </CollectionView>
         </Grid>
-    </ChildContent>
+
+        <CollectionView Grid.Row="1" ItemsSource="items">
+
+            <ItemTemplateSelector>
+                @if (context is TextItemModel text)
+                {
+                    <TextItem Item="text" />
+                }
+                else if (context is ImageItemModel image)
+                {
+                    <ImageItem Item="image" />
+                }
+            </ItemTemplateSelector>
+
+        </CollectionView>
+    </Grid>
 </ContentPage>
 
 @code {
@@ -37,17 +39,24 @@
     ObservableCollection<ItemModel> items = new(Items.GetItems());
     string enteredText;
 
-    async Task SelectPhoto() {
+    async Task SelectPhoto()
+    {
         var photo = await MediaPicker.PickPhotoAsync();
-        items.Insert(0, new ImageItemModel(ImageSource.FromFile(photo.FullPath)));
+
+        if (photo != null)
+            items.Insert(0, new ImageItemModel(ImageSource.FromFile(photo.FullPath)));
     }
 
-    async Task CapturePhoto() {
+    async Task CapturePhoto()
+    {
         var photo = await MediaPicker.CapturePhotoAsync();
-        items.Insert(0, new ImageItemModel(ImageSource.FromFile(photo.FullPath)));
+
+        if (photo != null)
+            items.Insert(0, new ImageItemModel(ImageSource.FromFile(photo.FullPath)));
     }
 
-    void AddText() {
+    void AddText()
+    {
         items.Insert(0, new TextItemModel(enteredText));
         enteredText = "";
     }

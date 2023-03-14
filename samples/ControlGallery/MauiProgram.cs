@@ -3,6 +3,7 @@
 
 using BlazorBindings.Maui;
 using SkiaSharp.Views.Maui.Controls.Hosting;
+using UraniumUI;
 
 namespace ControlGallery;
 
@@ -18,6 +19,7 @@ public static class MauiProgram
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+                fonts.AddFontAwesomeIconFonts();
             });
 
         builder.Services.AddSingleton<IMediaPicker>(MediaPicker.Default);
