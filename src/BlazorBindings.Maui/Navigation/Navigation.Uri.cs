@@ -7,12 +7,10 @@ namespace BlazorBindings.Maui;
 
 public partial class Navigation
 {
-    private readonly Dictionary<string, MBBRouteFactory> RouteFactories = new();
-    private readonly Dictionary<Type, StructuredRouteResult> NavigationParameters = new();
     private List<StructuredRoute> Routes;
 
     /// <summary>
-    /// Performs URI-based Shell navigation. This method is only available for Shell-based applications.
+    /// Performs URI-based navigation.
     /// </summary>
     /// <param name="uri">URI to navigate to.</param>
     /// <param name="parameters">Additional parameters to set for component.</param>
@@ -20,22 +18,14 @@ public partial class Navigation
     {
         ArgumentNullException.ThrowIfNull(uri);
 
-        var shell = MC.Shell.Current
-            ?? throw new InvalidOperationException("URI-based navigation requires Shell-based application.");
-
         Routes ??= FindRoutes();
 
         var route = StructuredRoute.FindBestMatch(uri, Routes, parameters);
 
         if (route != null)
         {
-            NavigationParameters[route.Route.Type] = route;
-            if (!RouteFactories.TryGetValue(route.Route.BaseUri, out var routeFactory))
-            {
-                throw new InvalidOperationException($"A route factory for URI '{uri}' could not be found.");
-            }
-            await routeFactory.CreateAsync();
-            await shell.GoToAsync(route.Route.BaseUri);
+            var pars = GetParameters(route);
+            await Navigate(route.Route.Type, pars, NavigationTarget.Navigation, true);
         }
         else
         {
@@ -67,13 +57,8 @@ public partial class Navigation
 
                 var structuredRoute = new StructuredRoute(route.Template, page);
 
-                //Register with XamarinForms so it can handle Navigation.
-                var routeFactory = new MBBRouteFactory(page, BuildPage);
-                MC.Routing.RegisterRoute(structuredRoute.BaseUri, routeFactory);
-
                 //Also register route in our own list for setting parameters and tracking if it is registered;
                 result.Add(structuredRoute);
-                RouteFactories[structuredRoute.BaseUri] = routeFactory;
             }
         }
 
@@ -103,11 +88,9 @@ public partial class Navigation
         return convertedParameters;
     }
 
-    private Task<MC.Page> BuildPage(Type componentType)
+    private Dictionary<string, object> GetParameters(StructuredRouteResult route)
     {
-        var route = NavigationParameters[componentType];
-
-        var parameters = ConvertParameters(componentType, route.PathParameters);
+        var parameters = ConvertParameters(route.Route.Type, route.PathParameters);
 
         if (route.AdditionalParameters is not null)
         {
@@ -124,6 +107,6 @@ public partial class Navigation
             }
         }
 
-        return BuildElement<MC.Page>(componentType, parameters);
+        return parameters;
     }
 }
