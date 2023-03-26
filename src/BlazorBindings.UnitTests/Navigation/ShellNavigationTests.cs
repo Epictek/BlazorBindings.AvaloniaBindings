@@ -52,4 +52,39 @@ public class ShellNavigationTests
 
         Assert.That(isDisposed);
     }
+
+    [Test]
+    public async Task NavigatedComponentShouldBeAbleToReplacePage()
+    {
+        await _navigationService.NavigateToAsync("/switchable-pages");
+        var navigatedPage = _mauiNavigation.NavigationStack.Last();
+
+        Assert.That(_mauiNavigation.NavigationStack.Count, Is.EqualTo(2));
+        Assert.That(navigatedPage.Title, Is.EqualTo("Page1"));
+
+        var switchButton = (MC.Button)((MC.ContentPage)navigatedPage).Content;
+        switchButton.SendClicked();
+        navigatedPage = _mauiNavigation.NavigationStack.Last();
+
+        Assert.That(_mauiNavigation.NavigationStack.Count, Is.EqualTo(2));
+        Assert.That(navigatedPage.Title, Is.EqualTo("Page2"));
+
+        switchButton = (MC.Button)((MC.ContentPage)navigatedPage).Content;
+        switchButton.SendClicked();
+        navigatedPage = _mauiNavigation.NavigationStack.Last();
+
+        Assert.That(_mauiNavigation.NavigationStack.Count, Is.EqualTo(2));
+        Assert.That(navigatedPage.Title, Is.EqualTo("Page1"));
+    }
+
+    [Test]
+    public async Task PushPageWithRootWrapper()
+    {
+        _navigationService.SetWrapperComponentType(typeof(WrapperWithCascadingValue));
+
+        await _navigationService.NavigateToAsync("/page-with-cascading-param");
+        var navigatedPage = _mauiNavigation.NavigationStack.Last();
+
+        PageContentWithCascadingParameter.ValidateContent(navigatedPage, WrapperWithCascadingValue.Value);
+    }
 }
