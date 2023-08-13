@@ -84,7 +84,7 @@ public partial class GeneratedPropertyInfo
 
     public string GetPropertyDeclaration()
     {
-        // razor compiler doesn't allow 'new' properties, it condiders them as duplicates.
+        // razor compiler doesn't allow 'new' properties, it considers them as duplicates.
         if (_propertyInfo is not null && _propertyInfo.IsHidingMember())
         {
             return "";

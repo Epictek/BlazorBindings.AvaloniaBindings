@@ -1,7 +1,4 @@
-﻿using AlohaKit.Controls;
-using BlazorBindings.Maui.ComponentGenerator;
-using SkiaSharp.Views.Maui.Controls;
-using XCalendar.Maui.Views;
+﻿using BlazorBindings.Maui.ComponentGenerator;
 
 // AlohaKit.Controls
 [assembly: GenerateComponent(typeof(Rating))]
@@ -35,17 +32,8 @@ using XCalendar.Maui.Views;
     })]
 
 // Material.Components.Maui
-[assembly: GenerateComponent(typeof(Material.Components.Maui.ProgressIndicator), Aliases = new[] { "ProgressIndicator:MDProgressIndicator" })]
-[assembly: GenerateComponent(typeof(Material.Components.Maui.Button), Aliases = new[] { "Button:MDButton" })]
-[assembly: GenerateComponent(typeof(Material.Components.Maui.NavigationBar), Aliases = new[] { "NavigationBar:MDNavigationBar" })]
-[assembly: GenerateComponent(typeof(Material.Components.Maui.ComboBox), Aliases = new[] { "ComboBox:MDComboBox" })]
-[assembly: GenerateComponent(typeof(Material.Components.Maui.ComboBoxItem), Aliases = new[] { "ComboBoxItem:MDComboBoxItem" })]
-[assembly: GenerateComponent(typeof(Material.Components.Maui.MenuItem), Aliases = new[] { "MenuItem:MDMenuItem" })]
-[assembly: GenerateComponent(typeof(Material.Components.Maui.Card), Aliases = new[] { "Card:MDCard" })]
-[assembly: GenerateComponent(typeof(Material.Components.Maui.WrapLayout), Aliases = new[] { "WrapLayout:MDWrapLayout" })]
-[assembly: GenerateComponent(typeof(Material.Components.Maui.Popup), Aliases = new[] { "Popup:MDPopup" })]
-[assembly: GenerateComponent(typeof(Material.Components.Maui.Label), Aliases = new[] { "Label:MDLabel" })]
-[assembly: GenerateComponent(typeof(Material.Components.Maui.TextField), Aliases = new[] { "TextField:MDTextField" })]
+[assembly: GenerateComponentsFromAssembly(typeof(Material.Components.Maui.Button),
+    TypeNamePrefix = "MD")]
 
 [assembly: GenerateComponent(typeof(Material.Components.Maui.SKTouchCanvasView))]
 [assembly: GenerateComponent(typeof(SKCanvasView))]

@@ -39,6 +39,21 @@ internal static class SymbolExtensions
         return GetMember(typeSymbol, propName, includeBaseTypes) as IPropertySymbol;
     }
 
+    public static IEnumerable<INamedTypeSymbol> GetAllTypes(this INamespaceSymbol namespaceSymbol)
+    {
+        foreach (var nsOrType in namespaceSymbol.GetMembers())
+        {
+            if (nsOrType is INamedTypeSymbol namedType)
+                yield return namedType;
+
+            if (nsOrType is INamespaceSymbol ns)
+            {
+                foreach (var type in GetAllTypes(ns))
+                    yield return type;
+            }
+        }
+    }
+
     public static string GetFullName(this INamespaceOrTypeSymbol namespaceOrType)
     {
         var stack = new Stack<string>();

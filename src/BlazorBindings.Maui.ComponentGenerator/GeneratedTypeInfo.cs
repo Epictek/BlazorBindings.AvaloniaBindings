@@ -64,24 +64,27 @@ public class GeneratedTypeInfo
             return typeName;
         }
 
+        if (type is not INamedTypeSymbol namedType)
+            return type.Name;
+
         if (type.ContainingType != null)
         {
-            return $"{GetTypeNameAndAddNamespace(type.ContainingType)}.{FormatTypeName(type)}";
+            return $"{GetTypeNameAndAddNamespace(type.ContainingType)}.{FormatTypeName(namedType)}";
         }
 
         var nsName = type.ContainingNamespace.GetFullName();
 
-        return GetTypeNameAndAddNamespace(nsName, FormatTypeName(type));
+        return GetTypeNameAndAddNamespace(nsName, FormatTypeName(namedType));
     }
 
-    private string FormatTypeName(ITypeSymbol type)
+    private string FormatTypeName(INamedTypeSymbol namedType)
     {
-        if (type is not INamedTypeSymbol namedType || !namedType.IsGenericType)
+        if (!namedType.IsGenericType)
         {
-            return type.Name;
+            return namedType.Name;
         }
         var typeNameBuilder = new StringBuilder();
-        typeNameBuilder.Append(type.Name);
+        typeNameBuilder.Append(namedType.Name);
         typeNameBuilder.Append('<');
         var genericArgs = namedType.TypeArguments;
         for (var i = 0; i < genericArgs.Length; i++)

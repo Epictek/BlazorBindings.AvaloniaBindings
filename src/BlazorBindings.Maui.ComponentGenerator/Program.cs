@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
+using BlazorBindings.Maui.ComponentGenerator.Extensions;
 using CommandLine;
 using Microsoft.Build.Locator;
 using Microsoft.CodeAnalysis;
@@ -69,6 +70,8 @@ public class Program
     {
         Console.WriteLine("Finding types to generate.");
 
+        var elementType = compilation.GetTypeByMetadataName("Microsoft.Maui.Controls.Element");
+
         var attributes = compilation.Assembly.GetAttributes();
         var typesToGenerate = attributes
             .Where(a => a.AttributeClass?.ToDisplayString() == "BlazorBindings.Maui.ComponentGenerator.GenerateComponentAttribute")
@@ -99,7 +102,32 @@ public class Program
                 };
             })
             .Where(type => type.TypeSymbol != null)
-            .ToArray();
+            .ToList();
+
+        var typesByAssembly = attributes
+            .Where(a => a.AttributeClass?.ToDisplayString() == "BlazorBindings.Maui.ComponentGenerator.GenerateComponentsFromAssemblyAttribute")
+            .SelectMany(a =>
+            {
+                var containingTypeSymbol = a.ConstructorArguments.FirstOrDefault().Value as INamedTypeSymbol;
+                var typeNamePrefix = a.NamedArguments.FirstOrDefault(a => a.Key == "TypeNamePrefix").Value.Value as string;
+
+                var typesInAssembly = containingTypeSymbol.ContainingAssembly
+                    .GlobalNamespace.GetAllTypes()
+                    .Where(t => t.DeclaredAccessibility == Accessibility.Public)
+                    .Where(t => !(t.IsGenericType && t.IsDefinition))
+                    .Where(t => compilation.ClassifyCommonConversion(t, elementType) is { IsReference: true, IsImplicit: true });
+
+                return typesInAssembly
+                    .Where(typeSymbol => typesToGenerate.Any(t => !SymbolEqualityComparer.Default.Equals(t.TypeSymbol, typeSymbol)))
+                    .Select(typeSymbol => new GenerateComponentSettings
+                    {
+                        FileHeader = FileHeader,
+                        TypeSymbol = typeSymbol,
+                        TypeAlias = typeNamePrefix is null ? null : typeNamePrefix + typeSymbol.Name
+                    });
+            });
+
+        typesToGenerate.AddRange(typesByAssembly);
 
         foreach (var info in typesToGenerate)
         {
@@ -107,7 +135,7 @@ public class Program
             info.BaseTypeInfo = baseTypeInfo;
         }
 
-        return typesToGenerate;
+        return typesToGenerate.ToArray();
     }
 
     private static string[] GetNamedArgumentValues(AttributeData attribute, string name)
