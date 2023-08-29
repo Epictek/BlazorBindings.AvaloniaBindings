@@ -9,7 +9,7 @@ namespace BlazorBindings.Maui.Elements.Handlers;
 /// </summary>
 /// <remarks>Experimental API, subject to change.</remarks>
 [RequiresPreviewFeatures]
-public class RootContainerHandler : IContainerElementHandler, INonPhysicalChild
+public class RootContainerHandler : INonPhysicalParent
 {
     private TaskCompletionSource<object> _taskCompletionSource;
 
@@ -37,10 +37,4 @@ public class RootContainerHandler : IContainerElementHandler, INonPhysicalChild
     {
         Elements.Remove(child);
     }
-
-    // Because this is a 'fake' container element, all matters related to physical trees
-    // should be no-ops.
-    object IElementHandler.TargetElement => null;
-    void INonPhysicalChild.SetParent(object parentElement) { }
-    void INonPhysicalChild.RemoveFromParent(object parentElement) { }
 }

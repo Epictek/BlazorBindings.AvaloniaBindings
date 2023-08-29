@@ -16,15 +16,19 @@ public class ElementManager
         IElementHandler childHandler,
         int physicalSiblingIndex)
     {
-        if (childHandler is INonPhysicalChild nonPhysicalChild)
+        if (childHandler is INonPhysicalHandler)
         {
             // If the child is a non-child container then we shouldn't try to add it to a parent.
             // This is used in cases such as ModalContainer, which exists for the purposes of Blazor
             // markup and is not represented in the Xamarin.Forms control hierarchy.
+            if (childHandler is INonPhysicalChild nonPhysicalChild)
+            {
+                nonPhysicalChild.SetParent(parentHandler.TargetElement);
+            }
 
-            nonPhysicalChild.SetParent(parentHandler.TargetElement);
             return;
         }
+
 
         if (parentHandler is not IContainerElementHandler parent)
         {
@@ -38,9 +42,12 @@ public class ElementManager
 
     public virtual void RemoveChildElement(IElementHandler parentHandler, IElementHandler childHandler, int physicalSiblingIndex)
     {
-        if (childHandler is INonPhysicalChild nonPhysicalChild)
+        if (childHandler is INonPhysicalHandler)
         {
-            nonPhysicalChild.RemoveFromParent(parentHandler.TargetElement);
+            if (childHandler is INonPhysicalChild nonPhysicalChild)
+            {
+                nonPhysicalChild.RemoveFromParent(parentHandler.TargetElement);
+            }
         }
         else if (parentHandler is IContainerElementHandler parent)
         {

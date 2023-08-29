@@ -5,7 +5,7 @@ using WVM = Microsoft.AspNetCore.Components.WebView.Maui;
 
 namespace BlazorBindings.Maui.Elements;
 
-public class RootComponent : NativeControlComponentBase, IElementHandler, INonPhysicalChild
+public class RootComponent : NativeControlComponentBase, INonPhysicalChild
 {
     [Parameter] public string Selector { get; set; }
     [Parameter] public Type ComponentType { get; set; }

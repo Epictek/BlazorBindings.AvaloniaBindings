@@ -9,7 +9,7 @@ using MCS = Microsoft.Maui.Controls.StyleSheets;
 
 namespace BlazorBindings.Maui.Elements;
 
-public class StyleSheet : NativeControlComponentBase, IElementHandler, INonPhysicalChild
+public class StyleSheet : NativeControlComponentBase, INonPhysicalChild
 {
     private MC.VisualElement _parentVisualElement;
 
@@ -62,6 +62,4 @@ public class StyleSheet : NativeControlComponentBase, IElementHandler, INonPhysi
     {
         throw new InvalidOperationException("Removing StyleSheet element is not supported.");
     }
-
-    object IElementHandler.TargetElement => null;
 }

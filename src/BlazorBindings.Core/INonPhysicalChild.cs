@@ -8,7 +8,7 @@ namespace BlazorBindings.Core;
 /// This is often used on handlers for elements that contain metadata that is applied
 /// to a parent rather than a child control.
 /// </summary>
-public interface INonPhysicalChild
+public interface INonPhysicalChild : INonPhysicalHandler
 {
     /// <summary>
     /// This is called when this component would otherwise be added to a parent container. Instead
@@ -25,11 +25,4 @@ public interface INonPhysicalChild
     /// This is useful so that this component can unapply its effects from parent element.
     /// </summary>
     void RemoveFromParent(object parentElement);
-
-    /// <summary>
-    /// If this property is true, then renderer will pass children of this component to parent.
-    /// This is useful if you want to apply some effects to children (e.g. attached properties),
-    /// but still add them to parent element.
-    /// </summary>
-    internal bool ShouldAddChildrenToParent { get => false; }
 }

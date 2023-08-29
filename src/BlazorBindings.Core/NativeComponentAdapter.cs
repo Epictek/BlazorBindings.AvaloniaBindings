@@ -117,7 +117,7 @@ internal sealed class NativeComponentAdapter : IDisposable
             var index = PhysicalTarget.GetChildPhysicalIndex(childToRemove);
             Renderer.ElementManager.RemoveChildElement(PhysicalTarget._targetElement, childToRemove._targetElement, index);
 
-            if (PhysicalTarget._targetElement is INonPhysicalChild { ShouldAddChildrenToParent: true })
+            if (PhysicalTarget._targetElement is INonPhysicalParent { ShouldAddChildrenToParent: true })
             {
                 // Since element was added to parent previosly, we have to remove it from there.
                 PhysicalTarget.Parent.PhysicalTarget.RemoveChildElementAndDescendants(childToRemove);
@@ -209,7 +209,7 @@ internal sealed class NativeComponentAdapter : IDisposable
         var elementIndex = PhysicalTarget.GetChildPhysicalIndex(childAdapter);
         Renderer.ElementManager.AddChildElement(PhysicalTarget._targetElement, childAdapter._targetElement, elementIndex);
 
-        if (PhysicalTarget._targetElement is INonPhysicalChild { ShouldAddChildrenToParent: true })
+        if (PhysicalTarget._targetElement is INonPhysicalParent { ShouldAddChildrenToParent: true })
         {
             PhysicalTarget.Parent.AddElementAsChildElement(childAdapter);
         }
@@ -246,12 +246,12 @@ internal sealed class NativeComponentAdapter : IDisposable
                 if (child == targetChild)
                     return true;
 
-                if (child._targetElement != null && child._targetElement is not INonPhysicalChild)
+                if (child._targetElement != null && child._targetElement is not INonPhysicalHandler)
                 {
                     index++;
                 }
 
-                if (child._targetElement == null || child._targetElement is INonPhysicalChild { ShouldAddChildrenToParent: true })
+                if (child._targetElement == null || child._targetElement is INonPhysicalParent { ShouldAddChildrenToParent: true })
                 {
                     if (FindChildPhysicalIndexRecursive(child, targetChild, ref index))
                         return true;

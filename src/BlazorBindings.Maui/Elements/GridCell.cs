@@ -6,7 +6,7 @@ using MC = Microsoft.Maui.Controls;
 
 namespace BlazorBindings.Maui.Elements;
 
-public class GridCell : NativeControlComponentBase, IContainerElementHandler, INonPhysicalChild
+public class GridCell : NativeControlComponentBase, INonPhysicalParent
 {
     [Parameter] public int? Column { get; set; }
     [Parameter] public int? ColumnSpan { get; set; }
@@ -87,8 +87,5 @@ public class GridCell : NativeControlComponentBase, IContainerElementHandler, IN
         _children.Remove(childView);
     }
 
-    object IElementHandler.TargetElement => null;
-    void INonPhysicalChild.SetParent(object parentElement) { }
-    void INonPhysicalChild.RemoveFromParent(object parentElement) { }
-    bool INonPhysicalChild.ShouldAddChildrenToParent => true;
+    bool INonPhysicalParent.ShouldAddChildrenToParent => true;
 }

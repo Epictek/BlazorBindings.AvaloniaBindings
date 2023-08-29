@@ -3,7 +3,7 @@
 
 namespace BlazorBindings.Maui.Elements.Internal;
 
-internal class RootContainerComponent : NativeControlComponentBase, IContainerElementHandler, INonPhysicalChild
+internal class RootContainerComponent : NativeControlComponentBase, INonPhysicalParent
 {
     [Parameter] public RenderFragment ChildContent { get; set; }
     [Parameter] public EventCallback<object> OnElementAdded { get; set; }
@@ -23,10 +23,4 @@ internal class RootContainerComponent : NativeControlComponentBase, IContainerEl
     {
         Elements.Remove(child);
     }
-
-    // Because this is a 'fake' container element, all matters related to physical trees
-    // should be no-ops.
-    object IElementHandler.TargetElement => null;
-    void INonPhysicalChild.SetParent(object parentElement) { }
-    void INonPhysicalChild.RemoveFromParent(object parentElement) { }
 }

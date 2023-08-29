@@ -7,7 +7,7 @@ using MC = Microsoft.Maui.Controls;
 
 namespace BlazorBindings.Maui.Elements;
 
-public class ShellProperties : NativeControlComponentBase, IElementHandler, INonPhysicalChild
+public class ShellProperties : NativeControlComponentBase, INonPhysicalChild
 {
     private MC.BindableObject _target;
 
@@ -159,6 +159,4 @@ public class ShellProperties : NativeControlComponentBase, IElementHandler, INon
         MC.Shell.SetTitleColor(_target, (Color)MC.Shell.TitleColorProperty.DefaultValue);
         MC.Shell.SetUnselectedColor(_target, (Color)MC.Shell.UnselectedColorProperty.DefaultValue);
     }
-
-    object IElementHandler.TargetElement => null;
 }

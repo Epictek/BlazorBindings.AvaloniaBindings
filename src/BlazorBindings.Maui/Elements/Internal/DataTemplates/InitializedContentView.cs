@@ -5,7 +5,9 @@ using MC = Microsoft.Maui.Controls;
 
 namespace BlazorBindings.Maui.Elements.DataTemplates;
 
-internal class InitializedContentView : ContentView
+// While this element _is_ physical, we don't need it to be added to parents,
+// as they should track provided NativeControl instead.
+internal class InitializedContentView : ContentView, INonPhysicalHandler
 {
     [Parameter] public new MC.ContentView NativeControl { get; set; }
 

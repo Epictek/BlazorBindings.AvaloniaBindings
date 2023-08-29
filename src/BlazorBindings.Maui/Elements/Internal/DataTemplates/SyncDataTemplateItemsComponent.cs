@@ -51,7 +51,8 @@ internal class SyncDataTemplateItemsComponent<TControl, TItem> : NativeControlCo
     }
 
     void INonPhysicalChild.RemoveFromParent(object parentElement) { }
-    object IElementHandler.TargetElement => null;
+
+    // While this type implements IContainerElementHandler to allow adding children, we don't care about those methods, as items are already stored.
     void IContainerElementHandler.AddChild(object child, int physicalSiblingIndex) { }
     void IContainerElementHandler.RemoveChild(object child, int physicalSiblingIndex) { }
 

@@ -83,5 +83,5 @@ internal class NavigationHandler : IContainerElementHandler
         await AddChildAsync((MC.Page)child);
     }
 
-    public object TargetElement => null;
+    public object TargetElement => _navigation;
 }

@@ -2,7 +2,7 @@
 
 namespace BlazorBindings.Maui.Elements.Internal;
 
-internal class ContentPropertyComponent<TControl> : NativeControlComponentBase, IContainerElementHandler, INonPhysicalChild
+internal class ContentPropertyComponent<TControl> : NativeControlComponentBase, INonPhysicalParent, INonPhysicalChild
 {
     private TControl _parent;
 
@@ -30,8 +30,4 @@ internal class ContentPropertyComponent<TControl> : NativeControlComponentBase, 
     {
         SetPropertyAction(_parent, null);
     }
-
-    // Because this is a 'fake' element, all matters related to physical trees
-    // should be no-ops.
-    object IElementHandler.TargetElement => null;
 }

@@ -2,7 +2,7 @@
 
 namespace BlazorBindings.Maui.Elements.Internal;
 
-internal class ListContentPropertyComponent<TControl, TItem> : NativeControlComponentBase, IContainerElementHandler, INonPhysicalChild
+internal class ListContentPropertyComponent<TControl, TItem> : NativeControlComponentBase, INonPhysicalParent, INonPhysicalChild
     where TItem : class
 {
     private TControl _parent;
@@ -23,8 +23,6 @@ internal class ListContentPropertyComponent<TControl, TItem> : NativeControlComp
     {
         // Because this Handler is used internally only, this method is no-op.
     }
-
-    object IElementHandler.TargetElement => _parent;
 
     void IContainerElementHandler.AddChild(object child, int physicalSiblingIndex)
     {
