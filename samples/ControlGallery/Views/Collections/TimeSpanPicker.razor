@@ -1,0 +1,86 @@
+﻿<ContentPage Title="TimeSpan Picker">
+    <VerticalStackLayout Spacing="6">
+
+        <Grid ColumnDefinitions="*,10,*,10,*" RowDefinitions="*, 200">
+            <Label Grid.Column="0" HorizontalOptions="LayoutOptions.Center" Text="Hours" />
+            <Label Grid.Column="2" HorizontalOptions="LayoutOptions.Center" Text="Minutes" />
+            <Label Grid.Column="4" HorizontalOptions="LayoutOptions.Center" Text="Seconds" />
+
+            <CarouselView Grid.Row="1" Grid.Column="0"
+                          ItemsLayout="_layout"
+                          PeekAreaInsets="65"
+                          Loop="true"
+                          ItemsSource="_hours"
+                          @bind-CurrentItem="_selectedHours">
+
+                <ItemTemplate>
+                    <Label Text="@context.ToString("00")"
+                           VerticalOptions="LayoutOptions.Center"
+                           HorizontalOptions="LayoutOptions.Center"
+                           FontSize="50" />
+                </ItemTemplate>
+            </CarouselView>
+
+            <Label Grid.Row="1" Grid.Column="1"
+                   Text=":"
+                   VerticalOptions="LayoutOptions.Center"
+                   HorizontalOptions="LayoutOptions.Center"
+                   FontSize="50" />
+
+            <CarouselView Grid.Row="1" Grid.Column="2"
+                          ItemsLayout="_layout"
+                          PeekAreaInsets="65"
+                          Loop="true"
+                          ItemsSource="_minutes"
+                          @bind-CurrentItem="_selectedMinutes">
+
+                <ItemTemplate>
+                    <Label Text="@context.ToString("00")"
+                           VerticalOptions="LayoutOptions.Center"
+                           HorizontalOptions="LayoutOptions.Center"
+                           FontSize="50" />
+                </ItemTemplate>
+            </CarouselView>
+
+            <Label Grid.Row="1" Grid.Column="3"
+                   Text=":"
+                   VerticalOptions="LayoutOptions.Center"
+                   HorizontalOptions="LayoutOptions.Center"
+                   FontSize="50" />
+
+            <CarouselView Grid.Row="1" Grid.Column="4"
+                          ItemsLayout="_layout"
+                          PeekAreaInsets="65"
+                          Loop="true"
+                          ItemsSource="_seconds"
+                          @bind-CurrentItem="_selectedSeconds">
+
+                <ItemTemplate>
+                    <Label Text="@context.ToString("00")"
+                           VerticalOptions="LayoutOptions.Center"
+                           HorizontalOptions="LayoutOptions.Center"
+                           FontSize="50" />
+                </ItemTemplate>
+            </CarouselView>
+
+        </Grid>
+
+        <Label>Selected Time: @($"{_selectedHours:00}:{_selectedMinutes:00}:{_selectedSeconds:00}")</Label>
+    </VerticalStackLayout>
+</ContentPage>
+
+@code {
+    LinearItemsLayout _layout = new(ItemsLayoutOrientation.Vertical)
+        {
+            ItemSpacing = 5,
+            SnapPointsType = SnapPointsType.Mandatory,
+        };
+
+    int[] _hours = Enumerable.Range(0, 100).ToArray();
+    int[] _minutes = Enumerable.Range(0, 60).ToArray();
+    int[] _seconds = Enumerable.Range(0, 60).ToArray();
+
+    int _selectedHours;
+    int _selectedMinutes;
+    int _selectedSeconds;
+}
