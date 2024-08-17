@@ -21,7 +21,7 @@ public partial class BlazorNavigation : INavigation
         _wrapperComponentType = wrapperComponentType;
     }
 
-    protected AvaloniaNavigation AvaloniaNavigation => Application.Current.Cast<IAvaloniaBlazorApplication>().Navigation; //((IClassicDesktopStyleApplicationLifetime)Application.Current.ApplicationLifetime).MainWindow.MainWindow.Navigation;
+    protected AvaloniaNavigation AvaloniaNavigation => Application.Current.Cast<IAvaloniaBlazorApplication>().Navigation;
 
     /// <summary>
     /// Push page component <typeparamref name="T"/> to the Navigation Stack.

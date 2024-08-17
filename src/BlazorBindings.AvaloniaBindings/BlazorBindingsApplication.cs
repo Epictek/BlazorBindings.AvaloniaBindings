@@ -37,11 +37,29 @@ public class BlazorBindingsApplication<T> : Application, IAvaloniaBlazorApplicat
 
         var navigationView = new NavigationView();
         _avaloniaNavigation = new AvaloniaNavigation(navigationView);
-        var pushTask = _avaloniaNavigation.PushAsync((Control)((IClassicDesktopStyleApplicationLifetime)Avalonia.Application.Current.ApplicationLifetime).MainWindow.Content, false);
 
-        ((IClassicDesktopStyleApplicationLifetime)Avalonia.Application.Current.ApplicationLifetime).MainWindow.Content = navigationView;
+        
+        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+        {
+            if (desktop.MainWindow != null)
+            {
+                var pushTask = _avaloniaNavigation.PushAsync((Control)desktop.MainWindow.Content, false);
 
-        AwaitVoid(pushTask);
+                desktop.MainWindow.Content = navigationView;
+                AwaitVoid(pushTask);
+            }
+        }
+        else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
+        {
+            var pushTask = _avaloniaNavigation.PushAsync(singleViewPlatform.MainView, false);
+
+            singleViewPlatform.MainView = navigationView;
+            AwaitVoid(pushTask);
+
+        }
+        
+        
+
 
         static async void AwaitVoid(Task task) => await task;
     }
