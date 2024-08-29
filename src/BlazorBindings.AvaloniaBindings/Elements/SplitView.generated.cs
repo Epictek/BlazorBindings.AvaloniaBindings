@@ -40,7 +40,7 @@ namespace BlazorBindings.AvaloniaBindings.Elements
         /// <summary>
         /// Gets or sets the Pane for the SplitView
         /// </summary>
-        [Parameter] public object Pane { get; set; }
+        [Parameter] public RenderFragment Pane { get; set; }
         /// <summary>
         /// Gets or sets the background of the pane
         /// </summary>
@@ -56,7 +56,7 @@ namespace BlazorBindings.AvaloniaBindings.Elements
         /// <summary>
         /// Gets or sets the data template used to display the header content of the control.
         /// </summary>
-        [Parameter] public RenderFragment PaneTemplate { get; set; }
+        [Parameter] public RenderFragment<object> PaneTemplate { get; set; }
         [Parameter] public EventCallback<global::Avalonia.Interactivity.RoutedEventArgs> OnPaneClosed { get; set; }
         [Parameter] public EventCallback<global::Avalonia.Interactivity.CancelRoutedEventArgs> OnPaneClosing { get; set; }
         [Parameter] public EventCallback<global::Avalonia.Interactivity.RoutedEventArgs> OnPaneOpened { get; set; }
@@ -99,11 +99,7 @@ namespace BlazorBindings.AvaloniaBindings.Elements
                     }
                     break;
                 case nameof(Pane):
-                    if (!Equals(Pane, value))
-                    {
-                        Pane = (object)value;
-                        NativeControl.Pane = Pane;
-                    }
+                    Pane = (RenderFragment)value;
                     break;
                 case nameof(PaneBackground):
                     if (!Equals(PaneBackground, value))
@@ -127,7 +123,7 @@ namespace BlazorBindings.AvaloniaBindings.Elements
                     }
                     break;
                 case nameof(PaneTemplate):
-                    PaneTemplate = (RenderFragment)value;
+                    PaneTemplate = (RenderFragment<object>)value;
                     break;
                 case nameof(OnPaneClosed):
                     if (!Equals(OnPaneClosed, value))
@@ -179,8 +175,12 @@ namespace BlazorBindings.AvaloniaBindings.Elements
         protected override void RenderAdditionalElementContent(RenderTreeBuilder builder, ref int sequence)
         {
             base.RenderAdditionalElementContent(builder, ref sequence);
-            RenderTreeBuilderHelper.AddDataTemplateProperty<AC.SplitView>(builder, sequence++, PaneTemplate,
+            RenderTreeBuilderHelper.AddDataTemplateProperty<AC.SplitView, object>(builder, sequence++, PaneTemplate,
                 (nativeControl, nativeTemplate) => nativeControl.PaneTemplate = nativeTemplate);
+            
+            RenderTreeBuilderHelper.AddContentProperty<AC.SplitView>(builder, sequence++, Pane,
+                (nativeControl, nativeTemplate) => nativeControl.Pane = nativeTemplate);
+
         }
 
         static partial void RegisterAdditionalHandlers();

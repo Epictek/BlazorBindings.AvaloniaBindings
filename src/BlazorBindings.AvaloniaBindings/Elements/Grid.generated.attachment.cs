@@ -17,7 +17,15 @@ namespace BlazorBindings.AvaloniaBindings.Elements
                     }
                     else
                     {
-                        Avalonia.Controls.Grid.SetColumn((Avalonia.Controls.Control)element, (int)value);
+                        if (value is string s)
+                        {
+                            Avalonia.Controls.Grid.SetColumn((Avalonia.Controls.Control)element, int.Parse(s));
+
+                        }
+                        else
+                        {
+                            Avalonia.Controls.Grid.SetColumn((Avalonia.Controls.Control)element, (int)value);
+                        }
                     }
                 });
             AttachedPropertyRegistry.RegisterAttachedPropertyHandler("Grid.ColumnSpan",

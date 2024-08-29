@@ -100,6 +100,12 @@ public partial class GeneratedPropertyInfo
 
         var xmlDocContents = _propertyInfo is null ? "" : ComponentWrapperGenerator.GetXmlDocContents(_propertyInfo, indent);
 
+        if (ComponentPropertyName == "HeaderTemplate")
+        {
+            return $@"{xmlDocContents}{indent}[Parameter] public {ComponentType}<object> {ComponentPropertyName} {{ get; set; }}
+";
+
+        }
         return $@"{xmlDocContents}{indent}[Parameter] public {ComponentType} {ComponentPropertyName} {{ get; set; }}
 ";
     }

@@ -55,12 +55,8 @@ public class BlazorBindingsApplication<T> : Application, IAvaloniaBlazorApplicat
 
             singleViewPlatform.MainView = navigationView;
             AwaitVoid(pushTask);
-
         }
         
-        
-
-
         static async void AwaitVoid(Task task) => await task;
     }
 

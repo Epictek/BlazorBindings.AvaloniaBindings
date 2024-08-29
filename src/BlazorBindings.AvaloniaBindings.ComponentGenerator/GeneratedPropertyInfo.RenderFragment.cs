@@ -37,6 +37,13 @@ public partial class GeneratedPropertyInfo
 
     public string GetHandleContentProperty()
     {
+        if (ComponentPropertyName == "HeaderTemplate")
+        {
+            return $@"                case nameof({ComponentPropertyName}):
+                    {ComponentPropertyName} = ({ComponentType}<object>)value;
+                    break;
+";
+        }
         return $@"                case nameof({ComponentPropertyName}):
                     {ComponentPropertyName} = ({ComponentType})value;
                     break;
@@ -53,6 +60,10 @@ public partial class GeneratedPropertyInfo
 
         }
 
+        if (AvaloniaContainingTypeName.Contains("Headered"))
+        {
+            return $"\r\n            RenderTreeBuilderHelper.AddDataTemplateProperty<{AvaloniaContainingTypeName}, object>(builder, sequence++, {ComponentPropertyName},\r\n                ({parameterName}, nativeTemplate) => {parameterName}.{_propertyInfo.Name} = nativeTemplate);";
+        }
         if (IsPanelTemplate)
         {
             return $"\r\n            RenderTreeBuilderHelper.AddControlTemplateProperty<{AvaloniaContainingTypeName}, AC.ITemplate<AC.Panel>>(builder, sequence++, {ComponentPropertyName},\r\n                ({parameterName}, nativeTemplate) => {parameterName}.{_propertyInfo.Name} = nativeTemplate);";
@@ -126,6 +137,13 @@ public partial class GeneratedPropertyInfo
             return true;
 
         var type = prop.Type;
+
+        if (type.Name.Contains("DataTemplate") && type is INamedTypeSymbol namedType)
+        {
+            Console.WriteLine(namedType);
+        }
+
+
         if (IsContent(type) && HasPublicSetter(prop))
             return true;
 

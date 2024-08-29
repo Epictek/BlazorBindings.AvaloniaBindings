@@ -30,7 +30,7 @@ namespace BlazorBindings.AvaloniaBindings.Elements.Primitives
         /// <summary>
         /// Gets or sets the data template used to display the header content of the control.
         /// </summary>
-        [Parameter] public RenderFragment HeaderTemplate { get; set; }
+        [Parameter] public RenderFragment<object> HeaderTemplate { get; set; }
 
         public new ACP.HeaderedSelectingItemsControl NativeControl => (ACP.HeaderedSelectingItemsControl)((AvaloniaObject)this).NativeControl;
 
@@ -48,7 +48,7 @@ namespace BlazorBindings.AvaloniaBindings.Elements.Primitives
                     }
                     break;
                 case nameof(HeaderTemplate):
-                    HeaderTemplate = (RenderFragment)value;
+                    HeaderTemplate = (RenderFragment<object>)value;
                     break;
 
                 default:
@@ -60,7 +60,7 @@ namespace BlazorBindings.AvaloniaBindings.Elements.Primitives
         protected override void RenderAdditionalElementContent(RenderTreeBuilder builder, ref int sequence)
         {
             base.RenderAdditionalElementContent(builder, ref sequence);
-            RenderTreeBuilderHelper.AddDataTemplateProperty<ACP.HeaderedSelectingItemsControl>(builder, sequence++, HeaderTemplate,
+            RenderTreeBuilderHelper.AddDataTemplateProperty<ACP.HeaderedSelectingItemsControl, object>(builder, sequence++, HeaderTemplate,
                 (nativeControl, nativeTemplate) => nativeControl.HeaderTemplate = nativeTemplate);
         }
 
