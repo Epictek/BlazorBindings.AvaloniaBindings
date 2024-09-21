@@ -1,0 +1,18 @@
+﻿global using System;
+global using System.Linq;
+global using System.Collections.Generic;
+global using System.Threading.Tasks;
+global using System.Runtime.Versioning;
+global using BlazorBindings.Core;
+global using Microsoft.AspNetCore.Components;
+global using Microsoft.Extensions.DependencyInjection;
+global using Avalonia;
+global using AC = Avalonia.Controls;
+global using AvaloniaBindableObject = Avalonia.AvaloniaObject;
+global using AvaloniaApplication = Avalonia.Application;
+global using AvaloniaDataTemplate = Avalonia.Controls.Templates.IDataTemplate;
+global using AvaloniaContentView = Avalonia.Controls.ContentControl;//Avalonia.Controls.Control;
+global using BlazorBindings.Avalonia;
+global using BlazorBindings.Avalonia.Extensions;
+global using AvaloniaPage = Avalonia.Controls.Control;
+global using AvaloniaControl = Avalonia.Controls.Control;

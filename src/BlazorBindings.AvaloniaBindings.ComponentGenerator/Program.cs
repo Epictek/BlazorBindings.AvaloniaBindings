@@ -86,7 +86,7 @@ public class Program
 
         var attributes = compilation.Assembly.GetAttributes();
         var typesToGenerate = attributes
-            .Where(a => a.AttributeClass?.ToDisplayString() == "BlazorBindings.AvaloniaBindings.ComponentGenerator.GenerateComponentAttribute")
+            .Where(a => a.AttributeClass?.ToDisplayString() == "BlazorBindings.Avalonia.ComponentGenerator.GenerateComponentAttribute")
             .Select(a =>
             {
                 var typeSymbol = a.ConstructorArguments.FirstOrDefault().Value as INamedTypeSymbol;
@@ -117,7 +117,7 @@ public class Program
             .ToList();
 
         var typesByAssembly = attributes
-            .Where(a => a.AttributeClass?.ToDisplayString() == "BlazorBindings.AvaloniaBindings.ComponentGenerator.GenerateComponentsFromAssemblyAttribute")
+            .Where(a => a.AttributeClass?.ToDisplayString() == "BlazorBindings.Avalonia.ComponentGenerator.GenerateComponentsFromAssemblyAttribute")
             .SelectMany(a =>
             {
                 var containingTypeSymbol = a.ConstructorArguments.FirstOrDefault().Value as INamedTypeSymbol;

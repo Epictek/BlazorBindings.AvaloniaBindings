@@ -1,17 +1,18 @@
-<local:BlazorBindingsApplicationMainPage
+<helloWorld:BlazorBindingsApplicationMainPage
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    x:Class="BlazorBindings.AvaloniaBindings.HelloWorld.App"
-    xmlns:local="using:BlazorBindings.AvaloniaBindings.HelloWorld"
-	xmlns:nav="using:BlazorBindings.AvaloniaBindings.Navigation"
-    RequestedThemeVariant="Default">
+    x:Class="BlazorBindings.Avalonia.HelloWorld.App"
+    xmlns:local="using:BlazorBindings.Avalonia.HelloWorld"
+	xmlns:nav="using:BlazorBindings.Avalonia.Navigation"
+	xmlns:helloWorld="clr-namespace:BlazorBindings.AvaloniaBindings.HelloWorld"
+	RequestedThemeVariant="Default">
 	<!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
-	<local:BlazorBindingsApplicationMainPage.DataTemplates>
+	<helloWorld:BlazorBindingsApplicationMainPage.DataTemplates>
 
-	</local:BlazorBindingsApplicationMainPage.DataTemplates>
+	</helloWorld:BlazorBindingsApplicationMainPage.DataTemplates>
 
-	<local:BlazorBindingsApplicationMainPage.Styles>
+	<helloWorld:BlazorBindingsApplicationMainPage.Styles>
 		<FluentTheme />
 		<StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
 
@@ -19,7 +20,7 @@
 			<Setter Property="FontWeight" Value="Black" />
 		</Style>
 
-		<Style Selector="local|BlazorBindingsApplicationMainPage nav|ItemsControlWithItemContainer">
+		<Style Selector="helloWorld|BlazorBindingsApplicationMainPage nav|ItemsControlWithItemContainer">
 			<Setter Property="ItemContainerTheme">
 				<ControlTheme TargetType="ContentPresenter">
 					<Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
@@ -28,5 +29,5 @@
 				</ControlTheme>
 			</Setter>
 		</Style>
-	</local:BlazorBindingsApplicationMainPage.Styles>
-</local:BlazorBindingsApplicationMainPage>
+	</helloWorld:BlazorBindingsApplicationMainPage.Styles>
+</helloWorld:BlazorBindingsApplicationMainPage>

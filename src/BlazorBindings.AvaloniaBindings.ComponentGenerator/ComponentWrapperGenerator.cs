@@ -15,7 +15,7 @@ namespace BlazorBindings.AvaloniaBindings.ComponentGenerator;
 
 public partial class ComponentWrapperGenerator
 {
-    const string AvaloniaComponentsNamespace = "BlazorBindings.AvaloniaBindings.Elements";
+    const string AvaloniaComponentsNamespace = "BlazorBindings.Avalonia.Elements";
 
     public (string GroupName, string Name, string Source) GenerateComponentFile(Compilation compilation, GenerateComponentSettings generatedInfo)
     {
@@ -214,7 +214,7 @@ namespace {componentNamespace}
             handleAttachedPopertiesBuilder.AppendLine($$"""
             {{usingsText}}
 
-            namespace BlazorBindings.AvaloniaBindings.Elements
+            namespace BlazorBindings.Avalonia.Elements
             {
                 
                 internal static class {{typeToGenerate.Name}}Initializer
@@ -492,7 +492,7 @@ namespace {componentNamespace}
             {
                 new UsingStatement { Namespace = "System", IsGlobalUsing = true },
                 new UsingStatement { Namespace = "Microsoft.AspNetCore.Components", IsUsed = true, IsGlobalUsing = true },
-                new UsingStatement { Namespace = "BlazorBindings.AvaloniaBindings.Core", IsUsed = true, IsGlobalUsing = true },
+                new UsingStatement { Namespace = "BlazorBindings.Avalonia.Core", IsUsed = true, IsGlobalUsing = true },
                 new UsingStatement { Namespace = "System.Threading.Tasks", IsUsed = true, IsGlobalUsing = true },
                 new UsingStatement { Namespace = "Avalonia.Controls", Alias = "AC", IsUsed = true, IsGlobalUsing = true },
                 //new UsingStatement { Namespace = "Avalonia.Templ", Alias = "MMP" }
@@ -625,7 +625,7 @@ namespace {componentNamespace}
     private string GetComponentNamespace(INamedTypeSymbol typeToGenerate)
     {
         var group = GetComponentGroup(typeToGenerate);
-        return string.IsNullOrEmpty(group) ? "BlazorBindings.AvaloniaBindings.Elements" : $"BlazorBindings.AvaloniaBindings.Elements.{group}";
+        return string.IsNullOrEmpty(group) ? "BlazorBindings.Avalonia.Elements" : $"BlazorBindings.Avalonia.Elements.{group}";
     }
 
     private static string GetNamespaceAlias(string @namespace)

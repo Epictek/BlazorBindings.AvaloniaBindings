@@ -4,15 +4,16 @@
 
 @namespace BlazorBindings.AvaloniaBindings.HelloWorld
 
-@using BlazorBindings.AvaloniaBindings.Elements
+@using BlazorBindings.Avalonia.Elements
 @using System.Collections.ObjectModel
-@using BlazorBindings.AvaloniaBindings.Elements.Shapes
+@using BlazorBindings.Avalonia
+@using BlazorBindings.Avalonia.Elements.Shapes
 @using BlazorBindings.Core;
 @using global::Avalonia.Layout
 @using global::Avalonia
 @using global::Avalonia.Media
 @using global::Avalonia.Media.Imaging;
-@using BlazorBindings.AvaloniaBindings.Extensions
+@using BlazorBindings.Avalonia.Extensions
 @using Microsoft.AspNetCore.Components
 @using Microsoft.AspNetCore.Components.CompilerServices
 @using Microsoft.AspNetCore.Components.Infrastructure
@@ -27,122 +28,122 @@
                     VerticalAlignment="VerticalAlignment.Center">
 
             <Button class="bold" OnClick="@(async () => await navigation.NavigateToAsync("/sub", null))">Go to sub page</Button>
-            <Button class="bold" OnClick="@(async () => await navigation.PushModalAsync(GetModalFragment()))">Open Modal</Button>
-
-            <Canvas Width="200" Height="100" Background="Brushes.DarkOrchid" ClipToBounds="true">
-                <TextBlock Attached="@((TextBlock x) => x.CanvasLeft(22))">Canvas positioned text block
-
-                    <Canvas_Attachment Top="30"></Canvas_Attachment>
-                </TextBlock>
-            </Canvas>
-
-            <Menu T="object">
-                <MenuItem T="object" Header="@("Menu item 1")">
-                    <MenuItem T="object" Header="@("Menu item 1-1")"></MenuItem>
-                    <MenuItem T="object" Header="@("Menu item 1-2")"></MenuItem>
-                </MenuItem>
-                <MenuItem T="object" Header="@("Menu item 2")"></MenuItem>
-            </Menu>
-
-            <NumericUpDown></NumericUpDown>
-
-            <Border Padding="new Thickness(10,0,10,0)">
-                <AutoCompleteBox ItemsSource="Items"></AutoCompleteBox>
-            </Border>
-            <Canvas Width="100" Height="50">
-                <Ellipse Width="100" Height="25" Fill="Brushes.Red"></Ellipse>
-            </Canvas>
-            <ComboBox ItemsSource="Items">
-            </ComboBox>
-            <MaskedTextBox Text="000-111-222" Mask="(+09) 000 000 0000"></MaskedTextBox>
-            <TextBox Text="Hallo Welt">
-                <ContextMenuSlot>
-                    <ContextMenu T="object">
-                        <MenuItem T="object" Header="@("Copy")" />
-                        <MenuItem T="object" Header="@("Paste")" />
-                    </ContextMenu>
-                </ContextMenuSlot>
-            </TextBox>
-            <Label> <n>dd</n> so<b>k</b>me <z>zzz</z> </Label>
-            <TextBlock Text="Hello World"></TextBlock>
-            @if (buttonVisible == true)
-            {
-                <Button OnClick="OnCounterClicked">Click me</Button>
-            }
-            <TextBlock Text="@ButtonText"></TextBlock>
-
-            <CheckBox @bind-IsChecked="buttonVisible">Button visible</CheckBox>
-
-            <ListBox ItemsSource="Items">
-                <ItemTemplate>
-                    <StackPanel>
-                        <TextBlock Text="Content:"></TextBlock>
-                        <TextBlock Text="@context"></TextBlock>
-                    </StackPanel>
-                </ItemTemplate>
-                <ItemsPanel>
-                    <StackPanel Orientation="Orientation.Horizontal"></StackPanel>
-                </ItemsPanel>
-            </ListBox>
-            <StackPanel Orientation="Orientation.Horizontal" Margin="new Thickness(0,20,0,0)">
-                <TextBlock Text="Ellipse size: "></TextBlock>
-                <TextBlock Text="@slider.ToString()"></TextBlock>
-            </StackPanel>
-            <Slider @bind-Value="slider"></Slider>
-
-            @* Attached="@((x) => x.ToolTip_TipExtension("func 5 tool tip"))" *@
-            <Ellipse Width="slider" Height="slider/2" Fill="Brushes.Green"
-                     Attached="@((Ellipse x) => { })">
-                <ToolTip_Attachment Placement="global::Avalonia.Controls.PlacementMode.Bottom">
-                    <StackPanel>
-                        <TextBlock>
-                            <TextElement_Attachment FontSize="40">
-
-                            </TextElement_Attachment>
-                            test me nnnn aaaaad
-                        </TextBlock>
-                        <Button>test 2adaasdfasdf</Button>
-                    </StackPanel>
-                </ToolTip_Attachment>
-                @* <ToolTip_Tip>
-
-                <Button>A button in a tool tip</Button>
-
-                </ToolTip_Tip> *@
-            </Ellipse>
-
-            <Calendar></Calendar>
-            <CalendarDatePicker>
-            </CalendarDatePicker>
-
-            <TabControl T="object">
-                <TabItem Header="@("Tab 1")">
-                    <TextBlock Text="Hello 1"></TextBlock>
-                </TabItem>
-                <TabItem Header="@("Tab 2")">
-                    <TextBlock Text="Hello 2"></TextBlock>
-                </TabItem>
-                <TabItem Header="@("Tab 3")">
-                    <TextBlock Text="Hello 3"></TextBlock>
-                </TabItem>
-            </TabControl>
-
-            <DataGrid T="string"
-                      Background="Brushes.Gray"
-                      MinWidth="100"
-                      MinHeight="300"
-                      ItemsSource="Items" AutoGenerateColumns="true" IsReadOnly="false"
-                      GridLinesVisibility="global::Avalonia.Controls.DataGridGridLinesVisibility.All"
-                      BorderThickness="new Thickness(1,1,1,1)"
-                      BorderBrush="Brushes.Green"
-                      ColumnHeaderHeight="40"
-                      CanUserResizeColumns="true">
-                <RowDetailsTemplate>
-                    <StackPanel>
-                    </StackPanel>
-                </RowDetailsTemplate>
-
-            </DataGrid>
+            @* <Button class="bold" OnClick="@(async () => await navigation.PushModalAsync(GetModalFragment()))">Open Modal</Button> *@
+            @* *@
+            @* <Canvas Width="200" Height="100" Background="Brushes.DarkOrchid" ClipToBounds="true"> *@
+            @*     <TextBlock Attached="@((TextBlock x) => x.CanvasLeft(22))">Canvas positioned text block *@
+            @* *@
+            @*         <Canvas_Attachment Top="30"></Canvas_Attachment> *@
+            @*     </TextBlock> *@
+            @* </Canvas> *@
+            @* *@
+            @* <Menu T="object"> *@
+            @*     <MenuItem T="object" Header="@("Menu item 1")"> *@
+            @*         <MenuItem T="object" Header="@("Menu item 1-1")"></MenuItem> *@
+            @*         <MenuItem T="object" Header="@("Menu item 1-2")"></MenuItem> *@
+            @*     </MenuItem> *@
+            @*     <MenuItem T="object" Header="@("Menu item 2")"></MenuItem> *@
+            @* </Menu> *@
+            @* *@
+            @* <NumericUpDown></NumericUpDown> *@
+            @* *@
+            @* <Border Padding="new Thickness(10,0,10,0)"> *@
+            @*     <AutoCompleteBox ItemsSource="Items"></AutoCompleteBox> *@
+            @* </Border> *@
+            @* <Canvas Width="100" Height="50"> *@
+            @*     <Ellipse Width="100" Height="25" Fill="Brushes.Red"></Ellipse> *@
+            @* </Canvas> *@
+            @* <ComboBox ItemsSource="Items"> *@
+            @* </ComboBox> *@
+            @* <MaskedTextBox Text="000-111-222" Mask="(+09) 000 000 0000"></MaskedTextBox> *@
+            @* <TextBox Text="Hallo Welt"> *@
+            @*     <ContextMenuSlot> *@
+            @*         <ContextMenu T="object"> *@
+            @*             <MenuItem T="object" Header="@("Copy")" /> *@
+            @*             <MenuItem T="object" Header="@("Paste")" /> *@
+            @*         </ContextMenu> *@
+            @*     </ContextMenuSlot> *@
+            @* </TextBox> *@
+            @* <Label> <n>dd</n> so<b>k</b>me <z>zzz</z> </Label> *@
+            @* <TextBlock Text="Hello World"></TextBlock> *@
+            @* @if (buttonVisible == true) *@
+            @* { *@
+            @*     <Button OnClick="OnCounterClicked">Click me</Button> *@
+            @* } *@
+            @* <TextBlock Text="@ButtonText"></TextBlock> *@
+            @* *@
+            @* <CheckBox @bind-IsChecked="buttonVisible">Button visible</CheckBox> *@
+            @* *@
+            @* <ListBox ItemsSource="Items"> *@
+            @*     <ItemTemplate> *@
+            @*         <StackPanel> *@
+            @*             <TextBlock Text="Content:"></TextBlock> *@
+            @*             <TextBlock Text="@context"></TextBlock> *@
+            @*         </StackPanel> *@
+            @*     </ItemTemplate> *@
+            @*     <ItemsPanel> *@
+            @*         <StackPanel Orientation="Orientation.Horizontal"></StackPanel> *@
+            @*     </ItemsPanel> *@
+            @* </ListBox> *@
+            @* <StackPanel Orientation="Orientation.Horizontal" Margin="new Thickness(0,20,0,0)"> *@
+            @*     <TextBlock Text="Ellipse size: "></TextBlock> *@
+            @*     <TextBlock Text="@slider.ToString()"></TextBlock> *@
+            @* </StackPanel> *@
+            @* <Slider @bind-Value="slider"></Slider> *@
+            @* *@
+            @* $1$ Attached="@((x) => x.ToolTip_TipExtension("func 5 tool tip"))" #1# *@
+            @* <Ellipse Width="slider" Height="slider/2" Fill="Brushes.Green" *@
+            @*          Attached="@((Ellipse x) => { })"> *@
+            @*     <ToolTip_Attachment Placement="global::Avalonia.Controls.PlacementMode.Bottom"> *@
+            @*         <StackPanel> *@
+            @*             <TextBlock> *@
+            @*                 <TextElement_Attachment FontSize="40"> *@
+            @* *@
+            @*                 </TextElement_Attachment> *@
+            @*                 test me nnnn aaaaad *@
+            @*             </TextBlock> *@
+            @*             <Button>test 2adaasdfasdf</Button> *@
+            @*         </StackPanel> *@
+            @*     </ToolTip_Attachment> *@
+            @*     @* <ToolTip_Tip> *@
+            @* *@
+            @*     <Button>A button in a tool tip</Button> *@
+            @* *@
+            @*     </ToolTip_Tip> *@
+            @* </Ellipse> *@
+            @* *@
+            @* <Calendar></Calendar> *@
+            @* <CalendarDatePicker> *@
+            @* </CalendarDatePicker> *@
+            @* *@
+            @* <TabControl T="object"> *@
+            @*     <TabItem Header="@("Tab 1")"> *@
+            @*         <TextBlock Text="Hello 1"></TextBlock> *@
+            @*     </TabItem> *@
+            @*     <TabItem Header="@("Tab 2")"> *@
+            @*         <TextBlock Text="Hello 2"></TextBlock> *@
+            @*     </TabItem> *@
+            @*     <TabItem Header="@("Tab 3")"> *@
+            @*         <TextBlock Text="Hello 3"></TextBlock> *@
+            @*     </TabItem> *@
+            @* </TabControl> *@
+            @* *@
+            @* <DataGrid T="string" *@
+            @*           Background="Brushes.Gray" *@
+            @*           MinWidth="100" *@
+            @*           MinHeight="300" *@
+            @*           ItemsSource="Items" AutoGenerateColumns="true" IsReadOnly="false" *@
+            @*           GridLinesVisibility="global::Avalonia.Controls.DataGridGridLinesVisibility.All" *@
+            @*           BorderThickness="new Thickness(1,1,1,1)" *@
+            @*           BorderBrush="Brushes.Green" *@
+            @*           ColumnHeaderHeight="40" *@
+            @*           CanUserResizeColumns="true"> *@
+            @*     <RowDetailsTemplate> *@
+            @*         <StackPanel> *@
+            @*         </StackPanel> *@
+            @*     </RowDetailsTemplate> *@
+            @* *@
+            @* </DataGrid> *@
         </StackPanel>
     </ScrollViewer>
 </Window>
@@ -175,8 +176,8 @@
         <Border Background="Brushes.Green" Padding="new Thickness(10,10,10,10)" CornerRadius="new CornerRadius(10)" ClipToBounds="true">
             <StackPanel>
                 <TextBlock Text="This is a modal"></TextBlock>
-                <Button OnClick="@(() => navigation.PushModalAsync(GetModalFragment()))">Open another Modal</Button>
-                <Button OnClick="@(() => navigation.PopModalAsync())">Close Modal</Button>
+                @* <Button OnClick="@(() => navigation.PushModalAsync(GetModalFragment()))">Open another Modal</Button> *@
+                @* <Button OnClick="@(() => navigation.PopModalAsync())">Close Modal</Button> *@
             </StackPanel>
         </Border>
     </Panel>

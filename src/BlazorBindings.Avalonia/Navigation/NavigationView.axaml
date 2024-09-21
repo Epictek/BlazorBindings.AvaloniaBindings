@@ -1,0 +1,79 @@
+<Panel 
+	xmlns="https://github.com/avaloniaui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	x:Class="BlazorBindings.Avalonia.Navigation.NavigationView"
+	xmlns:local="using:BlazorBindings.Avalonia.Navigation"
+	>
+	
+	<Panel.Styles>
+		<Style Selector="TransitioningContentControl:not(.shouldAnimate)">
+			<Setter Property="PageTransition" Value="{x:Null}" />
+		</Style>
+
+		<Style Selector="TransitioningContentControl.shouldAnimate">
+			<Setter Property="PageTransition">
+				<PageSlide Duration="0:0:1" Orientation="Vertical" SlideInEasing="CubicEaseInOut" SlideOutEasing="CubicEaseInOut" />
+			</Setter>
+		</Style>
+
+		<Style Selector="TransitioningContentControl.reverseAnimate">
+			<Setter Property="IsTransitionReversed" Value="True" />
+		</Style>
+
+		<Style Selector="local|ItemsControlWithItemContainer">
+			<Setter Property="ItemContainerTheme">
+				<ControlTheme TargetType="ContentPresenter">
+					<Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+					<Setter Property="VerticalContentAlignment" Value="Center"></Setter>
+					<Setter Property="Background" Value="#3000"></Setter>
+				</ControlTheme>
+			</Setter>
+
+			<Setter Property="ItemsPanel">
+				<ItemsPanelTemplate>
+					<Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></Grid>
+				</ItemsPanelTemplate>
+			</Setter>
+
+			<Setter Property="ItemTemplate">
+				<DataTemplate>
+					<Border>
+						<Border.Effect>
+							<DropShadowEffect Color="#3000" BlurRadius="20" OffsetX="0" OffsetY="0"/>
+						</Border.Effect>
+						<ContentPresenter Content="{Binding}"></ContentPresenter>
+					</Border>
+				</DataTemplate>
+			</Setter>
+		</Style>
+	</Panel.Styles>
+
+
+	<Grid>
+		<TransitioningContentControl  Name="PART_ContentControl" Content="{Binding CurrentPage}"
+		                              Classes.shouldAnimate="{Binding ShouldAnimate}"
+		                              IsTransitionReversed="{Binding ReverseAnimate}">
+		</TransitioningContentControl>
+
+		<local:ItemsControlWithItemContainer Name="PART_ItemsControl" ItemsSource="{Binding ModalStack}">
+		</local:ItemsControlWithItemContainer>
+	</Grid>
+
+	<!-- Workaround until https://github.com/AvaloniaUI/Avalonia/pull/13003 is merged and released -->
+	<Panel.Resources>
+		<ControlTheme x:Key="{x:Type local:ItemsControlWithItemContainer}" TargetType="local:ItemsControlWithItemContainer">
+			<Setter Property="Template">
+				<ControlTemplate>
+					<Border Background="{TemplateBinding Background}"
+							BorderBrush="{TemplateBinding BorderBrush}"
+							BorderThickness="{TemplateBinding BorderThickness}"
+							CornerRadius="{TemplateBinding CornerRadius}"
+							Padding="{TemplateBinding Padding}">
+						<ItemsPresenter Name="PART_ItemsPresenter"
+										ItemsPanel="{TemplateBinding ItemsPanel}"/>
+					</Border>
+				</ControlTemplate>
+			</Setter>
+		</ControlTheme>
+	</Panel.Resources>
+</Panel>

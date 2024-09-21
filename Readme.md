@@ -1,6 +1,6 @@
-# 🪢 BlazorBindings.AvaloniaBindings
+# 🪢 BlazorBindings.Avalonia
 
-[![Nuget](https://img.shields.io/nuget/v/BlazorBindings.AvaloniaBindings)](https://www.nuget.org/packages/BlazorBindings.AvaloniaBindings/)
+[![Nuget](https://img.shields.io/nuget/v/BlazorBindings.Avalonia)](https://www.nuget.org/packages/BlazorBindings.Avalonia/)
 
 ## ⏱️ TL;DR
 - Use <a href="https://dotnet.microsoft.com/en-us/apps/aspnet/web-apps/blazor">⚡ Blazor</a> syntax for <a href="https://avaloniaui.net/">Avalonia</a> apps
@@ -92,7 +92,7 @@ As you might already noted, this looks very familiar like a standard component -
 The `"/"` part is a route. It is useful if you want use routing in your application and paths like this can be used for navigating from one page to another.
 
 > [!TIP]
-> For a (somewhat) complete example please look at the `MainPage.razor` and `SubPage.razor` pages in `BlazorBindings.AvaloniaBindings.HelloWorld` sample.
+> For a (somewhat) complete example please look at the `MainPage.razor` and `SubPage.razor` pages in `BlazorBindings.Avalonia.HelloWorld` sample.
 
 ## ⚡ Blazor
 Blazor was originally a technology for interactive web apps. But the authors imagined from the start that it could also be used on-top of any UI framework. This architecture allows us to use Blazor to drive Avalonia controls.
@@ -106,14 +106,14 @@ To see how Hot Reload in action, here's a video of how well it integrates in .NE
 
 ## 📦 Using This Repository
 ### 🛠️ Building
-- Open `BlazorBindings.AvaloniaBindings.sln` in Visual Studio 2022
+- Open `BlazorBindings.Avalonia.sln` in Visual Studio 2022
 - Build solution
 
 ### 🪛 (Re-)Generate Blazor Wrappers
-Just run `BlazorBindings.AvaloniaBindings.ComponentGenerator` - all wrapper classes in `BlazorBindings.AvaloniaBindings` get updated.
+Just run `BlazorBindings.Avalonia.ComponentGenerator` - all wrapper classes in `BlazorBindings.Avalonia` get updated.
 
 #### 🌟 Register A New Avalonia Control With The Generator
-- Open `src/BlazorBindings.AvaloniaBindings/AttributeInfo.cs`
+- Open `src/BlazorBindings.Avalonia/AttributeInfo.cs`
 - Add new `GenerateComponent` attribute for new UI controls that are not yet supported
 - Run the generator
 

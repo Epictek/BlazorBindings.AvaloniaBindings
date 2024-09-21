@@ -4,7 +4,7 @@ using Avalonia.Markup.Xaml;
 using Avalonia.Markup.Xaml.Styling;
 using Avalonia.Markup.Xaml.XamlIl.Runtime;
 using Avalonia.Themes.Fluent;
-using BlazorBindings.AvaloniaBindings;
+using BlazorBindings.Avalonia;
 using System;
 
 namespace BlazorBindings.AvaloniaBindings.HelloWorld;

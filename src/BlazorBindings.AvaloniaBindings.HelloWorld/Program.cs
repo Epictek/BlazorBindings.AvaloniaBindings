@@ -1,6 +1,6 @@
 ﻿using Avalonia;
 using System;
-using BlazorBindings.AvaloniaBindings;
+using BlazorBindings.Avalonia;
 
 namespace BlazorBindings.AvaloniaBindings.HelloWorld;
 

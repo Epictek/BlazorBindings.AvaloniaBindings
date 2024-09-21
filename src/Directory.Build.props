@@ -9,7 +9,6 @@
 		<IncludeSymbols>true</IncludeSymbols>
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
 		<AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
-		<PackageReleaseNotes>Release notes are available at: https://dreamescaper.github.io/MobileBlazorBindingsDocs/maui-blazor-bindings/release-notes/1-1.html</PackageReleaseNotes>
 		<PackageReadmeFile>Readme.md</PackageReadmeFile>
 	</PropertyGroup>
 
@@ -20,7 +19,6 @@
 	<ItemGroup>
 		<None Include="..\..\THIRD-PARTY-NOTICES.txt" Link="THIRD-PARTY-NOTICES.txt">
 			<Pack>true</Pack>
-			<PackagePath></PackagePath>
 		</None>
 		<None Include="..\..\Readme.md">
 			<Pack>True</Pack>

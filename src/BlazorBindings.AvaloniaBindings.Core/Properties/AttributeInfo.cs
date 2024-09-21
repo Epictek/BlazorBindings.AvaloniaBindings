@@ -4,4 +4,4 @@
 using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("BlazorBindings.UnitTests")]
-[assembly: InternalsVisibleTo("BlazorBindings.AvaloniaBindings")]
+[assembly: InternalsVisibleTo("BlazorBindings.Avalonia")]
