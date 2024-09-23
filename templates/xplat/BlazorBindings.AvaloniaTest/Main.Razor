@@ -1,0 +1,30 @@
+﻿@using System.Runtime.InteropServices.JavaScript
+@using BlazorBindings.AvaloniaTest.Layouts
+@using global::Avalonia.Controls.ApplicationLifetimes
+@using BlazorBindings.Avalonia.Elements
+@inject NavigationManager navManager;
+@namespace BlazorBindings.AvaloniaTest
+
+@if (global::Avalonia.Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime lifetime)
+{
+    <Window Title="BlazorBindings.AvaloniaTest" Topmost="false" MinWidth="600" MinHeight="500">
+        <Router AppAssembly="@typeof(App).Assembly">
+            <Found Context="routeData">
+                <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+            </Found>
+        </Router>
+    </Window>
+}
+else
+{
+    <Router AppAssembly="@typeof(App).Assembly">
+        <Found Context="routeData">
+            <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+        </Found>
+    </Router>
+}
+
+@code
+{
+    
+}

@@ -1,0 +1,80 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Epictek",
+  "classifications": [ "Desktop", "Xaml", "Avalonia", "Browser", "Mobile", "Blazor", "BlazorBindings" ],
+  "description": "A cross-platform Avalonia UI Application using the Blazor Bindings targeting Desktop, Mobile and Browser with WebAssembly",
+  "groupidentity": "Avalonia.App.BlazorBindings.CrossPlatform",
+  "identity": "Avalonia.App.BlazorBindings.CrossPlatform",
+  "name": "Avalonia Cross Platform Blazor Bindings Application",
+  "preferNameDirectory": true,
+  "shortName": "avalonia.blazorbindings.xplat",
+  "sourceName": "BlazorBindings.AvaloniaTest",
+  "defaultName": "AvaloniaBlazorBindingsApplication",
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  },
+  "symbols": {
+    "Framework": {
+      "type": "parameter",
+      "description": "The target framework for the project.",
+      "datatype": "choice",
+      "choices": [
+        {
+          "choice": "net8.0",
+          "description": "Target net8.0"
+        },
+        {
+          "choice": "net9.0",
+          "description": "Target net9.0 previews"
+        }
+      ],
+      "replaces": "FrameworkParameter",
+      "defaultValue": "net8.0"
+    },
+    "AvaloniaVersion": {
+      "type": "parameter",
+      "description": "The target version of Avalonia NuGet packages.",
+      "datatype": "text",
+      "replaces": "AvaloniaVersionTemplateParameter",
+      "defaultValue": "11.1.0"
+    },
+    "HostIdentifier": {
+      "type": "bind",
+      "binding": "HostIdentifier"
+    }
+  },
+  "sources": [
+    {
+      "modifiers": []
+    }
+  ],
+  "primaryOutputs": [
+    { "path": "BlazorBindings.AvaloniaTest/BlazorBindings.AvaloniaTest.csproj" },
+    { "path": "BlazorBindings.AvaloniaTest.Android/BlazorBindings.AvaloniaTest.Android.csproj" },
+    { "path": "BlazorBindings.AvaloniaTest.Desktop/BlazorBindings.AvaloniaTest.Desktop.csproj" },
+    { "path": "BlazorBindings.AvaloniaTest.iOS/BlazorBindings.AvaloniaTest.iOS.csproj" },
+    { "path": "BlazorBindings.AvaloniaTest.Browser/BlazorBindings.AvaloniaTest.Browser.csproj" },
+    {
+      "condition": "(HostIdentifier != \"dotnetcli\" && HostIdentifier != \"dotnetcli-preview\")",
+      "path": "BlazorBindings.AvaloniaTest/ViewModels/MainViewModel.cs"
+    },
+    {
+      "condition": "(HostIdentifier != \"dotnetcli\" && HostIdentifier != \"dotnetcli-preview\")",
+      "path": "BlazorBindings.AvaloniaTest/Views/MainView.axaml"
+    }
+  ],
+  "postActions": [
+    {
+      "id": "editor",
+      "condition": "(HostIdentifier != \"dotnetcli\" && HostIdentifier != \"dotnetcli-preview\")",
+      "description": "Opens MainView and MainViewModel in the editor",
+      "manualInstructions": [],
+      "actionId": "84C0DA21-51C8-4541-9940-6CA19AF04EE6",
+      "args": {
+        "files": "5;6"
+      },
+      "continueOnError": true
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+﻿@page "/"
+@inject NavigationManager navManager;
+
+<TextBlock FontSize="69">Hello World</TextBlock>
+
+<Button OnClick="NavigateToCounter">Navigate to Counter</Button>
+
+@code {
+    private void NavigateToCounter()
+    {
+        navManager.NavigateTo("/Counter");
+    }
+}
+
+@code {
+    
+}

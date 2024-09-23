@@ -1,0 +1,22 @@
+﻿@page "/Counter"
+@inject NavigationManager navManager;
+<TextBlock  FontSize="69">Counter</TextBlock>
+
+<TextBlock>Current count: @currentCount</TextBlock>
+
+<Button OnClick="IncrementCount">Click me</Button>
+<Button OnClick="NavigateBack">Go Back</Button>
+
+@code {
+    private int currentCount = 0;
+
+    private void IncrementCount()
+    {
+        currentCount++;
+    }
+    
+    private void NavigateBack()
+    {
+        navManager.NavigateTo("/");
+    }
+}

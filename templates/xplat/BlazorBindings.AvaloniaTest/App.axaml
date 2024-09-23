@@ -1,0 +1,11 @@
+<avaloniaTest:BlazorBindingsApplicationMainPage xmlns="https://github.com/avaloniaui"
+                                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                                       xmlns:avaloniaTest="clr-namespace:BlazorBindings.AvaloniaTest"
+                                       x:Class="BlazorBindings.AvaloniaTest.App">
+    <Application.DataTemplates>
+    </Application.DataTemplates>
+
+    <Application.Styles>
+        <FluentTheme />
+    </Application.Styles>
+</avaloniaTest:BlazorBindingsApplicationMainPage>
