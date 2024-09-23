@@ -8,8 +8,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 		src\Directory.Build.props = src\Directory.Build.props
 		src\Directory.Build.targets = src\Directory.Build.targets
-		Directory.Packages.props = Directory.Packages.props
-		global.json = global.json
 		Readme.md = Readme.md
 		THIRD-PARTY-NOTICES.txt = THIRD-PARTY-NOTICES.txt
 		version.json = version.json
@@ -21,13 +19,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Avalonia", "Avalonia", "{9F
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorBindings.Avalonia", "src\BlazorBindings.Avalonia\BlazorBindings.Avalonia.csproj", "{CC3F59CD-EFD5-4926-B042-7EB098EC90C1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorBindings.AvaloniaBindings.ComponentGenerator", "src\BlazorBindings.AvaloniaBindings.ComponentGenerator\BlazorBindings.AvaloniaBindings.ComponentGenerator.csproj", "{7E1C80F8-8F74-41F5-9D20-D8510821C1B2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorBindings.Avalonia.ComponentGenerator", "src\BlazorBindings.Avalonia.ComponentGenerator\BlazorBindings.Avalonia.ComponentGenerator.csproj", "{7E1C80F8-8F74-41F5-9D20-D8510821C1B2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{9A81174C-6F1B-4BCC-85C6-1A780622EEAA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorBindings.AvaloniaBindings.HelloWorld", "src\BlazorBindings.AvaloniaBindings.HelloWorld\BlazorBindings.AvaloniaBindings.HelloWorld.csproj", "{F2E6A53B-6FAC-41B6-9B49-29388D0BFD05}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorBindings.Avalonia.HelloWorld", "src\BlazorBindings.Avalonia.HelloWorld\BlazorBindings.Avalonia.HelloWorld.csproj", "{F2E6A53B-6FAC-41B6-9B49-29388D0BFD05}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorBindings.AvaloniaBindings.Core", "src\BlazorBindings.AvaloniaBindings.Core\BlazorBindings.AvaloniaBindings.Core.csproj", "{E1B6387B-11C3-413F-9D75-24F4A169D3B2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorBindings.Avalonia.Core", "src\BlazorBindings.Avalonia.Core\BlazorBindings.Avalonia.Core.csproj", "{E1B6387B-11C3-413F-9D75-24F4A169D3B2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

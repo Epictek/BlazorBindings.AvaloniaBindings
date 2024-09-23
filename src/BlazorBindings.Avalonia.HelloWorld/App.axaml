@@ -1,10 +1,10 @@
-<helloWorld:BlazorBindingsApplicationMainPage
+<local:BlazorBindingsApplicationMainPage
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     x:Class="BlazorBindings.Avalonia.HelloWorld.App"
     xmlns:local="using:BlazorBindings.Avalonia.HelloWorld"
 	xmlns:nav="using:BlazorBindings.Avalonia.Navigation"
-	xmlns:helloWorld="clr-namespace:BlazorBindings.AvaloniaBindings.HelloWorld"
+	xmlns:helloWorld="clr-namespace:BlazorBindings.Avalonia.HelloWorld"
 	RequestedThemeVariant="Default">
 	<!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
@@ -12,7 +12,7 @@
 
 	</helloWorld:BlazorBindingsApplicationMainPage.DataTemplates>
 
-	<helloWorld:BlazorBindingsApplicationMainPage.Styles>
+	<local:BlazorBindingsApplicationMainPage.Styles>
 		<FluentTheme />
 		<StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
 
@@ -29,5 +29,5 @@
 				</ControlTheme>
 			</Setter>
 		</Style>
-	</helloWorld:BlazorBindingsApplicationMainPage.Styles>
-</helloWorld:BlazorBindingsApplicationMainPage>
+	</local:BlazorBindingsApplicationMainPage.Styles>
+</local:BlazorBindingsApplicationMainPage>

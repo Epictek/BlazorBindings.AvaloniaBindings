@@ -9,7 +9,7 @@ on:
 jobs:
   build:
 
-    runs-on: windows-2022
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v3
@@ -19,17 +19,15 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: '8.0.x'
-    - name: Install MAUI
-      run: dotnet workload install maui
     - name: Restore dependencies
-      run: dotnet restore BlazorBindings.Maui.sln
-    - name: Run tests
-      run: dotnet test src/BlazorBindings.UnitTests --no-restore --verbosity normal --collect:"XPlat Code Coverage"
-    - name: Build templates
-      run: |
-        cd templates
-        dotnet build -c Release --no-restore
-        cd ..
+      run: dotnet restore BlazorBindings.Avalonia.sln
+#    - name: Run tests
+#      run: dotnet test src/BlazorBindings.UnitTests --no-restore --verbosity normal --collect:"XPlat Code Coverage"
+#    - name: Build templates
+#      run: |
+#        cd templates
+#        dotnet build -c Release --no-restore
+#        cd ..
     - name: Pack nugets
       run: dotnet pack -o ./packages -c Release --no-restore
     - name: Upload a Build Artifact
@@ -37,11 +35,11 @@ jobs:
       with:
         path: packages
 
-  publish-to-myget:
-    runs-on: windows-2022
-    needs: [build]
-    steps:
-    - uses: actions/download-artifact@v3
-    
-    - name: Publish to Myget
-      run: dotnet nuget push */*.nupkg -k ${{ secrets.MYGET_TOKEN }} -s https://www.myget.org/F/blazorbindings/api/v2/package
+#  publish-to-myget:
+#    runs-on: windows-2022
+#    needs: [build]
+#    steps:
+#    - uses: actions/download-artifact@v3
+#    
+#    - name: Publish to Myget
+#      run: dotnet nuget push */*.nupkg -k ${{ secrets.MYGET_TOKEN }} -s https://www.myget.org/F/blazorbindings/api/v2/package

@@ -10,7 +10,7 @@ namespace BlazorBindings.Avalonia;
 
 public static class AvaloniaAppBuilderExtensions
 {
-    public static AvaloniaAppBuilder UseAvaloniaBlazorBindings(this AvaloniaAppBuilder builder, Action<IServiceCollection> configureServices, bool useNavigation = false)
+    public static AvaloniaAppBuilder UseAvaloniaBlazorBindings(this AvaloniaAppBuilder builder, Action<IServiceCollection> configureServices)
     {   
         ArgumentNullException.ThrowIfNull(builder);
 
@@ -28,11 +28,7 @@ public static class AvaloniaAppBuilderExtensions
             services.TryAddSingleton(new AvaloniaBlazorBindingsServiceProvider(() => serviceProvider));
 
             services.TryAddSingleton(svcs => new AvaloniaBlazorBindingsRenderer(svcs.GetRequiredService<AvaloniaBlazorBindingsServiceProvider>(), svcs.GetRequiredService<ILoggerFactory>()));
-            if (useNavigation)
-            {
-                services.TryAddSingleton<INavigation>(svcs => new BlazorNavigation(svcs.GetRequiredService<AvaloniaBlazorBindingsServiceProvider>()));
-            }
-
+            services.TryAddSingleton<INavigation>(svcs => new BlazorNavigation(svcs.GetRequiredService<AvaloniaBlazorBindingsServiceProvider>()));
             services.AddLogging();
 
             serviceProvider = services.BuildServiceProvider();

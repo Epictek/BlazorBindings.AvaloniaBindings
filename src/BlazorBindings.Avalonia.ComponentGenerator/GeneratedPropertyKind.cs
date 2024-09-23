@@ -1,4 +1,4 @@
-﻿namespace BlazorBindings.AvaloniaBindings.ComponentGenerator;
+﻿namespace BlazorBindings.Avalonia.ComponentGenerator;
 
 public enum GeneratedPropertyKind
 {

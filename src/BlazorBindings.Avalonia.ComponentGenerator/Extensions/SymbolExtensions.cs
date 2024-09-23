@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace BlazorBindings.AvaloniaBindings.ComponentGenerator.Extensions;
+namespace BlazorBindings.Avalonia.ComponentGenerator.Extensions;
 
 internal static class SymbolExtensions
 {

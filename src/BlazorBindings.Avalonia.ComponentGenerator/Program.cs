@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-using BlazorBindings.AvaloniaBindings.ComponentGenerator.Extensions;
+using BlazorBindings.Avalonia.ComponentGenerator.Extensions;
 using CommandLine;
 using Microsoft.Build.Locator;
 using Microsoft.CodeAnalysis;
@@ -11,7 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BlazorBindings.AvaloniaBindings.ComponentGenerator;
+namespace BlazorBindings.Avalonia.ComponentGenerator;
 
 public class Program
 {

@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-namespace BlazorBindings.AvaloniaBindings.ComponentGenerator;
+namespace BlazorBindings.Avalonia.ComponentGenerator;
 
 public sealed class UsingStatement
 {

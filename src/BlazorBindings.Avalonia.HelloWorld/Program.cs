@@ -2,7 +2,7 @@
 using System;
 using BlazorBindings.Avalonia;
 
-namespace BlazorBindings.AvaloniaBindings.HelloWorld;
+namespace BlazorBindings.Avalonia.HelloWorld;
 
 internal class Program
 {

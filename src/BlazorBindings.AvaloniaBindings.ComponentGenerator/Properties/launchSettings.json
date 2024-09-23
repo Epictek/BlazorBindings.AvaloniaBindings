@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "GenerateBlazorBindings.Avalonia": {
-      "commandName": "Project",
-      "commandLineArgs": "..\\..\\..\\..\\BlazorBindings.AvaloniaBindings\\BlazorBindings.AvaloniaBindings.csproj"
-    }
-  }
-}

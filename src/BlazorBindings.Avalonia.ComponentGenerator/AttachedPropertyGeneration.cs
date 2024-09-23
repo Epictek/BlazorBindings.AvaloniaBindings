@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BlazorBindings.AvaloniaBindings.ComponentGenerator;
+namespace BlazorBindings.Avalonia.ComponentGenerator;
 
 [Flags]
 public enum AttachedPropertyGeneration

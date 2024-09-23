@@ -1,4 +1,4 @@
-﻿using BlazorBindings.AvaloniaBindings.ComponentGenerator.Extensions;
+﻿using BlazorBindings.Avalonia.ComponentGenerator.Extensions;
 using CommandLine;
 using Microsoft.CodeAnalysis;
 using System;
@@ -7,7 +7,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 
-namespace BlazorBindings.AvaloniaBindings.ComponentGenerator;
+namespace BlazorBindings.Avalonia.ComponentGenerator;
 
 public enum GeneratedFieldKind
 {

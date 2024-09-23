@@ -7,7 +7,7 @@ using Avalonia.Themes.Fluent;
 using BlazorBindings.Avalonia;
 using System;
 
-namespace BlazorBindings.AvaloniaBindings.HelloWorld;
+namespace BlazorBindings.Avalonia.HelloWorld;
 
 public class App : BlazorBindingsApplicationMainPage
 {

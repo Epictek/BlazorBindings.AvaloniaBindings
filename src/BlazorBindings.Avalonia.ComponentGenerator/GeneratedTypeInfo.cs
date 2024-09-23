@@ -1,10 +1,10 @@
-﻿using BlazorBindings.AvaloniaBindings.ComponentGenerator.Extensions;
+﻿using BlazorBindings.Avalonia.ComponentGenerator.Extensions;
 using Microsoft.CodeAnalysis;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace BlazorBindings.AvaloniaBindings.ComponentGenerator;
+namespace BlazorBindings.Avalonia.ComponentGenerator;
 
 public class GeneratedTypeInfo
 {

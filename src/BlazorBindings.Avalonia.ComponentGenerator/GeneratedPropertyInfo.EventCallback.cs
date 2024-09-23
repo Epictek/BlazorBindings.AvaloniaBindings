@@ -1,10 +1,10 @@
-﻿using BlazorBindings.AvaloniaBindings.ComponentGenerator.Extensions;
+﻿using BlazorBindings.Avalonia.ComponentGenerator.Extensions;
 using Microsoft.CodeAnalysis;
 using System;
 using System.Linq;
 using System.Reflection;
 
-namespace BlazorBindings.AvaloniaBindings.ComponentGenerator;
+namespace BlazorBindings.Avalonia.ComponentGenerator;
 
 public partial class GeneratedPropertyInfo
 {

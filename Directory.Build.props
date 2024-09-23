@@ -1,6 +1,6 @@
 ﻿<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <Authors>Microsoft, Dreamescaper, Warapppa</Authors>
+    <Authors>Microsoft, Dreamescaper, Warapppa, Epictek</Authors>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
 	<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>

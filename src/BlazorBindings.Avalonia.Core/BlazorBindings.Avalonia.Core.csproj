@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
 		<Title>Avalonia Blazor Bindings Core Runtime</Title>
-		<Description>Common logic for using Blazor to target native renderers. For Avalonia app projects use the BlazorBindings.AvaloniaBindings package.</Description>
+		<Description>Common logic for using Blazor to target native renderers. For Avalonia app projects use the BlazorBindings.Avalonia package.</Description>
 		<PackageTags>blazor;blazorbindings</PackageTags>
 		<ImplicitUsings>enable</ImplicitUsings>
 	</PropertyGroup>

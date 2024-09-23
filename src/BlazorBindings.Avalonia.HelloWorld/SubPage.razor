@@ -1,0 +1,25 @@
+﻿@page "/sub"
+@* @inherits NativeControlComponentBase *@
+
+@namespace BlazorBindings.Avalonia.HelloWorld
+
+@using BlazorBindings.Avalonia.Elements
+@using BlazorBindings.Avalonia
+@using global::Avalonia.Layout
+@using global::Avalonia.Media
+@inject INavigation navigation
+
+<ScrollViewer>
+    <StackPanel HorizontalAlignment="HorizontalAlignment.Center"
+                VerticalAlignment="VerticalAlignment.Top">
+        <TextBlock Text="Sub" Foreground="Brushes.White"></TextBlock>
+        <Button OnClick="Back">Back</Button>
+    </StackPanel>
+</ScrollViewer>
+
+@code {
+    public async Task Back()
+    {
+        await navigation.PopAsync();
+    }
+}
