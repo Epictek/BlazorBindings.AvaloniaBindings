@@ -6,7 +6,7 @@
 
 		<Description>Dotnet tool which generate BlazorBindings.Avalonia components for Avalonia elements.</Description>
 		<PackAsTool>true</PackAsTool>
-		<ToolCommandName>dotnet-generate-maui-blazor-components</ToolCommandName>
+		<ToolCommandName>dotnet-generate-avalonia-blazor-components</ToolCommandName>
 		<PackageTags>blazor;blazorbindings</PackageTags>
 	</PropertyGroup>
 

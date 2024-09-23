@@ -56,9 +56,9 @@ public partial class GeneratedPropertyInfo
         {
             var componentPropertyTypeNullable = GetComponentPropertyTypeName(_bindedProperty, ContainingType, makeNullable: true);
             var componentPropertyType = GetComponentPropertyTypeName(_bindedProperty, ContainingType, makeNullable: false);
-            var mauiPropertyType = GetTypeNameAndAddNamespace(_bindedProperty.Type);
+            var avaloniaPropertyType = GetTypeNameAndAddNamespace(_bindedProperty.Type);
 
-            argument = componentPropertyTypeNullable == mauiPropertyType
+            argument = componentPropertyTypeNullable == avaloniaPropertyType
                 ? $"NativeControl.{_bindedProperty.Name}"
                 : $"NativeControl.{_bindedProperty.Name} is {componentPropertyType} item ? item : default({componentPropertyTypeNullable})";
         }

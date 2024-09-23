@@ -1,6 +1,5 @@
 <Project>
     <ItemGroup>
-        <AvaloniaVersion>11.1.3</AvaloniaVersion>
         <PackageVersion Include="Avalonia" Version="$(AvaloniaVersion)" />
         <PackageVersion Include="Avalonia.Base" Version="$(AvaloniaVersion)" />
         <PackageVersion Include="Avalonia.Controls.ColorPicker" Version="$(AvaloniaVersion)" />
@@ -27,5 +26,7 @@
         <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
         <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="8.0.0" />
         <PackageVersion Include="Nerdbank.GitVersioning" Version="3.6.133" />
+        <PackageVersion Include="CommandLineParser" Version="2.9.1" />
+
     </ItemGroup>
 </Project>

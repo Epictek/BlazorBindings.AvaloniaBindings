@@ -2,8 +2,9 @@
 	<Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
 
 	<PropertyGroup>
+		<AvaloniaVersion>11.1.3</AvaloniaVersion>
 		<LangVersion>12.0</LangVersion>
-		<Nullable>enable</Nullable>
+<!--		<Nullable>enable</Nullable>-->
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<NoWarn>$(NoWarn);CS1591;CA1303</NoWarn>
 		<EmbedUntrackedSources>true</EmbedUntrackedSources>
