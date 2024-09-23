@@ -12,22 +12,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
-        fetch-depth: 0        
+        fetch-depth: 0
+        filter: tree:0
     - name: Install .NET
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: '8.0.x'
     - name: Restore dependencies
       run: dotnet restore BlazorBindings.Avalonia.sln
-#    - name: Run tests
-#      run: dotnet test src/BlazorBindings.UnitTests --no-restore --verbosity normal --collect:"XPlat Code Coverage"
-#    - name: Build templates
-#      run: |
-#        cd templates
-#        dotnet build -c Release --no-restore
-#        cd ..
+    - name: Build templates
+      run: |
+        cd templates
+        dotnet build -c Release --no-restore
+        cd ..
     - name: Pack nugets
       run: dotnet pack -o ./packages -c Release --no-restore
     - name: Upload a Build Artifact
