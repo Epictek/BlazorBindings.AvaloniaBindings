@@ -34,11 +34,14 @@ jobs:
       with:
         path: packages
 
-#  publish-to-myget:
-#    runs-on: windows-2022
-#    needs: [build]
-#    steps:
-#    - uses: actions/download-artifact@v3
-#    
-#    - name: Publish to Myget
-#      run: dotnet nuget push */*.nupkg -k ${{ secrets.MYGET_TOKEN }} -s https://www.myget.org/F/blazorbindings/api/v2/package
+  publish-to-nuget:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: packages
+      - name: Push to NuGet
+        run: |
+          dotnet nuget push **/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
