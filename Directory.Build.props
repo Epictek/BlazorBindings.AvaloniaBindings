@@ -5,11 +5,11 @@
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
     <DebugType>portable</DebugType>
+    <MinVerTagPrefix>v</MinVerTagPrefix>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="MinVer">
-      <MinVerTagPrefix>v</MinVerTagPrefix>
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
